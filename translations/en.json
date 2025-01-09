@@ -1,0 +1,237 @@
+{
+    "connect_wallet": "Please, connect your wallet",
+    "wrong": "Something went wrong",
+    "loading": "Loading",
+    "what_will_happen": "What will happen?",
+    "more_info": "More info",
+    "or": "or",
+    "find_luthier": "Find a luthier ➡️",
+    "invite_luthier": "Invite your luthier ➡️",
+    "luthier_verification_request": "Apply for verification",
+    "transfer_property": "Transfer Instrument Ownership",
+    "qr_scan": "Scan QR Address",
+    "copy_to_clipboard": "Copy to clipboard",
+    "hero": {
+        "title": "Welcome to the Instruement App",
+        "text": "Login securely and with privacy without password nor registration.",
+        "add_to_home_screen": "For the best experience add this App to your home screen.",
+        "show_how": "Show me how"
+    },
+    "features": {
+        "our_story": "The Story",
+        "heading": "Get peace of mind",
+        "text": "Why it matters",
+        "features": {
+            "value": "Value",
+            "persistence": "Persistence",
+            "ownership": "Ownership",
+            "trust": "Trust"
+        }
+    },
+    "user" : {
+        "address": "User address",
+        "not_minter": "You do not have the required role"
+    },
+    "account": {
+        "minter_account": "Verified luthier for registraton of:",
+        "verified_luthier": "Verified luthier",
+        "not_verified_luthier": "Not verified luthier"
+    },
+    "modals" : {
+        "add_to_home_screen" : {
+            "preview": "",
+            "title" : "Add Instruement to your home screen",
+            "description": "Tap the share icon of your web browser and select the “Add to home screen” option."
+        },
+        "request_to_luthier" : {
+            "preview": "",
+            "title" : "About your account and sharing it with a luthier",
+            "description": "Your account is represented by a number starting with “0x” and you can share it openly without any risk. For you to receive the registration of an instrument the sender – in this case your luthier –  needs your account number. Share it through your prefered communication channel like mail or chat."
+        },
+        "share_account_what": {
+            "preview": "What is your account number?",
+            "title": "What your account number is",
+            "description": "It is a unique and permanent number associated with your account that was created when you logged in. You can share it without any risk. A luthier can send you the instrument registration to your account with this number. Once transferred to your account, you will be the sole owner of that record."
+        },
+        "share_account_how": {
+            "preview": "How can you share it?",
+            "title": "How to share your account number",
+            "description": "Ideally you will use the messaging channel your already established with the other party. It can be f.e. email or any chat app or social network. If you use your mobile phone, you have the option to show a QR code which the Luthier will scan to obtain your account number."
+        },
+        "membership" : { "title": "About your membership", "description": "A brief description about your membership." },
+        "register_instrument" : { "title": "About Registering an instrument", "description": "A brief description about registering an instrument." },
+        "invite_to_instrument" : { "title": "Invite to join Instruement", "description": "A brief description about sending inviting to the instruement platform." },
+        "apply_for_verification" : { "title": "About applying for verification", "description": "You can apply for being a verified Luthier by filling out a form." },
+        "invite_your_luthier" : { "title": "Invite your luthier to join Instruement", "description": "A brief description about sending inviting to the instruement platform." }
+    },
+    "instrument": {
+        "owner": "Owner",
+        "type": "Instrument type",
+        "type_helper": "Contact us if you can't find your instrument in the list",
+        "type_error": "Please enter one type",
+        "type_placeholder": "Instrument type",
+        "date": "Year of manufacture",
+        "date_helper": "Manufacture yer of the instrument",
+        "date_error": "Please enter the instrument fabrication year",
+        "name": "Instrument name",
+        "name_helper": "A descriptive, personal honey name of the instrument",
+        "name_error": "Please enter the instrument demomination",
+        "description": "Instrument description",
+        "description_helper": "A description of the instrument with all the anti-counterfeiting details",
+        "description_error": "Please enter the instrument description",
+        "image": "Primary image",
+        "image_helper": "Select the primary image",
+        "images": "Images and documents with format",
+        "images_helper": "Add 2-10 additional images detailing the instrument",
+        "images_error": "Please add at least two and no more that ten images",
+        "image_error": "Please upload an image of the instrument",
+        "images_description_placeholder": "Add a description for this image",
+        "select_detail_image": "Add more images",
+        "traits": {
+            "Description": "Description",
+            "Certificates": "Certificates",
+            "Registration": "Registration",
+            "Creator": "Creator",
+            "Type": "Type",
+            "Category": "Category",
+            "Date": "Date",
+            "Image": "Images",
+            "Certificates404": "Cetificates are not available yet."
+        }
+    },
+    "navbar": {
+        "account": "Account",
+        "title": "Instruement",
+        "home": "Home",
+        "my_instruments": "Instruments",
+        "request": "Request",
+        "registration": "Registration",
+        "certification": "Certification",
+        "register": "Register",
+        "certify": "Certify",
+        "connect": "Login now",
+        "my_subscription": "Subscription",
+        "drafts": "Drafts",
+        "new_draft": "New Draft"
+    },
+    "home": {
+        "user": {
+            "my_instruments": "My Instruments",
+            "registration": "Register a new instrument",
+            "instruments_of": "Instruments of",
+            "no_instruments": "Get your first registered instrument",
+            "no_instruments_sub": {
+                "qr": "Show the QR-code to your luthier.",
+                "mailto": "Share your account number with your luthier."
+            },
+            "no_instrument" : {
+                "card1_title": "You already know a verified luthier?",
+                "card1_text": "Get your first registered instrument by sending a registration request to your luthier.",
+                "card2_title": "You don't know a verified luthier yet?",
+                "card2_text": "Find a luthier near you or invite your current one to join the global network of verified luthiers.",
+                "card3_title": "Are you a luthier?",
+                "card3_text": "We are onboarding new luthiers by invitation. If you already received an invitation proceed to confirmation.",
+                "apply_invitation": "Apply for invitation",
+                "confirm_invitation": "Confirm your invitaion",
+                "confirm_otp": "Enter the code",
+                "enter_email": "Enter your email",
+                "confirm_email": "Send",
+                "cancel_email": "Cancel"
+            },
+            "with_instrument" : {
+                "card_title": "Do you want to register a new instrument?",
+                "card_text": "Send a registration request to your verified luthier."
+            },
+            "qr": {
+                "press_to_share": "Press to share"
+            }
+        },
+        "minter": {
+            "my_instruments": "My Instruments",
+            "registered_instruments": "Registered Instruments",
+            "no_registered": "You have not registered any instrument yet",
+            "hello": "Hello",
+            "verified_since": "Verified since",
+            "activate_title": "Activate your membership",
+            "activate_text": "Please activate your membership to access the services you have as a verified luthier.",
+            "activate_now": "Activate now",
+            "activate_more": "More info",
+            "register_title": "Register an instrument",
+            "register_text": "As verified luthier you can register instruments of your expertise: violin, viola, cello",
+            "register_now": "Register now",
+            "register_more": "More info",
+            "invite_title": "Invite your customers to get this App",
+            "invite_text": "They can then request a registration or a certificate for their instrument.",
+            "invite_now": "Send invitation",
+            "invite_more": "More instructions"
+        }
+    },
+    "request": {
+        "send": "Send a request now",
+        "registration": {
+            "heading": "Instrument registration request",
+            "text": "Copy the registration request link and send it to your registrar",
+            "copy_link": "Copy registration link"
+        },
+        "certification": {
+            "heading": "Instrument certification request",
+            "text": "Copy the certification request link and send it to your registrar",
+            "copy_link": "Copy certification link"
+        },
+        "copied": "Copied!"
+    },
+    "register": {
+        "heading": "Instrument registration",
+        "sub_heading": "Please fill out all the fields",
+        "address_help": "The address of the user you are creating an instrument registration for",
+        "register": "Register",
+        "update": "Update",
+        "set_description": "Save description",
+        "update_description": "Save",
+        "create_cover": "Create cover",
+        "update_cover": "Update cover",
+        "upload_images": "Upload images",
+        "pay": "Pay registration"
+    },
+    "pay": {
+        "create": "Pay the instrument registration",
+        "pay": "Pay",
+        "see": "See user instruments",
+        "success": "Your payment was succesful",
+        "wrong": "Something went wrong with your payment"
+    },
+    "certify": {
+        "heading": "Instrument certification",
+        "address_help": "The address of the user you are creating a certification for"
+    },
+    "subscription": {
+        "heading": "My subscription",
+        "no_subs": "You dont have a subscription",
+        "no_sub_valid": "Your subscription has expired",
+        "pay": "Pay a subscription",
+        "renew": "Renew your subscription",
+        "duration": "Duration",
+        "valid": "You have a valid subscription until",
+        "expired": "Your subscription has expired"
+    },
+    "transfer": {
+        "transfer": "Transfer",
+        "the_token": "the token",
+        "to": "To"
+    },
+    "drafts": {
+        "my_drafts": "My drafts",
+        "no_drafts": "No drafts.",
+        "new": "New draft",
+        "save": "Save",
+        "update": "Update",
+        "set_description": "Save",
+        "update_description": "Update",
+        "edit": "You are editing the draft of the instrument"
+    },
+    "Metadata": {
+      "title": "Instruement",
+      "description": ""
+    }
+  }
+  

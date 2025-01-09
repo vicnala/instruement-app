@@ -1,0 +1,236 @@
+{
+    "connect_wallet": "Por favor, conecta tu wallet",
+    "wrong": "Algo ha ido mal",
+    "loading": "Cargando",
+    "what_will_happen": "¿Qué ocurrirá?",
+    "more_info": "Más información",
+    "or": "o",
+    "find_luthier": "Encuentra un luthier ➡️",
+    "invite_luthier": "Invite your luthier ➡️",
+    "luthier_verification_request": "Enviar solicitud",
+    "transfer_property": "Transferir el Instrumento",
+    "qr_scan": "Escanear dirección QR",
+    "copy_to_clipboard": "Copiar al portapapeles",
+    "hero": {
+        "title": "Te damos la bienvenida a nuestra App",
+        "text": "Inicia sesión de forma segura y privada sin contraseña ni registro.",
+        "add_to_home_screen": "Para una mejor experiencia añade esta aplicación a tu pantalla de inicio.",
+        "show_how": "Muéstrame cómo"
+    },
+    "features": {
+        "our_story": "La história",
+        "heading": "Consigue tranquilidad",
+        "text": "Porqué importa?",
+        "features": {
+            "value": "Valor",
+            "persistence": "Persistencia",
+            "ownership": "Propiedad",
+            "trust": "Confianza"
+        }
+    },
+    "user" : {
+        "address": "Wallet del usuario",
+        "not_minter": "No dispones del rol requerido"
+    },
+    "account": {
+        "minter_account": "Luthier verificado para registrar:",
+        "verified_luthier": "Luthier verificado",
+        "not_verified_luthier": "Luthier no verificado"
+    },
+    "modals" : {
+        "add_to_home_screen" : {
+            "preview": "",
+            "title" : "Añade Instruement a tu pantalla de inicio",
+            "description": "Toca el icono de compartir del navegador web y selecciona la opción de “Añadir a la pantalla de inicio”."
+        },
+        "request_to_luthier" : {
+            "title" : "Sobre enviar una solicitud a tu luthier",
+            "description": "When you send a request, the share screen will open for you to send a message through your prefered messaging app."
+        },
+        "share_account_what": {
+            "preview": "¿Que es tu número de cuenta?",
+            "title": "Que es tu número de cuenta",
+            "description": "Es un número único asociado a tu cuenta que se creo cuando hiciste login y que puedes compartir con cualquiera sin ningún tipo de riesgo. Un o una luthier puede enviarte el registro del instrumento a tu cuenta con este número. Una vez transferido a tu cuenta, serás la única persona propietaria de ese registro."
+        },
+        "share_account_how": {
+            "preview": "¿Cómo puedes compartirlo?",
+            "title": "Como puedes compartes tu número de cuenta",
+            "description": "Idealmente, usarás el canal de mensajería que ya estableciste con la otra parte. Puede ser, por ejemplo, email o cualquier aplicación de chat o red social. Si usas tu teléfono móvil, tienes la opción de mostrar un código QR que el o la luthier escaneará para obtener tu número de cuenta."
+        },
+        "membership" : { "title": "About your membership", "description": "A brief description about your membership." },
+        "register_instrument" : { "title": "About Registering an instrument", "description": "A brief description about registering an instrument." },
+        "invite_to_instrument" : { "title": "Invite to join Instruement", "description": "A brief description about sending inviting to the instruement platform." },
+        "apply_for_verification" : { "title": "About applying for verification", "description": "You can apply for being a verified Luthier by filling out a form." },
+        "invite_your_luthier" : { "title": "Invite your luthier to join Instruement", "description": "A brief description about sending inviting to the instruement platform." }
+    },
+    "instrument": {
+        "owner": "Propietario",
+        "type": "Tipo de instrumento",
+        "type_helper": "Contacta con nosotros si no encuentras el tipo de instrumento en la lista",
+        "type_error": "Por favor, selecciona el tipo de instrumento",
+        "type_placeholder": "Tipo de instrumento",
+        "date": "Año de fabricación",
+        "date_helper": "El año de fabricación del instrumento",
+        "date_error": "Por favor introduce el año de fabricación",
+        "name": "Denominación del instrumento",
+        "name_helper": "Un nombre personalizado para el instrumento",
+        "name_error": "Por favor, introduce la denominación del instrumento",
+        "description": "Descripción del instrumento",
+        "description_helper": "Una descripción del instrumento con todos los detalles contra la falsificación",
+        "description_error": "Por favor, introduce la descripción del instrumento",
+        "image": "Imagen principal",
+        "image_helper": "Selecciona la imagen principal",
+        "images": "Imágenes y documentos en formato",
+        "images_helper": "Añade 2-10 imágenes adicionales que detallen el instrumento.",
+        "images_error": "Por favor, añade al menos dos y no más de diez imágenes",
+        "image_error": "Una imagen es requerida",
+        "images_description_placeholder": "Añade una description para ésta imagen",
+        "select_detail_image": "Añade más imágenes",
+        "traits": {
+            "Description": "Descripción",
+            "Certificates": "Certificados",
+            "Registration": "Registro",
+            "Creator": "Creador",
+            "Type": "Tipo",
+            "Category": "Categoría",
+            "Date": "Fecha",
+            "Image": "Imágenes",
+            "Certificates404": "Los certificados no están disponibles aún."
+        }
+    },
+    "navbar": {
+        "account": "Mi cuenta",
+        "title": "Instruement",
+        "home": "Inicio",
+        "my_instruments": "Instrumentos",
+        "request": "Solicitar",
+        "registration": "Registro",
+        "certification": "Certificado",
+        "register": "Registrar",
+        "certify": "Certificar",
+        "connect": "Inicia sesión",
+        "my_subscription": "Suscripción",
+        "drafts": "Borradores",
+        "new_draft": "Nuevo Borrador"
+    },
+    "home": {
+        "user": {
+            "my_instruments": "Mis Instrumentos",
+            "registration": "Registra un nuevo instrumento",
+            "instruments_of": "Instrumentos de",
+            "no_instruments": "Consigue tu primer instrumento registrado",
+            "no_instruments_sub": {
+                "qr": "Muestra el código QR a tu luthier.",
+                "mailto": "Comparte tu número de cuenta con tu luthier."
+            },
+            "no_instrument" : {
+                "card1_title": "Conoces un luthier verificado?",
+                "card1_text": "Consigue tu primer instrumento registrado enviando una solicitud de registro a tu luthier.",
+                "card2_title": "¿Aún no conoces a un luthier verificado?",
+                "card2_text": "Encuentra un luthier o invita a tu luthier actual a unirse a la red mundial de luthieres verificados.",
+                "card3_title": "¿Eres luthier?",
+                "card3_text": "Estamos incorporando nuevos luthiers por invitación. Si ya recibiste una invitación, procede a la confirmación.",
+                "apply_invitation": "Solicitar invitación",
+                "confirm_invitation": "Confirma tu invitación",
+                "confirm_otp": "Ok, introduce el código",
+                "enter_email": "Introduce tu email",
+                "confirm_email": "Enviar",
+                "cancel_email": "Cancelar"
+            },
+            "with_instrument" : {
+                "card_title": "¿Quieres registrar un nuevo instrumento?",
+                "card_text": "Envía una solicitud de registro a tu luthier verificado."
+            },
+            "qr": {
+                "press_to_share": "Pulsa para compartir"
+            }
+        },
+        "minter": {
+            "my_instruments": "Mis Instrumentos",
+            "registered_instruments": "Instrumentos Registrados",
+            "no_registered": "No has registrado ningún instrumento",
+            "hello": "Hola",
+            "verified_since": "Verificado desde",
+            "activate_title": "Activa tu membresía",
+            "activate_text": "Por favor, activa su membresía para acceder a los servicios que dispones como luthier verificado.",
+            "activate_now": "Activar",
+            "activate_more": "Más información",
+            "register_title": "Registrar un instrumento",
+            "register_text": "Como luthier verificado puedes registrar instrumentos de tu especialidad: violín, viola, violonchelo, etc.",
+            "register_now": "Registrar",
+            "register_more": "Más información",
+            "invite_title": "Invita a tus clientes a usar esta aplicación",
+            "invite_text": "Después podrán solicitar registros o certificados para sus instrumentos.",
+            "invite_now": "Enviar invitación",
+            "invite_more": "Más instrucciones"
+        }
+    },
+    "request": {
+        "send": "Envía una solicitud",
+        "registration": {
+            "heading": "Solicitud de registro de instrumento",
+            "text": "Copia el enlace de solicitud de registro y envíalo a tu artesano",
+            "copy_link": "Copiar enlace de registro"
+        },
+        "certification": {
+            "heading": "Solicitud de certificación de instrumento",
+            "text": "Copia el enlace de solicitud de certificación y envíalo a tu artesano",
+            "copy_link": "Copiar enlace de certificación"
+        },
+        "copied": "Copiado!"
+    },
+    "register": {
+        "heading": "Registro de instrumento",
+        "sub_heading": "Por favor rellena todos los campos",
+        "address_help": "La dirección del usuario para el que está creando un registro de instrumento",
+        "register": "Registrar",
+        "update": "Actualizar",
+        "set_description": "Guardar descripción",
+        "update_description": "Guardar",
+        "create_cover": "Crear imagen principal",
+        "update_cover": "Actualizar imagen principal",
+        "upload_images": "Guardar imágenes",
+        "pay": "Pagar registro"
+    },
+    "pay": {
+        "create": "Pagar el registro del instrumento",
+        "pay": "Pagar",
+        "see": "Ver los instrumentos del usuario",
+        "success": "La compra ha finalizado correctamente",
+        "wrong": "Algo ha ido mal con el pago"
+    },
+    "certify": {
+        "heading": "Certificado de un instrumento",
+        "address_help": "La dirección del usuario para el que está creando una certificación"
+    },
+    "subscription": {
+        "heading": "Mi suscripción",
+        "no_subs": "No tienes suscripción",
+        "no_sub_valid": "Tu suscripción ha caducado",
+        "pay": "Compra una suscripción",
+        "renew": "Renueva tu suscripción",
+        "duration": "Duración",
+        "valid": "Tienes una suscripción válida hasta el",
+        "expired": "Tu suscripción ha expirado"
+    },
+    "transfer": {
+        "transfer": "Transferir",
+        "the_token": "el token",
+        "to": "A la cuenta"
+    },
+    "drafts": {
+        "my_drafts": "Mis borradores",
+        "no_drafts": "No hay borradores.",
+        "new": "Nuevo borrador",
+        "save": "Guardar",
+        "update": "Actualizar",
+        "set_description": "Guardar",
+        "update_description": "Actualizar",
+        "edit": "Estás editando el borrador del instrumento"
+    },
+    "Metadata": {
+      "title": "Instruement",
+      "description": ""
+    }
+  }
+  
