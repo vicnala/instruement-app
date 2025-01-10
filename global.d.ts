@@ -6,4 +6,4 @@ type messages = typeof import("./translations/en.json");
 type arMessages = typeof import("./translations/ar.json");
 type esMessages = typeof import("./translations/es.json");
 
-declare interface IntlMessages extends messages, arMessages {}
+declare interface IntlMessages extends messages, arMessages, esMessages {}

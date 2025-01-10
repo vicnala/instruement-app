@@ -25,18 +25,15 @@ export default function DraftForm(
     .filter((s: any) => s.slug.includes('construction'))
     .map((s: any) => s.slug.split('-construction')[0]) || [];
 
-  const instrumentTypes = minter.instrument_types ? minter.instrument_types
-    .map((ins: any) => ({
-      value: ins.name,
-      label: ins.name,
-      category: ins.slug
-    }))
-    .filter((ins: any) => minterSkillsConstruction.includes(ins.category))
+  const instrumentTypes = minter.instrument_types ?
+      minter.instrument_types
+      .map((ins: any) => ({ value: ins.name, label: ins.name, category: ins.slug }))
+      .filter((ins: any) => minterSkillsConstruction.includes(ins.category))
     : [];
 
   const [open, setOpen] = useState(false)
   const [instrumentId, setInstrumentId] = useState(instrument?.id.toString() || "")
-  const [type, setType] = useState(instrument?.type ? instrumentTypes.find((i: any) => i.category === instrument?.type).value : '')
+  const [type, setType] = useState(instrument?.type ? instrumentTypes && instrumentTypes.find((i: any) => i.category === instrument?.type).value : '')
   const [inputValue, setInputValue] = useState("")
   const [name, setName] = useState(instrument?.title || "")
   const [description, setDescription] = useState(instrument?.description || "")
@@ -100,7 +97,7 @@ export default function DraftForm(
 
     setIsLoadingMetadata(true)
     if (type && name && instrumentId) {
-      const selected = instrumentTypes.find((i: any) => i.label === type);
+      const selected = instrumentTypes && instrumentTypes.find((i: any) => i.label === type);
       if (!selected && !instrument) return;
       try {
         const result = await fetch(`/api/instrument/${instrumentId}`, {
@@ -218,7 +215,7 @@ export default function DraftForm(
                       className="placeholder:text-gray-700 p-2 outline-none"
                     />
                   </div>
-                  {instrumentTypes?.map((ins: any) => (
+                  {instrumentTypes && instrumentTypes?.map((ins: any) => (
                     <li
                       key={ins?.label}
                       className={`p-2 text-sm hover:bg-sky-600 hover:text-white
