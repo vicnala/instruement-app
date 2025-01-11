@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import dynamic from "next/dynamic"
 import { useTranslations } from "next-intl";
 import { useStateContext } from "@/app/context";
@@ -21,19 +21,10 @@ export default function DraftForm(
   const router = useRouter();
   const { minter, setReloadUser, address: minterAddress } = useStateContext()
 
-  const minterSkillsConstruction = minter && minter.skills
-    .filter((s: any) => s.slug.includes('construction'))
-    .map((s: any) => s.slug.split('-construction')[0]) || [];
-
-  const instrumentTypes = minter.instrument_types ?
-      minter.instrument_types
-      .map((ins: any) => ({ value: ins.name, label: ins.name, category: ins.slug }))
-      .filter((ins: any) => minterSkillsConstruction.includes(ins.category))
-    : [];
-
   const [open, setOpen] = useState(false)
   const [instrumentId, setInstrumentId] = useState(instrument?.id.toString() || "")
-  const [type, setType] = useState(instrument?.type ? instrumentTypes && instrumentTypes.find((i: any) => i.category === instrument?.type).value : '')
+  const [type, setType] = useState<string>("")
+  const [instrumentTypes, setInstrumentTypes] = useState([])
   const [inputValue, setInputValue] = useState("")
   const [name, setName] = useState(instrument?.title || "")
   const [description, setDescription] = useState(instrument?.description || "")
@@ -43,6 +34,30 @@ export default function DraftForm(
   const [error, setError] = useState<string | null>(null)
   const refs = useRef<HTMLInputElement>(null)
   const [isLoadingMetadata, setIsLoadingMetadata] = useState(false)
+
+  useEffect(() => {
+    if (minter) {
+      const minterSkillsConstruction = minter && minter.skills
+      .filter((s: any) => s.slug.includes('construction'))
+      .map((s: any) => s.slug.split('-construction')[0]) || []; 
+
+      const minterInstrumentTypes = minter.instrument_types ?
+        minter.instrument_types
+          .map((ins: any) => ({ value: ins.name, label: ins.name, category: ins.slug }))
+          .filter((ins: any) => minterSkillsConstruction.includes(ins.category)) :
+          [];
+
+      setInstrumentTypes(minterInstrumentTypes);
+
+      if (instrument && instrument.type) {
+        const instrumentType = minterInstrumentTypes.find((i: any) => i.category === instrument?.type);
+        if (instrumentType) {
+          setType(instrumentType.value);
+        }
+      }
+    }
+  }, [minter]);
+
 
   const handleImagesClick = () => {
     refs.current?.click();
@@ -97,8 +112,8 @@ export default function DraftForm(
 
     setIsLoadingMetadata(true)
     if (type && name && instrumentId) {
-      const selected = instrumentTypes && instrumentTypes.find((i: any) => i.label === type);
-      if (!selected && !instrument) return;
+      const selected: any = instrumentTypes.find((i: any) => i.label === type);
+      if (!selected || !instrument) return;
       try {
         const result = await fetch(`/api/instrument/${instrumentId}`, {
           method: "POST",
@@ -115,11 +130,13 @@ export default function DraftForm(
 
         if (data.code !== 'success') {
           console.log(`POST /api/instrument/${instrumentId} ERROR`, data.message);
+          alert(`Error: ${data.message}`);
         } else {
           setReloadUser(true);
         }
-      } catch (error) {
-        console.log(`POST /api/instrument/${instrumentId} ERROR`, error)
+      } catch (error: any) {
+        console.log(`POST /api/instrument/${instrumentId} ERROR`, error.message)
+        alert(`Error: ${error.message}`);
       }
     }
     setIsLoadingMetadata(false)
@@ -129,7 +146,11 @@ export default function DraftForm(
     e.preventDefault()
     setIsLoadingMetadata(true)
     if (type && name && !instrumentId) {
-      const selected = instrumentTypes.find((i: any) => i.label === type);
+      const selected: any = instrumentTypes.find((i: any) => i.label === type);
+      if (!selected) {
+        setIsLoadingMetadata(false)
+        return;
+      }
       try {
         const result = await fetch(`/api/instrument`, {
           method: "POST",
@@ -147,9 +168,11 @@ export default function DraftForm(
           }
         } else {
           console.log("POST /api/instrument ERROR", data.message);
+          alert(`Error: ${data.message}`);
         }
-      } catch (error) {
+      } catch (error: any) {
         console.log("POST /api/instrument ERROR", error)
+        alert(`Error: ${error.message}`);
       }
     }
     setIsLoadingMetadata(false)
@@ -172,8 +195,13 @@ export default function DraftForm(
             body: formData
           })
           const { data } = await result.json();
-        } catch (error) {
-          console.log("POST /api/file POST error", error)
+          if (data.code !== 'success') {
+            console.log("POST /api/file ERROR", data.message);
+            alert(`Error: ${data.message}`);
+          }
+        } catch (error: any) {
+          console.log("POST /api/file POST error", error);
+          alert(`Error: ${error.message}`);
         }
       }
     }
@@ -215,7 +243,7 @@ export default function DraftForm(
                       className="placeholder:text-gray-700 p-2 outline-none"
                     />
                   </div>
-                  {instrumentTypes && instrumentTypes?.map((ins: any) => (
+                  {instrumentTypes?.map((ins: any) => (
                     <li
                       key={ins?.label}
                       className={`p-2 text-sm hover:bg-sky-600 hover:text-white
