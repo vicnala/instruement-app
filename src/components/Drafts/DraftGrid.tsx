@@ -29,7 +29,7 @@ export default function DraftGrid({ address }: { address?: string | undefined })
 
   return (
     <div className="flex justify-center items-center h-[500px]">
-      <p className="max-w-lg text-lg font-semibold text-center text-white/60">
+      <p className="max-w-lg text-lg font-semibold text-center text-black dark:text-white">
         {t('no_drafts')}
       </p>
     </div>

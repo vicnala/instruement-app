@@ -6,7 +6,7 @@ import { useTheme } from "next-themes";
 import { useLocale, useTranslations } from "next-intl";
 import { useStateContext } from "@/app/context";
 import { client } from "@/app/client";
-import NotConnected from "@/components/pages/NotConnected";
+import NotConnected from "@/components/NotConnected";
 import Loading from "@/components/Loading";
 import Page from "@/components/Page";
 import Section from "@/components/Section";

@@ -18,7 +18,7 @@ export default function Draft({ draft }: any) {
       }
     >
       <div className="relative w-full bg-white/[.04]">
-        {draft.images.length > 0 && (
+        {draft.images.length > 0 && draft.images[0][0] && (
           <Image
             src={draft.images[0][0].file_url}
             width={500}

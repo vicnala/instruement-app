@@ -16,6 +16,9 @@ export async function POST(request: Request) {
     })
     const data = await result.json()
 
+    console.log('/api/file POST data', data);
+    
+
     if (data?.code === 'success') {
       return Response.json({ code: 'success', data })
     }

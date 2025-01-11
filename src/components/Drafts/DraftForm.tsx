@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import dynamic from "next/dynamic"
 import { useTranslations } from "next-intl";
 import { useStateContext } from "@/app/context";
-import NotConnected from "@/components/pages/NotConnected";
+import NotConnected from "@/components/NotConnected";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
 import IconUploadTwentyFour from "@/components/Icons/Upload"
@@ -209,6 +209,9 @@ export default function DraftForm(
     setReloadUser(true);
   }
 
+  console.log(">>>>", instrument);
+  
+
   return (
     minter ?
       <Page>
@@ -322,7 +325,7 @@ export default function DraftForm(
                       className="hidden"
                       onChange={handleImageChange}
                     />
-                    {instrument && instrument.images.length > 0 &&
+                    {instrument && instrument.images.length > 0 && instrument.images[0][0] &&
                       instrument.images.sort((imga: InstrumentImage, imgb: InstrumentImage) => imga[0].id > imgb[0].id ? 1 : -1).map((img: InstrumentImage, index: number) => (
                         <div
                           key={img[0].id}

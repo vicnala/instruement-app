@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useStateContext } from "@/app/context";
-import NotConnected from "@/components/pages/NotConnected";
+import NotConnected from "@/components/NotConnected";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
 import { Instrument } from "@/lib/definitions";
