@@ -10,6 +10,9 @@ export default function DraftGrid({ address }: { address?: string | undefined })
 
   if (minter && minter.instruments && minter.instruments.length > 0) {
     const instruments = minter.instruments.sort((insa: any, insb: any) => (insa.id < insb.id) ? 1 : -1);
+
+    // console.log("instruments", instruments);
+    
     return (<>
       <h2 className='text-2xl text-center font-bold text-black dark:text-white'>
         {t('my_drafts')} {instruments.length > 0 ? `(${instruments.length})` : ''}

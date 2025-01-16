@@ -34,7 +34,7 @@ export default function DraftForm(
   const [descriptions, setDescriptions] = useState<string[]>([])
   const [error, setError] = useState<string | null>(null)
   const refs = useRef<HTMLInputElement>(null)
-  const [isLoadingMetadata, setIsLoadingMetadata] = useState(false)  
+  const [isLoadingMetadata, setIsLoadingMetadata] = useState(false)
 
   useEffect(() => {
     const getInstrument = async () => {     
@@ -339,7 +339,7 @@ export default function DraftForm(
             }
           </Section>
           {
-            instrumentId && type && name && description &&
+            instrument && type && name && instrument.description &&
             <Section>
               <div className="mb-6">
                 <label htmlFor="images" className="block text-md font-semibold text-gray-1000 pb-1">
