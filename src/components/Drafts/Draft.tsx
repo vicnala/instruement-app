@@ -5,6 +5,7 @@ import { useRouter } from "@/i18n/routing";
 import { useStateContext } from "@/app/context";
 import Image from "next/image";
 import { Instrument, InstrumentImage } from "@/lib/definitions";
+import Skeleton from "@/components/Skeleton";
 
 export default function Draft(
   { instrumentId, address: queryAddress }: { instrumentId: string, address: string | undefined}
@@ -68,14 +69,17 @@ export default function Draft(
       }
     >
       <div className="relative w-full bg-white/[.04]">
-        {image && (
+        { image ? 
           <Image
             src={image.file_url}
             width={500}
             height={500}
             alt={image.description}
-          />
-        )}
+          /> :
+          <div className="w-full h-[250px] rounded-lg">
+            <Skeleton width="100%" height="100%" />
+          </div>
+        }
       </div>
       <div className="flex items-center justify-between flex-1 w-full px-3">
         <div className="flex flex-col justify-center py-3">

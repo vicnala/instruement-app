@@ -66,7 +66,7 @@ export default function DraftForm(
                   console.log(`GET /api/file/${imgId} ERROR`, imageData.message);
                   return ({
                     id: imgId,
-                    file_url: '/images/logo.png',
+                    file_url: '/images/icons/android-chrome-512x512.png',
                     description: 'Image not found'
                   })
                 } else {
