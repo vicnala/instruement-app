@@ -26,8 +26,6 @@ export default function Instrument(
 
 	useEffect(() => {
 		async function getInstrument() {
-			setIsLoading(true)
-
 			try {
 				const result = await fetch(`/api/token/${id}`)
 				const data = await result.json();
@@ -59,14 +57,15 @@ export default function Instrument(
 			setIsLoading(false)
 		}
 
-		if (!isLoading) {
+		if (!isLoading && !instrument) {
 			if (id) {
+				setIsLoading(true)
 				getInstrument().catch((e) => {
 					console.error(`/api/token/${id}`, e.message);
 				})
 			}
 		}
-	}, [id, isLoading])
+	}, [id, isLoading, instrument])
 
 	if (isLoading) return (
 		<Page>
