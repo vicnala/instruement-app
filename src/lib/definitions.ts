@@ -16,7 +16,7 @@ export type InstrumentImageSizes = {
 };
 
 
-export type InstrumentImage = [{
+export type InstrumentImage = {
     id: number,
     title: string,
     description: string,
@@ -30,7 +30,7 @@ export type InstrumentImage = [{
     file_url: string,
     base_url: string,
     sizes: InstrumentImageSizes,
-}];
+};
 
 export type Instrument = {
     id: number;

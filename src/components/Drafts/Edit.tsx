@@ -16,23 +16,32 @@ export default function Edit(
   const { isMinter, minter, isLoading } = useStateContext()
   const router = useRouter();
 
-  let intId: number, instrument: Instrument | undefined = undefined;
-  try {
-    if (id) {
-      intId = parseInt(id);
-      instrument = minter?.instruments?.find((ins: any) => ins.id === intId);
-    }
-  } catch (error: any) {
-    return (
-      <Page>
-        <Section>
-          <div className='text-center flex flex-col'>
-            {error.message}
-          </div>
-        </Section>
-      </Page>
-    );
-  }
+  // let intId: number, instrument: Instrument | undefined = undefined;
+  // try {
+  //   if (id) {
+  //     intId = parseInt(id);
+  //     instrument = minter?.instruments?.find((ins: any) => ins.id === intId);
+  //     if (!instrument) {
+  //       return <Page>
+  //       <Section>
+  //         <div className='text-center flex flex-col'>
+  //           ERROR!
+  //         </div>
+  //       </Section>
+  //     </Page>
+  //     }
+  //   }
+  // } catch (error: any) {
+  //   return (
+  //     <Page>
+  //       <Section>
+  //         <div className='text-center flex flex-col'>
+  //           {error.message}
+  //         </div>
+  //       </Section>
+  //     </Page>
+  //   );
+  // }
 
   if (isLoading) return (
     <Page>
@@ -43,6 +52,6 @@ export default function Edit(
   )
 
   return (
-    <DraftForm locale={locale} instrument={instrument} address={address} />
+    <DraftForm locale={locale} instrumentId={id} address={address} />
   );
 }

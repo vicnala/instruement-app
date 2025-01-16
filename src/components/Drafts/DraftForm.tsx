@@ -11,29 +11,58 @@ import IconUploadTwentyFour from "@/components/Icons/Upload"
 import IconTrashTwentyFour from "@/components/Icons/Trash"
 import { Instrument, InstrumentImage } from "@/lib/definitions";
 import { useRouter } from "@/i18n/routing";
+import Loading from "../Loading";
 
 const Editor = dynamic(() => import("@/components/Editor"), { ssr: false })
 
 export default function DraftForm(
-  { locale, instrument, address }: Readonly<{ locale: string, instrument?: Instrument, address?: string }>
+  { locale, instrumentId, address }: Readonly<{ locale: string, instrumentId?: string, address?: string }>
 ) {
   const t = useTranslations();
   const router = useRouter();
   const { minter, setReloadUser, address: minterAddress } = useStateContext()
 
   const [open, setOpen] = useState(false)
-  const [instrumentId, setInstrumentId] = useState(instrument?.id.toString() || "")
   const [type, setType] = useState<string>("")
   const [instrumentTypes, setInstrumentTypes] = useState([])
+  const [instrument, setInstrument] = useState<Instrument>()
   const [inputValue, setInputValue] = useState("")
-  const [name, setName] = useState(instrument?.title || "")
-  const [description, setDescription] = useState(instrument?.description || "")
+  const [name, setName] = useState("")
+  const [description, setDescription] = useState("")
   const [images, setImages] = useState<File[]>([])
   const [files, setFiles] = useState<File[]>([])
   const [descriptions, setDescriptions] = useState<string[]>([])
   const [error, setError] = useState<string | null>(null)
   const refs = useRef<HTMLInputElement>(null)
-  const [isLoadingMetadata, setIsLoadingMetadata] = useState(false)
+  const [isLoadingMetadata, setIsLoadingMetadata] = useState(false)  
+
+  useEffect(() => {
+    const getInstrument = async () => {     
+      try {
+        const result = await fetch(`/api/instrument/${instrumentId}`, {
+          method: "GET",
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
+        })
+        const { data } = await result.json()
+        // console.log("GET", `/api/instrument/${instrumentId}`, data.data);
+
+        if (data.code !== 'success') {
+          console.log(`GET /api/instrument/${instrumentId} ERROR`, data.message);
+          alert(`Error: ${data.message}`);
+        } else {
+          setInstrument(data.data);
+          setName(data.data.title);          
+          setDescription(data.data.description);
+        }
+      } catch (error: any) {
+        console.log(`POST /api/instrument/${instrumentId} ERROR`, error.message)
+        alert(`Error: ${error.message}`);
+      } 
+    }
+    if (instrumentId && !instrument) {
+      getInstrument();
+    }
+  }, [instrumentId, instrument]);
 
   useEffect(() => {
     if (minter) {
@@ -56,7 +85,7 @@ export default function DraftForm(
         }
       }
     }
-  }, [minter]);
+  }, [minter, instrument]);
 
 
   const handleImagesClick = () => {
@@ -158,13 +187,11 @@ export default function DraftForm(
           body: JSON.stringify({ user_id: minter.user_id, type: selected.category, name })
         })
         const { data } = await result.json()
-
+        
         if (data.code === 'success') {
-          if (data.data?.length) {
-            if (data.data[0]) {
-              setReloadUser(true);
-              router.replace(`/drafts/${data.data[0].id}?address=${address ? address : minterAddress}`);
-            }
+          if (data.data) {
+            setReloadUser(true);
+            router.replace(`/drafts/${data.data.id}?address=${address ? address : minterAddress}`);
           }
         } else {
           console.log("POST /api/instrument ERROR", data.message);
@@ -208,9 +235,14 @@ export default function DraftForm(
     setIsLoadingMetadata(false);
     setReloadUser(true);
   }
-
-  console.log(">>>>", instrument);
   
+  if (instrumentId && !instrument) return (
+    <Page>
+      <div className="text-center">
+        <Loading />
+      </div>
+    </Page>
+  )
 
   return (
     minter ?
@@ -279,7 +311,7 @@ export default function DraftForm(
               />
             </div>
             {
-              instrumentId && <div className="mb-6">
+              instrument && instrumentId && <div className="mb-6">
                 <label
                   htmlFor="description"
                   className="block text-md font-semibold text-gray-1000  pb-1"
@@ -325,10 +357,10 @@ export default function DraftForm(
                       className="hidden"
                       onChange={handleImageChange}
                     />
-                    {instrument && instrument.images.length > 0 && instrument.images[0][0] &&
-                      instrument.images.sort((imga: InstrumentImage, imgb: InstrumentImage) => imga[0].id > imgb[0].id ? 1 : -1).map((img: InstrumentImage, index: number) => (
+                    {instrument && instrument.images.length > 0 && instrument.images[0] &&
+                      instrument.images.sort((imga: InstrumentImage, imgb: InstrumentImage) => imga.id > imgb.id ? 1 : -1).map((img: InstrumentImage, index: number) => (
                         <div
-                          key={img[0].id}
+                          key={img.id}
                           className="max-w-sm bg-it-50 border border-gray-200 rounded-lg overflow-hidden shadow dark:bg-gray-800 dark:border-gray-700 mt-4 text-center"
                         >
                           <div className="relative overflow-hidden text-ellipsis">
@@ -337,17 +369,17 @@ export default function DraftForm(
                                 <b>{t('instrument.image')}</b>
                               </div>
                             }
-                            <img className="" src={img[0].file_url} alt={img[0].description} />
+                            <img className="" src={img.file_url} alt={img.description} />
                             <button
                               type="button"
                               className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
-                              onClick={() => handleCurrentImageDelete(img[0].id)}
+                              onClick={() => handleCurrentImageDelete(img.id)}
                             >
                               <IconTrashTwentyFour />
                             </button>
                           </div>
                           <div className="w-full p-2 border-none focus:outline-none">
-                            {img[0].description}
+                            {img.description}
                           </div>
                         </div>
                       ))
