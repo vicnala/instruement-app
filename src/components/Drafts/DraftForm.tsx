@@ -50,9 +50,34 @@ export default function DraftForm(
           console.log(`GET /api/instrument/${instrumentId} ERROR`, data.message);
           alert(`Error: ${data.message}`);
         } else {
-          setInstrument(data.data);
           setName(data.data.title);          
           setDescription(data.data.description);
+          const imageIds = data.data.images;
+          if (imageIds && imageIds.length > 0) {
+            const sorted = imageIds.sort((ida: number, idb: number) => ida > idb ? 1 : -1);
+            const _images: InstrumentImage[] = await Promise.all(
+              sorted.map(async (imgId: number) => {
+                const result = await fetch(`/api/file/${imgId}`, {
+                  method: "GET",
+                  headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
+                })
+                const { data: imageData } = await result.json()
+                if (imageData.code !== 'success') {
+                  console.log(`GET /api/file/${imgId} ERROR`, imageData.message);
+                  return ({
+                    id: imgId,
+                    file_url: '/images/logo.png',
+                    description: 'Image not found'
+                  })
+                } else {
+                  return imageData.data;
+                }
+              })
+            ) || [];
+          
+            data.data.images = _images;
+            setInstrument(data.data);
+          }
         }
       } catch (error: any) {
         console.log(`POST /api/instrument/${instrumentId} ERROR`, error.message)
@@ -358,7 +383,7 @@ export default function DraftForm(
                       onChange={handleImageChange}
                     />
                     {instrument && instrument.images.length > 0 && instrument.images[0] &&
-                      instrument.images.sort((imga: InstrumentImage, imgb: InstrumentImage) => imga.id > imgb.id ? 1 : -1).map((img: InstrumentImage, index: number) => (
+                      instrument.images.map((img: InstrumentImage, index: number) => (
                         <div
                           key={img.id}
                           className="max-w-sm bg-it-50 border border-gray-200 rounded-lg overflow-hidden shadow dark:bg-gray-800 dark:border-gray-700 mt-4 text-center"

@@ -11,17 +11,16 @@ export default function DraftGrid({ address }: { address?: string | undefined })
   if (minter && minter.instruments && minter.instruments.length > 0) {
     const instruments = minter.instruments.sort((insa: any, insb: any) => (insa.id < insb.id) ? 1 : -1);
 
-    // console.log("instruments", instruments);
-    
-    return (<>
+    return (
+    <>
       <h2 className='text-2xl text-center font-bold text-black dark:text-white'>
         {t('my_drafts')} {instruments.length > 0 ? `(${instruments.length})` : ''}
       </h2>
       <div className="grid justify-start grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {instruments.map((draft: any) => (
+        {instruments.map((instrumentId: number) => (
           <Draft
-            key={draft.id}
-            draft={draft}
+            key={instrumentId.toString()}
+            instrumentId={instrumentId.toString()}
             address={address}
           />
         ))}
