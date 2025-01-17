@@ -1,32 +1,31 @@
 import type { Config } from "tailwindcss";
 
 const config = {
-  darkMode: ["class"],
-  content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
-  ],
-  prefix: "",
-  theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
-    },
-    extend: {
+	darkMode: ["class"],
+	content: [
+		"./pages/**/*.{ts,tsx}",
+		"./components/**/*.{ts,tsx}",
+		"./app/**/*.{ts,tsx}",
+		"./src/**/*.{ts,tsx}",
+	],
+	prefix: "",
+	theme: {
+		container: {
+			center: true,
+			padding: "2rem",
+		},
+		extend: {
 			colors: {
+				contrast: "#171412",
+				tertiary: "#F6F6F6",
 				it: {
-					'25': '#FCF6F0',
-					'50': '#FCF0E3',
+					'25': '#FFF9F3',
+					'50': '#FCF2E8',
 					'100': '#FCEAD7',
 					'200': '#FCD7B1',
 					'300': '#FCB165',
-					'400': '#FC9126',
-					'500': '#FB7C0D',
+					'400': '#FC9F42',
+					'500': '#FA870D',
 					'600': '#EC7309',
 					'700': '#C36009',
 					'800': '#9D4D10',
@@ -35,10 +34,10 @@ const config = {
 					'1000': '#471F00'
 				},
 				me: {
-					'25': '#F2FFF9',
-					'50': '#E5FFF2',
-					'100': '#D9FFEC',
-					'200': '#B3FFD9',
+					'25': '#EDFFF7',
+					'50': '#E3FFF1',
+					'100': '#D1FFE8',
+					'200': '#A3FFD1',
 					'300': '#66FFB0',
 					'400': '#32F593',
 					'500': '#0BDC62',
@@ -50,8 +49,8 @@ const config = {
 					'1000': '#003311',
 				},
 				we: {
-					'25': '#F6EFFC',
-					'50': '#F4EBFC',
+					'25': '#FAF5FF',
+					'50': '#F5EDFC',
 					'100': '#F0E3FC',
 					'200': '#E4CFFC',
 					'300': '#D4B1FC',
@@ -65,18 +64,19 @@ const config = {
 					'1000': '#250147',
 				},
 				gray: {
-					'50': '#F7F6F5',
-					'100': '#EDEAE8',
-					'200': '#D9D3CE',
-					'300': '#BCB1A9',
-					'400': '#A79A90',
-					'500': '#958579',
-					'600': '#89796C',
-					'700': '#72645A',
-					'800': '#61554C',
-					'900': '#50463E',
-					'1000': '#332D28',
-					'1100': '#171412',
+					'25': '#F6F4F3',
+					'50': '#E5E0DB',
+					'100': '#D4CBC4',
+					'200': '#C2B6AD',
+					'300': '#AFA297',
+					'400': '#9C8D81',
+					'500': '#89796C',
+					'600': '#74665A',
+					'700': '#5F5349',
+					'800': '#493F38',
+					'900': '#332C27',
+					'950': '#1D1916',
+					'1000': '#070605',
 				}
 			},
 			backgroundImage: theme => ({
@@ -95,34 +95,29 @@ const config = {
 				'1/15': '6.666667vh',
 				'1/20': '5vh',
 			},
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      },
-      keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-      },
-    },
-  },
-  plugins: [
-    require('tailwindcss-safe-area'),
-    require("tailwindcss-animate")
-  ],
-  corePlugins: {
-    transitionDelay: true,
-  },
+			keyframes: {
+				"accordion-down": {
+					from: { height: "0" },
+					to: { height: "var(--radix-accordion-content-height)" },
+				},
+				"accordion-up": {
+					from: { height: "var(--radix-accordion-content-height)" },
+					to: { height: "0" },
+				},
+			},
+			animation: {
+				"accordion-down": "accordion-down 0.2s ease-out",
+				"accordion-up": "accordion-up 0.2s ease-out",
+			},
+		},
+	},
+	plugins: [
+		require('tailwindcss-safe-area'),
+		require("tailwindcss-animate")
+	],
+	corePlugins: {
+		transitionDelay: true,
+	},
 } satisfies Config;
 
 export default config;
