@@ -12,10 +12,12 @@
     "qr_scan": "Escanear dirección QR",
     "copy_to_clipboard": "Copiar al portapapeles",
     "hero": {
-        "title": "Te damos la bienvenida a nuestra App",
-        "text": "Inicia sesión de forma segura y privada sin contraseña ni registro.",
+        "heading": "Asegura la identidad digital de tu instrumento musical",
+        "sub_heading": "Mantén control absoluto de tus certificados y de tu propiedad mediante tecnología blockchain de autocustodia",
+        "button_description": "No requiere registro - conéctate de forma anónima",
         "add_to_home_screen": "Para una mejor experiencia añade esta aplicación a tu pantalla de inicio.",
-        "show_how": "Muéstrame cómo"
+        "show_how": "Muéstrame cómo",
+        "auth_disclaimer": "Autenticación basada en"
     },
     "features": {
         "our_story": "La história",
@@ -118,14 +120,14 @@
             "my_instruments": "Mis Instrumentos",
             "registration": "Registra un nuevo instrumento",
             "instruments_of": "Instrumentos de",
-            "no_instruments": "Consigue tu primer instrumento registrado",
+            "no_instruments": "Obtén tu primer instrumento registrado",
             "no_instruments_sub": {
-                "qr": "Muestra el código QR a tu luthier.",
+                "qr": "Presenta este código QR a tu lutier en persona, o púlsalo para compartir la dirección de tu cuenta por mensaje",
                 "mailto": "Comparte tu número de cuenta con tu luthier."
             },
             "no_instrument" : {
                 "card1_title": "Conoces un luthier verificado?",
-                "card1_text": "Consigue tu primer instrumento registrado enviando una solicitud de registro a tu luthier.",
+                "card1_text": "Obtén tu primer instrumento registrado enviando una solicitud de registro a tu luthier.",
                 "card2_title": "¿Aún no conoces a un luthier verificado?",
                 "card2_text": "Encuentra un luthier o invita a tu luthier actual a unirse a la red mundial de luthieres verificados.",
                 "card3_title": "¿Eres luthier?",

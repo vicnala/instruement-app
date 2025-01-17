@@ -41,7 +41,7 @@ export default async function RootLayout({
             "@context": "https://schema.org",
             "@type": "WebSite",
             name: "Instruement",
-            description: "Get registered musical instruments and certifications by verified lutherie. Build on descentralized values & technology.",
+            description: "Manage your valuable musical instruments with self-custody blockchain technology.",
             url: process.env.NEXT_PUBLIC_SERVER_URL || `https://app.instruement.com`,
           })}
         />

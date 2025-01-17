@@ -17,43 +17,49 @@ export default function NotConnected(
 
     return (
         <Page>
-            <div className='text-center min-h-screen flex flex-col'>
-                <div className='sm:hidden mt-8 ml-4 min-h-1/10'>
-                    <Image
-                        src="/images/logo.png"
-                        alt="Instruement"
-                        width={125}
-                        height={53}
-                        className="dark:filter dark:invert mx-auto"
-                    />
-                </div>
+            <div className='min-h-screen flex flex-col'>
                 <Section>
-                    <h2 className='text-3xl font-semibold text-black dark:text-it-50 min-h-1/7'>
-                        {t('hero.title')}
-                    </h2>
-                    <div className="mt-2">
-                        <ConnectButton
-                            client={client}
-                            theme={theme === 'system' ? 'light' : theme === 'dark' ? 'dark' : 'light'}
-                            locale={locale.includes('en') ? 'en_US' : locale.includes('es') ? 'es_ES' : 'en_US'}
-                        // accountAbstraction={{ chain: baseSepolia, sponsorGas: true }}
-                        />
+                    <div className="min-h-[70vh] md:min-h-[60vh] mt-[15vh] md:mt-[10vh] flex items-center justify-center bg-it-25 dark:bg-gray-950 px-3.5 md:px-24 rounded-md">
+                        <div className="text-center text-gray-1000">
+                            <h2 className='text-4xl md:text-6xl font-semibold text-gray-900 dark:text-it-50 mb-2'>
+                                {t('hero.heading')}
+                            </h2>
+                            <p className="text-lg text-gray-900 dark:text-gray-200 pb-12 md:pb-16 max-w-72 mx-auto">
+                                {t('hero.sub_heading')}
+                            </p>
+                            <div className="">
+                                <ConnectButton
+                                    client={client}
+                                    theme={theme === 'system' ? 'light' : theme === 'dark' ? 'dark' : 'light'}
+                                    locale={locale.includes('en') ? 'en_US' : locale.includes('es') ? 'es_ES' : 'en_US'}
+                                // accountAbstraction={{ chain: baseSepolia, sponsorGas: true }}
+                                />
+                            </div>
+                            <div className='mt-4'>
+                                <p className='text-md text-gray-900 dark:text-gray-400'>
+                                    {t('hero.button_description')}
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                    <div className='mt-4'>
-                        <p className='text-xs text-black dark:text-gray-400'>
-                            {t('hero.text')}
+                    <div className="mt-4 md:mt-8">
+                        <p className="text-sm text-center text-gray-900 mb-2">
+                            {t('hero.auth_disclaimer')}
                         </p>
+                        <div className="flex justify-center items-center">
+                            <Image src="/images/thirdweb-wordmark-dark.svg" alt="thirdweb" width={100} height={100} />
+                        </div>
                     </div>
                 </Section>
 
-                <Section>
+                {/* <Section>
                     <div className='fixed inset-x-0 bottom-0 sm:hidden pb-8'>
                         <div className='mt-6 flex justify-center pt-48'>
                             <p className='text-gray-800 dark:text-gray-400 text-sm max-w-xs pr-14 pl-14'>
                                 {t('hero.add_to_home_screen')}
                             </p>
                         </div>
-                        {/* <div className="mt-2">
+                        { <div className="mt-2">
                         <button 
                             onClick={() => openModal({ 
                                 title: t('modals.add_to_home_screen.title'), 
@@ -62,9 +68,9 @@ export default function NotConnected(
                             className="inline-flex items-center px-3 py-1 text-me-700 bg-transparent rounded-md text-xs sm:text-base">
                             <IconInfo height="1.2em" width="1.2em" className="mr-1"/> {t('hero.show_how')}
                         </button>
-                    </div> */}
+                    </div> }
                     </div>
-                </Section>
+                </Section> */}
 
                 {/* <Modal isOpen={isModalOpen} content={modalContent} onClose={closeModal} /> */}
 

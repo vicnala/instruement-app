@@ -13,10 +13,10 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <div className='hidden md:block'>
+    <div className=''>
       <div className='fixed top-0 left-0 z-20 w-full'>
         <header className='bg-white bg-opacity-90 px-safe dark:bg-black dark:bg-opacity-90'>
-          <div className='mx-auto flex flex-row h-24 sm:h-20 max-w-screen-md items-center justify-between px-6'>
+          <div className='mx-auto flex flex-row min-h-[15vh] md:min-h-[10vh] max-w-screen-lg items-center justify-between px-3.5'>
             <Link href="/">
               <Image
                 src="/images/logo.png"

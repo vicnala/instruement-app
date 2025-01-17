@@ -13,8 +13,8 @@ const Page = ({ children }: Props) => {
 		<>
 			<Header />
 			{
-				<main className="mx-auto max-w-screen-md sm:pt-20 pb-16 px-safe sm:pb-0">
-					<div className='p-6'>{children}</div>
+				<main className="mx-auto max-w-screen-lg px-safe ">
+					<div className='px-3.5'>{children}</div>
 				</main>
 			}
 			<BottomNav />
