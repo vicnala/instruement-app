@@ -12,10 +12,12 @@
     "qr_scan": "Scan QR Address",
     "copy_to_clipboard": "Copy to clipboard",
     "hero": {
-        "title": "Welcome to the Instruement App",
-        "text": "Login securely and with privacy without password nor registration.",
+        "heading": "Secure your musical instrument's digital identity",
+        "sub_heading": "Keep absolute control of your certificates and ownership through self-custody blockchain technology",
+        "button_description": "No registration required - connect anonymously",
         "add_to_home_screen": "For the best experience add this App to your home screen.",
-        "show_how": "Show me how"
+        "show_how": "Show me how",
+        "auth_disclaimer": "Authentication powered by"
     },
     "features": {
         "our_story": "The Story",
