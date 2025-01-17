@@ -6,7 +6,7 @@ import Loading from "@/components/Loading";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
 import DraftGrid from "@/components/Drafts/DraftGrid";
-import NotConnected from "@/components/pages/NotConnected";
+import NotConnected from "@/components/NotConnected";
 
 export default function Drafts({
   searchParams

@@ -158,18 +158,40 @@ export default function ElementsForm(
 ): JSX.Element {
   const t = useTranslations();
   const { address: minterAddress, minter, isLoading } = useStateContext()
+  const [instrument, setInstrument] = React.useState<Instrument>()
+  const [amount, setAmount] = React.useState<number>(0)
 
-  let intId: number, instrument: Instrument;
-  try {
-    intId = parseInt(id);
-    instrument = minter?.instruments?.find((ins: any) => ins.id === intId);
-  } catch (error: any) {
-    return (
-      <div className='text-center flex flex-col'>
-        {error.message}
-      </div>
-    );
-  }
+
+  React.useEffect(() => {
+    const getInstrument = async () => {     
+      try {
+        const result = await fetch(`/api/instrument/${id}`, {
+          method: "GET",
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
+        })
+        const { data } = await result.json()
+        // console.log("GET", `/api/instrument/${id}`, data.data);
+
+        if (data.code !== 'success') {
+          console.log(`GET /api/instrument/${id} ERROR`, data.message);
+          alert(`Error: ${data.message}`);
+        } else {
+          const _instrument = data.data;
+          const type = minter?.instrument_types.find((ins: any) => ins.slug === _instrument.type);
+          if (type) {
+            setAmount(type.user_register_price_eur);
+          }
+          setInstrument(_instrument);
+        }
+      } catch (error: any) {
+        console.log(`POST /api/instrument/${id} ERROR`, error.message)
+        alert(`Error: ${error.message}`);
+      } 
+    }
+    if (id && minter && !instrument) {
+      getInstrument();
+    }
+  }, [id, minter, instrument]);
 
   if (isLoading) return (
     <Page>
@@ -178,14 +200,6 @@ export default function ElementsForm(
       </div>
     </Page>
   )
-
-  let amount: number = 0;
-  if (instrument && minter) {
-    const type = minter?.instrument_types.find((ins: any) => ins.slug === instrument.type);
-    if (type) {
-      amount = type.user_register_price_eur;
-    }
-  }
 
   return (instrument && minter && amount > 0 &&
     <Elements

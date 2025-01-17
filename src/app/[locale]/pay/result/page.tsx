@@ -1,6 +1,6 @@
 import type { Stripe } from "stripe";
 import { stripe } from "@/lib/stripe";
-import PaymentResult from "@/components/pages/Pay/PaymentResult";
+import PaymentResult from "@/components/Pay/PaymentResult";
 
 export default async function ResultPage({
   searchParams,

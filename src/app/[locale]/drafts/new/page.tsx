@@ -1,5 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
-import Edit from "@/components/pages/Drafts/Edit";
+import Edit from "@/components/Drafts/Edit";
 
 export default function NewDraftPage({
   params: { locale },

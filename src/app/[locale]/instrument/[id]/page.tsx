@@ -1,5 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
-import Instrument from "@/components/pages/Instrument/Instrument";
+import Instrument from "@/components/Instrument/Instrument";
 
 export default function InstrumentPage({
   params: { locale, id },

@@ -1,5 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
-import Register from "@/components/pages/Register/Register";
+import Register from "@/components/Register/Register";
 
 export default function RegisterPage({
   params: { locale, id },
