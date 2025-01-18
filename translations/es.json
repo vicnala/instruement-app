@@ -50,9 +50,9 @@
             "description": "When you send a request, the share screen will open for you to send a message through your prefered messaging app."
         },
         "share_account_what": {
-            "preview": "¿Que es tu número de cuenta?",
-            "title": "Que es tu número de cuenta",
-            "description": "Es un número único asociado a tu cuenta que se creo cuando hiciste login y que puedes compartir con cualquiera sin ningún tipo de riesgo. Un o una luthier puede enviarte el registro del instrumento a tu cuenta con este número. Una vez transferido a tu cuenta, serás la única persona propietaria de ese registro."
+            "preview": "¿Que es mi número de cuenta?",
+            "title": "Número de cuenta",
+            "description": "El número de cuenta es un identificador único que se creó automáticamente cuando abriste tu cuenta. Este número te permite recibir registros de instrumentos de manera segura, ya que solo sirve para transferencias entrantes. Puedes compartirlo con luthiers y otros usuarios para recibir registros de instrumentos en tu cuenta. Una vez que un registro se transfiere a tu cuenta usando este número, serás la única persona propietaria de ese registro."
         },
         "share_account_how": {
             "preview": "¿Cómo puedes compartirlo?",
