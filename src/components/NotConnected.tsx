@@ -19,7 +19,7 @@ export default function NotConnected(
         <Page>
             <div className='min-h-screen flex flex-col'>
                 <Section>
-                    <div className="min-h-[70vh] md:min-h-[60vh] mt-[15vh] md:mt-[10vh] flex items-center justify-center bg-it-25 dark:bg-gray-950 px-3.5 md:px-24 rounded-md">
+                    <div className="min-h-[70vh] md:min-h-[60vh] flex items-center justify-center bg-it-25 dark:bg-gray-950 px-3.5 md:px-24 rounded-md">
                         <div className="text-center text-gray-1000">
                             <h2 className='text-4xl md:text-6xl font-semibold text-gray-900 dark:text-it-50 mb-2'>
                                 {t('hero.heading')}

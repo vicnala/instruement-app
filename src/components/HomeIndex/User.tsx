@@ -100,7 +100,7 @@ export default function User(
   return (
     <Page>
       <Section>
-        <div className='pt-[15vh] md:pt-[10vh]'>
+        <div>
           {
             isLoading ? (<NFTGridLoading />) :
               owned && owned.length ?
@@ -123,61 +123,65 @@ export default function User(
                       </div>
                       <div>
                         <div className="flex items-center justify-center">
-                          <div className="p-4 rounded-xl bg-white border border-gray-50">
-                            {
-                              typeof navigator.share === 'function' ?
+                          <div>
+                            <div className="p-4 rounded-xl bg-white border border-gray-50">
+                              {
+                                typeof navigator.share === 'function' ?
+                                  <button
+                                    onClick={() => openShareScreen(address || '')}
+                                    className="bg-transparent"
+                                  >
+                                    <QRCodeCanvas
+                                      value={address || ''}
+                                      size={200}
+                                      bgColor="#ffffff"
+                                      fgColor="#070605"
+                                    />
+                                    <div className="pt-4">
+                                      {t('home.user.qr.press_to_share')}
+                                    </div>
+                                  </button>
+                                  :
+                                  <>
+                                    <div className="flex items-center">
+                                      <input
+                                        type="text"
+                                        value={address}
+                                        className="border border-r-0 border-it-400 p-2 rounded-l-md flex-grow"
+                                        readOnly
+                                      ></input>
+                                      <button
+                                        onClick={() => copyToClipboard(address || '')}
+                                        className="border border-it-400 bg-it-400 text-white p-2 rounded-r-md hover:bg-it-600 hover:border-it-600"
+                                      >
+                                        {t('copy_to_clipboard')}
+                                      </button>
+                                    </div>
+                                  </>
+                              }
+                            </div>
+                            <div className="flex justify-left mt-4">
+                              <div className="flex flex-col space-y-2">
                                 <button
-                                  onClick={() => openShareScreen(address || '')}
-                                  className="bg-transparent"
+                                  onClick={() => openModal({
+                                    title: t('modals.share_account_what.title'),
+                                    description: t('modals.share_account_what.description')
+                                  })}
+                                  className="inline-flex text-it-900 text-xs"
                                 >
-                                  <QRCodeCanvas
-                                    value={address || ''}
-                                    size={200}
-                                    bgColor="#ffffff"
-                                    fgColor="#070605"
-                                  />
-                                  <div className="pt-4">
-                                    {t('home.user.qr.press_to_share')}
-                                  </div>
+                                  <IconInfo height="1.2em" width="1.2em" className="mr-1" /> {t('modals.share_account_what.preview')}
                                 </button>
-                                :
-                                <>
-                                  <div className="flex items-center">
-                                    <input
-                                      type="text"
-                                      value={address}
-                                      className="border border-r-0 border-it-400 p-2 rounded-l-md flex-grow"
-                                      readOnly
-                                    ></input>
-                                    <button
-                                      onClick={() => copyToClipboard(address || '')}
-                                      className="border border-it-400 bg-it-400 text-white p-2 rounded-r-md hover:bg-it-600 hover:border-it-600"
-                                    >
-                                      {t('copy_to_clipboard')}
-                                    </button>
-                                  </div>
-                                  <div className="flex flex-col space-y-2 text-center mt-4">
-                                    <button
-                                      onClick={() => openModal({
-                                        title: t('modals.share_account_what.title'),
-                                        description: t('modals.share_account_what.description')
-                                      })}
-                                      className="inline-flex items-center text-it-900 text-xs text-base sm:text-xs sm:ml-2"
-                                    >
-                                      <IconInfo height="1.2em" width="1.2em" className="mr-1" /> {t('modals.share_account_what.preview')}
-                                    </button>
-                                    <button
-                                      onClick={() => openModal({
-                                        title: t('modals.share_account_how.title'),
-                                        description: t('modals.share_account_how.description')
-                                      })}
-                                      className="inline-flex items-center text-it-900 text-xs text-base sm:text-xs sm:ml-2"
-                                    >
-                                      <IconInfo height="1.2em" width="1.2em" className="mr-1" /> {t('modals.share_account_how.preview')}
-                                    </button>
-                                  </div>
-                                </>
-                            }
+                                <button
+                                  onClick={() => openModal({
+                                    title: t('modals.share_account_how.title'),
+                                    description: t('modals.share_account_how.description')
+                                  })}
+                                  className="inline-flex text-it-900 text-xs"
+                                >
+                                  <IconInfo height="1.2em" width="1.2em" className="mr-1" /> {t('modals.share_account_how.preview')}
+                                </button>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
