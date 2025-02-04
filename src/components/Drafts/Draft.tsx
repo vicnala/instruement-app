@@ -17,7 +17,7 @@ export default function Draft(
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    const getInstrument = async () => {     
+    const getInstrument = async () => {
       try {
         const result = await fetch(`/api/instrument/${instrumentId}`, {
           method: "GET",
@@ -53,11 +53,11 @@ export default function Draft(
         setIsLoading(false);
       } 
     }
-    if (instrumentId && !image && !isLoading) {
+    if (instrumentId && !isLoading) {
       setIsLoading(true);
       getInstrument();
     }
-  }, [instrumentId, image, isLoading]);
+  }, []);
 
   return (
     <div
