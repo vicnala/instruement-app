@@ -9,16 +9,24 @@ import Modal from "@/components/Modal/Modal";
 import IconInfo from "@/components/Icons/Info";
 import { useStateContext } from "@/app/context";
 import NFTGrid, { NFTGridLoading } from "@/components/NFT/NFTGrid";
+import DraftGrid from "@/components/Drafts/DraftGrid";
 
 export default function Minter(
   { locale }: Readonly<{ locale: string }>
 ) {
   const t = useTranslations();
   const { isModalOpen, modalContent, openModal, closeModal } = useModal()
-  const { minter, owned, isLoading } = useStateContext()
+  const { minter, owned, isLoading, address } = useStateContext()
 
   return (
     <Page>
+      <Section>
+        {
+          isLoading ? (<NFTGridLoading />) : <div className='text-center flex flex-col'>
+              <DraftGrid address={address} />
+          </div>
+        }
+      </Section>
       <Section>
         {
           isLoading ? (<NFTGridLoading />) :

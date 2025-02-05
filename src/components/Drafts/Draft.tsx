@@ -41,9 +41,18 @@ export default function Draft(
               method: "GET",
               headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
             })
-            const { data } = await result.json()
-            // console.log("GET", `/api/file/${coverId}`, data.data);
+            const { data } = await result.json();
             setImage(data.data);
+          } else {
+            const result = await fetch(`/images/icons/android-chrome-512x512.png`, {
+              method: "GET",
+              headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
+            });
+            const _image = {
+              file_url: result.url,
+              description: ''
+            }
+            setImage(_image as InstrumentImage);
           }
           setIsLoading(false);
         }
