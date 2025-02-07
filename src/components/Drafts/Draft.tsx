@@ -17,6 +17,9 @@ export default function Draft(
   const [image, setImage] = useState<InstrumentImage>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
+  console.log("locale", locale);
+  
+
   useEffect(() => {
     const getInstrument = async () => {
       try {

@@ -29,7 +29,7 @@ export default function Drafts({
       <Page>
         <Section>
           <div className='text-center flex flex-col'>
-            <DraftGrid address={searchParams?.address} />
+            <DraftGrid address={searchParams?.address} locale={locale} />
           </div>
         </Section>
       </Page> :

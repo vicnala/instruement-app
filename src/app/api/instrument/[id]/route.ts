@@ -1,5 +1,7 @@
 'use server'
 
+import { NextRequest } from "next/server";
+
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -45,10 +47,13 @@ export async function POST(
 }
 
 export async function GET(
-  request: Request,
-  { params }: { params: Promise<{ id: string, locale: string }> }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id, locale } = await params
+  const { id } = await params
+  const locale = request.nextUrl.searchParams.get('locale') || 'en'
+
+  // console.log(`(server) GET /api/instrument/${id}?locale=${locale}`)
 
   try {
     const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/instrument/${id}?locale=${locale}`, {
@@ -60,8 +65,6 @@ export async function GET(
       }
     })
     const data = await result.json()
-
-    // console.log(`GET /api/instrument/${id}`, data)
 
     if (data?.code === 'success') {
       return Response.json({ data })
