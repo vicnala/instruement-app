@@ -24,7 +24,7 @@ export default function Minter(
         {
           isLoading ? (<NFTGridLoading />) : 
             <div className='flex flex-col'>
-              <DraftGrid address={address} />
+              <DraftGrid address={address} locale={locale}/>
             </div>
         }
       </Section>

@@ -9,7 +9,7 @@ import Skeleton from "@/components/Skeleton";
 import IconEdit from '../Icons/Edit';
 
 export default function Draft(
-  { instrumentId, address: queryAddress }: { instrumentId: string, address: string | undefined}
+  { instrumentId, address: queryAddress, locale }: { instrumentId: string, address: string | undefined, locale: string }
 ) {
   const router = useRouter();
   const { address } = useStateContext()
@@ -20,10 +20,11 @@ export default function Draft(
   useEffect(() => {
     const getInstrument = async () => {
       try {
-        const result = await fetch(`/api/instrument/${instrumentId}`, {
+        const result = await fetch(`/api/instrument/${instrumentId}?locale=${locale}`, {
           method: "GET",
           headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
         })
+
         const { data } = await result.json()
         // console.log("GET", `/api/instrument/${instrumentId}`, data.data);
 
@@ -55,7 +56,7 @@ export default function Draft(
           setIsLoading(false);
         }
       } catch (error: any) {
-        console.log(`POST /api/instrument/${instrumentId} ERROR`, error.message)
+        console.log(`GET /api/instrument/${instrumentId} ERROR`, error.message)
         alert(`Error: ${error.message}`);
         setIsLoading(false);
       } 

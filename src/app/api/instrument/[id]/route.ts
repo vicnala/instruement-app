@@ -46,12 +46,12 @@ export async function POST(
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string, locale: string }> }
 ) {
-  const { id } = await params
+  const { id, locale } = await params
 
   try {
-    const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/instrument/${id}`, {
+    const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/instrument/${id}?locale=${locale}`, {
       cache: 'no-store',
       method: 'GET',
       headers: {

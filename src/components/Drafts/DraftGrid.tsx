@@ -5,7 +5,7 @@ import { useStateContext } from "@/app/context";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 
-export default function DraftGrid({ address }: { address?: string | undefined }) {
+export default function DraftGrid({ address, locale  }: { address?: string | undefined, locale: string }) {
   const { minter } = useStateContext();
   const t = useTranslations();
 
@@ -28,6 +28,7 @@ export default function DraftGrid({ address }: { address?: string | undefined })
               key={instrumentId.toString()}
               instrumentId={instrumentId.toString()}
               address={address}
+              locale={locale}
             />
           ))}
         </div>

@@ -39,7 +39,7 @@ export default function DraftForm(
   useEffect(() => {
     const getInstrument = async () => {     
       try {
-        const result = await fetch(`/api/instrument/${instrumentId}`, {
+        const result = await fetch(`/api/instrument/${instrumentId}?locale=${locale}`, {
           method: "GET",
           headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
         })
