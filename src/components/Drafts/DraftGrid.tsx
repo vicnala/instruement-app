@@ -13,41 +13,30 @@ export default function DraftGrid({ address }: { address?: string | undefined })
     const instruments = minter.instruments.sort((insa: any, insb: any) => (insa.id < insb.id) ? 1 : -1);
 
     return (
-    <>
-      <h2 className='text-2xl text-center font-bold text-black dark:text-white'>
-        {t('drafts.my_drafts')} {instruments.length > 0 ? `(${instruments.length})` : ''}
-      </h2>
-      <div className="grid justify-start grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {instruments.map((instrumentId: number) => (
-          <Draft
-            key={instrumentId.toString()}
-            instrumentId={instrumentId.toString()}
-            address={address}
-          />
-        ))}
+      <div className="pb-4">
+        <div className="pb-2">
+          <h2 className='text-2xl text-left font-bold text-black dark:text-white pb-2'>
+            {instruments.length > 1 ? t('components.DraftGrid.title_plural') : t('components.DraftGrid.title_single')}
+          </h2>
+          <p className="text-md text-gray-500 pb-4">
+            {t('components.DraftGrid.description')}
+          </p>
+        </div>
+        <div className="grid justify-start grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {instruments.map((instrumentId: number) => (
+            <Draft
+              key={instrumentId.toString()}
+              instrumentId={instrumentId.toString()}
+              address={address}
+            />
+          ))}
+        </div>
       </div>
-      <Link key="drafts" href="/drafts/new">
-          <button type="button" className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25">
-            {t('navbar.new_draft')}
-          </button>
-      </Link>
-    </>
     );
   }
 
   return (
     <>
-  
-      <div className="flex justify-center items-center h-[500px]">
-        <p className="max-w-lg text-lg font-semibold text-center text-black dark:text-white">
-          {t('drafts.no_drafts')}
-        </p>
-      </div>
-      <Link key="drafts" href="/drafts/new">
-          <button type="button" className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25">
-            {t('navbar.new_draft')}
-          </button>
-      </Link>
     </>
   );
 }

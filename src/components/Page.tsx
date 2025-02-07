@@ -2,7 +2,7 @@
 
 import { BottomNav } from "./BottomNav";
 import { Header } from "./Header";
-
+import { Footer } from "./Footer";
 interface Props {
 	title?: string
 	children: React.ReactNode
@@ -17,6 +17,7 @@ const Page = ({ children }: Props) => {
 					<div className='px-3.5'>{children}</div>
 				</main>
 			}
+			<Footer />
 			<BottomNav />
 		</>
 	)

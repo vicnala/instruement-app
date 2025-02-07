@@ -20,14 +20,14 @@ export default function NFTComponent({
 
   return (
     <div
-      className="cursor-pointer transition-all hover:scale-105 hover:shadow-lg flex flex-col w-full h-[250px] bg-white/[.04] justify-stretch border overflow-hidden border-white/10 rounded-lg"
+      className="cursor-pointer transition-all hover:shadow-lg || flex flex-col w-full bg-it-25 justify-stretch || overflow-hidden bg-it-25 border border-it-100 rounded-lg"
       onClick={() =>
         router.push(
           `/instrument/${nft.metadata.id.toString()}`
         )
       }
     >
-      <div className="relative w-full bg-white/[.04]">
+      <div className="relative w-full bg-it-50">
         {nft.metadata.image && (
           <MediaRenderer
             src={nft.metadata.image}
@@ -39,7 +39,7 @@ export default function NFTComponent({
       <div className="flex items-center justify-between flex-1 w-full px-3">
         <div className="flex flex-col justify-center py-3">
           <p className="max-w-full overflow-hidden text-lg text-ellipsis whitespace-nowrap">
-            {nft.metadata.name}
+            {nft.metadata.name || JSON.stringify(nft.metadata, null, 2)}
           </p>
           <p className="text-sm font-semibold">
             #{nft.metadata.id.toString()}

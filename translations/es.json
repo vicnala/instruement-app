@@ -117,6 +117,9 @@
     },
     "home": {
         "user": {
+            "registered": "Registrados",
+            "registered_for_transfers": "Registrados para transferir",
+            "registered_for_transfer": "Registrado para transferir",
             "my_instruments": "Mis Instrumentos",
             "registration": "Registra un nuevo instrumento",
             "instruments_of": "Instrumentos de",
@@ -221,6 +224,11 @@
         "to": "A la cuenta"
     },
     "drafts": {
+        "draft": "Borrador",
+        "drafts": "Borradores",
+        "draft_registration": "Registro en borrador",
+        "drafts_registration": "Registros en borrador",
+        "draft_registration_description": "Instrumentos pendientes de completar su registro. Puedes guardar los cambios y terminar más tarde.",
         "my_drafts": "Mis borradores",
         "no_drafts": "No hay borradores.",
         "new": "Nuevo borrador",
@@ -233,6 +241,23 @@
     "Metadata": {
       "title": "Instruement",
       "description": ""
+    },
+    "common": {},
+    "pages": {},
+    "components": {
+        "Header": {
+            "new_instrument": "Nuevo instrumento"
+        },
+        "DraftGrid": {
+            "title_single": "Registro en borrador",
+            "title_plural": "Registros en borrador",
+            "description": "Instrumentos pendientes de completar su registro. Puedes guardar los cambios y terminar más tarde."
+        },
+        "NFTGrid": {
+            "title_single": "Tu Instrumento Registrado",
+            "title_plural": "Tus Instrumentos Registrados",
+            "description": "Instrumentos bajo tu propiedad. Puedes gestionar su configuración, ver datos o iniciar su transferencia."
+        }
     }
   }
   

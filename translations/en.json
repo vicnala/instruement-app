@@ -118,6 +118,9 @@
     },
     "home": {
         "user": {
+            "registered": "Registered",
+            "registered_for_transfers": "Registered for transfers",
+            "registered_for_transfer": "Registered for transfer",
             "my_instruments": "My Instruments",
             "registration": "Register a new instrument",
             "instruments_of": "Instruments of",
@@ -222,8 +225,7 @@
         "to": "To"
     },
     "drafts": {
-        "my_drafts": "My drafts",
-        "no_drafts": "No drafts.",
+        "no_drafts": "My drafts",
         "new": "New draft",
         "save": "Save",
         "update": "Update",
@@ -234,6 +236,23 @@
     "Metadata": {
       "title": "Instruement",
       "description": ""
+    },
+    "common": {},
+    "pages": {},
+    "components": {
+        "Header": {
+            "new_instrument": "New instrument"
+        },
+        "DraftGrid": {
+            "title_single": "Draft Registration",
+            "title_plural": "Draft Registrations",
+            "description": "Instruments pending registration completion. You can save changes and finish later."
+        },
+        "NFTGrid": {
+            "title_single": "Your Registered Instrument",
+            "title_plural": "Your Registered Instruments",
+            "description": "Instruments under your ownership. You can manage settings, view data or initiate their transfer."
+        }
     }
   }
   

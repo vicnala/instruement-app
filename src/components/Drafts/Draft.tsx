@@ -6,6 +6,7 @@ import { useStateContext } from "@/app/context";
 import Image from "next/image";
 import { Instrument, InstrumentImage } from "@/lib/definitions";
 import Skeleton from "@/components/Skeleton";
+import IconEdit from '../Icons/Edit';
 
 export default function Draft(
   { instrumentId, address: queryAddress }: { instrumentId: string, address: string | undefined}
@@ -32,7 +33,7 @@ export default function Draft(
           setIsLoading(false);
         } else {
           setInstrument(data.data);
-
+          
           const imageIds = data.data.images;
           if (imageIds && imageIds.length > 0) {
             const sorted = imageIds.sort((ida: number, idb: number) => ida > idb ? 1 : -1);
@@ -41,15 +42,12 @@ export default function Draft(
               method: "GET",
               headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
             })
-            const { data } = await result.json();
-            setImage(data.data);
+            const { data: imageData } = await result.json();
+            console.log('Image data:', imageData.data);
+            setImage(imageData.data);
           } else {
-            const result = await fetch(`/images/icons/android-chrome-512x512.png`, {
-              method: "GET",
-              headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-            });
             const _image = {
-              file_url: result.url,
+              file_url: data.data.placeholder_image || '',
               description: ''
             }
             setImage(_image as InstrumentImage);
@@ -70,7 +68,7 @@ export default function Draft(
 
   return (
     <div
-      className="cursor-pointer transition-all hover:scale-105 hover:shadow-lg flex flex-col w-full h-[350px] bg-white/[.04] justify-stretch border overflow-hidden border-white/10 rounded-lg"
+      className="cursor-pointer transition-all hover:shadow-lg || flex flex-col w-full justify-stretch min-h-[120vw] md:min-h-[200px] || overflow-hidden bg-it-25 border border-it-100 rounded-lg"
       onClick={() =>
         router.push(
           `/drafts/${instrumentId}${queryAddress ? `?address=${queryAddress}` : `?address=${address}`}`
@@ -78,6 +76,13 @@ export default function Draft(
       }
     >
       <div className="relative w-full bg-white/[.04]">
+        <div className="absolute top-2 right-2 z-10 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-all">
+          <IconEdit 
+            width="20"
+            height="20"
+            className="text-white"
+          />
+        </div>
         { image ? 
           <Image
             src={image.file_url}
@@ -85,7 +90,7 @@ export default function Draft(
             height={500}
             alt={image.description}
           /> :
-          <div className="w-full h-[250px] rounded-lg">
+          <div className="w-full rounded-lg">
             <Skeleton width="100%" height="100%" />
           </div>
         }
@@ -96,7 +101,7 @@ export default function Draft(
             {instrument?.title}
           </p>
           <p className="text-sm font-semibold">
-            #{instrumentId}
+            {instrument?.type_name}
           </p>
         </div>
       </div>

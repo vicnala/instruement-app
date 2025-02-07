@@ -274,10 +274,12 @@ export default function DraftForm(
       <Page>
         <Section>
           {
-            instrument ? <h2 className='text-xl font-semibold text-center'>{t('drafts.edit')} #{instrument.id} </h2> : <>
-              <h2 className='text-xl font-semibold text-center'>{t('drafts.new')}</h2>
-              <p className="text-center mb-2 text-grey-900">{t('register.sub_heading')}</p>
-            </>
+            instrument ? 
+              <h2 className='text-xl font-semibold text-center'>{t('drafts.edit')} #{instrument.id} </h2> 
+            : <>
+                <h2 className='text-xl font-semibold text-center'>{t('drafts.new')}</h2>
+                <p className="text-center mb-2 text-grey-900">{t('register.sub_heading')}</p>
+              </>
           }
         </Section>
         <form className="py-4 px-4 rounded-lg">

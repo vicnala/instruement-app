@@ -22,16 +22,20 @@ export default function Minter(
     <Page>
       <Section>
         {
-          isLoading ? (<NFTGridLoading />) : <div className='text-center flex flex-col'>
+          isLoading ? (<NFTGridLoading />) : 
+            <div className='flex flex-col'>
               <DraftGrid address={address} />
-          </div>
+            </div>
         }
       </Section>
       <Section>
         {
           isLoading ? (<NFTGridLoading />) :
             owned && owned.length ?
-              <NFTGrid nftData={owned} /> :
+              <div className="flex flex-col pt-4">
+                <NFTGrid nftData={owned} /> 
+              </div>
+              :
               <>
                 <h2 className='text-xl font-semibold text-zinc-800 dark:text-zinc-200'>
                   {t('home.minter.hello')} {minter.first_name}
