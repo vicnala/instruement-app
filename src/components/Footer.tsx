@@ -14,7 +14,7 @@ export function Footer() {
   return (
     <footer className="justify-center items-center flex pb-6">
             {/* <LocalSwitcher /> */}
-            <ModeToggle />
+            {/* <ModeToggle /> */}
     </footer>
   )
 }

@@ -76,8 +76,8 @@ export default function DraftForm(
             ) || [];
           
             data.data.images = _images;
-            setInstrument(data.data);
           }
+          setInstrument(data.data);
         }
       } catch (error: any) {
         console.log(`POST /api/instrument/${instrumentId} ERROR`, error.message)

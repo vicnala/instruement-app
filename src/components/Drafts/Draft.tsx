@@ -43,7 +43,7 @@ export default function Draft(
               headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
             })
             const { data: imageData } = await result.json();
-            console.log('Image data:', imageData.data);
+            // console.log('Image data:', imageData.data);
             setImage(imageData.data);
           } else {
             const _image = {
