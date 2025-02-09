@@ -82,12 +82,16 @@
         "description_error": "Por favor, introduce la descripción del instrumento",
         "image": "Imagen principal",
         "image_helper": "Selecciona la imagen principal",
-        "images": "Imágenes y documentos en formato",
+        "images": "Imágenes en formato",
         "images_helper": "Añade 2-10 imágenes adicionales que detallen el instrumento.",
         "images_error": "Por favor, añade al menos dos y no más de diez imágenes",
         "image_error": "Una imagen es requerida",
-        "images_description_placeholder": "Añade una description para ésta imagen",
-        "select_detail_image": "Añade más imágenes",
+        "images_description_placeholder": "Añade una descripción para esta imagen",
+        "select_detail_image": "Añade imágenes",
+        "document": "Documento",
+        "files": "Archivos en formato",
+        "files_description_placeholder": "Añade una descripción para este documento",
+        "select_detail_files": "Añade documentos",
         "traits": {
             "Description": "Descripción",
             "Certificates": "Certificados",
@@ -195,6 +199,7 @@
         "create_cover": "Crear imagen principal",
         "update_cover": "Actualizar imagen principal",
         "upload_images": "Guardar imágenes",
+        "upload_documents": "Guardar documentos",
         "pay": "Pagar registro"
     },
     "pay": {

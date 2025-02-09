@@ -83,12 +83,16 @@
         "description_error": "Please enter the instrument description",
         "image": "Primary image",
         "image_helper": "Select the primary image",
-        "images": "Images and documents with format",
+        "images": "Images with format",
         "images_helper": "Add 2-10 additional images detailing the instrument",
         "images_error": "Please add at least two and no more that ten images",
         "image_error": "Please upload an image of the instrument",
         "images_description_placeholder": "Add a description for this image",
-        "select_detail_image": "Add more images",
+        "select_detail_image": "Add images",
+        "document": "Document",
+        "files": "Files with format",
+        "files_description_placeholder": "Add a description for this file",
+        "select_detail_files": "Add documents",
         "traits": {
             "Description": "Description",
             "Certificates": "Certificates",
@@ -196,6 +200,7 @@
         "create_cover": "Create cover",
         "update_cover": "Update cover",
         "upload_images": "Upload images",
+        "upload_documents": "Upload documents",
         "pay": "Pay registration"
     },
     "pay": {

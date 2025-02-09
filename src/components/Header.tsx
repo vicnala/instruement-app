@@ -31,13 +31,18 @@ export function Header() {
               />
             </Link>
             <nav className='flex items-center space-x-6'>
-              <Link href="/" className={`${pathname === '/' ? 'text-it-400 dark:text-white' : 'text-gray-500 hover:text-it-400 dark:text-gray-600 dark:hover:text-it-100'}`}>
-                <IconHomeTwentyFour className="w-5 h-5" />
-              </Link>
-              <ButtonLink href="/drafts/new" size="sm" colorSchema="it">
-                {t('components.Header.new_instrument')}
-              </ButtonLink>
-
+              {
+                address && 
+                <Link href="/" className={`${pathname === '/' ? 'text-it-400 dark:text-white' : 'text-gray-500 hover:text-it-400 dark:text-gray-600 dark:hover:text-it-100'}`}>
+                  <IconHomeTwentyFour className="w-5 h-5" />
+                </Link>
+              }
+              {
+                isMinter && 
+                <ButtonLink href="/drafts/new" size="sm" colorSchema="it">
+                  {t('components.Header.new_instrument')}
+                </ButtonLink>
+              }
               {
                 address &&
                 <div className='hidden sm:block'>
