@@ -30,6 +30,10 @@ export default function DraftForm(
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   
+  const [cover, setCover] = useState<File>()
+  const [coverFile, setCoverFile] = useState<File>()
+  const [coverDescription, setCoverDescription] = useState<string>('')
+
   const [images, setImages] = useState<File[]>([])
   const [imageFiles, setImageFiles] = useState<File[]>([])
   const [imageDescriptions, setImageDescriptions] = useState<string[]>([])
@@ -38,8 +42,10 @@ export default function DraftForm(
   const [documentDescriptions, setDocumentsDescriptions] = useState<string[]>([])
   
   const [error, setError] = useState<string | null>(null)
-  const refs = useRef<HTMLInputElement>(null)
-  const [isLoadingMetadata, setIsLoadingMetadata] = useState(false)
+  const refCover = useRef<HTMLInputElement>(null)
+  const refImage = useRef<HTMLInputElement>(null)
+  const refDocument = useRef<HTMLInputElement>(null)
+  const [isLoadingMetadata, setIsLoadingMetadata] = useState(false)  
 
   useEffect(() => {
     const getInstrument = async () => {     
@@ -59,6 +65,7 @@ export default function DraftForm(
           setDescription(data.data.description);         
           const imageIds = data.data.images;
           const fileIds = data.data.files;
+          const coverId = data.data.cover_image;
 
           if (imageIds && imageIds.length > 0) {
             const sorted = imageIds.sort((ida: number, idb: number) => ida > idb ? 1 : -1);
@@ -109,6 +116,19 @@ export default function DraftForm(
           
             data.data.files = files;
           }
+
+          if (coverId) {
+            const result = await fetch(`/api/file/${coverId}`, {
+              method: "GET",
+              headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
+            })
+            const { data: imageData } = await result.json()
+            if (imageData.code !== 'success') {
+              console.log(`GET /api/file/${coverId} ERROR`, imageData.message);
+            } else {
+              data.data.cover_image = imageData.data;
+            }
+          }
           setInstrument(data.data);
         }
       } catch (error: any) {
@@ -148,21 +168,38 @@ export default function DraftForm(
     setDescription(markdown)
   }
 
+  const handleCoverClick = () => {
+    refCover.current?.click();
+  }
+
   const handleImagesClick = () => {
-    refs.current?.click();
+    refImage.current?.click();
   }
 
   const handleDocumentClick = () => {
-    refs.current?.click();
+    refDocument.current?.click();
   }
+
+  const handleCoverChange = (event: React.ChangeEvent<HTMLInputElement>) => {   
+    const files = event.target.files;
+    if (files && files.length === 1) {
+      const _files = Array.from(files);
+      setCoverFile(_files[0] as File);
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setCover(reader.result as unknown as File);
+        setCoverDescription(() => '');
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
       const _files = Array.from(files);
-
       setImageFiles((prevFiles: any) => [...prevFiles, _files[0] as File]);
-
       const file = files[0];
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -173,15 +210,21 @@ export default function DraftForm(
     }
   };
 
-  const handleCurrentDocuementDelete = async (id: number) => {
+  const handleCurrentFileDelete = async (id: number) => {
     setIsLoadingMetadata(true);
     try {
       await fetch(`/api/file/${id}`, { method: "DELETE" });
     } catch (error) {
       console.log("POST /api/file DELETE error", error)
     }
-    setIsLoadingMetadata(false);
     setReloadUser(true);
+    setIsLoadingMetadata(false);
+  };
+
+  const handleCoverDelete = async () => {
+    setCoverFile(() => undefined);
+    setCover(() => undefined);
+    setCoverDescription(() => '');
   };
 
   const handleImageDelete = async (index: number) => {
@@ -196,6 +239,10 @@ export default function DraftForm(
     setDocumentsDescriptions((prevDescriptions: any) => prevDescriptions.filter((_: any, i: any) => i !== index));
   };
 
+  const handleCoverDescriptionChange = (value: string) => {
+    setCoverDescription(value);
+  };
+
   const handleImageDescriptionChange = (index: number, value: string) => {
     const newDescriptions = [...imageDescriptions];
     newDescriptions[index] = value;
@@ -206,17 +253,8 @@ export default function DraftForm(
     const files = event.target.files;
     if (files && files.length > 0) {
       const _files = Array.from(files);
-      
       setDocumentFiles((prevFiles: File[]) => [...prevFiles, _files[0] as File]);
       setDocumentsDescriptions((prevDescriptions: any) => [...prevDescriptions, '']);
-            
-      // const file = files[0];
-      // const reader = new FileReader();
-      // reader.onloadend = () => {
-      //   setDocuments((prevFiles: any) => [...prevFiles, reader.result as string]);
-      //   setDocumentsDescriptions((prevDescriptions: any) => [...prevDescriptions, '']);
-      // };
-      // reader.readAsDataURL(file);
     }
   };
 
@@ -293,6 +331,35 @@ export default function DraftForm(
       }
     }
     setIsLoadingMetadata(false)
+  }
+
+  const uploadCover = async (e: any) => {
+    e.preventDefault()
+    setIsLoadingMetadata(true);
+
+    if (instrumentId && coverFile) {
+      const formData = new FormData();
+      formData.append("instrument_id", instrumentId);
+      formData.append("description", coverDescription);
+      formData.append("cover_image", "true");
+      formData.append("file", coverFile);
+      try {
+        const result = await fetch(`/api/file`, {
+          method: "POST",
+          body: formData
+        })
+        const { data } = await result.json();
+        if (data.code !== 'success') {
+          console.log("POST /api/file ERROR", data.message);
+          alert(`Error: ${data.message}`);
+        }
+      } catch (error: any) {
+        console.log("POST /api/file POST error", error);
+        alert(`Error: ${error.message}`);
+      }
+    }
+    setIsLoadingMetadata(false);
+    setReloadUser(true);
   }
 
   const uploadImages = async (e: any) => {
@@ -466,6 +533,106 @@ export default function DraftForm(
             <>
               <Section>
                 <div className="mb-6">
+                  <label htmlFor="cover" className="block text-md font-semibold text-gray-1000 pb-1">
+                    {t('instrument.images')} {process.env.NEXT_PUBLIC_MIME_TYPE_ACCEPT}
+                  </label>
+                  <>
+                    <div className="p-6 flex flex-col items-center gap-2 bg-gray-100 text-gray-100' rounded-lg">
+                      <input
+                        type="file"
+                        accept={process.env.NEXT_PUBLIC_MIME_TYPE_ACCEPT || ""}
+                        id="cover"
+                        name="cover"
+                        multiple={false}
+                        ref={refCover}
+                        className="hidden"
+                        onChange={handleCoverChange}
+                      />
+                      {instrument && instrument.cover_image && instrument.cover_image.file_url &&
+                          <div
+                            key={instrument.cover_image.id}
+                            className="max-w-sm bg-it-50 border border-gray-200 rounded-lg overflow-hidden shadow dark:bg-gray-800 dark:border-gray-700 mt-4 text-center"
+                          >
+                            <div className="relative overflow-hidden text-ellipsis">
+                              <img className="" src={instrument.cover_image.file_url} alt={instrument.cover_image.description} />
+                              <button
+                                type="button"
+                                className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
+                                onClick={() => handleCurrentFileDelete(instrument.cover_image.id)}
+                              >
+                                <IconTrashTwentyFour />
+                              </button>
+                            </div>
+                            <div className="w-full p-2 border-none focus:outline-none">
+                              {instrument.cover_image.description}
+                            </div>
+                          </div>
+                      }
+                      {!!cover && 
+                        <div
+                          key={'cover'}
+                          className="max-w-sm bg-it-50 border border-gray-200 rounded-lg overflow-hidden shadow dark:bg-gray-800 dark:border-gray-700 mt-4 text-center"
+                        >
+                          <div className="relative overflow-hidden text-ellipsis">
+                            <img className="" src={cover as any} alt="" />
+                            <button
+                              type="button"
+                              className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
+                              onClick={() => handleCoverDelete()}
+                            >
+                              <IconTrashTwentyFour />
+                            </button>
+                          </div>
+                          {
+                            t('instrument.image')
+                          }
+                          <textarea
+                            className="w-full p-2 border-none focus:outline-none"
+                            placeholder={t('instrument.images_description_placeholder')}
+                            value={coverDescription}
+                            onChange={(e) => handleCoverDescriptionChange(e.target.value)}
+                          />
+                        </div>
+                      }
+                      {
+                        instrument && (!instrument.cover_image || !cover) && 
+                        <button
+                          type="button"
+                          className="bg-transparent text-center mt-2 hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-lg flex items-center justify-center"
+                          onClick={handleCoverClick}
+                        >
+                          <IconUploadTwentyFour className="w-4 h-4 mr-2" />
+                          {t('instrument.image_helper')}
+                        </button>
+                      }
+                    </div>
+                    {error && <p className="text-red-500">{error}</p>}
+                  </>
+                </div>
+                {type && name && cover &&
+                  <div className="mt-6 text-center">
+                    {
+                      <button
+                        type="button"
+                        className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+                        disabled={isLoadingMetadata}
+                        onClick={(e) => uploadCover(e)}
+                      >
+                        {
+                          isLoadingMetadata &&
+                          <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                        }
+                        {t('register.create_cover')}
+                      </button>
+                    }
+                  </div>
+                }
+              </Section>
+              <Section>
+                <div className="mb-6">
                   <label htmlFor="images" className="block text-md font-semibold text-gray-1000 pb-1">
                     {t('instrument.images')} {process.env.NEXT_PUBLIC_MIME_TYPE_ACCEPT}
                   </label>
@@ -477,7 +644,7 @@ export default function DraftForm(
                         id="images"
                         name="images"
                         multiple={true}
-                        ref={refs}
+                        ref={refImage}
                         className="hidden"
                         onChange={handleImageChange}
                       />
@@ -488,16 +655,11 @@ export default function DraftForm(
                             className="max-w-sm bg-it-50 border border-gray-200 rounded-lg overflow-hidden shadow dark:bg-gray-800 dark:border-gray-700 mt-4 text-center"
                           >
                             <div className="relative overflow-hidden text-ellipsis">
-                              {
-                                index === 0 && <div className="w-full p-3 border-none focus:outline-none">
-                                  <b>{t('instrument.image')}</b>
-                                </div>
-                              }
                               <img className="" src={img.file_url} alt={img.description} />
                               <button
                                 type="button"
                                 className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
-                                onClick={() => handleCurrentDocuementDelete(img.id)}
+                                onClick={() => handleCurrentFileDelete(img.id)}
                               >
                                 <IconTrashTwentyFour />
                               </button>
@@ -523,9 +685,6 @@ export default function DraftForm(
                               <IconTrashTwentyFour />
                             </button>
                           </div>
-                          {
-                            instrument && instrument.images.length > 0 ? '' : index === 0 && t('instrument.image')
-                          }
                           <textarea
                             className="w-full p-2 border-none focus:outline-none"
                             placeholder={t('instrument.images_description_placeholder')}
@@ -540,7 +699,7 @@ export default function DraftForm(
                         onClick={handleImagesClick}
                       >
                         <IconUploadTwentyFour className="w-4 h-4 mr-2" />
-                        {!images.length && (!instrument || !instrument.images.length) ? t('instrument.image_helper') : t('instrument.select_detail_image')}
+                        {t('instrument.select_detail_image')}
                       </button>
                     </div>
                     {error && <p className="text-red-500">{error}</p>}
@@ -581,7 +740,7 @@ export default function DraftForm(
                         id="files"
                         name="files"
                         multiple={true}
-                        ref={refs}
+                        ref={refDocument}
                         className="hidden"
                         onChange={handleDocumentChange}
                       />
@@ -593,14 +752,14 @@ export default function DraftForm(
                           >
                             <div className="relative overflow-hidden text-ellipsis">
                               <div className="">
-                                <div className="p-8">
+                                <div className="p-8 pl-20 pr-20 bg-white">
                                   {file.title}
                                 </div>
                               </div>
                               <button
                                 type="button"
                                 className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
-                                onClick={() => handleCurrentDocuementDelete(file.id)}
+                                onClick={() => handleCurrentFileDelete(file.id)}
                               >
                                 <IconTrashTwentyFour />
                               </button>

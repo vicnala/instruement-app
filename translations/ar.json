@@ -197,7 +197,7 @@
         "update": "Update",
         "set_description": "Save description",
         "update_description": "Save",
-        "create_cover": "Create cover",
+        "create_cover": "Save cover",
         "update_cover": "Update cover",
         "upload_images": "Upload images",
         "upload_documents": "Upload documents",
