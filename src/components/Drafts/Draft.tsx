@@ -34,12 +34,8 @@ export default function Draft(
           setIsLoading(false);
         } else {
           setInstrument(data.data);
-          
-          const imageIds = data.data.images;
-          if (imageIds && imageIds.length > 0) {
-            const sorted = imageIds.sort((ida: number, idb: number) => ida > idb ? 1 : -1);
-            const coverId = sorted[0];
-            const result = await fetch(`/api/file/${coverId}`, {
+          if (data.data.cover_image) {
+            const result = await fetch(`/api/file/${data.data.cover_image}`, {
               method: "GET",
               headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
             })

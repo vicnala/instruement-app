@@ -26,11 +26,11 @@ export async function DELETE(
       return Response.json({ code: 'success', data: data?.data })
     }
     return Response.json(
-      { data: { message: data?.message ? data.message : 'Upload error' } },
+      { data: { message: data?.message ? data.message : '/api/file DELETE error' } },
       { status: 400 }
     )
   } catch (err: any) {
-    console.error(`/api/file error`, err)
+    console.error(`/api/file DELETE error`, err)
     return Response.json(
       { data: { message: err.message } },
       { status: 400 }
@@ -61,7 +61,7 @@ export async function GET(
       return Response.json({ code: 'success', data })
     }
     return Response.json(
-      { data: { message: data?.message ? data.message : 'Upload error' } },
+      { data: { message: data?.message ? data.message : '/api/file GET error' } },
       { status: 400 }
     )
   } catch (err: any) {

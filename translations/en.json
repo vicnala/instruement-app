@@ -236,7 +236,7 @@
         "update": "Update",
         "set_description": "Save",
         "update_description": "Update",
-        "edit": "You are editing the draft of the instrument"
+        "edit": "You are editing the draft"
     },
     "Metadata": {
       "title": "Instruement",
@@ -257,6 +257,9 @@
             "title_single": "Your Registered Instrument",
             "title_plural": "Your Registered Instruments",
             "description": "Instruments under your ownership. You can manage settings, view data or initiate their transfer."
+        },
+        "DraftForm": {
+            "delete": "Delete draft"
         }
     }
   }

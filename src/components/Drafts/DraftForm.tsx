@@ -68,7 +68,9 @@ export default function DraftForm(
           const coverId = data.data.cover_image;
 
           if (imageIds && imageIds.length > 0) {
-            const sorted = imageIds.sort((ida: number, idb: number) => ida > idb ? 1 : -1);
+            const sorted = imageIds
+              .filter((id: number) => id !== coverId)
+              .sort((ida: number, idb: number) => ida > idb ? 1 : -1);
             const _images: InstrumentImage[] = await Promise.all(
               sorted.map(async (imgId: number) => {
                 const result = await fetch(`/api/file/${imgId}`, {
@@ -423,6 +425,18 @@ export default function DraftForm(
     setIsLoadingMetadata(false);
     setReloadUser(true);
   }
+
+  const handleInstrumentDelete = async () => {
+    setIsLoadingMetadata(true);
+    try {
+      await fetch(`/api/instrument/${instrumentId}`, { method: "DELETE" });
+    } catch (error) {
+      console.log("POST /api/instrument DELETE error", error)
+    }
+    setIsLoadingMetadata(false);
+    setReloadUser(true);
+    router.push(`/`)
+  };
   
   if (instrumentId && !instrument) return (
     <Page>
@@ -437,14 +451,32 @@ export default function DraftForm(
       <Page>
         <Section>
           {
-            instrument ? 
-              <h2 className='text-xl font-semibold text-center'>{t('drafts.edit')} #{instrument.id} </h2> 
+            instrument ?
+              <h2 className='text-xl font-semibold text-center'>{t('drafts.edit')} #{instrument.id} </h2>
             : <>
                 <h2 className='text-xl font-semibold text-center'>{t('drafts.new')}</h2>
                 <p className="text-center mb-2 text-grey-900">{t('register.sub_heading')}</p>
               </>
           }
         </Section>
+
+        <Section>
+          {
+            instrument &&
+            <div className="mt-6 text-center">
+              <button
+                type="button"
+                className="items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+                disabled={isLoadingMetadata}
+                onClick={() => handleInstrumentDelete()}
+              >
+                {isLoadingMetadata && <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>}
+                {t('components.DraftForm.delete')}
+              </button>
+            </div>
+          }
+        </Section>
+
         <form className="py-4 px-4 rounded-lg">
           <Section>
             <div className="mb-6">
@@ -468,17 +500,16 @@ export default function DraftForm(
                       className="placeholder:text-gray-700 p-2 outline-none"
                     />
                   </div>
-                  {instrumentTypes?.map((ins: any) => (
+                  {instrumentTypes?.length && instrumentTypes.map((ins: any) => (
                     <li
                       key={ins?.label}
                       className={`p-2 text-sm hover:bg-sky-600 hover:text-white
                       ${ins?.value?.toLowerCase() === type?.toLowerCase() && "bg-sky-600 text-white"}
                       ${ins?.value?.toLowerCase().startsWith(inputValue) ? "block" : "hidden"}`}
                       onClick={() => {
+                        setOpen(false);
                         if (ins?.value?.toLowerCase() !== type.toLowerCase()) {
                           setType(ins?.value)
-                          setOpen(false)
-                          setInputValue("")
                         }
                       }}
                     >

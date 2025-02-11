@@ -241,7 +241,7 @@
         "update": "Actualizar",
         "set_description": "Guardar",
         "update_description": "Actualizar",
-        "edit": "Estás editando el borrador del instrumento"
+        "edit": "Estás editando el borrador"
     },
     "Metadata": {
       "title": "Instruement",
@@ -262,6 +262,9 @@
             "title_single": "Tu Instrumento Registrado",
             "title_plural": "Tus Instrumentos Registrados",
             "description": "Instrumentos bajo tu propiedad. Puedes gestionar su configuración, ver datos o iniciar su transferencia."
+        },
+        "DraftForm": {
+            "delete": "Eliminar borrador"
         }
     }
   }
