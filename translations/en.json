@@ -259,7 +259,11 @@
             "description": "Instruments under your ownership. You can manage settings, view data or initiate their transfer."
         },
         "DraftForm": {
-            "delete": "Delete draft"
+            "delete": "Delete draft",
+            "preview": "Preview"
+        },
+        "Preview": {
+            "title": "Preview of draft"
         }
     }
   }

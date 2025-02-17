@@ -264,7 +264,11 @@
             "description": "Instrumentos bajo tu propiedad. Puedes gestionar su configuración, ver datos o iniciar su transferencia."
         },
         "DraftForm": {
-            "delete": "Eliminar borrador"
+            "delete": "Eliminar borrador",
+            "preview": "Previsualizar"
+        },
+        "Preview": {
+            "title": "Previsualización del borrador"
         }
     }
   }

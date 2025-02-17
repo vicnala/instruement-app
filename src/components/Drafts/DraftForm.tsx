@@ -45,7 +45,7 @@ export default function DraftForm(
   const refCover = useRef<HTMLInputElement>(null)
   const refImage = useRef<HTMLInputElement>(null)
   const refDocument = useRef<HTMLInputElement>(null)
-  const [isLoadingMetadata, setIsLoadingMetadata] = useState(false)  
+  const [isLoadingMetadata, setIsLoadingMetadata] = useState(false)
 
   useEffect(() => {
     const getInstrument = async () => {     
@@ -485,7 +485,7 @@ export default function DraftForm(
               </label>
               <div className="relative mb-2 font-medium">
                 <div
-                  onClick={() => setOpen(!open)}
+                  onClick={() => instrument?.type ? null : setOpen(!open)}
                   className={`bg-white p-2 flex border border-gray-200 items-center justify-between rounded-md ${!type && "text-gray-700"}`}
                 >
                   {type ? type : t('instrument.type_placeholder')}
@@ -498,14 +498,15 @@ export default function DraftForm(
                       onChange={(e) => setInputValue(e.target.value.toLowerCase())}
                       placeholder={t('instrument.type_placeholder')}
                       className="placeholder:text-gray-700 p-2 outline-none"
+                      disabled={instrument?.type ? true : false}
                     />
                   </div>
                   {instrumentTypes?.length && instrumentTypes.map((ins: any) => (
                     <li
                       key={ins?.label}
                       className={`p-2 text-sm hover:bg-sky-600 hover:text-white
-                      ${ins?.value?.toLowerCase() === type?.toLowerCase() && "bg-sky-600 text-white"}
-                      ${ins?.value?.toLowerCase().startsWith(inputValue) ? "block" : "hidden"}`}
+                        ${ins?.value?.toLowerCase() === type?.toLowerCase() && "bg-sky-600 text-white"}
+                        ${ins?.value?.toLowerCase().startsWith(inputValue) ? "block" : "hidden"}`}
                       onClick={() => {
                         setOpen(false);
                         if (ins?.value?.toLowerCase() !== type.toLowerCase()) {
@@ -529,29 +530,17 @@ export default function DraftForm(
                 className="block w-full px-4 py-2 text-it-950 border rounded-md focus:border-it-400 focus:ring-it-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 onChange={(e) => { setName(e.target.value) }}
                 value={name}
+                disabled={name ? true : false}
               />
             </div>
             {
-              instrument && instrumentId && <div className="mb-6">
-                <label
-                  htmlFor="description"
-                  className="block text-md font-semibold text-gray-1000  pb-1"
-                >
-                  {t('instrument.description')}
-                </label>
-                <div className="p-0 border border-gray-200 bg-white rounded-md">
-                  <Editor markdown={description} updateDescription={handleDescriptionChange} />
-                </div>
-              </div>
-            }
-            {
-              type && name &&
+              type && name && !instrumentId &&
               <div className="mt-6 text-center">
                 <button
                   type="button"
                   className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
                   disabled={isLoadingMetadata}
-                  onClick={(e) => instrumentId ? updateInstrument(e) : createInstrument(e)}
+                  onClick={(e) => createInstrument(e)}
                 >
                   {isLoadingMetadata && <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>}
                   {t('drafts.save')}
@@ -560,7 +549,7 @@ export default function DraftForm(
             }
           </Section>
           {
-            instrument && type && name && instrument.description &&
+            instrument &&
             <>
               <Section>
                 <div className="mb-6">
@@ -614,9 +603,6 @@ export default function DraftForm(
                               <IconTrashTwentyFour />
                             </button>
                           </div>
-                          {
-                            t('instrument.image')
-                          }
                           <textarea
                             className="w-full p-2 border-none focus:outline-none"
                             placeholder={t('instrument.images_description_placeholder')}
@@ -862,7 +848,62 @@ export default function DraftForm(
               </Section>
             </>
           }
-          {
+
+          { instrument && 
+            (instrument.images?.length > 0) &&
+            (instrument.files?.length > 0) && 
+            (instrument.cover_image) &&
+              <Section>
+                <div className="mb-6">
+                  <label
+                    htmlFor="description"
+                    className="block text-md font-semibold text-gray-1000  pb-1"
+                  >
+                    {t('instrument.description')}
+                  </label>
+                  <div className="p-0 border border-gray-200 bg-white rounded-md">
+                    <Editor markdown={description} updateDescription={handleDescriptionChange} />
+                  </div>
+                </div>
+                {
+                  instrument.description !== description && 
+                  <div className="mt-6 text-center">
+                    <button
+                      type="button"
+                      className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+                      disabled={isLoadingMetadata}                      
+                      onClick={(e) => updateInstrument(e)}
+                    >
+                      {isLoadingMetadata && <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>}
+                      {t('drafts.save')}
+                    </button>
+                  </div>
+                }
+                {
+                  (instrument.cover_image || cover) &&
+                  (instrument.description === description) && description &&
+                  <div className="mt-6 text-center">
+                    <button
+                      type="button"
+                      className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+                      disabled={isLoadingMetadata}
+                      onClick={() => router.push(`/preview/${instrument.id}`)}
+                    >
+                      {
+                        isLoadingMetadata &&
+                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                      }
+                      {t('components.DraftForm.preview')}
+                    </button>
+                  </div>
+                }
+              </Section>
+          }
+
+          {/* {
             !images.length && instrument && instrument.type && instrument.title && instrument.description && instrument.images?.length > 0 &&
             <div className="mt-6 text-center">
               <button
@@ -881,7 +922,7 @@ export default function DraftForm(
                 {t('register.register')}
               </button>
             </div>
-          }
+          } */}
         </form>
       </Page> :
       <NotConnected locale={locale} />

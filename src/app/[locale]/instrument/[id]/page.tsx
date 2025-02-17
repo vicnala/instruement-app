@@ -7,5 +7,6 @@ export default function InstrumentPage({
   searchParams?: { address?: string };
   params: { locale: string, id: string };
 }) {
+  setRequestLocale(locale);
   return <Instrument id={id} locale={locale} />;
 }
