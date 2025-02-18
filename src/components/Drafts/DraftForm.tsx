@@ -530,7 +530,7 @@ export default function DraftForm(
                 className="block w-full px-4 py-2 text-it-950 border rounded-md focus:border-it-400 focus:ring-it-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 onChange={(e) => { setName(e.target.value) }}
                 value={name}
-                disabled={name ? true : false}
+                disabled={instrument?.title ? true : false}
               />
             </div>
             {
