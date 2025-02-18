@@ -4,7 +4,6 @@ import { stripe } from "@/lib/stripe";
 import { Engine } from "@thirdweb-dev/engine";
 import { upload } from "thirdweb/storage";
 import { client } from "@/app/client";
-import Instrument from "@/components/Instrument/Instrument";
 import { baseSepolia } from "thirdweb/chains";
 
 const {
@@ -122,7 +121,7 @@ export async function POST(req: Request) {
                 const instrumentId = minter.instruments.find((id: number) => id === parseInt(data.metadata.id));
                 // console.log('instrumentId ok:', instrumentId);
                 if (!instrumentId) {
-                  throw new Error(`/api/webhook wrong instrument id`);
+                  throw new Error(`/api/webhooks/stripe wrong instrument id`);
                 }
                 
                 result = await fetch(`${process.env.INSTRUEMENT_API_URL}/instrument/${instrumentId}`, { cache: 'no-store', method: 'GET', headers })
@@ -245,25 +244,43 @@ export async function POST(req: Request) {
                       const xBackendWalletAddress = BACKEND_WALLET_ADDRESS;
                       const receiver = BACKEND_WALLET_ADDRESS;
         
-                      
                       const mintResult = await engine.erc721.mintTo(
                         cahin,
                         contractAddress,
                         xBackendWalletAddress,
                         { receiver, metadata }
                       );
-        
-                      console.log('mintResult', mintResult);
+                      
+                      const { queueId } = mintResult.result;
+
+                      console.log('queueId', queueId, 'for draft', instrumentId);
+
+                      result = await fetch(`${process.env.INSTRUEMENT_API_URL}/instrument/${instrumentId}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` },
+                        body: JSON.stringify({ queueId })
+                      });
+
+                      const updateData = await result.json();
+                      if (updateData?.code === 'success') {
+                        return NextResponse.json({ message: "Received" }, { status: 200 });
+                      } else {
+                        throw new Error(`/api/webhooks/stripe ${message}`);
+                      }
+                    } else {
+                      throw new Error(`/api/webhooks/stripe NO COVER URI`);
                     }
-                  }                  
+                  } else {
+                    throw new Error(`/api/webhooks/stripe NO COVER URI FILE`);
+                  }
                 } else {
-                  throw new Error(`/api/webhook ${message}`);
+                  throw new Error(`/api/webhooks/stripe ${message}`);
                 }
               } else {
-                throw new Error(`/api/webhook ${message}`);
+                throw new Error(`/api/webhooks/stripe ${message}`);
               }
             } catch (err: any) {
-              throw new Error(`/api/webhook ${err.message}`);
+              throw new Error(`/api/webhooks/stripe ${err.message}`);
             }
           }
           break;
@@ -271,7 +288,7 @@ export async function POST(req: Request) {
           throw new Error(`Unhandled event: ${event.type}`);
       }
     } catch (error: any) {
-      console.error(`/api/webhook:`, error)
+      console.error(`/api/webhooks/stripe:`, error)
       return NextResponse.json(
         { message: error.message ? error.message : "Webhook handler failed" },
         { status: 500 },
