@@ -446,6 +446,9 @@ export default function DraftForm(
     </Page>
   )
 
+  console.log("instrument", instrument);
+  
+
   return (
     minter ?
       <Page>

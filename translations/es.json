@@ -269,6 +269,10 @@
         },
         "Preview": {
             "title": "Previsualización del borrador"
+        },
+        "Instrument": {
+            "images": "Imágenes",
+            "documents": "Documentos"
         }
     }
   }

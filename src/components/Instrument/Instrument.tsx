@@ -4,25 +4,19 @@ import React, { useEffect, useState } from "react"
 import truncateEthAddress from 'truncate-eth-address'
 import { useTranslations } from "next-intl";
 import { resolveScheme } from "thirdweb/storage";
-// import { bytesToBigInt } from "thirdweb/utils";
-import { useActiveAccount, TransactionButton } from "thirdweb/react";
-// import { transferFrom } from "thirdweb/extensions/erc721";
-// import { useStateContext } from "@/app/context";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
 import Loading from "@/components/Loading";
 import { client } from "@/app/client";
-import { useRouter } from "@/i18n/routing";
 
 export default function Instrument(
 	{ locale, id }: Readonly<{ locale: string, id: string }>
 ) {
-	const router = useRouter();
 	const t = useTranslations();
-	// const { setReloadUser, address, contract } = useStateContext()
 	const [isLoading, setIsLoading] = useState(false)
 	const [instrument, setInstrument] = useState<any>()
 	const [images, setImages] = useState<any[]>([])
+	const [documents, setDocuments] = useState<any[]>([])
 
 	useEffect(() => {
 		async function getInstrument() {
@@ -30,25 +24,51 @@ export default function Instrument(
 				const result = await fetch(`/api/token/${id}`)
 				const data = await result.json();
 				setInstrument(data);
-				const properties = data.metadata.properties || data.metadata.attributes || [];
-				const fileDirHashTrait = properties.find((prop: any) => prop.trait_type === 'FileDirHash');
-				const fileCountTrait = properties.find((prop: any) => prop.trait_type === 'FileCount');
-				const fileDescriptionsTrait = properties.find((prop: any) => prop.trait_type === 'FileDescriptions');
+				
+				// console.log("instrument.data", data);
 
-				if (fileDirHashTrait && fileCountTrait) {
+				const properties = data.metadata.properties || data.metadata.attributes || [];
+				const fileDirHashTrait = properties.find((prop: any) => prop.trait_type === 'Files');
+
+				if (fileDirHashTrait) {
 					const fileDirHash = fileDirHashTrait.value;
-					const fileCount = parseInt(fileCountTrait.value);
-					const fileDescriptions = JSON.parse(fileDescriptionsTrait.value);
-					// console.log(fileDirHash, fileCount, fileDescriptions);
+					
+					// console.log("fileDirHash", fileDirHash);
+
+					const fileDescriptionsUrl = await resolveScheme({
+						client,
+						uri: `ipfs://${fileDirHash}/descriptions`
+					});
+
+					// console.log("fileDescriptionsUrl", fileDescriptionsUrl);
+
+					const result = await fetch(fileDescriptionsUrl)
+					const fileDescriptionsData = await result.json();
+
+					// console.log("fileDescriptionsData", fileDescriptionsData);
+					
 					const images: any[] = [];
-					for (let index = 0; index < fileCount; index++) {
-						const uri = await resolveScheme({
-							client,
-							uri: `ipfs://${fileDirHash}/${index}`
-						});
-						if (uri) images.push({ uri, description: fileDescriptions[index] });
+					const documents: any[] = [];
+					
+					for (const fileDescription of fileDescriptionsData) {
+						if (fileDescription.cover) continue;
+
+						if (fileDescription.name.includes('image')) {
+							const uri = await resolveScheme({
+								client,
+								uri: `ipfs://${fileDirHash}/${fileDescription.name}`
+							});
+							if (uri) images.push({ uri, description: fileDescription.description });
+						} else if (fileDescription.name.includes('document')) {
+							const uri = await resolveScheme({
+								client,
+								uri: `ipfs://${fileDirHash}/${fileDescription.name}`
+							});
+							if (uri) documents.push({ uri, description: fileDescription.description });
+						}
 					}
 					setImages(images);
+					setDocuments(documents);
 				}
 
 			} catch (error) {
@@ -78,7 +98,7 @@ export default function Instrument(
 	return (
 		<Page>
 			{
-				instrument ? <>
+				instrument && instrument.metadata ? <>
 					<Section>
 						<div className='text-center flex flex-col'>
 							<h2 className='text-3xl font-semibold text-black dark:text-it-50'>
@@ -104,11 +124,11 @@ export default function Instrument(
 						</div>
 					</Section>
 					{
-						images && images.length ?
+						images && images.length &&
 							<Section>
 								<div className='flex flex-col'>
 									<h2 className='text-3xl font-semibold text-black dark:text-it-50'>
-										Images
+										{t('components.Instrument.images')}
 									</h2>
 									{
 										images.map((img: any, index: number) =>
@@ -119,7 +139,28 @@ export default function Instrument(
 										)
 									}
 								</div>
-							</Section> : <></>
+							</Section>
+					}
+					{
+						documents && documents.length &&
+							<Section>
+								<div className='flex flex-col'>
+									<h2 className='text-3xl font-semibold text-black dark:text-it-50'>
+										{t('components.Instrument.documents')}
+									</h2>
+									{
+										documents.map((doc: any, index: number) =>
+											<div key={`${index}`}>
+												<p>
+													<a href={doc.uri} target="_blank" rel="noreferrer">
+														🔗 {doc.description} 
+													</a>
+												</p>
+											</div>
+										)
+									}
+								</div>
+							</Section>
 					}
 					{/* <Section>
 			{

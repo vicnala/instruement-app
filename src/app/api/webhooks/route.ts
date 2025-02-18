@@ -4,6 +4,8 @@ import { stripe } from "@/lib/stripe";
 import { Engine } from "@thirdweb-dev/engine";
 import { upload } from "thirdweb/storage";
 import { client } from "@/app/client";
+import Instrument from "@/components/Instrument/Instrument";
+import { baseSepolia } from "thirdweb/chains";
 
 const {
   STRIPE_WEBHOOK_SECRET_KEY,
@@ -15,7 +17,13 @@ const {
   CHAIN_ID
 } = process.env;
 
-async function fetchAndStreamImage(url: string) {
+type ImageDescription = {
+  name: string;
+  description: string;
+  cover: boolean;
+}
+
+async function fetchAndStreamFile(url: string) {
   const response = await fetch(url);
   if (response.body) {
     const reader = response.body.getReader();
@@ -42,6 +50,9 @@ async function fetchAndStreamImage(url: string) {
 
 export async function POST(req: Request) {
   let event: Stripe.Event;
+
+
+  const headers = { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` };
 
   try {
     event = stripe.webhooks.constructEvent(
@@ -102,14 +113,9 @@ export async function POST(req: Request) {
           console.log(`💰 PaymentIntent minterAddress:`, data.metadata?.minterAddress);
 
           if (data.metadata.minterAddress && data.metadata.id) {
+            let result, blob;
             try {
-              const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/user/${data.metadata.minterAddress}`, {
-                cache: 'no-store',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`,
-                }
-              })
+              result = await fetch(`${process.env.INSTRUEMENT_API_URL}/user/${data.metadata.minterAddress}`, {  cache: 'no-store', headers })
               const { code, message, data: minter } = await result.json()
 
               if (code === 'success') {
@@ -119,146 +125,140 @@ export async function POST(req: Request) {
                   throw new Error(`/api/webhook wrong instrument id`);
                 }
                 
-                const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/instrument/${instrumentId}`, {
-                  cache: 'no-store', method: 'GET',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`,
-                  }
-                })
+                result = await fetch(`${process.env.INSTRUEMENT_API_URL}/instrument/${instrumentId}`, { cache: 'no-store', method: 'GET', headers })
                 const { code, message, data: instrument }  = await result.json()
 
-                console.log('instrument mint', instrument);
-                
+                // console.log('instrument mint', instrument);
 
-                // if (code === 'success') {
-                //   if (instrument) {
-                //     const sorted = instrument.images.sort((ida: number, idb: number) => ida > idb ? 1 : -1);
-                //     const _images: any[] = await Promise.all(
-                //       sorted.map(async (imgId: number) => {
-                //         const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/file/${imgId}`, {
-                //           method: "GET",
-                //           headers: {
-                //             'Accept': 'application/json',
-                //             'Content-Type': 'application/json',
-                //             'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`
-                //           }
-                //         })
-                //         const { code, data: imageData } = await result.json()
-                        
-                //         if (code !== 'success') {
-                //           console.log(`GET ${process.env.INSTRUEMENT_API_URL}/file/${imgId} ERROR`, imageData.message);
-                //           return ({
-                //             id: imgId,
-                //             file_url: '/images/icons/android-chrome-512x512.png',
-                //             description: 'Image not found'
-                //           })
-                //         } else {
-                //           return imageData;
-                //         }
-                //       })
-                //     ) || [];
+                if (code === 'success') {
+                  const files: File[] = [];
+                  const descriptions: ImageDescription[] = [];
 
-                //     if (_images.length === instrument.images.length) {
-                //       // set instrument images
-                //       instrument.images = _images;
+                  const coverId = instrument.cover_image;
+                  const imagesIds = instrument.images;
+                  const filesIds = instrument.files;
+
+                  // IMAGES
+                  let imageIndex: number = 0;
+                  for (const imageId of imagesIds) {
+                    result = await fetch(`${process.env.INSTRUEMENT_API_URL}/file/${imageId}`, { headers });
+                    const { data: _image } = await result.json();
+                    // console.log("_image", _image);
+
+                    blob = await fetchAndStreamFile(_image.file_url);
+                    const fileName = `image_${imageIndex}`;
+                    if (blob) {
+                        const file = new File([blob], fileName, { type: _image.type });
+                        files.push(file);
+                        // imagesDescriptions.push(_image.description);
+                        descriptions.push({
+                          name: fileName,
+                          description: _image.description,
+                          cover: imageId === coverId ? true : false
+                        });
+                    }
+                    imageIndex++;
+                  }
+
+                  // DOCUMENTS
+                  let documentIndex: number = 0;
+                  for (const fileId of filesIds) {
+                    result = await fetch(`${process.env.INSTRUEMENT_API_URL}/file/${fileId}`, { headers });
+                    const { data: _file } = await result.json();
+                    // console.log("_file", _file);
+                    blob = await fetchAndStreamFile(_file.file_url);
+                    const fileName = `document_${documentIndex}`;
+                    if (blob) {
+                        const file = new File([blob], fileName, { type: _file.type });
+                        files.push(file);
+                        // filesDescriptions.push(_file.description);
+                        descriptions.push({
+                          name: fileName,
+                          description: _file.description,
+                          cover: false
+                        });
+                    }
+                    documentIndex++;
+                  }
+
+                  const _descriptionsString = JSON.stringify(descriptions);
+                  const _descriptionsBlob = Buffer.from(_descriptionsString, 'utf-8');
+                  const _descriptions = new File([_descriptionsBlob], `descriptions`, { type: 'text/plain' });
+                  files.push(_descriptions);
+        
+                  // console.log("descriptions", descriptions);
+
+                  const coverFileName = descriptions.find(d => d.cover === true);
+
+                  if (coverFileName) {
+                    // console.log('coverFileName', coverFileName.name);
+        
+                    // sort the files so the first one is the cover
+                    files.sort((a, b) => a.name === coverFileName.name ? -1 : 1);
                     
-                //       const files = [];
-                //       const descriptions = [];
-
-                //       let imageIndex: number = 0;
-                //       for (const image of instrument.images) {
-                //         const file_url = image.file_url;
-                //         // const file_name_split =image.file.split('.');
-                //         // const file_name_ext = file_name_split[file_name_split.length -1];
-                //         // const file_name = image.file;
-                //         // const file_name = `${imageIndex}.${file_name_ext}`;
-                //         const file_name = `${imageIndex}`;
-                //         const file_type = image.type;
-                //         // console.log(file_name);
-
-                //         const blob = await fetchAndStreamImage(file_url);
-                //         if (blob) {
-                //           const file = new File([blob], file_name, { type: file_type });
-                //           files.push(file);
-                //           descriptions.push(image.description);
-                //         }
-                //         imageIndex++;
-                //       }
-
-                //       const uris = await upload({
-                //         client,
-                //         files
-                //       });
-
-                //       let uri0, fileCount = 1;
-                //       if (Array.isArray(uris)) {
-                //         uri0 = uris[0];
-                //         fileCount = uris.length;
-                //       } else {
-                //         uri0 = uris;
-                //       }
-
-                //       if (uris && uris.length) {
-                //         const fileDirSplit = uri0.split('/');
-                //         const FileDirHash = fileDirSplit[2];
-                //         // console.log("FileDirHash", FileDirHash);
-
-                //         const metadata = {
-                //           image: uri0,
-                //           name: instrument.title,
-                //           description: instrument.description,
-                //           properties: [
-                //             {
-                //               trait_type: "Registrar",
-                //               value: data.metadata.minterAddress
-                //             },
-                //             {
-                //               trait_type: "Type",
-                //               value: instrument.type
-                //             },
-                //             {
-                //               trait_type: "FileDirHash",
-                //               value: FileDirHash
-                //             },
-                //             {
-                //               trait_type: "FileCount",
-                //               value: fileCount
-                //             },
-                //             {
-                //               trait_type: "FileDescriptions",
-                //               value: JSON.stringify(descriptions)
-                //             },
-                //           ]
-                //         }
-
-                //         const engine = new Engine({
-                //           url: ENGINE_URL,
-                //           accessToken: ENGINE_ACCESS_TOKEN,
-                //         });
-
-                //         const cahin = CHAIN_ID;
-                //         const contractAddress = NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS;
-                //         const xBackendWalletAddress = BACKEND_WALLET_ADDRESS;
-                //         const receiver = data.metadata.address;
-
-                //         // console.log('metadata', metadata);
-
-                //         const mintResult = await engine.erc721.mintTo(
-                //           cahin,
-                //           contractAddress,
-                //           xBackendWalletAddress,
-                //           { receiver, metadata }
-                //         );
-
-                //         console.log('mintResult', mintResult);
-                //       }                      
-                //     }
-                //   }
-                  
-                // } else {
-                //   throw new Error(`/api/webhook ${message}`);
-                // }
+                    // upload files to IPFS
+                    const uris = await upload({ client, files });
+        
+                    console.log("uris", uris);
+                    
+                    // get the cover umage URI as the first uri
+                    const coverURI = uris[0];
+        
+                    if (coverURI) {
+                      const fileDirSplit = coverURI.split('/');
+                      const FileDirHash = fileDirSplit[2];
+        
+                      const metadata = {
+                        image: coverURI,
+                        name: instrument.title,
+                        description: instrument.description,
+                        background_color: "",
+                        external_url: "",
+                        customImage: "",
+                        customAnimationUrl: "",
+                        animation_url: "",
+                        properties: [
+                          {
+                            trait_type: "Registrar",
+                            value: BACKEND_WALLET_ADDRESS
+                          },
+                          {
+                            trait_type: "Type",
+                            value: instrument.type
+                          },
+                          {
+                            trait_type: "Files",
+                            value: FileDirHash
+                          }
+                        ]
+                      }
+        
+                      // console.log('metadata', metadata);
+        
+                      const engine = new Engine({
+                        url: ENGINE_URL,
+                        accessToken: ENGINE_ACCESS_TOKEN,
+                      });
+        
+                      const cahin = `${baseSepolia.id}`
+                      const contractAddress = NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS;
+                      const xBackendWalletAddress = BACKEND_WALLET_ADDRESS;
+                      const receiver = BACKEND_WALLET_ADDRESS;
+        
+                      
+                      const mintResult = await engine.erc721.mintTo(
+                        cahin,
+                        contractAddress,
+                        xBackendWalletAddress,
+                        { receiver, metadata }
+                      );
+        
+                      console.log('mintResult', mintResult);
+                    }
+                  }                  
+                } else {
+                  throw new Error(`/api/webhook ${message}`);
+                }
               } else {
                 throw new Error(`/api/webhook ${message}`);
               }

@@ -264,6 +264,10 @@
         },
         "Preview": {
             "title": "Preview of draft"
+        },
+        "Instrument": {
+            "images": "Images",
+            "documents": "Documents"
         }
     }
   }
