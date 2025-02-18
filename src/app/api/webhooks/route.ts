@@ -128,134 +128,137 @@ export async function POST(req: Request) {
                 })
                 const { code, message, data: instrument }  = await result.json()
 
-                if (code === 'success') {
-                  if (instrument) {
-                    const sorted = instrument.images.sort((ida: number, idb: number) => ida > idb ? 1 : -1);
-                    const _images: any[] = await Promise.all(
-                      sorted.map(async (imgId: number) => {
-                        const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/file/${imgId}`, {
-                          method: "GET",
-                          headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json',
-                            'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`
-                          }
-                        })
-                        const { code, data: imageData } = await result.json()
+                console.log('instrument mint', instrument);
+                
+
+                // if (code === 'success') {
+                //   if (instrument) {
+                //     const sorted = instrument.images.sort((ida: number, idb: number) => ida > idb ? 1 : -1);
+                //     const _images: any[] = await Promise.all(
+                //       sorted.map(async (imgId: number) => {
+                //         const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/file/${imgId}`, {
+                //           method: "GET",
+                //           headers: {
+                //             'Accept': 'application/json',
+                //             'Content-Type': 'application/json',
+                //             'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`
+                //           }
+                //         })
+                //         const { code, data: imageData } = await result.json()
                         
-                        if (code !== 'success') {
-                          console.log(`GET ${process.env.INSTRUEMENT_API_URL}/file/${imgId} ERROR`, imageData.message);
-                          return ({
-                            id: imgId,
-                            file_url: '/images/icons/android-chrome-512x512.png',
-                            description: 'Image not found'
-                          })
-                        } else {
-                          return imageData;
-                        }
-                      })
-                    ) || [];
+                //         if (code !== 'success') {
+                //           console.log(`GET ${process.env.INSTRUEMENT_API_URL}/file/${imgId} ERROR`, imageData.message);
+                //           return ({
+                //             id: imgId,
+                //             file_url: '/images/icons/android-chrome-512x512.png',
+                //             description: 'Image not found'
+                //           })
+                //         } else {
+                //           return imageData;
+                //         }
+                //       })
+                //     ) || [];
 
-                    if (_images.length === instrument.images.length) {
-                      // set instrument images
-                      instrument.images = _images;
+                //     if (_images.length === instrument.images.length) {
+                //       // set instrument images
+                //       instrument.images = _images;
                     
-                      const files = [];
-                      const descriptions = [];
+                //       const files = [];
+                //       const descriptions = [];
 
-                      let imageIndex: number = 0;
-                      for (const image of instrument.images) {
-                        const file_url = image.file_url;
-                        // const file_name_split =image.file.split('.');
-                        // const file_name_ext = file_name_split[file_name_split.length -1];
-                        // const file_name = image.file;
-                        // const file_name = `${imageIndex}.${file_name_ext}`;
-                        const file_name = `${imageIndex}`;
-                        const file_type = image.type;
-                        // console.log(file_name);
+                //       let imageIndex: number = 0;
+                //       for (const image of instrument.images) {
+                //         const file_url = image.file_url;
+                //         // const file_name_split =image.file.split('.');
+                //         // const file_name_ext = file_name_split[file_name_split.length -1];
+                //         // const file_name = image.file;
+                //         // const file_name = `${imageIndex}.${file_name_ext}`;
+                //         const file_name = `${imageIndex}`;
+                //         const file_type = image.type;
+                //         // console.log(file_name);
 
-                        const blob = await fetchAndStreamImage(file_url);
-                        if (blob) {
-                          const file = new File([blob], file_name, { type: file_type });
-                          files.push(file);
-                          descriptions.push(image.description);
-                        }
-                        imageIndex++;
-                      }
+                //         const blob = await fetchAndStreamImage(file_url);
+                //         if (blob) {
+                //           const file = new File([blob], file_name, { type: file_type });
+                //           files.push(file);
+                //           descriptions.push(image.description);
+                //         }
+                //         imageIndex++;
+                //       }
 
-                      const uris = await upload({
-                        client,
-                        files
-                      });
+                //       const uris = await upload({
+                //         client,
+                //         files
+                //       });
 
-                      let uri0, fileCount = 1;
-                      if (Array.isArray(uris)) {
-                        uri0 = uris[0];
-                        fileCount = uris.length;
-                      } else {
-                        uri0 = uris;
-                      }
+                //       let uri0, fileCount = 1;
+                //       if (Array.isArray(uris)) {
+                //         uri0 = uris[0];
+                //         fileCount = uris.length;
+                //       } else {
+                //         uri0 = uris;
+                //       }
 
-                      if (uris && uris.length) {
-                        const fileDirSplit = uri0.split('/');
-                        const FileDirHash = fileDirSplit[2];
-                        // console.log("FileDirHash", FileDirHash);
+                //       if (uris && uris.length) {
+                //         const fileDirSplit = uri0.split('/');
+                //         const FileDirHash = fileDirSplit[2];
+                //         // console.log("FileDirHash", FileDirHash);
 
-                        const metadata = {
-                          image: uri0,
-                          name: instrument.title,
-                          description: instrument.description,
-                          properties: [
-                            {
-                              trait_type: "Registrar",
-                              value: data.metadata.minterAddress
-                            },
-                            {
-                              trait_type: "Type",
-                              value: instrument.type
-                            },
-                            {
-                              trait_type: "FileDirHash",
-                              value: FileDirHash
-                            },
-                            {
-                              trait_type: "FileCount",
-                              value: fileCount
-                            },
-                            {
-                              trait_type: "FileDescriptions",
-                              value: JSON.stringify(descriptions)
-                            },
-                          ]
-                        }
+                //         const metadata = {
+                //           image: uri0,
+                //           name: instrument.title,
+                //           description: instrument.description,
+                //           properties: [
+                //             {
+                //               trait_type: "Registrar",
+                //               value: data.metadata.minterAddress
+                //             },
+                //             {
+                //               trait_type: "Type",
+                //               value: instrument.type
+                //             },
+                //             {
+                //               trait_type: "FileDirHash",
+                //               value: FileDirHash
+                //             },
+                //             {
+                //               trait_type: "FileCount",
+                //               value: fileCount
+                //             },
+                //             {
+                //               trait_type: "FileDescriptions",
+                //               value: JSON.stringify(descriptions)
+                //             },
+                //           ]
+                //         }
 
-                        const engine = new Engine({
-                          url: ENGINE_URL,
-                          accessToken: ENGINE_ACCESS_TOKEN,
-                        });
+                //         const engine = new Engine({
+                //           url: ENGINE_URL,
+                //           accessToken: ENGINE_ACCESS_TOKEN,
+                //         });
 
-                        const cahin = CHAIN_ID;
-                        const contractAddress = NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS;
-                        const xBackendWalletAddress = BACKEND_WALLET_ADDRESS;
-                        const receiver = data.metadata.address;
+                //         const cahin = CHAIN_ID;
+                //         const contractAddress = NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS;
+                //         const xBackendWalletAddress = BACKEND_WALLET_ADDRESS;
+                //         const receiver = data.metadata.address;
 
-                        // console.log('metadata', metadata);
+                //         // console.log('metadata', metadata);
 
-                        const mintResult = await engine.erc721.mintTo(
-                          cahin,
-                          contractAddress,
-                          xBackendWalletAddress,
-                          { receiver, metadata }
-                        );
+                //         const mintResult = await engine.erc721.mintTo(
+                //           cahin,
+                //           contractAddress,
+                //           xBackendWalletAddress,
+                //           { receiver, metadata }
+                //         );
 
-                        console.log('mintResult', mintResult);
-                      }                      
-                    }
-                  }
+                //         console.log('mintResult', mintResult);
+                //       }                      
+                //     }
+                //   }
                   
-                } else {
-                  throw new Error(`/api/webhook ${message}`);
-                }
+                // } else {
+                //   throw new Error(`/api/webhook ${message}`);
+                // }
               } else {
                 throw new Error(`/api/webhook ${message}`);
               }
