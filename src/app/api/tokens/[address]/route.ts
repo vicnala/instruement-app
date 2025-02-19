@@ -48,7 +48,7 @@ export async function GET(
       NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS
     );
 
-    console.log(address, 'has', result?.length, 'tokens of', NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS);
+    console.log(address, 'has', result?.length, 'tokens from', NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS, 'on chain', CHAIN_ID);
 
     if (result) {
       return Response.json(result)
