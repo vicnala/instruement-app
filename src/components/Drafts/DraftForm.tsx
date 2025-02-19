@@ -58,7 +58,7 @@ export default function DraftForm(
         // console.log("GET", `/api/instrument/${instrumentId}`, data.data);
 
         if (data.code !== 'success') {
-          console.log(`GET /api/instrument/${instrumentId} ERROR`, data.message);
+          // console.log(`GET /api/instrument/${instrumentId} ERROR`, data.message);
           alert(`Error: ${data.message}`);
         } else {
           setName(data.data.title);          
@@ -217,10 +217,11 @@ export default function DraftForm(
     try {
       await fetch(`/api/file/${id}`, { method: "DELETE" });
     } catch (error) {
-      console.log("POST /api/file DELETE error", error)
+      console.log("DELETE /api/file error", error)
     }
-    setReloadUser(true);
     setIsLoadingMetadata(false);
+    setReloadUser(true);
+    setInstrument(undefined);
   };
 
   const handleCoverDelete = async () => {
@@ -266,25 +267,19 @@ export default function DraftForm(
     setDocumentsDescriptions(newDescriptions);
   };
 
-  const updateInstrument = async (e: any) => {
+  const updateDescription = async (e: any) => {
     e.preventDefault()
 
     setIsLoadingMetadata(true)
-    if (type && name && instrumentId) {
-      const selected: any = instrumentTypes.find((i: any) => i.label === type);
-      if (!selected || !instrument) return;
+    if (description) {
       try {
         const result = await fetch(`/api/instrument/${instrumentId}`, {
           method: "POST",
           headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            // user_id: minter.user_id,
-            type: selected ? selected.category : instrument?.type,
-            name,
-            description: description || ""
-          })
+          body: JSON.stringify({ description: description || "" })
         })
         const { data } = await result.json()
+
         // console.log("POST", `/api/instrument/${instrumentId}`, data);
 
         if (data.code !== 'success') {
@@ -292,6 +287,7 @@ export default function DraftForm(
           alert(`Error: ${data.message}`);
         } else {
           setReloadUser(true);
+          setInstrument(undefined);
         }
       } catch (error: any) {
         console.log(`POST /api/instrument/${instrumentId} ERROR`, error.message)
@@ -321,6 +317,7 @@ export default function DraftForm(
         if (data.code === 'success') {
           if (data.data) {
             setReloadUser(true);
+            setInstrument(undefined);
             router.replace(`/drafts/${data.data.id}?address=${address ? address : minterAddress}`);
           }
         } else {
@@ -362,6 +359,7 @@ export default function DraftForm(
     }
     setIsLoadingMetadata(false);
     setReloadUser(true);
+    setInstrument(undefined);
   }
 
   const uploadImages = async (e: any) => {
@@ -393,6 +391,10 @@ export default function DraftForm(
     }
     setIsLoadingMetadata(false);
     setReloadUser(true);
+    setImages([]);
+    setImageFiles([]);
+    setImageDescriptions([]);
+    setInstrument(undefined);
   }
   
   const uploadDocuments = async (e: any) => {
@@ -424,6 +426,9 @@ export default function DraftForm(
     }
     setIsLoadingMetadata(false);
     setReloadUser(true);
+    setDocumentFiles([]);
+    setDocumentsDescriptions([]);
+    setInstrument(undefined);
   }
 
   const handleInstrumentDelete = async () => {
@@ -435,6 +440,7 @@ export default function DraftForm(
     }
     setIsLoadingMetadata(false);
     setReloadUser(true);
+    // setInstrument(undefined);
     router.push(`/`)
   };
   
@@ -446,7 +452,12 @@ export default function DraftForm(
     </Page>
   )
 
-  // console.log("instrument", instrument);
+  // console.log(instrument);
+  
+  // // console.log("cover_image", instrument?.cover_image);
+  // console.log("images", instrument?.images);
+  // console.log("imageFiles", imageFiles);
+  // console.log("files", instrument?.files);
 
   return (
     minter ?
@@ -570,7 +581,7 @@ export default function DraftForm(
                         className="hidden"
                         onChange={handleCoverChange}
                       />
-                      {instrument && instrument.cover_image && instrument.cover_image.file_url &&
+                      {!cover && instrument.cover_image && instrument.cover_image.file_url && 
                           <div
                             key={instrument.cover_image.id}
                             className="max-w-sm bg-it-50 border border-gray-200 rounded-lg overflow-hidden shadow dark:bg-gray-800 dark:border-gray-700 mt-4 text-center"
@@ -614,7 +625,7 @@ export default function DraftForm(
                         </div>
                       }
                       {
-                        instrument && (!instrument.cover_image || !cover) && 
+                        (!instrument.cover_image && !cover) && 
                         <button
                           type="button"
                           className="bg-transparent text-center mt-2 hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-lg flex items-center justify-center"
@@ -628,7 +639,7 @@ export default function DraftForm(
                     {error && <p className="text-red-500">{error}</p>}
                   </>
                 </div>
-                {type && name && cover &&
+                {type && name && cover && !instrument.cover_image &&
                   <div className="mt-6 text-center">
                     {
                       <button
@@ -667,7 +678,7 @@ export default function DraftForm(
                         className="hidden"
                         onChange={handleImageChange}
                       />
-                      {instrument && instrument.images.length > 0 && instrument.images[0] &&
+                      {instrument.images.length > 0 && instrument.images[0] &&
                         instrument.images.map((img: InstrumentImage, index: number) => (
                           <div
                             key={img.id}
@@ -689,7 +700,7 @@ export default function DraftForm(
                           </div>
                         ))
                       }
-                      {!!images.length && images.map((img: any, index: number) => (
+                      {images.length > 0 && images.map((img: any, index: number) => (
                         <div
                           key={index.toString()}
                           className="max-w-sm bg-it-50 border border-gray-200 rounded-lg overflow-hidden shadow dark:bg-gray-800 dark:border-gray-700 mt-4 text-center"
@@ -874,7 +885,7 @@ export default function DraftForm(
                       type="button"
                       className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
                       disabled={isLoadingMetadata}                      
-                      onClick={(e) => updateInstrument(e)}
+                      onClick={(e) => updateDescription(e)}
                     >
                       {isLoadingMetadata && <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>}
                       {t('drafts.save')}
@@ -904,27 +915,6 @@ export default function DraftForm(
                 }
               </Section>
           }
-
-          {/* {
-            !images.length && instrument && instrument.type && instrument.title && instrument.description && instrument.images?.length > 0 &&
-            <div className="mt-6 text-center">
-              <button
-                type="button"
-                className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
-                disabled={isLoadingMetadata}
-                onClick={() => router.push(`/pay/${instrument.id}${address && `?address=${address}`}`)}
-              >
-                {
-                  isLoadingMetadata &&
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                }
-                {t('register.register')}
-              </button>
-            </div>
-          } */}
         </form>
       </Page> :
       <NotConnected locale={locale} />

@@ -10,7 +10,13 @@ export async function POST(
   const { id } = await params
   const { type, name, description } = await request.json()
 
-  console.log(`/api/instrument/${id}`, type, name, description);
+  
+  const postData: any = {};
+  if (type) postData['type'] = type;
+  if (name) postData['name'] = name;
+  if (description) postData['description'] = description;
+  
+  // console.log(`POST /api/instrument/${id}`, postData);
 
   try {
     const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/instrument/${id}`, {
@@ -20,11 +26,7 @@ export async function POST(
         'Content-Type': 'application/json',
         'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`,
       },
-      body: JSON.stringify({
-        type,
-        name,
-        description
-      })
+      body: JSON.stringify(postData)
     })
     const data = await result.json()
 
