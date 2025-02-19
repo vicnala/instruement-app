@@ -55,16 +55,23 @@ export async function POST( request: Request, response: Response ) {
     console.log(queueId, status, chainId, asset_id);
     
     try {
-        const getResult = await fetch(`${process.env.INSTRUEMENT_API_URL}/instrument?queueId=${queueId}`, {
+        const getResult = await fetch(`${process.env.INSTRUEMENT_API_URL}/instrument/queue/${queueId}`, {
             cache: 'no-store',
             method: 'GET',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` }
         })
         const getData = await getResult.json()
     
-        // console.log(`POST /api/instrument/${id}`, getData)
+        console.log(`GET /api/instrument/queue_id/${queueId}`, getData)
     
         if (getData?.code === 'success') {
+            if (getData.data.queue_id !== queueId) {
+                return NextResponse.json(
+                    { message: "Invalid queue_id" },
+                    { status: 401 },
+                );
+            }
+
             const instrumentId = getData.data.id;
 
             const postResult = await fetch(`${process.env.INSTRUEMENT_API_URL}/instrument/${instrumentId}`, {
@@ -74,18 +81,21 @@ export async function POST( request: Request, response: Response ) {
             });
 
             const postData = await postResult.json()
-
+            
             if (postData?.code === 'success') {
+                console.log(`Update asset_id SUCCEED for draft #${getData?.data?.id} queue_id ${queueId} and asset_id #${asset_id}`);
                 return Response.json({ message: "Received" })
             }
-
-            return Response.json(
-                { data: { message: `Update asset_id failed for draft ${instrumentId}, asset_id ${asset_id}` } },
-                { status: 400 }
-            )
+        } else {
+            console.error(`GET /instrument/queue/${queueId} FAILED with ${getData?.data?.message}`);
+            return NextResponse.json(
+                { message: getData?.message },
+                { status: getData?.data?.status },
+            );   
         }
+        console.error(`Update asset_id FAILED for draft #${getData?.data?.id} queue_id ${queueId} and asset_id #${asset_id}`);
         return Response.json(
-            { data: { message: getData?.message ? getData.message : 'Verify error' } },
+            { data: { message: `Update asset_id FAILED for draft #${getData?.data?.id} queue_id ${queueId} and asset_id #${asset_id}` } },
             { status: 400 }
         )
     } catch (err: any) {

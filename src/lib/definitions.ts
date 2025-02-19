@@ -60,5 +60,7 @@ export type Instrument = {
     cover_image: InstrumentImage,
     images: InstrumentImage[],
     files: InstrumentFile[],
-    placeholder_image: string
+    placeholder_image: string,
+    asset_id: string,
+    queue_id: string
 };

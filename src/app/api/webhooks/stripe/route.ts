@@ -258,7 +258,7 @@ export async function POST(req: Request) {
                       result = await fetch(`${process.env.INSTRUEMENT_API_URL}/instrument/${instrumentId}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` },
-                        body: JSON.stringify({ queueId })
+                        body: JSON.stringify({ queue_id: queueId })
                       });
 
                       const updateData = await result.json();
