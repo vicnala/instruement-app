@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react"
 import truncateEthAddress from 'truncate-eth-address'
 import { useTranslations } from "next-intl";
 import { resolveScheme } from "thirdweb/storage";
+import { useStateContext } from "@/app/context";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
 import Loading from "@/components/Loading";
@@ -17,6 +18,7 @@ export default function Instrument(
 	const [instrument, setInstrument] = useState<any>()
 	const [images, setImages] = useState<any[]>([])
 	const [documents, setDocuments] = useState<any[]>([])
+	const { minter } = useStateContext()
 
 	useEffect(() => {
 		async function getInstrument() {

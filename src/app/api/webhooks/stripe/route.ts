@@ -274,13 +274,13 @@ export async function POST(req: Request) {
                     throw new Error(`/api/webhooks/stripe NO COVER URI FILE`);
                   }
                 } else {
-                  throw new Error(`/api/webhooks/stripe ${message}`);
+                  throw new Error(`/api/webhooks/stripe 1 ${message}`);
                 }
               } else {
-                throw new Error(`/api/webhooks/stripe ${message}`);
+                throw new Error(`/api/webhooks/stripe 2 ${message}`);
               }
             } catch (err: any) {
-              throw new Error(`/api/webhooks/stripe ${err.message}`);
+              throw new Error(`/api/webhooks/stripe 3 ${err.message}`);
             }
           }
           break;
