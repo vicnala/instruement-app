@@ -68,6 +68,7 @@
     },
     "instrument": {
         "owner": "Owner",
+        "minter": "Minter",
         "type": "Instrument type",
         "type_helper": "Contact us if you can't find your instrument in the list",
         "type_error": "Please enter one type",

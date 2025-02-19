@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react"
 import truncateEthAddress from 'truncate-eth-address'
 import { useTranslations } from "next-intl";
 import { resolveScheme } from "thirdweb/storage";
-import { useStateContext } from "@/app/context";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
 import Loading from "@/components/Loading";
@@ -18,7 +17,7 @@ export default function Instrument(
 	const [instrument, setInstrument] = useState<any>()
 	const [images, setImages] = useState<any[]>([])
 	const [documents, setDocuments] = useState<any[]>([])
-	const { minter } = useStateContext()
+	const [minter, setMinter] = useState<string>()
 
 	useEffect(() => {
 		async function getInstrument() {
@@ -31,6 +30,11 @@ export default function Instrument(
 
 				const properties = data.metadata.properties || data.metadata.attributes || [];
 				const fileDirHashTrait = properties.find((prop: any) => prop.trait_type === 'Files');
+				const registrarTarit = properties.find((prop: any) => prop.trait_type === 'Registrar');
+
+				if (registrarTarit) {
+					setMinter(registrarTarit.value);
+				}
 
 				if (fileDirHashTrait) {
 					const fileDirHash = fileDirHashTrait.value;
@@ -114,6 +118,9 @@ export default function Instrument(
 								<p className='text-s text-black dark:text-gray-400'>
 									{t('instrument.owner')} {truncateEthAddress(instrument.owner)}
 								</p>
+								<p className='text-s text-black dark:text-gray-400'>
+									{t('instrument.minter')} {minter && truncateEthAddress(minter)}
+								</p>
 							</div>
 						</div>
 					</Section>
@@ -164,38 +171,41 @@ export default function Instrument(
 								</div>
 							</Section>
 					}
-					{/* <Section>
-			{
-				contract && address ?
-				<TransactionButton
-					transaction={() => {
-						const bytes = new Uint8Array([parseInt(id)]);
-						const bigInt = bytesToBigInt(bytes);
-						return transferFrom({
-							contract,
-							from: address,
-							to: "0xE6A2b83c7eb61CD8241Fbe0a449E86F0dA0141EA",
-							tokenId: bigInt
-						});
-					}}
-					onTransactionConfirmed={() => {
-						alert("Instrument transfered!");
-					}}
-					onError={(error) => {
-						console.error("Transaction error", error);
-					}}
-				>
 					{
-						t('transfer.transfer')
+						/* <Section>
+						{
+							contract && address ?
+							<TransactionButton
+								transaction={() => {
+									const bytes = new Uint8Array([parseInt(id)]);
+									const bigInt = bytesToBigInt(bytes);
+									return transferFrom({
+										contract,
+										from: address,
+										to: "0xE6A2b83c7eb61CD8241Fbe0a449E86F0dA0141EA",
+										tokenId: bigInt
+									});
+								}}
+								onTransactionConfirmed={() => {
+									alert("Instrument transfered!");
+								}}
+								onError={(error) => {
+									console.error("Transaction error", error);
+								}}
+							>
+								{
+									t('transfer.transfer')
+								}
+							</TransactionButton> : <></>
+						}
+						</Section> */
 					}
-				</TransactionButton> : <></>
-			}
-		</Section> */}
-					{/* <p>
-				{JSON.stringify(instrument)}
-				</p> */}
-				</>
-					: <></>
+					{
+						/* <p>
+							{JSON.stringify(instrument)}
+						</p> */
+					}
+				</> : <></>
 			}
 		</Page>
 	);
