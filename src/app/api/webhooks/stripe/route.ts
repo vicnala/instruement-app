@@ -198,7 +198,7 @@ export async function POST(req: Request) {
                     // upload files to IPFS
                     const uris = await upload({ client, files });
         
-                    console.log("uris", uris);
+                    // console.log("uris", uris);
                     
                     // get the cover umage URI as the first uri
                     const coverURI = uris[0];
@@ -238,18 +238,18 @@ export async function POST(req: Request) {
                         url: ENGINE_URL,
                         accessToken: ENGINE_ACCESS_TOKEN,
                       });
-        
-                      const cahin = `${baseSepolia.id}`
-                      const contractAddress = NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS;
-                      const xBackendWalletAddress = BACKEND_WALLET_ADDRESS;
-                      const receiver = BACKEND_WALLET_ADDRESS;
+
+                      console.log(">>> engine.erc721.mintTo <<< start");
+                      
         
                       const mintResult = await engine.erc721.mintTo(
-                        cahin,
-                        contractAddress,
-                        xBackendWalletAddress,
-                        { receiver, metadata }
+                        CHAIN_ID,
+                        NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS,
+                        BACKEND_WALLET_ADDRESS,
+                        { receiver: data.metadata?.address, metadata }
                       );
+
+                      console.log(">>> engine.erc721.mintTo <<< end");
                       
                       const { queueId } = mintResult.result;
 
@@ -291,7 +291,7 @@ export async function POST(req: Request) {
       console.error(`/api/webhooks/stripe:`, error)
       return NextResponse.json(
         { message: error.message ? error.message : "Webhook handler failed" },
-        { status: 500 },
+        { status: 400 },
       );
     }
   }
