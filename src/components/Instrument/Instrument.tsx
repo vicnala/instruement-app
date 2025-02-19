@@ -14,10 +14,12 @@ export default function Instrument(
 ) {
 	const t = useTranslations();
 	const [isLoading, setIsLoading] = useState(false)
+	const [isLoadingMinter, setIsLoadingMinter] = useState(false)
 	const [instrument, setInstrument] = useState<any>()
 	const [images, setImages] = useState<any[]>([])
 	const [documents, setDocuments] = useState<any[]>([])
 	const [minter, setMinter] = useState<string>()
+	const [minterUser, setMinterUser] = useState<any>()
 
 	useEffect(() => {
 		async function getInstrument() {
@@ -93,6 +95,28 @@ export default function Instrument(
 		}
 	}, [id, isLoading, instrument])
 
+
+	useEffect(() => {
+		async function getminter() {
+			try {
+				const result = await fetch(`/api/user/${minter}`)
+				const data = await result.json();
+				setMinterUser(data);
+			} catch (error) {
+				console.error(`/api/user/${minter}`, error)
+			}
+			setIsLoadingMinter(false)
+		}
+
+		if (minter && !isLoadingMinter && !minterUser) {
+			setIsLoadingMinter(true)
+			getminter().catch((e) => {
+				console.error(`/api/user/${minter}`, e.message);
+			})
+		}
+
+	}, [minter])
+
 	if (isLoading) return (
 		<Page>
 			<div className="text-center">
@@ -120,6 +144,11 @@ export default function Instrument(
 								</p>
 								<p className='text-s text-black dark:text-gray-400'>
 									{t('instrument.minter')} {minter && truncateEthAddress(minter)}
+									{
+										minterUser && <b>
+											{" "} {minterUser.business_name}
+										</b>
+									}
 								</p>
 							</div>
 						</div>
