@@ -36,9 +36,6 @@ export async function GET(
     return Response.json({ message })
   }
 
-  const cahin = CHAIN_ID;
-  const contractAddress = NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS;
-
   try {
     const engine = new Engine({
       url: ENGINE_URL,
@@ -47,8 +44,8 @@ export async function GET(
 
     const { result } = await engine.erc721.getOwned(
       address,
-      cahin,
-      contractAddress
+      CHAIN_ID,
+      NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS
     );
 
     // console.log('tokens', result?.length);
