@@ -1,25 +1,30 @@
 "use client";
 
 import React, { useEffect, useState } from "react"
+import { TransactionButton } from "thirdweb/react";
+import { transferFrom } from "thirdweb/extensions/erc721";
+// import { bytesToBigInt } from "thirdweb/utils";
 import truncateEthAddress from 'truncate-eth-address'
 import { useTranslations } from "next-intl";
 import { resolveScheme } from "thirdweb/storage";
+import { useStateContext } from "@/app/context";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
 import Loading from "@/components/Loading";
 import { client } from "@/app/client";
 
 export default function Instrument(
-	{ locale, id }: Readonly<{ locale: string, id: string }>
+	{ locale, id, to }: Readonly<{ locale: string, id: string, to: string | undefined }>
 ) {
 	const t = useTranslations();
-	const [isLoading, setIsLoading] = useState(false)
+	const [isLoadingInstrumentNft, setIsLoadingInstrumentNft] = useState(false)
 	const [isLoadingMinter, setIsLoadingMinter] = useState(false)
 	const [instrument, setInstrument] = useState<any>()
 	const [images, setImages] = useState<any[]>([])
 	const [documents, setDocuments] = useState<any[]>([])
 	const [minter, setMinter] = useState<string>()
 	const [minterUser, setMinterUser] = useState<any>()
+	const { address, contract } = useStateContext()
 
 	useEffect(() => {
 		async function getInstrument() {
@@ -82,18 +87,18 @@ export default function Instrument(
 			} catch (error) {
 				console.error(`/api/token/${id}`, error)
 			}
-			setIsLoading(false)
+			setIsLoadingInstrumentNft(false)
 		}
 
-		if (!isLoading && !instrument) {
+		if (!isLoadingInstrumentNft && !instrument) {
 			if (id) {
-				setIsLoading(true)
+				setIsLoadingInstrumentNft(true)
 				getInstrument().catch((e) => {
 					console.error(`/api/token/${id}`, e.message);
 				})
 			}
 		}
-	}, [id, isLoading, instrument])
+	}, [id, isLoadingInstrumentNft, instrument])
 
 
 	useEffect(() => {
@@ -116,15 +121,7 @@ export default function Instrument(
 		}
 
 	}, [minter])
-
-	if (isLoading) return (
-		<Page>
-			<div className="text-center">
-				<Loading />
-			</div>
-		</Page>
-	)
-
+	
 	return (
 		<Page>
 			{
@@ -201,38 +198,31 @@ export default function Instrument(
 							</Section>
 					}
 					{
-						/* <Section>
-						{
-							contract && address ?
-							<TransactionButton
-								transaction={() => {
-									const bytes = new Uint8Array([parseInt(id)]);
-									const bigInt = bytesToBigInt(bytes);
-									return transferFrom({
-										contract,
-										from: address,
-										to: "0xE6A2b83c7eb61CD8241Fbe0a449E86F0dA0141EA",
-										tokenId: bigInt
-									});
-								}}
-								onTransactionConfirmed={() => {
-									alert("Instrument transfered!");
-								}}
-								onError={(error) => {
-									console.error("Transaction error", error);
-								}}
-							>
-								{
-									t('transfer.transfer')
-								}
-							</TransactionButton> : <></>
-						}
-						</Section> */
-					}
-					{
-						/* <p>
-							{JSON.stringify(instrument)}
-						</p> */
+						contract && address && to ?
+							<Section>
+								<TransactionButton
+									transaction={() => {
+										// const bytes = new Uint8Array([parseInt(id)]);
+										// const bigInt = bytesToBigInt(bytes);
+										return transferFrom({
+											contract: contract,
+											from: address,
+											to: to,
+											tokenId: BigInt(id) /*bigInt*/
+										});
+									}}
+									onTransactionConfirmed={() => {
+										alert("Instrument transfered!");
+									}}
+									onError={(error) => {
+										console.error("Transaction error", error);
+									}}
+									unstyled
+									className="items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+								>
+									{ t('transfer.transfer') } #{id} { t('to') } {truncateEthAddress(to)}
+								</TransactionButton>
+							</Section> : <></>
 					}
 				</> : <></>
 			}
