@@ -66,28 +66,19 @@ export default function Draft(
   }, []);
 
   return (
+    instrument && !instrument.asset_id ?
     <div
       className="cursor-pointer transition-all hover:shadow-lg || flex flex-col w-full justify-stretch min-h-[120vw] md:min-h-[200px] || overflow-hidden bg-it-25 border border-it-100 rounded-lg"
-      onClick={() => instrument && !instrument.asset_id &&
-        router.push(
-          `/drafts/${instrumentId}${queryAddress ? `?address=${queryAddress}` : `?address=${address}`}`
-        )
-      }
+      onClick={() => router.push(`/drafts/${instrumentId}${queryAddress ? `?address=${queryAddress}` : `?address=${address}`}`)}
     >
-      <div className="relative w-full bg-white/[.04]">
-        {
-          instrument && instrument.asset_id ?
-            <div className="text-white absolute top-2 left-2 z-10 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-all">
-              #{instrument.asset_id}
-          </div> : 
-          <div className="absolute top-2 right-2 z-10 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-all">
-            <IconEdit 
-              width="20"
-              height="20"
-              className="text-white"
-            />
-          </div>
-        }
+      <div className="relative w-full bg-white/[.04]"> 
+        <div className="absolute top-2 right-2 z-10 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-all">
+          <IconEdit 
+            width="20"
+            height="20"
+            className="text-white"
+          />
+        </div>
         { image ? 
           <Image
             src={image.file_url}
@@ -110,6 +101,6 @@ export default function Draft(
           </p>
         </div>
       </div>
-    </div>
+    </div> : <></>
   );
 }
