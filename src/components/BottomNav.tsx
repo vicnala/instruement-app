@@ -16,7 +16,7 @@ export const BottomNav = () => {
 		<div className='sm:hidden'>
 			{
 				address &&
-				<nav className='fixed bottom-0 w-full bg-white pb-safe dark:border-t dark:border-gray-900 shadow-[0_0px_10px_0px_rgba(0,0,0,0.2)]'>
+				<nav className='fixed z-100 bottom-0 w-full bg-white pb-safe dark:border-t dark:border-gray-900 shadow-[0_0px_10px_0px_rgba(0,0,0,0.2)]'>
 					{
 						<div className='mx-auto flex h-16 max-w-md items-center justify-around px-6'>
 							<Link key="home" href="/">

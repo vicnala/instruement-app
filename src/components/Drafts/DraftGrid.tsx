@@ -20,7 +20,7 @@ export default function DraftGrid({ locale }: { locale: string }) {
             {t('components.DraftGrid.description')}
           </p>
         </div>
-        <div className="grid justify-start grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="|| grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 justify-start || gap-3 md:gap-6">
           {minter.instruments.map((instrumentId: number) => (
             <Draft
               key={instrumentId.toString()}

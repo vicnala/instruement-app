@@ -68,7 +68,7 @@ export default function Draft(
   return (
     instrument && !instrument.asset_id ?
     <div
-      className="cursor-pointer transition-all hover:shadow-lg || flex flex-col w-full justify-stretch min-h-[120vw] md:min-h-[200px] || overflow-hidden bg-it-25 border border-it-100 rounded-lg"
+      className="cursor-pointer transition-all hover:shadow-lg || flex flex-col w-full justify-stretch min-h-[200px] || overflow-hidden bg-it-25 border border-it-100 rounded-lg"
       onClick={() => router.push(`/drafts/${instrumentId}`)}
     >
       <div className="relative w-full aspect-square bg-white/[.04]"> 
@@ -94,10 +94,10 @@ export default function Draft(
       </div>
       <div className="flex items-center justify-between flex-1 w-full px-3">
         <div className="flex flex-col justify-center py-3">
-          <p className="max-w-full overflow-hidden text-lg text-ellipsis whitespace-nowrap">
+          <p className="max-w-full overflow-hidden text-md md:text-lg text-ellipsis whitespace-nowrap">
             {instrument?.title}
           </p>
-          <p className="text-sm font-semibold">
+          <p className="text-xs md:text-sm font-semibold">
             {instrument?.type_name}
           </p>
         </div>
