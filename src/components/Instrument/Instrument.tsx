@@ -6,10 +6,13 @@ import { transferFrom, ownerOf } from "thirdweb/extensions/erc721";
 import truncateEthAddress from 'truncate-eth-address'
 import { useTranslations } from "next-intl";
 import { resolveScheme } from "thirdweb/storage";
+import { Scanner } from '@yudiel/react-qr-scanner';
 import { useStateContext } from "@/app/context";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
 import { client } from "@/app/client";
+import QRModal from "./QRModal";
+
 
 export default function Instrument(
 	{ locale, id, to }: Readonly<{ locale: string, id: string, to: string | undefined }>
@@ -25,6 +28,9 @@ export default function Instrument(
 	const { address, contract } = useStateContext()
 	const [isOwner, setIsOwner] = useState<boolean>(false)
 
+    const [scannedResult, setScannedResult] = useState<string | undefined>("")
+	const [isModalOpen, setModalOpen] = useState(false);
+	
 	useEffect(() => {
 		async function getInstrument() {
 			try {
@@ -215,31 +221,55 @@ export default function Instrument(
 								</div>
 							</Section>
 					}
+					<div className="mt-6 text-center">
 					{
-						contract && address && isOwner && to ?
-							<Section>
-								<TransactionButton
-									transaction={() => {
-										return transferFrom({
-											contract: contract,
-											from: address,
-											to: to,
-											tokenId: BigInt(id)
-										});
-									}}
-									onTransactionConfirmed={() => {
-										alert("Instrument transfered!");
-									}}
-									onError={(error) => {
-										console.error("Transaction error", error);
-									}}
-									unstyled
-									className="items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
-								>
-									{ t('transfer.transfer') } #{id} { t('to') } {truncateEthAddress(to)}
-								</TransactionButton>
-							</Section> : <></>
+						contract && address && isOwner && !to &&
+						<Section>
+							<button
+								type="button"
+								className="items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+								onClick={() => setModalOpen(true)}
+							>
+								{isModalOpen ? t('components.Instrument.stop') : t('components.Instrument.scan')}
+							</button>
+						</Section>
 					}
+					{
+						contract && address && isOwner && (to || scannedResult) &&
+						<Section>
+							<TransactionButton
+								transaction={() => {
+									return transferFrom({
+										contract: contract,
+										from: address,
+										to: to ? to : scannedResult ? scannedResult : '',
+										tokenId: BigInt(id)
+									});
+								}}
+								onTransactionConfirmed={() => {
+									alert("Instrument transfered!");
+								}}
+								onError={(error) => {
+									console.error("Transaction error", error);
+								}}
+								unstyled
+								className="items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+								>
+								{ t('transfer.transfer') } #{id} { t('to') } {truncateEthAddress(to || scannedResult || '')}
+							</TransactionButton>
+						</Section>
+					}
+					</div>
+					<QRModal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
+						<Scanner
+							onScan={(result) => {
+								setScannedResult(result[0].rawValue)
+								setModalOpen(false)
+							}}
+							classNames={{}}
+							styles={{}}
+						/>
+					</QRModal>
 				</> : <></>
 			}
 		</Page>

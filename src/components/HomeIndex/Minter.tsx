@@ -16,7 +16,7 @@ export default function Minter(
 ) {
   const t = useTranslations();
   const { isModalOpen, modalContent, openModal, closeModal } = useModal()
-  const { minter, owned, isLoading, address } = useStateContext()
+  const { minter, owned, isLoading } = useStateContext()
 
   return (
     <Page>
@@ -24,7 +24,7 @@ export default function Minter(
         {
           isLoading ? (<NFTGridLoading />) : 
             <div className='flex flex-col'>
-              <DraftGrid address={address} locale={locale}/>
+              <DraftGrid locale={locale}/>
             </div>
         }
       </Section>

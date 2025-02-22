@@ -274,7 +274,10 @@
         },
         "Instrument": {
             "images": "Imágenes",
-            "documents": "Documentos"
+            "documents": "Documentos",
+            "scan": "Escanear QR de usuario",
+            "stop": "Parar",
+            "close": "Cerrar"
         },
         "CheckoutForm": {
             "payment_details": "Detalles del pago",
