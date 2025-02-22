@@ -4,7 +4,6 @@ import { stripe } from "@/lib/stripe";
 import { Engine } from "@thirdweb-dev/engine";
 import { upload } from "thirdweb/storage";
 import { client } from "@/app/client";
-import { baseSepolia } from "thirdweb/chains";
 
 const {
   STRIPE_WEBHOOK_SECRET_KEY,

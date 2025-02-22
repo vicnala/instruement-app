@@ -270,6 +270,13 @@
         "Instrument": {
             "images": "Images",
             "documents": "Documents"
+        },
+        "CheckoutForm": {
+            "payment_details": "Your payment details",
+            "pay": "Pay",
+            "name": "Name",
+            "card_name": "Cardholder name",
+            "concept_register": "for registration of draft"
         }
     }
   }

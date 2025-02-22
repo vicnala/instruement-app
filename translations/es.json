@@ -275,6 +275,13 @@
         "Instrument": {
             "images": "Imágenes",
             "documents": "Documentos"
+        },
+        "CheckoutForm": {
+            "payment_details": "Detalles del pago",
+            "pay": "Pagar",
+            "name": "Nombre",
+            "card_name": "Nombre que aparece en la tarjeta",
+            "concept_register": "para el registro del borrador"
         }
     }
   }
