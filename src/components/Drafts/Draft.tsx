@@ -71,7 +71,7 @@ export default function Draft(
       className="cursor-pointer transition-all hover:shadow-lg || flex flex-col w-full justify-stretch min-h-[120vw] md:min-h-[200px] || overflow-hidden bg-it-25 border border-it-100 rounded-lg"
       onClick={() => router.push(`/drafts/${instrumentId}`)}
     >
-      <div className="relative w-full bg-white/[.04]"> 
+      <div className="relative w-full aspect-square bg-white/[.04]"> 
         <div className="absolute top-2 right-2 z-10 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-all">
           <IconEdit 
             width="20"
@@ -85,8 +85,9 @@ export default function Draft(
             width={500}
             height={500}
             alt={image.description}
+            className="object-cover w-full h-full"
           /> :
-          <div className="w-full rounded-lg">
+          <div className="w-full h-full rounded-lg">
             <Skeleton width="100%" height="100%" />
           </div>
         }
