@@ -281,7 +281,18 @@
             "pay": "Pagar",
             "name": "Nombre",
             "card_name": "Nombre que aparece en la tarjeta",
-            "concept_register": "para el registro del borrador"
+            "concept_register": "para el registro del borrador",
+            "requires_confirmation": "Procesando",
+            "requires_action": "Autenticando",
+            "succeeded": "Pago realizado con éxito 🥳"
+        },
+        "PaymentResult": {
+            "title": "El pago por el registro del borrador",
+            "succesful": "ha finalizado con éxito!",
+            "failed": "ha fallado!",
+            "success_message": "El instrumento registrado estará disponible en tu billetera en breve.",
+            "failed_message": "Algo ha ido mal con el pago. Por favor, contacta con nosotros.",
+            "home": "Volver al inicio"
         }
     }
   }

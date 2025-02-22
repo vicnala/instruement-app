@@ -38,13 +38,13 @@ function CheckoutForm({ amount, address, id, minterAddress }: { amount: number, 
       case "processing":
       case "requires_payment_method":
       case "requires_confirmation":
-        return <h2>Processing...</h2>;
+        return <h2>{t("components.CheckoutForm.requires_confirmation")}...</h2>;
 
       case "requires_action":
-        return <h2>Authenticating...</h2>;
+        return <h2>{t('components.CheckoutForm.requires_action')}...</h2>;
 
       case "succeeded":
-        return <h2>Payment Succeeded 🥳</h2>;
+        return <h2>{t('components.CheckoutForm.succeeded')} 🥳</h2>;
 
       case "error":
         return (
@@ -113,9 +113,6 @@ function CheckoutForm({ amount, address, id, minterAddress }: { amount: number, 
     }
   };
 
-  console.log("handleInputChange", input);
-  
-
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -165,7 +162,9 @@ function CheckoutForm({ amount, address, id, minterAddress }: { amount: number, 
           }
         </Section>
       </form>
-      <PaymentStatus status={payment.status} />
+      <Section>
+        <PaymentStatus status={payment.status} />
+      </Section>
     </>
   );
 }

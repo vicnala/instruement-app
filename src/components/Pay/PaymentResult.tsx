@@ -1,6 +1,5 @@
 "use client";
 
-import type { Stripe } from "stripe";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/routing";
 import Page from "@/components/Page";
@@ -16,7 +15,6 @@ export default function PaymentResult(
   const t = useTranslations();
   const router = useRouter();
   const { isLoading } = useStateContext()
-  // const router = useRouter();
 
   if (isLoading) return (
     <Page>
@@ -29,9 +27,20 @@ export default function PaymentResult(
   return (
     <Page>
       <Section>
-        <h1>Draft: #{id}</h1>
-        <h1>Status: {status}</h1>
-        <h1>Minted for: {address}</h1>
+        <h2 className='text-xl font-semibold text-center'>
+            {t('components.PaymentResult.title')} #{id} {status === 'succeeded' ? t('components.PaymentResult.succesful') : t('components.PaymentResult.failed')}
+        </h2>
+        <div className='text-m text-center'>
+          {
+            status === 'succeeded' ? 
+            <p>
+              {t('components.PaymentResult.success_message')}
+            </p> : 
+            <p>
+              {t('components.PaymentResult.failed_message')}
+            </p>
+          }
+        </div>
       </Section>
       <Section>
         <div className="mt-6 text-center">
@@ -41,7 +50,7 @@ export default function PaymentResult(
               className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
               onClick={() => router.push(`/`)}
             >
-              {t('navbar.home')}
+              {t('components.PaymentResult.home')}
             </button>
           }
         </div>

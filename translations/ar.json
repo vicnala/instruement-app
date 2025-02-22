@@ -282,7 +282,18 @@
             "pay": "Pay",
             "name": "Name",
             "card_name": "Cardholder name",
-            "concept_register": "for registration of draft"
+            "concept_register": "for registration of draft",
+            "requires_confirmation": "Processing",
+            "requires_action": "Authenticating",
+            "succeeded": "Payment Succeeded 🥳"
+        },
+        "PaymentResult": {
+            "title": "Payment result for draft",
+            "succesful": "succesful!",
+            "failed": "failed!",
+            "success_message": "The registered instrument will be in your wallet shortly.",
+            "failed_message": "Something went wrong with the payment. Please contact us.",
+            "home": "Return to the home page"
         }
     }
   }
