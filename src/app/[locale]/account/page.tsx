@@ -60,7 +60,7 @@ export default function AccountPage() {
               client={client}
               theme={theme === 'system' ? 'light' : theme === 'dark' ? 'dark' : 'light'}
               locale={locale.includes('en') ? 'en_US' : locale.includes('es') ? 'es_ES' : 'en_US'}
-            // accountAbstraction={{ chain: baseSepolia, sponsorGas: true }}
+              accountAbstraction={{ chain: baseSepolia, sponsorGas: true }}
             />
           </div>
         </Section>
