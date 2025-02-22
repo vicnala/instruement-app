@@ -13,8 +13,8 @@ const Page = ({ children }: Props) => {
 		<>
 			<Header />
 			{
-				<main className="mx-auto max-w-screen-lg sm:pt-40 pb-16 px-safe sm:pb-100">
-					<div className='p-6'>{children}</div>
+				<main className="pt-0 md:pt-[12vh] mx-auto max-w-screen-lg px-safe">
+					<div className='px-3.5 py-6 md:py-0'>{children}</div>
 				</main>
 			}
 			<Footer />
