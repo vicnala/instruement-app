@@ -44,7 +44,7 @@ export const BottomNav = () => {
 							</Link>
 							{
 								isMinter &&
-								<Link key="drafts" href="/drafts">
+								<Link key="drafts_new" href="/drafts/new">
 									<div
 										className={`flex h-full w-full flex-col items-center justify-center space-y-1 ${pathname.includes('/drafts')
 												? 'text-indigo-500 dark:text-indigo-400'
@@ -65,7 +65,7 @@ export const BottomNav = () => {
 											/>
 										</svg>
 										<span className='text-xs text-gray-300 dark:text-gray-700'>
-											{t('navbar.drafts')}
+											{t('components.Header.new_instrument')}
 										</span>
 									</div>
 								</Link>
