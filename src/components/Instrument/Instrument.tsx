@@ -2,15 +2,13 @@
 
 import React, { useEffect, useState } from "react"
 import { TransactionButton } from "thirdweb/react";
-import { transferFrom } from "thirdweb/extensions/erc721";
-// import { bytesToBigInt } from "thirdweb/utils";
+import { transferFrom, ownerOf } from "thirdweb/extensions/erc721";
 import truncateEthAddress from 'truncate-eth-address'
 import { useTranslations } from "next-intl";
 import { resolveScheme } from "thirdweb/storage";
 import { useStateContext } from "@/app/context";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
-import Loading from "@/components/Loading";
 import { client } from "@/app/client";
 
 export default function Instrument(
@@ -25,6 +23,7 @@ export default function Instrument(
 	const [minter, setMinter] = useState<string>()
 	const [minterUser, setMinterUser] = useState<any>()
 	const { address, contract } = useStateContext()
+	const [isOwner, setIsOwner] = useState<boolean>(false)
 
 	useEffect(() => {
 		async function getInstrument() {
@@ -122,6 +121,25 @@ export default function Instrument(
 
 	}, [minter])
 	
+
+	useEffect(() => {
+		async function getOwner() {
+			const owner = await ownerOf({ contract, tokenId: BigInt(id) });			
+			if (owner === address) {
+				setIsOwner(true);
+			} else {
+				setIsOwner(false);
+			}
+		}
+
+		if (address && contract) {
+			getOwner().catch((e) => {
+				console.error(`getOwner`, e.message);
+			})
+		}
+	}, [address, contract])
+
+
 	return (
 		<Page>
 			{
@@ -198,17 +216,15 @@ export default function Instrument(
 							</Section>
 					}
 					{
-						contract && address && to ?
+						contract && address && isOwner && to ?
 							<Section>
 								<TransactionButton
 									transaction={() => {
-										// const bytes = new Uint8Array([parseInt(id)]);
-										// const bigInt = bytesToBigInt(bytes);
 										return transferFrom({
 											contract: contract,
 											from: address,
 											to: to,
-											tokenId: BigInt(id) /*bigInt*/
+											tokenId: BigInt(id)
 										});
 									}}
 									onTransactionConfirmed={() => {

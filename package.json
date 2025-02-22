@@ -17,7 +17,7 @@
     "@radix-ui/react-tabs": "^1.1.1",
     "@stripe/react-stripe-js": "^3.1.1",
     "@stripe/stripe-js": "^5.4.0",
-    "@thirdweb-dev/engine": "^0.0.17",
+    "@thirdweb-dev/engine": "^0.0.18",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.378.0",
@@ -33,7 +33,7 @@
     "stripe": "^17.5.0",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "thirdweb": "^5.80.0",
+    "thirdweb": "^5.88.7",
     "truncate-eth-address": "^1.0.2"
   },
   "devDependencies": {
