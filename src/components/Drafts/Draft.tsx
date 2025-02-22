@@ -11,7 +11,7 @@ import IconEdit from '../Icons/Edit';
 import IconInfo from '../Icons/Info';
 
 export default function Draft(
-  { instrumentId, address: queryAddress, locale }: { instrumentId: string, address: string | undefined, locale: string }
+  { instrumentId, locale }: { instrumentId: string, locale: string }
 ) {
   const router = useRouter();
   const { address } = useStateContext()
@@ -69,7 +69,7 @@ export default function Draft(
     instrument && !instrument.asset_id ?
     <div
       className="cursor-pointer transition-all hover:shadow-lg || flex flex-col w-full justify-stretch min-h-[120vw] md:min-h-[200px] || overflow-hidden bg-it-25 border border-it-100 rounded-lg"
-      onClick={() => router.push(`/drafts/${instrumentId}${queryAddress ? `?address=${queryAddress}` : `?address=${address}`}`)}
+      onClick={() => router.push(`/drafts/${instrumentId}`)}
     >
       <div className="relative w-full bg-white/[.04]"> 
         <div className="absolute top-2 right-2 z-10 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-all">

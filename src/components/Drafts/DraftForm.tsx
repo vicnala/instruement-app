@@ -16,7 +16,7 @@ import Loading from "../Loading";
 const Editor = dynamic(() => import("@/components/Editor"), { ssr: false })
 
 export default function DraftForm(
-  { locale, instrumentId, address }: Readonly<{ locale: string, instrumentId?: string, address?: string }>
+  { locale, instrumentId }: Readonly<{ locale: string, instrumentId?: string }>
 ) {
   const t = useTranslations();
   const router = useRouter();
@@ -318,7 +318,7 @@ export default function DraftForm(
           if (data.data) {
             setReloadUser(true);
             setInstrument(undefined);
-            router.replace(`/drafts/${data.data.id}?address=${address ? address : minterAddress}`);
+            router.replace(`/drafts/${data.data.id}`);
           }
         } else {
           console.log("POST /api/instrument ERROR", data.message);
