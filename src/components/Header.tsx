@@ -17,8 +17,8 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <div className={address ? 'hidden md:block' : ''}>
-      <div className='fixed top-0 left-0 z-100 w-full'>
+    <div className={address ? 'hidden md:block relative z-100' : ''}>
+      <div className='fixed top-0 left-0 w-full'>
         <header className='bg-canvas px-safe dark:bg-black dark:bg-opacity-90'>
           <div className='mx-auto flex flex-row min-h-[15vh] md:min-h-[10vh] max-w-screen-lg items-center justify-between px-3.5'>
             <Link href="/">
