@@ -12,23 +12,8 @@ export default async function InstrumentPage({
 }) {
   const locale = await getLocale();
   const authResult: any = await authedOnly("/");
-  const authContext = authResult.parsedJWT.ctx;
-  const isMinter = authContext.isMinter;
-  const authUser = authContext.user;
-  const userInstrumentIds = authUser.instruments || [];
 
-  let requestedInstrumentId;
-  try {
-    requestedInstrumentId = parseInt(id);
-  } catch (error) {
-    return <NotFound />;
-  }
-
-  if (!userInstrumentIds.includes(requestedInstrumentId)) {
-    return <NotFound />;
-  }
-
-  if (!isMinter) {
+  if (!authResult.valid) {
     return <NotFound />;
   }
   
