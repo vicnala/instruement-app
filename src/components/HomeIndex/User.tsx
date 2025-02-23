@@ -10,7 +10,7 @@ import { useModal } from "@/components/Modal/useModal";
 import IconInfo from '@/components/Icons/Info';
 import { useStateContext } from '@/app/context';
 import NFTGrid, { NFTGridLoading } from '@/components/NFT/NFTGrid';
-
+import NotConnected from '../NotConnected';
 
 export default function User(
   { locale }: Readonly<{ locale: string }>
@@ -104,7 +104,10 @@ export default function User(
           {
             isLoading ? (<NFTGridLoading />) :
               owned && owned.length ?
-                <NFTGrid nftData={owned} /> :
+                <div className="flex flex-col pt-4">
+                  <NFTGrid nftData={owned} />
+                </div> :
+                address ?
                 <>
                   <div className='bg-it-25 p-6 rounded-md mb-3.5 border border-it-100'>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -272,7 +275,7 @@ export default function User(
                   </div>
 
                   <Modal isOpen={isModalOpen} content={modalContent} onClose={closeModal} />
-                </>
+                </> : <NotConnected locale={locale} />
           }
         </div>
       </Section>

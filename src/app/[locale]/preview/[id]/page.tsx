@@ -1,11 +1,27 @@
-import { setRequestLocale } from "next-intl/server";
+import { authedOnly } from "@/actions/login";
+import NotFound from "@/app/not-found";
 import Preview from "@/components/Drafts/Preview";
 
-export default function PreviewPage({
+export default async function PreviewPage({
   params: { locale, id },
 }: {
   params: { locale: string, id: string };
 }) {
-  setRequestLocale(locale);
+  const authResult: any = await authedOnly(`/preview/${id}`);
+  const authContext = authResult.parsedJWT.ctx;
+  const authUser = authContext.user;
+  const userInstrumentIds = authUser.instruments || [];
+
+  let requestedInstrumentId;
+  try {
+    requestedInstrumentId = parseInt(id);
+  } catch (error) {
+    return <NotFound />;
+  }
+
+  if (!userInstrumentIds.includes(requestedInstrumentId)) {
+    return <NotFound />;
+  }
+
   return <Preview id={id} locale={locale} />;
 }

@@ -10,6 +10,7 @@ import IconInfo from "@/components/Icons/Info";
 import { useStateContext } from "@/app/context";
 import NFTGrid, { NFTGridLoading } from "@/components/NFT/NFTGrid";
 import DraftGrid from "@/components/Drafts/DraftGrid";
+import NotConnected from "../NotConnected";
 
 export default function Minter(
   { locale }: Readonly<{ locale: string }>
@@ -34,8 +35,8 @@ export default function Minter(
             owned && owned.length ?
               <div className="flex flex-col pt-4">
                 <NFTGrid nftData={owned} /> 
-              </div>
-              :
+              </div> :
+              minter ?
               <>
                 <h2 className='text-xl font-semibold text-zinc-800 dark:text-zinc-200'>
                   {t('home.minter.hello')} {minter.first_name}
@@ -83,7 +84,7 @@ export default function Minter(
                   </div>
                 </div>
                 <Modal isOpen={isModalOpen} content={modalContent} onClose={closeModal} />
-              </>
+              </> : <NotConnected locale={locale} />
         }
       </Section>
     </Page>

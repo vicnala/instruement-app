@@ -1,5 +1,3 @@
-'use client';
-
 import { BottomNav } from "./BottomNav";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
