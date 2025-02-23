@@ -1,32 +1,14 @@
-'use client';
-
-import { useLocale, useTranslations } from "next-intl";
-import { useStateContext } from "@/app/context";
-import Page from "@/components/Page";
-import Loading from "@/components/Loading";
 import Minter from "@/components/HomeIndex/Minter";
 import User from "@/components/HomeIndex/User";
-import NotConnected from "@/components/NotConnected";
+import { getLocale } from "next-intl/server";
+import { authedOnly } from "@/actions/login";
 
 
-export default function Home() {
-  const locale = useLocale();
-  const t = useTranslations();
-  const { address, isMinter, isLoading } = useStateContext()
+export default async function Home() {
+  const locale = await getLocale();
+  const authResult: any = await authedOnly("/");
+  const authContext = authResult.parsedJWT.ctx;
+  const isMinter = authContext.isMinter;
 
-  if (isLoading) return (
-    <Page>
-      <div className="text-center">
-        <Loading />
-      </div>
-    </Page>
-  )
-
-  return (
-    isMinter ?
-      <Minter locale={locale} /> :
-      address ?
-        <User locale={locale} /> :
-        <NotConnected locale={locale} />)
+  return isMinter ? <Minter locale={locale} /> : <User locale={locale} />
 }
-

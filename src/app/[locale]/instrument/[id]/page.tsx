@@ -1,33 +1,36 @@
-'use client';
-
-import { useLocale } from "next-intl";
-import { useStateContext } from "@/app/context";
-import Page from "@/components/Page";
+import { getLocale } from "next-intl/server";
+import { authedOnly } from "@/actions/login";
 import Instrument from "@/components/Instrument/Instrument";
-import Loading from "@/components/Loading";
-import NotConnected from "@/components/NotConnected";
+import NotFound from "@/app/not-found";
 
-export default function InstrumentPage({
+export default async function InstrumentPage({
   searchParams,
   params: {  id },
 }: {
   searchParams?: { to?: string };
   params: { locale: string, id: string };
 }) {
-  const locale = useLocale();
-  const { address, isLoading } = useStateContext()
+  const locale = await getLocale();
+  const authResult: any = await authedOnly("/");
+  const authContext = authResult.parsedJWT.ctx;
+  const isMinter = authContext.isMinter;
+  const authUser = authContext.user;
+  const userInstrumentIds = authUser.instruments || [];
 
-  if (isLoading) return (
-    <Page>
-      <div className="text-center">
-        <Loading />
-      </div>
-    </Page>
-  )
+  let requestedInstrumentId;
+  try {
+    requestedInstrumentId = parseInt(id);
+  } catch (error) {
+    return <NotFound />;
+  }
 
-  return (
-    address ?
-      <Instrument id={id} locale={locale} to={searchParams?.to} /> :
-      <NotConnected locale={locale} />
-  );
+  if (!userInstrumentIds.includes(requestedInstrumentId)) {
+    return <NotFound />;
+  }
+
+  if (!isMinter) {
+    return <NotFound />;
+  }
+  
+  return <Instrument id={id} locale={locale} to={searchParams?.to} />;
 }

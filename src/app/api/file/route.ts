@@ -1,7 +1,32 @@
 'use server'
 
+import { userAuthData } from "@/actions/login";
+
 export async function POST(request: Request) {
-  const formData = await request.formData()
+  const formData: any = await request.formData()
+
+  const authData: any = await userAuthData();
+  const authContext = authData.parsedJWT.ctx;
+  
+  const authUser = authContext.user;
+  const userInstrumentIds = authUser.instruments || [];
+
+  let requestedInstrumentId;
+  try {
+    requestedInstrumentId = parseInt(formData.instrument_id);
+  } catch (error) {
+    return Response.json(
+      { data: { message: `Instrument ID parse error` } },
+      { status: 400 }
+    )
+  }
+
+  if (!userInstrumentIds.includes(requestedInstrumentId)) {
+    return Response.json(
+      { data: { message: `Wrong instrument ID` } },
+      { status: 400 }
+    )
+  }
 
   try {
     const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/file`, {

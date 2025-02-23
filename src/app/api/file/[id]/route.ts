@@ -1,5 +1,7 @@
 'use server'
 
+import { userAuthData } from "@/actions/login";
+
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -11,6 +13,17 @@ export async function DELETE(
     { message: 'No id provided' },
     { status: 400 }
   )
+
+  const authData: any = await userAuthData();
+  const authContext = authData.parsedJWT.ctx;
+  const isMinter = authContext.isMinter;
+
+  if (!isMinter) {
+    return Response.json(
+      { data: { message: `Forbidden` } },
+      { status: 401 }
+    )
+  }
 
   try {
     const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/file/${id}`, {
@@ -45,6 +58,24 @@ export async function GET(
 ) {
   const { id } = await params
 
+  // console.log('/api/file GET data', data);
+
+  if (!id) return Response.json(
+    { message: 'No id provided' },
+    { status: 400 }
+  )
+
+  const authData: any = await userAuthData();
+  const authContext = authData.parsedJWT.ctx;
+  const isMinter = authContext.isMinter;
+
+  if (!isMinter) {
+    return Response.json(
+      { data: { message: `Forbidden` } },
+      { status: 401 }
+    )
+  }
+
   try {
     const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/file/${id}`, {
       method: 'GET',
@@ -54,8 +85,6 @@ export async function GET(
       }
     })
     const data = await result.json()
-
-    // console.log('/api/file GET data', data);
 
     if (data?.code === 'success') {
       return Response.json({ code: 'success', data })
