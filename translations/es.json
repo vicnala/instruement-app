@@ -266,6 +266,12 @@
             "description": "Instrumentos bajo tu propiedad. Puedes gestionar su configuración, ver datos o iniciar su transferencia."
         },
         "DraftForm": {
+            "title": {
+                "new": "Registra tu instrumento",
+                "edit": "Editando borrador",
+                "new_sub_heading": "Completa estos pasos para registrar tu instrumento",
+                "edit_sub_heading": "Sigue completando los pasos para registrar tu instrumento"
+            },
             "delete": "Eliminar borrador",
             "preview": "Previsualizar"
         },
@@ -296,6 +302,26 @@
             "success_message": "El instrumento registrado estará disponible en tu billetera en breve.",
             "failed_message": "Algo ha ido mal con el pago. Por favor, contacta con nosotros.",
             "home": "Volver al inicio"
+        },
+        "ui": {
+            "ProgressBar": {
+                "basic_info": {
+                    "title": "Info básica",
+                    "description": "Tipo y nombre"
+                },
+                "media": {
+                    "title": "Medios",
+                    "description": "Imágenes y documentos"
+                },
+                "details": {
+                    "title": "Detalles",
+                    "description": "Descripción"
+                },
+                "preview": {
+                    "title": "Previsualizar",
+                    "description": "Revisar y registrar"
+                }
+            }
         }
     }
   }

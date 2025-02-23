@@ -44,12 +44,12 @@
         "add_to_home_screen" : {
             "preview": "",
             "title" : "Add Instruement to your home screen",
-            "description": "Tap the share icon of your web browser and select the “Add to home screen” option."
+            "description": "Tap the share icon of your web browser and select the \"Add to home screen\" option."
         },
         "request_to_luthier" : {
             "preview": "",
             "title" : "About your account and sharing it with a luthier",
-            "description": "Your account is represented by a number starting with “0x” and you can share it openly without any risk. For you to receive the registration of an instrument the sender – in this case your luthier –  needs your account number. Share it through your prefered communication channel like mail or chat."
+            "description": "Your account is represented by a number starting with \"0x\" and you can share it openly without any risk. For you to receive the registration of an instrument the sender – in this case your luthier –  needs your account number. Share it through your prefered communication channel like mail or chat."
         },
         "share_account_what": {
             "preview": "What is my account number?",
@@ -261,6 +261,12 @@
             "description": "Instruments under your ownership. You can manage settings, view data or initiate their transfer."
         },
         "DraftForm": {
+            "title": {
+                "new": "Register Your Instrument",
+                "edit": "Editing Draft",
+                "new_sub_heading": "Complete these steps to register your instrument",
+                "edit_sub_heading": "Continue completing the steps to register your instrument"
+            },
             "delete": "Delete draft",
             "preview": "Preview"
         },
@@ -291,6 +297,26 @@
             "success_message": "The registered instrument will be in your wallet shortly.",
             "failed_message": "Something went wrong with the payment. Please contact us.",
             "home": "Return to the home page"
+        },
+        "ui": {
+            "ProgressBar": {
+                "basic_info": {
+                    "title": "Basic Info",
+                    "description": "Type and name"
+                },
+                "media": {
+                    "title": "Media",
+                    "description": "Images & docs"
+                },
+                "details": {
+                    "title": "Details",
+                    "description": "Description"
+                },
+                "preview": {
+                    "title": "Preview",
+                    "description": "Review and register"
+                }
+            }
         }
     }
   }

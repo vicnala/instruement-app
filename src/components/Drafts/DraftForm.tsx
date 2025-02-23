@@ -12,8 +12,11 @@ import IconTrashTwentyFour from "@/components/Icons/Trash"
 import { Instrument, InstrumentFile, InstrumentImage } from "@/lib/definitions";
 import { useRouter } from "@/i18n/routing";
 import Loading from "../Loading";
-
+import ProgressBar from "../ui/ProgressBar";
 const Editor = dynamic(() => import("@/components/Editor"), { ssr: false })
+
+// Add this type definition at the top of the file
+type ProgressStep = 1 | 2 | 3 | 4;
 
 export default function DraftForm(
   { locale, instrumentId }: Readonly<{ locale: string, instrumentId?: string }>
@@ -47,6 +50,58 @@ export default function DraftForm(
   const refDocument = useRef<HTMLInputElement>(null)
   const [isLoadingMetadata, setIsLoadingMetadata] = useState(false)
 
+  // Add new state for tracking progress
+  const [currentStep, setCurrentStep] = useState<ProgressStep>(1);
+  const [completed, setCompleted] = useState(false);
+
+  // Add useEffect to handle step transitions
+  useEffect(() => {
+    if (!instrument) {
+      setCurrentStep(1);
+      setCompleted(false);
+    } else if (instrument) {
+      const hasMediaUploads = !!(instrument.cover_image || instrument.images.length > 0 || instrument.files.length > 0);
+      const hasDescription = !!instrument.description;
+      
+      if (hasMediaUploads && hasDescription) {
+        setCurrentStep(4);
+        setCompleted(true);
+      } else if (hasMediaUploads) {
+        setCurrentStep(3);
+      } else {
+        setCurrentStep(2);
+      }
+    }
+  }, [instrument]);
+
+  // Add handler for step changes
+  const handleStepChange = (step: number) => {
+    if (step === 1) {
+      // Can't go back to step 1 if instrument exists
+      if (!instrument) {
+        setCurrentStep(1);
+        setCompleted(false);
+      }
+    } else if (step === 2) {
+      if (instrument) {
+        setCurrentStep(2);
+        setCompleted(false);
+      }
+    } else if (step === 3) {
+      if (instrument && (instrument.cover_image || instrument.images.length > 0 || instrument.files.length > 0)) {
+        setCurrentStep(3);
+        setCompleted(false);
+      }
+    } else if (step === 4) {
+      if (instrument && instrument.description) {
+        setCurrentStep(4);
+        setCompleted(true);
+        router.push(`/preview/${instrument.id}`);
+      }
+    }
+  };
+
+  // Fetch instrument details and associated files/images when instrumentId changes
   useEffect(() => {
     const getInstrument = async () => {     
       try {
@@ -143,6 +198,7 @@ export default function DraftForm(
     }
   }, [instrumentId, instrument]);
 
+  // Update instrument types based on minter skills and instrument type
   useEffect(() => {
     if (minter) {
       const minterSkillsConstruction = minter && minter.skills
@@ -166,22 +222,27 @@ export default function DraftForm(
     }
   }, [minter, instrument]);
 
+  // Handle description change
   const handleDescriptionChange = (markdown: string) => {
     setDescription(markdown)
   }
 
+  // Handle cover click
   const handleCoverClick = () => {
     refCover.current?.click();
   }
 
+  // Handle images click
   const handleImagesClick = () => {
     refImage.current?.click();
   }
 
+  // Handle documents click
   const handleDocumentClick = () => {
     refDocument.current?.click();
   }
 
+  // Handle cover change
   const handleCoverChange = (event: React.ChangeEvent<HTMLInputElement>) => {   
     const files = event.target.files;
     if (files && files.length === 1) {
@@ -197,6 +258,7 @@ export default function DraftForm(
     }
   };
 
+  // Handle image change
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
@@ -212,6 +274,7 @@ export default function DraftForm(
     }
   };
 
+  // Handle current file delete
   const handleCurrentFileDelete = async (id: number) => {
     setIsLoadingMetadata(true);
     try {
@@ -224,34 +287,40 @@ export default function DraftForm(
     setInstrument(undefined);
   };
 
+  // Handle cover delete
   const handleCoverDelete = async () => {
     setCoverFile(() => undefined);
     setCover(() => undefined);
     setCoverDescription(() => '');
   };
 
+  // Handle image delete
   const handleImageDelete = async (index: number) => {
     setImageFiles((prevFiles: any) => prevFiles.filter((_: any, i: any) => i !== index));
     setImages((prevImages: any) => prevImages.filter((_: any, i: any) => i !== index));
     setImageDescriptions((prevDescriptions: any) => prevDescriptions.filter((_: any, i: any) => i !== index));
   };
 
+  // Handle document delete
   const handleDocumentDelete = async (index: number) => {
     setDocumentFiles((prevFiles: any) => prevFiles.filter((_: any, i: any) => i !== index));
     // setDocuments((prevImages: any) => prevImages.filter((_: any, i: any) => i !== index));
     setDocumentsDescriptions((prevDescriptions: any) => prevDescriptions.filter((_: any, i: any) => i !== index));
   };
 
+  // Handle cover description change
   const handleCoverDescriptionChange = (value: string) => {
     setCoverDescription(value);
   };
 
+  // Handle image description change
   const handleImageDescriptionChange = (index: number, value: string) => {
     const newDescriptions = [...imageDescriptions];
     newDescriptions[index] = value;
     setImageDescriptions(newDescriptions);
   };
 
+  // Handle document change
   const handleDocumentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
@@ -261,12 +330,14 @@ export default function DraftForm(
     }
   };
 
+  // Handle document description change
   const handleDocumentDescriptionChange = (index: number, value: string) => {
     const newDescriptions = [...documentDescriptions];
     newDescriptions[index] = value;
     setDocumentsDescriptions(newDescriptions);
   };
 
+  // Update instrument description
   const updateDescription = async (e: any) => {
     e.preventDefault()
 
@@ -297,6 +368,7 @@ export default function DraftForm(
     setIsLoadingMetadata(false)
   }
 
+  // Create new instrument
   const createInstrument = async (e: any) => {
     e.preventDefault()
     setIsLoadingMetadata(true)
@@ -332,6 +404,7 @@ export default function DraftForm(
     setIsLoadingMetadata(false)
   }
 
+  // Upload cover
   const uploadCover = async (e: any) => {
     e.preventDefault()
     setIsLoadingMetadata(true);
@@ -362,6 +435,7 @@ export default function DraftForm(
     setInstrument(undefined);
   }
 
+  // Upload images
   const uploadImages = async (e: any) => {
     e.preventDefault()
     setIsLoadingMetadata(true);
@@ -396,7 +470,8 @@ export default function DraftForm(
     setImageDescriptions([]);
     setInstrument(undefined);
   }
-  
+
+  // Upload documents
   const uploadDocuments = async (e: any) => {
     e.preventDefault()
     setIsLoadingMetadata(true);
@@ -431,6 +506,7 @@ export default function DraftForm(
     setInstrument(undefined);
   }
 
+  // Handle instrument delete
   const handleInstrumentDelete = async () => {
     setIsLoadingMetadata(true);
     try {
@@ -443,11 +519,12 @@ export default function DraftForm(
     // setInstrument(undefined);
     router.push(`/`)
   };
-  
+
+  // Render loading state if instrumentId exists but instrument is not loaded
   if (instrumentId && !instrument) return (
     <Page>
-      <div className="text-center">
-        <Loading />
+        <div className="text-center">
+          <Loading />
       </div>
     </Page>
   )
@@ -462,109 +539,111 @@ export default function DraftForm(
   return (
     minter ?
       <Page>
-        <Section>
-          {
-            instrument ?
-              <h2 className='text-xl font-semibold text-center'>{t('drafts.edit')} #{instrument.id} </h2>
-            : <>
-                <h2 className='text-xl font-semibold text-center'>{t('drafts.new')}</h2>
-                <p className="text-center mb-2 text-grey-900">{t('register.sub_heading')}</p>
-              </>
-          }
-        </Section>
-
-        <Section>
-          {
-            instrument &&
-            <div className="mt-6 text-center">
-              <button
-                type="button"
-                className="items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
-                disabled={isLoadingMetadata}
-                onClick={() => handleInstrumentDelete()}
-              >
-                {isLoadingMetadata && <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>}
-                {t('components.DraftForm.delete')}
-              </button>
+        
+        <Section id="progress-bar">
+          <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-it-50 rounded-[15px] border border-it-200">
+            {/* Header */}
+            <div className="w-full mx-auto">
+                {
+                instrument ?
+                  <>
+                    <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('components.DraftForm.title.edit')} #{instrument.id} </h2>
+                    <p className="text-sm sm:text-base text-gray-600">{t('components.DraftForm.title.edit_sub_heading')}</p>
+                  </>
+                : <>
+                    <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('components.DraftForm.title.new')}</h2>
+                    <p className="text-sm sm:text-base text-gray-600">{t('components.DraftForm.title.new_sub_heading')}</p>
+                  </>
+                }
             </div>
-          }
+
+            <ProgressBar 
+              currentStep={currentStep}
+              onStepChange={handleStepChange}
+              completed={completed}
+              onCompletedChange={setCompleted}
+            />
+
+          </div>
         </Section>
 
-        <form className="py-4 px-4 rounded-lg">
-          <Section>
-            <div className="mb-6">
-              <label htmlFor="type" className="block text-md font-semibold text-gray-1000 pb-1">
-                {t('instrument.type')}
-              </label>
-              <div className="relative mb-2 font-medium">
-                <div
-                  onClick={() => instrument?.type ? null : setOpen(!open)}
-                  className={`bg-white p-2 flex border border-gray-200 items-center justify-between rounded-md ${!type && "text-gray-700"}`}
-                >
-                  {type ? type : t('instrument.type_placeholder')}
-                </div>
-                <ul className={`absolute top-0 w-full bg-white rounded-md border border-gray-300 overflow-y-auto ${open ? "max-h-60" : "max-h-0 invisible"} `}>
-                  <div className="flex items-center px-2 sticky top-0 bg-white">
-                    <input
-                      type="text"
-                      value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value.toLowerCase())}
-                      placeholder={t('instrument.type_placeholder')}
-                      className="placeholder:text-gray-700 p-2 outline-none"
-                      disabled={instrument?.type ? true : false}
-                    />
-                  </div>
-                  {instrumentTypes?.length && instrumentTypes.map((ins: any) => (
-                    <li
-                      key={ins?.label}
-                      className={`p-2 text-sm hover:bg-sky-600 hover:text-white
-                        ${ins?.value?.toLowerCase() === type?.toLowerCase() && "bg-sky-600 text-white"}
-                        ${ins?.value?.toLowerCase().startsWith(inputValue) ? "block" : "hidden"}`}
-                      onClick={() => {
-                        setOpen(false);
-                        if (ins?.value?.toLowerCase() !== type.toLowerCase()) {
-                          setType(ins?.value)
-                        }
-                      }}
+        <form className="">
+            <Section id="basic-info">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-6 px-3 sm:px-6 py-4 sm:py-8 || bg-gray-25 rounded-lg">
+                <div>
+                  <label htmlFor="type" className="block text-md font-semibold text-gray-1000 pb-1">
+                    {t('instrument.type')}
+                  </label>
+                  <div className="relative mb-2 font-medium">
+                    <div
+                      onClick={() => instrument?.type ? null : setOpen(!open)}
+                      className={`bg-white p-2 flex border border-gray-200 items-center justify-between rounded-md ${!type && "text-gray-700"}`}
                     >
-                      {ins?.label}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+                      {type ? type : t('instrument.type_placeholder')}
+                    </div>
+                    <ul className={`absolute z-10 top-0 w-full bg-white rounded-md border border-gray-300 overflow-y-auto ${open ? "max-h-60" : "max-h-0 invisible"} `}>
+                      <div className="flex items-center px-2 sticky top-0 bg-white">
+                        <input
+                          type="text"
+                          value={inputValue}
+                          onChange={(e) => setInputValue(e.target.value.toLowerCase())}
+                          placeholder={t('instrument.type_placeholder')}
+                          className="placeholder:text-gray-700 p-2 outline-none"
+                          disabled={instrument?.type ? true : false}
+                        />
+                      </div>
+                      {instrumentTypes?.length && instrumentTypes.map((ins: any) => (
+                        <li
+                          key={ins?.label}
+                          className={`p-2 text-sm hover:bg-sky-600 hover:text-white
+                            ${ins?.value?.toLowerCase() === type?.toLowerCase() && "bg-sky-600 text-white"}
+                            ${ins?.value?.toLowerCase().startsWith(inputValue) ? "block" : "hidden"}`}
+                          onClick={() => {
+                            setOpen(false);
+                            if (ins?.value?.toLowerCase() !== type.toLowerCase()) {
+                              setType(ins?.value)
+                            }
+                          }}
+                        >
+                          {ins?.label}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
 
-            <div className="mb-6">
-              <label htmlFor="name" className="block text-md font-semibold text-gray-1000 pb-1">
-                {t('instrument.name')}
-              </label>
-              <input
-                name="name"
-                className="block w-full px-4 py-2 text-it-950 border rounded-md focus:border-it-400 focus:ring-it-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                onChange={(e) => { setName(e.target.value) }}
-                value={name}
-                disabled={instrument?.title ? true : false}
-              />
-            </div>
-            {
-              type && name && !instrumentId &&
-              <div className="mt-6 text-center">
-                <button
-                  type="button"
-                  className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
-                  disabled={isLoadingMetadata}
-                  onClick={(e) => createInstrument(e)}
-                >
-                  {isLoadingMetadata && <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>}
-                  {t('drafts.save')}
-                </button>
+                <div className="col-span-2">
+                  <label htmlFor="name" className="block text-md font-semibold text-gray-1000 pb-1">
+                    {t('instrument.name')}
+                  </label>
+                  <input
+                    name="name"
+                    className="block w-full px-4 py-2 text-it-950 border rounded-md focus:border-it-400 focus:ring-it-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                    onChange={(e) => { setName(e.target.value) }}
+                    value={name}
+                    disabled={instrument?.title ? true : false}
+                  />
+                </div>
               </div>
-            }
-          </Section>
+              
+              {type && name && !instrumentId && (
+                <div className="mt-6 text-center">
+                  <button
+                    type="button"
+                    className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+                    disabled={isLoadingMetadata}
+                    onClick={(e) => createInstrument(e)}
+                  >
+                    {isLoadingMetadata && <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>}
+                    {t('drafts.save')}
+                  </button>
+                </div>
+              )}
+            </Section>
           {
             instrument &&
             <>
-              <Section>
+              <Section id="cover">
                 <div className="mb-6">
                   <label htmlFor="cover" className="block text-md font-semibold text-gray-1000 pb-1">
                     {t('instrument.images')} {process.env.NEXT_PUBLIC_MIME_TYPE_ACCEPT}
@@ -661,7 +740,7 @@ export default function DraftForm(
                   </div>
                 }
               </Section>
-              <Section>
+              <Section id="images">
                 <div className="mb-6">
                   <label htmlFor="images" className="block text-md font-semibold text-gray-1000 pb-1">
                     {t('instrument.images')} {process.env.NEXT_PUBLIC_MIME_TYPE_ACCEPT}
@@ -757,7 +836,7 @@ export default function DraftForm(
                   </div>
                 }
               </Section>
-              <Section>
+              <Section id="files">
                 <div className="mb-6">
                   <label htmlFor="files" className="block text-md font-semibold text-gray-1000 pb-1">
                     {t('instrument.files')} {process.env.NEXT_PUBLIC_FILE_TYPE_ACCEPT}
@@ -866,7 +945,7 @@ export default function DraftForm(
             (instrument.images?.length > 0) &&
             (instrument.files?.length > 0) && 
             (instrument.cover_image) &&
-              <Section>
+              <Section id="description">
                 <div className="mb-6">
                   <label
                     htmlFor="description"
@@ -916,6 +995,24 @@ export default function DraftForm(
               </Section>
           }
         </form>
+
+        <Section id="delete">
+          {
+            instrument &&
+            <div className="mt-6 text-center">
+              <button
+                type="button"
+                className="items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+                disabled={isLoadingMetadata}
+                onClick={() => handleInstrumentDelete()}
+              >
+                {isLoadingMetadata && <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>}
+                {t('components.DraftForm.delete')}
+              </button>
+            </div>
+          }
+        </Section>
+
       </Page> :
       <NotConnected locale={locale} />
   );
