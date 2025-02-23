@@ -1,5 +1,7 @@
 'use server'
 
+// import { isLoggedIn } from "@/actions/login"
+
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ address: string }> }
@@ -10,6 +12,11 @@ export async function GET(
     { message: 'No address provided' },
     { status: 400 }
   )
+
+  // if(!await isLoggedIn()) return Response.json(
+  //   { message: 'User is not logged in' },
+  //   { status: 401 }
+  // )
 
   try {
     const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/user/${address}`, {

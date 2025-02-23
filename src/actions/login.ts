@@ -30,7 +30,11 @@ export async function login(payload: VerifyLoginPayloadParams, callbackUrl: stri
     const context = {
       isMinter: false,
       isLuthier: false,
-      isVerified: false
+      isVerified: false,
+      user: {
+        id: undefined,
+        instruments: []
+      }
     };
 
     try {
@@ -46,6 +50,8 @@ export async function login(payload: VerifyLoginPayloadParams, callbackUrl: stri
             context.isLuthier = isLuthier;
             context.isVerified = isVerified;
             context.isMinter = isMinter;
+            context.user.id = userData.data.user_id;
+            context.user.instruments = userData.data.instruments;
           }
         }
       }
@@ -87,7 +93,17 @@ export async function authedOnly(callbackUrl: string) {
   }
   return authResult;
 }
- 
+
+export async function userAuthData() {
+  const jwt = cookies().get("jwt");
+  if (!jwt?.value) {
+    return;
+  }
+
+  const authResult = await thirdwebAuth.verifyJWT({ jwt: jwt?.value || '' });
+  return authResult;
+}
+
 export async function logout() {
   cookies().delete("jwt");
 }
