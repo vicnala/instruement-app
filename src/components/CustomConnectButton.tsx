@@ -1,11 +1,10 @@
 "use client";
 
 import * as React from "react";
-import type { NextPage } from "next";
 import { ConnectButton } from "thirdweb/react";
 import { baseSepolia } from "thirdweb/chains";
 import { useTheme } from "next-themes";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 import { client } from "@/app/client";
 import {
   generatePayload,
@@ -35,7 +34,7 @@ export const CustomConnectButton = (
           await login(params, callbackUrl);
         },
         getLoginPayload: async ({ address }) =>
-          generatePayload({ address }),
+          await generatePayload({ address, chainId: baseSepolia.id }),
         doLogout: async () => {
           // console.log("logging out!");
           await logout();
