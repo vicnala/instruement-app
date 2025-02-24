@@ -294,14 +294,14 @@
                 },
                 "images": {
                     "title": "Imágenes",
-                    "description": "Registra imágenes adicionales de vistas y detalles del instrumento. En formato JPG y PNG",
+                    "description": "Registra un mínimo de dos imágenes adicionales de vistas y detalles del instrumento. En formato JPG y PNG",
                     "button_upload": "Subir imagen",
                     "text_area_placeholder": "Descripción para esta imagen",
                     "button_save": "Guardar imágenes"
                 },
                 "files": {
                     "title": "Documentos",
-                    "description": "Registra documentos adicionales en formato PDF",
+                    "description": "Registra documentos adicionales en formato PDF. Los documentos son opcionales.",
                     "button_upload": "Subir documento",
                     "text_area_placeholder": "Añade aquí una descripción para este documento",
                     "button_save": "Guardar documentos"
