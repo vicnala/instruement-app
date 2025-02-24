@@ -270,7 +270,9 @@
                 "new": "Registra tu instrumento",
                 "edit": "Editando borrador",
                 "new_sub_heading": "Completa estos pasos para registrar tu instrumento",
-                "edit_sub_heading": "Sigue completando los pasos para registrar tu instrumento"
+                "edit_sub_heading": "Sigue completando los pasos para registrar tu instrumento",
+                "ready_to_register": "¡Listo para registrar!",
+                "ready_to_register_sub": "Ya puedes previsualizar y registrar tu instrumento"
             },
             "basic_info": {
                 "title": "Información básica",

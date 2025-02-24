@@ -555,8 +555,17 @@ export default function DraftForm(
                   {
                   instrument ?
                     <>
-                      <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('title.edit')} #{instrument.id} </h2>
-                      <p className="text-sm sm:text-base text-gray-600">{t('title.edit_sub_heading')}</p>
+                      {hasMediaUploads && description ? (
+                        <>
+                          <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('title.ready_to_register')}</h2>
+                          <p className="text-sm sm:text-base text-gray-600">{t('title.ready_to_register_sub')}</p>
+                        </>
+                      ) : (
+                        <>
+                          <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('title.edit')} #{instrument.id} </h2>
+                          <p className="text-sm sm:text-base text-gray-600">{t('title.edit_sub_heading')}</p>
+                        </>
+                      )}
                     </>
                     : <>
                       <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('title.new')}</h2>

@@ -265,7 +265,9 @@
                 "new": "Register Your Instrument",
                 "edit": "Editing Draft",
                 "new_sub_heading": "Complete these steps to register your instrument",
-                "edit_sub_heading": "Continue completing the steps to register your instrument"
+                "edit_sub_heading": "Continue completing the steps to register your instrument",
+                "ready_to_register": "Ready to register!",
+                "ready_to_register_sub": "You can now preview and register your instrument"
             },
             "basic_info": {
                 "title": "Basic Info",

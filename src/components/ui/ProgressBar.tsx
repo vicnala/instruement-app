@@ -95,7 +95,7 @@ const ProgressBar = ({
           {/* Preview icon at the end */}
           <div className="flex flex-col items-center max-w-[110px] sm:max-w-none">
             {completed ? (
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-green-300 text-white flex items-center justify-center">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-green-400 text-white flex items-center justify-center">
                 <Eye className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
             ) : (
