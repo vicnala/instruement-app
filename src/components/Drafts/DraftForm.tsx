@@ -553,42 +553,25 @@ export default function DraftForm(
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   {
-                  instrument ?
-                    <>
-                      {hasMediaUploads && description ? (
-                        <>
-                          <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('title.ready_to_register')}</h2>
-                          <p className="text-sm sm:text-base text-gray-600">{t('title.ready_to_register_sub')}</p>
-                        </>
-                      ) : (
-                        <>
-                          <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('title.edit')} #{instrument.id} </h2>
-                          <p className="text-sm sm:text-base text-gray-600">{t('title.edit_sub_heading')}</p>
-                        </>
-                      )}
-                    </>
-                    : <>
-                      <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('title.new')}</h2>
-                      <p className="text-sm sm:text-base text-gray-600">{t('title.new_sub_heading')}</p>
-                    </>
+                    instrument ?
+                      <>
+                        {hasMediaUploads && description ? (
+                          <>
+                            <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('title.ready_to_register')}</h2>
+                            <p className="text-sm sm:text-base text-gray-600">{t('title.ready_to_register_sub')}</p>
+                          </>
+                        ) : (
+                          <>
+                            <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('title.edit')} #{instrument.id} </h2>
+                            <p className="text-sm sm:text-base text-gray-600">{t('title.edit_sub_heading')}</p>
+                          </>
+                        )}
+                      </>
+                      : <>
+                        <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('title.new')}</h2>
+                        <p className="text-sm sm:text-base text-gray-600">{t('title.new_sub_heading')}</p>
+                      </>
                   }
-                </div>
-                <div>
-                  {
-                    instrument &&
-                    hasMediaUploads &&
-                    (instrument.description === description) && description &&
-                    <div className="text-right">
-                    <FormSaveButton 
-                      disabled={isLoadingMetadata}
-                      onClick={() => router.push(`/preview/${instrument.id}`)}
-                      isLoading={isLoadingMetadata}
-                      theme="green"
-                    >
-                      {t('preview')}
-                    </FormSaveButton>
-                  </div>
-                }
                 </div>
               </div>
             </div>
@@ -601,15 +584,32 @@ export default function DraftForm(
             />
 
           </div>
+          <div>
+            {
+              instrument &&
+              hasMediaUploads &&
+              (instrument.description === description) && description &&
+              <div className="text-right mt-6">
+                <FormSaveButton
+                  disabled={isLoadingMetadata}
+                  onClick={() => router.push(`/preview/${instrument.id}`)}
+                  isLoading={isLoadingMetadata}
+                  theme="green"
+                >
+                  {t('preview')}
+                </FormSaveButton>
+              </div>
+            }
+          </div>
         </Section>
 
         <form className="">
-          <Section id="basic-info">
-            <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-25 rounded-lg">
+          <Section id="basic-info" className="pb-[1px]">
+            <div className="px-3 sm:px-6 pt-5 pb-6 sm:py-8 || bg-gray-50 rounded-t-lg">
               <h2 className="text-xl font-semibold text-gray-1000 pb-8">
                 {t('basic_info.title')}
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-0 md:gap-3 sm:gap-6">
                 <div>
                   <label htmlFor="type" className="block text-md font-semibold text-gray-600 pb-1">
                     {t('basic_info.type.label')}
@@ -667,7 +667,7 @@ export default function DraftForm(
               </div>
               {type && name && !instrumentId && (
                 <div className="mt-6 text-right">
-                  <FormSaveButton 
+                  <FormSaveButton
                     disabled={isLoadingMetadata}
                     onClick={(e) => createInstrument(e)}
                     isLoading={isLoadingMetadata}
@@ -680,8 +680,8 @@ export default function DraftForm(
           </Section>
           {instrument &&
             <>
-              <Section id="media">
-                <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-25 rounded-lg">
+              <Section id="media" className="pb-[1px]">
+                <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-50">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8">
                     <div className="col-span-1 min-h-[300px]">
                       <h2 className="text-xl font-semibold text-gray-1000 pb-1">
@@ -749,10 +749,10 @@ export default function DraftForm(
                               </div>
                             }
                             {/* Show upload button if there is no cover image in instrument (not saved yet) */}
-                            { (!instrument.cover_image && !cover) &&
+                            {(!instrument.cover_image && !cover) &&
                               <button
                                 type="button"
-                                className="bg-transparent text-center mt-2 hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-lg flex items-center justify-center"
+                                className="bg-transparent text-center mt-2 hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-sm md:text-lg flex items-center justify-center"
                                 onClick={handleCoverClick}
                               >
                                 <IconUploadTwentyFour className="w-4 h-4 mr-2" />
@@ -764,16 +764,16 @@ export default function DraftForm(
                         </>
 
                         {/* Upload/Save cover image. Check also name and type are set. */}
-                        { type && name && cover && !instrument.cover_image &&
+                        {type && name && cover && !instrument.cover_image &&
                           <div className="mt-2">
                             {
-                            <FormSaveButton 
-                              disabled={isLoadingMetadata}
-                              onClick={(e) => uploadCover(e)}
-                              isLoading={isLoadingMetadata}
-                            >
-                              {t('media.cover.button_save')}
-                            </FormSaveButton>
+                              <FormSaveButton
+                                disabled={isLoadingMetadata}
+                                onClick={(e) => uploadCover(e)}
+                                isLoading={isLoadingMetadata}
+                              >
+                                {t('media.cover.button_save')}
+                              </FormSaveButton>
                             }
                           </div>
                         }
@@ -782,6 +782,9 @@ export default function DraftForm(
                     </div>
 
                     <div className="col-span-1 md:col-span-2 min-h-[300px]">
+                      <div className="md:hidden">
+                        <Divider spacing="md" />
+                      </div>
                       <h2 className="text-xl font-semibold text-gray-1000 pb-1" >
                         {t('media.images.title')}
                       </h2>
@@ -854,7 +857,7 @@ export default function DraftForm(
                           {/* Upload button */}
                           <button
                             type="button"
-                            className="bg-transparent text-center hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-lg flex items-center justify-center w-full"
+                            className="bg-transparent text-center hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-sm md:text-lg flex items-center justify-center w-full"
                             onClick={handleImagesClick}
                           >
                             <IconUploadTwentyFour className="w-4 h-4 mr-2" />
@@ -868,7 +871,7 @@ export default function DraftForm(
                       {type && name && images.length > 0 &&
                         <div className="mt-6 text-right">
                           {
-                            <FormSaveButton 
+                            <FormSaveButton
                               disabled={isLoadingMetadata}
                               onClick={(e) => uploadImages(e)}
                               isLoading={isLoadingMetadata}
@@ -898,7 +901,7 @@ export default function DraftForm(
                           className="hidden"
                           onChange={handleDocumentChange}
                         />
-                        {(instrument.files.length > 0 || documentFiles.length > 0 ) && (
+                        {(instrument.files.length > 0 || documentFiles.length > 0) && (
                           <>
                             {/* Show saved files with description */}
                             {instrument && instrument.files.length > 0 &&
@@ -958,7 +961,7 @@ export default function DraftForm(
                         <div className="">
                           <button
                             type="button"
-                            className="bg-transparent text-center hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-lg flex items-center justify-center"
+                            className="bg-transparent text-center hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-sm md:text-lg flex items-center justify-center"
                             onClick={handleDocumentClick}
                           >
                             <IconUploadTwentyFour className="w-4 h-4 mr-2" />
@@ -970,18 +973,18 @@ export default function DraftForm(
 
                       {/* Upload/Save files. Check also name and type are set. */}
                       {type && name && documentFiles.length > 0 &&
-                          <div className="mt-6 text-right">
-                            {
-                            <FormSaveButton 
+                        <div className="mt-6 text-right">
+                          {
+                            <FormSaveButton
                               disabled={isLoadingMetadata}
                               onClick={(e) => uploadDocuments(e)}
                               isLoading={isLoadingMetadata}
                             >
                               {t('media.files.button_save')}
                             </FormSaveButton>
-                            }
-                          </div>
-                        }
+                          }
+                        </div>
+                      }
                     </div>
                   </div>
                 </div>
@@ -992,7 +995,7 @@ export default function DraftForm(
           {instrument &&
             hasMediaUploads &&
             <Section id="description">
-              <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-25 rounded-lg">
+              <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-50 rounded-b-lg">
                 <div className="mb-6">
                   <h2 className="text-xl font-semibold text-gray-1000 pb-1">
                     {t('details.title')}
@@ -1007,7 +1010,7 @@ export default function DraftForm(
                 {/* If saved description is different from the description in the editor, show save button */}
                 {instrument.description !== description &&
                   <div className="mt-6 text-right">
-                    <FormSaveButton 
+                    <FormSaveButton
                       disabled={isLoadingMetadata}
                       onClick={(e) => updateDescription(e)}
                       isLoading={isLoadingMetadata}
@@ -1022,7 +1025,7 @@ export default function DraftForm(
                 hasMediaUploads &&
                 (instrument.description === description) && description &&
                 <div className="mt-6 text-right">
-                  <FormSaveButton 
+                  <FormSaveButton
                     disabled={isLoadingMetadata}
                     onClick={() => router.push(`/preview/${instrument.id}`)}
                     isLoading={isLoadingMetadata}
@@ -1038,7 +1041,7 @@ export default function DraftForm(
         </form>
 
         <Section id="delete">
-          { instrument &&
+          {instrument &&
             <div className="mt-6 text-left">
               <button
                 type="button"
