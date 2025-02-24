@@ -267,8 +267,48 @@
                 "new_sub_heading": "Complete these steps to register your instrument",
                 "edit_sub_heading": "Continue completing the steps to register your instrument"
             },
+            "basic_info": {
+                "title": "Basic Info",
+                "button": "Save & continue",
+                "type": {
+                    "label": "Instrument type",
+                    "placeholder": "Select instrument type"
+                },
+                "name": {
+                    "label": "Instrument name",
+                    "placeholder": "Enter instrument name"
+                }
+            },
+            "media": {
+                "cover": {
+                    "title": "Cover",
+                    "description": "Primary image of the instrument. Accepts JPG and PNG format",
+                    "button_upload": "Upload cover",
+                    "text_area_placeholder": "Add a description for the cover image here",
+                    "button_save": "Save cover"
+                },
+                "images": {
+                    "title": "Images",
+                    "description": "Register additional images of views and details of the instrument. In JPG and PNG format",
+                    "button_upload": "Upload image",
+                    "text_area_placeholder": "Add a description for this image",
+                    "button_save": "Save images"
+                },
+                "files": {
+                    "title": "Documents",
+                    "description": "Register additional documents in PDF format",
+                    "button_upload": "Upload document",
+                    "text_area_placeholder": "Add a description for this document",
+                    "button_save": "Save documents"
+                }
+            },
+            "details": {
+                "title": "Details",
+                "description": "Detailed description of the instrument",
+                "button_save": "Save description"
+            },
             "delete": "Delete draft",
-            "preview": "Preview"
+            "preview": "Preview and register"
         },
         "Preview": {
             "title": "Preview of draft"
@@ -298,7 +338,7 @@
             "failed_message": "Something went wrong with the payment. Please contact us.",
             "home": "Return to the home page"
         },
-        "ui": {
+        "UI": {
             "ProgressBar": {
                 "basic_info": {
                     "title": "Basic Info",

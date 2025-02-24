@@ -9,10 +9,16 @@ import Page from "@/components/Page";
 import Section from "@/components/Section";
 import IconUploadTwentyFour from "@/components/Icons/Upload"
 import IconTrashTwentyFour from "@/components/Icons/Trash"
+import { FileText, Trash } from 'lucide-react';
+
 import { Instrument, InstrumentFile, InstrumentImage } from "@/lib/definitions";
 import { useRouter } from "@/i18n/routing";
 import Loading from "../Loading";
-import ProgressBar from "../ui/ProgressBar";
+import ProgressBar from "../UI/ProgressBar"
+import ButtonSpinner from "../UI/ButtonSpinner"
+import FormSaveButton from "../UI/FormSaveButton"
+import Divider from "../UI/Divider"
+
 const Editor = dynamic(() => import("@/components/Editor"), { ssr: false })
 
 // Add this type definition at the top of the file
@@ -21,7 +27,7 @@ type ProgressStep = 1 | 2 | 3 | 4;
 export default function DraftForm(
   { locale, instrumentId }: Readonly<{ locale: string, instrumentId?: string }>
 ) {
-  const t = useTranslations();
+  const t = useTranslations('components.DraftForm');
   const router = useRouter();
   const { minter, setReloadUser, address: minterAddress } = useStateContext()
 
@@ -32,7 +38,7 @@ export default function DraftForm(
   const [inputValue, setInputValue] = useState("")
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
-  
+
   const [cover, setCover] = useState<File>()
   const [coverFile, setCoverFile] = useState<File>()
   const [coverDescription, setCoverDescription] = useState<string>('')
@@ -43,7 +49,7 @@ export default function DraftForm(
 
   const [documentFiles, setDocumentFiles] = useState<File[]>([])
   const [documentDescriptions, setDocumentsDescriptions] = useState<string[]>([])
-  
+
   const [error, setError] = useState<string | null>(null)
   const refCover = useRef<HTMLInputElement>(null)
   const refImage = useRef<HTMLInputElement>(null)
@@ -54,15 +60,16 @@ export default function DraftForm(
   const [currentStep, setCurrentStep] = useState<ProgressStep>(1);
   const [completed, setCompleted] = useState(false);
 
+  // Regular declaration - placed after state declarations
+  const hasMediaUploads = instrument ? !!(instrument.cover_image && instrument.images.length >= 2) : false;
+  const hasDescription = instrument ? instrument.description && instrument.description.trim().length > 0 : false;
+
   // Add useEffect to handle step transitions
   useEffect(() => {
     if (!instrument) {
       setCurrentStep(1);
       setCompleted(false);
     } else if (instrument) {
-      const hasMediaUploads = !!(instrument.cover_image || instrument.images.length > 0 || instrument.files.length > 0);
-      const hasDescription = !!instrument.description;
-      
       if (hasMediaUploads && hasDescription) {
         setCurrentStep(4);
         setCompleted(true);
@@ -72,7 +79,7 @@ export default function DraftForm(
         setCurrentStep(2);
       }
     }
-  }, [instrument]);
+  }, [instrument, hasMediaUploads, hasDescription]);
 
   // Add handler for step changes
   const handleStepChange = (step: number) => {
@@ -103,7 +110,7 @@ export default function DraftForm(
 
   // Fetch instrument details and associated files/images when instrumentId changes
   useEffect(() => {
-    const getInstrument = async () => {     
+    const getInstrument = async () => {
       try {
         const result = await fetch(`/api/instrument/${instrumentId}?locale=${locale}`, {
           method: "GET",
@@ -116,8 +123,8 @@ export default function DraftForm(
           // console.log(`GET /api/instrument/${instrumentId} ERROR`, data.message);
           alert(`Error: ${data.message}`);
         } else {
-          setName(data.data.title);          
-          setDescription(data.data.description);         
+          setName(data.data.title);
+          setDescription(data.data.description);
           const imageIds = data.data.images;
           const fileIds = data.data.files;
           const coverId = data.data.cover_image;
@@ -145,7 +152,7 @@ export default function DraftForm(
                 }
               })
             ) || [];
-          
+
             data.data.images = _images;
           }
 
@@ -170,7 +177,7 @@ export default function DraftForm(
                 }
               })
             ) || [];
-          
+
             data.data.files = files;
           }
 
@@ -191,7 +198,7 @@ export default function DraftForm(
       } catch (error: any) {
         console.log(`POST /api/instrument/${instrumentId} ERROR`, error.message)
         alert(`Error: ${error.message}`);
-      } 
+      }
     }
     if (instrumentId && !instrument) {
       getInstrument();
@@ -202,14 +209,14 @@ export default function DraftForm(
   useEffect(() => {
     if (minter) {
       const minterSkillsConstruction = minter && minter.skills
-      .filter((s: any) => s.slug.includes('construction'))
-      .map((s: any) => s.slug.split('-construction')[0]) || []; 
+        .filter((s: any) => s.slug.includes('construction'))
+        .map((s: any) => s.slug.split('-construction')[0]) || [];
 
       const minterInstrumentTypes = minter.instrument_types ?
         minter.instrument_types
           .map((ins: any) => ({ value: ins.name, label: ins.name, category: ins.slug }))
           .filter((ins: any) => minterSkillsConstruction.includes(ins.category)) :
-          [];
+        [];
 
       setInstrumentTypes(minterInstrumentTypes);
 
@@ -243,7 +250,7 @@ export default function DraftForm(
   }
 
   // Handle cover change
-  const handleCoverChange = (event: React.ChangeEvent<HTMLInputElement>) => {   
+  const handleCoverChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length === 1) {
       const _files = Array.from(files);
@@ -385,7 +392,7 @@ export default function DraftForm(
           body: JSON.stringify({ user_id: minter.user_id, type: selected.category, name })
         })
         const { data } = await result.json()
-        
+
         if (data.code === 'success') {
           if (data.data) {
             setReloadUser(true);
@@ -523,14 +530,14 @@ export default function DraftForm(
   // Render loading state if instrumentId exists but instrument is not loaded
   if (instrumentId && !instrument) return (
     <Page>
-        <div className="text-center">
-          <Loading />
+      <div className="text-center">
+        <Loading />
       </div>
     </Page>
   )
 
   // console.log(instrument);
-  
+
   // // console.log("cover_image", instrument?.cover_image);
   // console.log("images", instrument?.images);
   // console.log("imageFiles", imageFiles);
@@ -539,25 +546,45 @@ export default function DraftForm(
   return (
     minter ?
       <Page>
-        
+
         <Section id="progress-bar">
-          <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-it-50 rounded-[15px] border border-it-200">
-            {/* Header */}
-            <div className="w-full mx-auto">
-                {
-                instrument ?
-                  <>
-                    <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('components.DraftForm.title.edit')} #{instrument.id} </h2>
-                    <p className="text-sm sm:text-base text-gray-600">{t('components.DraftForm.title.edit_sub_heading')}</p>
-                  </>
-                : <>
-                    <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('components.DraftForm.title.new')}</h2>
-                    <p className="text-sm sm:text-base text-gray-600">{t('components.DraftForm.title.new_sub_heading')}</p>
-                  </>
+          <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-it-50 rounded-[15px] border border-it-200 overflow-hidden">
+            <div className="w-full mx-auto mb-4 sm:mb-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  {
+                  instrument ?
+                    <>
+                      <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('title.edit')} #{instrument.id} </h2>
+                      <p className="text-sm sm:text-base text-gray-600">{t('title.edit_sub_heading')}</p>
+                    </>
+                    : <>
+                      <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('title.new')}</h2>
+                      <p className="text-sm sm:text-base text-gray-600">{t('title.new_sub_heading')}</p>
+                    </>
+                  }
+                </div>
+                <div>
+                  {
+                    instrument &&
+                    hasMediaUploads &&
+                    (instrument.description === description) && description &&
+                    <div className="text-right">
+                    <FormSaveButton 
+                      disabled={isLoadingMetadata}
+                      onClick={() => router.push(`/preview/${instrument.id}`)}
+                      isLoading={isLoadingMetadata}
+                      theme="green"
+                    >
+                      {t('preview')}
+                    </FormSaveButton>
+                  </div>
                 }
+                </div>
+              </div>
             </div>
 
-            <ProgressBar 
+            <ProgressBar
               currentStep={currentStep}
               onStepChange={handleStepChange}
               completed={completed}
@@ -568,18 +595,22 @@ export default function DraftForm(
         </Section>
 
         <form className="">
-            <Section id="basic-info">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-6 px-3 sm:px-6 py-4 sm:py-8 || bg-gray-25 rounded-lg">
+          <Section id="basic-info">
+            <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-25 rounded-lg">
+              <h2 className="text-xl font-semibold text-gray-1000 pb-8">
+                {t('basic_info.title')}
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-6">
                 <div>
-                  <label htmlFor="type" className="block text-md font-semibold text-gray-1000 pb-1">
-                    {t('instrument.type')}
+                  <label htmlFor="type" className="block text-md font-semibold text-gray-600 pb-1">
+                    {t('basic_info.type.label')}
                   </label>
                   <div className="relative mb-2 font-medium">
                     <div
                       onClick={() => instrument?.type ? null : setOpen(!open)}
                       className={`bg-white p-2 flex border border-gray-200 items-center justify-between rounded-md ${!type && "text-gray-700"}`}
                     >
-                      {type ? type : t('instrument.type_placeholder')}
+                      {type ? type : t('basic_info.type.placeholder')}
                     </div>
                     <ul className={`absolute z-10 top-0 w-full bg-white rounded-md border border-gray-300 overflow-y-auto ${open ? "max-h-60" : "max-h-0 invisible"} `}>
                       <div className="flex items-center px-2 sticky top-0 bg-white">
@@ -587,7 +618,7 @@ export default function DraftForm(
                           type="text"
                           value={inputValue}
                           onChange={(e) => setInputValue(e.target.value.toLowerCase())}
-                          placeholder={t('instrument.type_placeholder')}
+                          placeholder={t('basic_info.type.placeholder')}
                           className="placeholder:text-gray-700 p-2 outline-none"
                           disabled={instrument?.type ? true : false}
                         />
@@ -596,8 +627,8 @@ export default function DraftForm(
                         <li
                           key={ins?.label}
                           className={`p-2 text-sm hover:bg-sky-600 hover:text-white
-                            ${ins?.value?.toLowerCase() === type?.toLowerCase() && "bg-sky-600 text-white"}
-                            ${ins?.value?.toLowerCase().startsWith(inputValue) ? "block" : "hidden"}`}
+                              ${ins?.value?.toLowerCase() === type?.toLowerCase() && "bg-sky-600 text-white"}
+                              ${ins?.value?.toLowerCase().startsWith(inputValue) ? "block" : "hidden"}`}
                           onClick={() => {
                             setOpen(false);
                             if (ins?.value?.toLowerCase() !== type.toLowerCase()) {
@@ -613,8 +644,8 @@ export default function DraftForm(
                 </div>
 
                 <div className="col-span-2">
-                  <label htmlFor="name" className="block text-md font-semibold text-gray-1000 pb-1">
-                    {t('instrument.name')}
+                  <label htmlFor="name" className="block text-md font-semibold text-gray-600 pb-1">
+                    {t('basic_info.name.label')}
                   </label>
                   <input
                     name="name"
@@ -625,389 +656,390 @@ export default function DraftForm(
                   />
                 </div>
               </div>
-              
               {type && name && !instrumentId && (
-                <div className="mt-6 text-center">
-                  <button
-                    type="button"
-                    className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+                <div className="mt-6 text-right">
+                  <FormSaveButton 
                     disabled={isLoadingMetadata}
                     onClick={(e) => createInstrument(e)}
+                    isLoading={isLoadingMetadata}
                   >
-                    {isLoadingMetadata && <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>}
-                    {t('drafts.save')}
-                  </button>
+                    {t('basic_info.button')}
+                  </FormSaveButton>
                 </div>
               )}
-            </Section>
-          {
-            instrument &&
+            </div>
+          </Section>
+          {instrument &&
             <>
-              <Section id="cover">
-                <div className="mb-6">
-                  <label htmlFor="cover" className="block text-md font-semibold text-gray-1000 pb-1">
-                    {t('instrument.images')} {process.env.NEXT_PUBLIC_MIME_TYPE_ACCEPT}
-                  </label>
-                  <>
-                    <div className="p-6 flex flex-col items-center gap-2 bg-gray-100 text-gray-100' rounded-lg">
-                      <input
-                        type="file"
-                        accept={process.env.NEXT_PUBLIC_MIME_TYPE_ACCEPT || ""}
-                        id="cover"
-                        name="cover"
-                        multiple={false}
-                        ref={refCover}
-                        className="hidden"
-                        onChange={handleCoverChange}
-                      />
-                      {!cover && instrument.cover_image && instrument.cover_image.file_url && 
-                          <div
-                            key={instrument.cover_image.id}
-                            className="max-w-sm bg-it-50 border border-gray-200 rounded-lg overflow-hidden shadow dark:bg-gray-800 dark:border-gray-700 mt-4 text-center"
-                          >
-                            <div className="relative overflow-hidden text-ellipsis">
-                              <img className="" src={instrument.cover_image.file_url} alt={instrument.cover_image.description} />
-                              <button
-                                type="button"
-                                className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
-                                onClick={() => handleCurrentFileDelete(instrument.cover_image.id)}
+              <Section id="media">
+                <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-25 rounded-lg">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8">
+                    <div className="col-span-1 min-h-[300px]">
+                      <h2 className="text-xl font-semibold text-gray-1000 pb-1">
+                        {t('media.cover.title')}
+                      </h2>
+                      <p className="text-sm text-gray-600">
+                        {t('media.cover.description')}
+                      </p>
+                      <div className="mt-4">
+                        <>
+                          <div className="flex flex-col">
+                            <input
+                              type="file"
+                              accept={process.env.NEXT_PUBLIC_MIME_TYPE_ACCEPT || ""}
+                              id="cover"
+                              name="cover"
+                              multiple={false}
+                              ref={refCover}
+                              className="hidden"
+                              onChange={handleCoverChange}
+                            />
+                            {/* Show saved cover image with description */}
+                            {!cover && instrument.cover_image && instrument.cover_image.file_url &&
+                              <div
+                                key={instrument.cover_image.id}
+                                className="max-w-sm bg-it-50 border border-it-200 rounded-lg shadow overflow-hidden"
                               >
-                                <IconTrashTwentyFour />
-                              </button>
-                            </div>
-                            <div className="w-full p-2 border-none focus:outline-none">
-                              {instrument.cover_image.description}
-                            </div>
-                          </div>
-                      }
-                      {!!cover && 
-                        <div
-                          key={'cover'}
-                          className="max-w-sm bg-it-50 border border-gray-200 rounded-lg overflow-hidden shadow dark:bg-gray-800 dark:border-gray-700 mt-4 text-center"
-                        >
-                          <div className="relative overflow-hidden text-ellipsis">
-                            <img className="" src={cover as any} alt="" />
-                            <button
-                              type="button"
-                              className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
-                              onClick={() => handleCoverDelete()}
-                            >
-                              <IconTrashTwentyFour />
-                            </button>
-                          </div>
-                          <textarea
-                            className="w-full p-2 border-none focus:outline-none"
-                            placeholder={t('instrument.images_description_placeholder')}
-                            value={coverDescription}
-                            onChange={(e) => handleCoverDescriptionChange(e.target.value)}
-                          />
-                        </div>
-                      }
-                      {
-                        (!instrument.cover_image && !cover) && 
-                        <button
-                          type="button"
-                          className="bg-transparent text-center mt-2 hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-lg flex items-center justify-center"
-                          onClick={handleCoverClick}
-                        >
-                          <IconUploadTwentyFour className="w-4 h-4 mr-2" />
-                          {t('instrument.image_helper')}
-                        </button>
-                      }
-                    </div>
-                    {error && <p className="text-red-500">{error}</p>}
-                  </>
-                </div>
-                {type && name && cover && !instrument.cover_image &&
-                  <div className="mt-6 text-center">
-                    {
-                      <button
-                        type="button"
-                        className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
-                        disabled={isLoadingMetadata}
-                        onClick={(e) => uploadCover(e)}
-                      >
-                        {
-                          isLoadingMetadata &&
-                          <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                          </svg>
-                        }
-                        {t('register.create_cover')}
-                      </button>
-                    }
-                  </div>
-                }
-              </Section>
-              <Section id="images">
-                <div className="mb-6">
-                  <label htmlFor="images" className="block text-md font-semibold text-gray-1000 pb-1">
-                    {t('instrument.images')} {process.env.NEXT_PUBLIC_MIME_TYPE_ACCEPT}
-                  </label>
-                  <>
-                    <div className="p-6 flex flex-col items-center gap-2 bg-gray-100 text-gray-100' rounded-lg">
-                      <input
-                        type="file"
-                        accept={process.env.NEXT_PUBLIC_MIME_TYPE_ACCEPT || ""}
-                        id="images"
-                        name="images"
-                        multiple={true}
-                        ref={refImage}
-                        className="hidden"
-                        onChange={handleImageChange}
-                      />
-                      {instrument.images.length > 0 && instrument.images[0] &&
-                        instrument.images.map((img: InstrumentImage, index: number) => (
-                          <div
-                            key={img.id}
-                            className="max-w-sm bg-it-50 border border-gray-200 rounded-lg overflow-hidden shadow dark:bg-gray-800 dark:border-gray-700 mt-4 text-center"
-                          >
-                            <div className="relative overflow-hidden text-ellipsis">
-                              <img className="" src={img.file_url} alt={img.description} />
-                              <button
-                                type="button"
-                                className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
-                                onClick={() => handleCurrentFileDelete(img.id)}
-                              >
-                                <IconTrashTwentyFour />
-                              </button>
-                            </div>
-                            <div className="w-full p-2 border-none focus:outline-none">
-                              {img.description}
-                            </div>
-                          </div>
-                        ))
-                      }
-                      {images.length > 0 && images.map((img: any, index: number) => (
-                        <div
-                          key={index.toString()}
-                          className="max-w-sm bg-it-50 border border-gray-200 rounded-lg overflow-hidden shadow dark:bg-gray-800 dark:border-gray-700 mt-4 text-center"
-                        >
-                          <div className="relative overflow-hidden text-ellipsis">
-                            <img className="" src={img} alt="" />
-                            <button
-                              type="button"
-                              className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
-                              onClick={() => handleImageDelete(index)}
-                            >
-                              <IconTrashTwentyFour />
-                            </button>
-                          </div>
-                          <textarea
-                            className="w-full p-2 border-none focus:outline-none"
-                            placeholder={t('instrument.images_description_placeholder')}
-                            value={imageDescriptions[index]}
-                            onChange={(e) => handleImageDescriptionChange(index, e.target.value)}
-                          />
-                        </div>
-                      ))}
-                      <button
-                        type="button"
-                        className="bg-transparent text-center mt-2 hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-lg flex items-center justify-center"
-                        onClick={handleImagesClick}
-                      >
-                        <IconUploadTwentyFour className="w-4 h-4 mr-2" />
-                        {t('instrument.select_detail_image')}
-                      </button>
-                    </div>
-                    {error && <p className="text-red-500">{error}</p>}
-                  </>
-                </div>
-                {type && name && images.length > 0 &&
-                  <div className="mt-6 text-center">
-                    {
-                      <button
-                        type="button"
-                        className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
-                        disabled={isLoadingMetadata}
-                        onClick={(e) => uploadImages(e)}
-                      >
-                        {
-                          isLoadingMetadata &&
-                          <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                          </svg>
-                        }
-                        {t('register.upload_images')}
-                      </button>
-                    }
-                  </div>
-                }
-              </Section>
-              <Section id="files">
-                <div className="mb-6">
-                  <label htmlFor="files" className="block text-md font-semibold text-gray-1000 pb-1">
-                    {t('instrument.files')} {process.env.NEXT_PUBLIC_FILE_TYPE_ACCEPT}
-                  </label>
-                  <>
-                    <div className="p-6 flex flex-col items-center gap-2 bg-gray-100 text-gray-100' rounded-lg">
-                      <input
-                        type="file"
-                        accept={process.env.NEXT_PUBLIC_FILE_TYPE_ACCEPT || ""}
-                        id="files"
-                        name="files"
-                        multiple={true}
-                        ref={refDocument}
-                        className="hidden"
-                        onChange={handleDocumentChange}
-                      />
-                      {instrument && instrument.files.length > 0 &&
-                        instrument.files.map((file: InstrumentFile, index: number) => (
-                          <div
-                            key={`F${index.toString()}`}
-                            className="max-w-sm bg-it-50 border border-gray-200 rounded-lg overflow-hidden shadow dark:bg-gray-800 dark:border-gray-700 mt-4 text-center"
-                          >
-                            <div className="relative overflow-hidden text-ellipsis">
-                              <div className="">
-                                <div className="p-8 pl-20 pr-20 bg-white">
-                                  {file.title}
+                                <div className="relative overflow-hidden text-ellipsis">
+                                  <img className="" src={instrument.cover_image.file_url} alt={instrument.cover_image.description} />
+                                  <button
+                                    type="button"
+                                    className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
+                                    onClick={() => handleCurrentFileDelete(instrument.cover_image.id)}
+                                  >
+                                    <IconTrashTwentyFour />
+                                  </button>
+                                </div>
+                                <div className="w-full p-2 border-none focus:outline-none">
+                                  {instrument.cover_image.description}
                                 </div>
                               </div>
+                            }
+                            {/* Show selected cover image with description textarea. Not saved yet. */}
+                            {!!cover &&
+                              <div
+                                key={'cover'}
+                                className="max-w-sm bg-white border border-gray-200 rounded-lg overflow-hidden"
+                              >
+                                <div className="relative overflow-hidden text-ellipsis border-b border-gray-100">
+                                  <img className="" src={cover as any} alt="" />
+                                  <button
+                                    type="button"
+                                    className="absolute top-2 right-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
+                                    onClick={() => handleCoverDelete()}
+                                  >
+                                    <IconTrashTwentyFour />
+                                  </button>
+                                </div>
+                                <textarea
+                                  className="w-full p-2 border-none focus:outline-none min-h-[100px]"
+                                  placeholder={t('media.cover.text_area_placeholder')}
+                                  value={coverDescription}
+                                  onChange={(e) => handleCoverDescriptionChange(e.target.value)}
+                                />
+                              </div>
+                            }
+                            {/* Show upload button if there is no cover image in instrument (not saved yet) */}
+                            { (!instrument.cover_image && !cover) &&
                               <button
                                 type="button"
-                                className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
-                                onClick={() => handleCurrentFileDelete(file.id)}
+                                className="bg-transparent text-center mt-2 hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-lg flex items-center justify-center"
+                                onClick={handleCoverClick}
                               >
-                                <IconTrashTwentyFour />
+                                <IconUploadTwentyFour className="w-4 h-4 mr-2" />
+                                {t('media.cover.button_upload')}
                               </button>
-                            </div>
-                            <div className="w-full p-2 border-none focus:outline-none">
-                              {file.description}
-                            </div>
+                            }
                           </div>
-                        ))
-                      }
-                      {!!documentFiles.length && documentFiles.map((file: any, index: number) => (
-                        <div
-                          key={`D${index.toString()}`}
-                          className="max-w-sm bg-it-50 border border-gray-200 rounded-lg overflow-hidden shadow dark:bg-gray-800 dark:border-gray-700 mt-4 text-center"
-                        >
-                          <div className="relative overflow-hidden text-ellipsis">
-                            <div className="p-4">  
-                              {file.name}
-                            </div>
-                            <button
-                              type="button"
-                              className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
-                              onClick={() => handleDocumentDelete(index)}
+                          {error && <p className="text-red-500">{error}</p>}
+                        </>
+
+                        {/* Upload/Save cover image. Check also name and type are set. */}
+                        { type && name && cover && !instrument.cover_image &&
+                          <div className="mt-2">
+                            {
+                            <FormSaveButton 
+                              disabled={isLoadingMetadata}
+                              onClick={(e) => uploadCover(e)}
+                              isLoading={isLoadingMetadata}
                             >
-                              <IconTrashTwentyFour />
-                            </button>
+                              {t('media.cover.button_save')}
+                            </FormSaveButton>
+                            }
                           </div>
-                          <textarea
-                            className="w-full p-2 border-none focus:outline-none"
-                            placeholder={t('instrument.files_description_placeholder')}
-                            value={documentDescriptions[index]}
-                            onChange={(e) => handleDocumentDescriptionChange(index, e.target.value)}
-                          />
-                        </div>
-                      ))}
-                      <button
-                        type="button"
-                        className="bg-transparent text-center mt-2 hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-lg flex items-center justify-center"
-                        onClick={handleDocumentClick}
-                      >
-                        <IconUploadTwentyFour className="w-4 h-4 mr-2" />
-                        {t('instrument.select_detail_files')}
-                      </button>
-                    </div>
-                    {error && <p className="text-red-500">{error}</p>}
-                  </>
-                </div>
-                {type && name && documentFiles.length > 0 &&
-                  <div className="mt-6 text-center">
-                    {
-                      <button
-                        type="button"
-                        className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
-                        disabled={isLoadingMetadata}
-                        onClick={(e) => uploadDocuments(e)}
-                      >
-                        {
-                          isLoadingMetadata &&
-                          <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                          </svg>
                         }
-                        {t('register.upload_documents')}
-                      </button>
-                    }
+
+                      </div>
+                    </div>
+
+                    <div className="col-span-1 md:col-span-2 min-h-[300px]">
+                      <h2 className="text-xl font-semibold text-gray-1000 pb-1" >
+                        {t('media.images.title')}
+                      </h2>
+                      <p className="text-sm text-gray-600 max-w-sm">
+                        {t('media.images.description')}
+                      </p>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-6 mt-4">
+                        <input
+                          type="file"
+                          accept={process.env.NEXT_PUBLIC_MIME_TYPE_ACCEPT || ""}
+                          id="images"
+                          name="images"
+                          multiple={true}
+                          ref={refImage}
+                          className="hidden"
+                          onChange={handleImageChange}
+                        />
+                        {(instrument.images.length > 0 || images.length > 0) && (
+                          <>
+                            {/* Show saved images with description */}
+                            {instrument.images.length > 0 && instrument.images[0] &&
+                              instrument.images.map((img: InstrumentImage, index: number) => (
+                                <div
+                                  key={img.id}
+                                  className="max-w-sm bg-it-50 border border-it-200 rounded-lg shadow overflow-hidden"
+                                >
+                                  <div className="relative overflow-hidden text-ellipsis">
+                                    <img className="" src={img.file_url} alt={img.description} />
+                                    <button
+                                      type="button"
+                                      className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
+                                      onClick={() => handleCurrentFileDelete(img.id)}
+                                    >
+                                      <IconTrashTwentyFour />
+                                    </button>
+                                  </div>
+                                  <div className="w-full p-2 border-none focus:outline-none">
+                                    {img.description}
+                                  </div>
+                                </div>
+                              ))
+                            }
+                            {/* Show selected images with description textarea. Not saved yet. */}
+                            {images.length > 0 && images.map((img: any, index: number) => (
+                              <div
+                                key={index.toString()}
+                                className="max-w-sm bg-white border border-gray-200 rounded-lg overflow-hidden shadow dark:bg-gray-800 dark:border-gray-700 text-center"
+                              >
+                                <div className="relative overflow-hidden text-ellipsis border-b border-gray-100">
+                                  <img className="" src={img} alt="" />
+                                  <button
+                                    type="button"
+                                    className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
+                                    onClick={() => handleImageDelete(index)}
+                                  >
+                                    <IconTrashTwentyFour />
+                                  </button>
+                                </div>
+                                <textarea
+                                  className="w-full p-2 border-none focus:outline-none min-h-[100px]"
+                                  placeholder={t('media.images.text_area_placeholder')}
+                                  value={imageDescriptions[index]}
+                                  onChange={(e) => handleImageDescriptionChange(index, e.target.value)}
+                                />
+                              </div>
+                            ))}
+                          </>
+                        )}
+                        <div className="">
+                          {/* Upload button */}
+                          <button
+                            type="button"
+                            className="bg-transparent text-center hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-lg flex items-center justify-center w-full"
+                            onClick={handleImagesClick}
+                          >
+                            <IconUploadTwentyFour className="w-4 h-4 mr-2" />
+                            {t('media.images.button_upload')}
+                          </button>
+                          {error && <p className="text-red-500">{error}</p>}
+                        </div>
+
+                      </div>
+                      {/* Upload/Save images. Check also name and type are set. */}
+                      {type && name && images.length > 0 &&
+                        <div className="mt-6 text-right">
+                          {
+                            <FormSaveButton 
+                              disabled={isLoadingMetadata}
+                              onClick={(e) => uploadImages(e)}
+                              isLoading={isLoadingMetadata}
+                            >
+                              {t('media.images.button_save')}
+                            </FormSaveButton>
+                          }
+                        </div>
+                      }
+
+                      <Divider spacing="md" />
+
+                      <h2 className="text-xl font-semibold text-gray-1000 pb-1">
+                        {t('media.files.title')}
+                      </h2>
+                      <p className="text-sm text-gray-600">
+                        {t('media.files.description')}
+                      </p>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-6 mt-4">
+                        <input
+                          type="file"
+                          accept={process.env.NEXT_PUBLIC_FILE_TYPE_ACCEPT || ""}
+                          id="files"
+                          name="files"
+                          multiple={true}
+                          ref={refDocument}
+                          className="hidden"
+                          onChange={handleDocumentChange}
+                        />
+                        {(instrument.files.length > 0 || documentFiles.length > 0 ) && (
+                          <>
+                            {/* Show saved files with description */}
+                            {instrument && instrument.files.length > 0 &&
+                              instrument.files.map((file: InstrumentFile, index: number) => (
+                                <div
+                                  key={`F${index.toString()}`}
+                                  className="max-w-sm bg-it-50 border border-it-200 rounded-lg overflow-hidden shadow"
+                                >
+                                  <div className="relative overflow-hidden text-ellipsis">
+                                    <div className="aspect-square bg-it-200 flex items-center justify-center p-2">
+                                      <FileText className="w-4 h-4 mr-2" />
+                                      <span>{file.title}</span>
+                                    </div>
+                                    <button
+                                      type="button"
+                                      className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
+                                      onClick={() => handleCurrentFileDelete(file.id)}
+                                    >
+                                      <IconTrashTwentyFour />
+                                    </button>
+                                  </div>
+                                  <div className="w-full p-2 border-none focus:outline-none">
+                                    {file.description}
+                                  </div>
+                                </div>
+                              ))
+                            }
+                            {/* Show selected files with description textarea. Not saved yet. */}
+                            {!!documentFiles.length && documentFiles.map((file: any, index: number) => (
+                              <div
+                                key={`D${index.toString()}`}
+                                className="max-w-sm bg-gray-50 border border-gray-200 rounded-lg overflow-hidden"
+                              >
+                                <div className="relative overflow-hidden text-ellipsis">
+                                  <div className="aspect-square flex items-center justify-center p-2">
+                                    <FileText className="w-4 h-4 mr-2" />
+                                    <span className="text-center">{file.name}</span>
+                                  </div>
+                                  <button
+                                    type="button"
+                                    className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
+                                    onClick={() => handleDocumentDelete(index)}
+                                  >
+                                    <IconTrashTwentyFour />
+                                  </button>
+                                </div>
+                                <textarea
+                                  className="w-full p-2 border-none focus:outline-none min-h-[100px]"
+                                  placeholder={t('media.files.text_area_placeholder')}
+                                  value={documentDescriptions[index]}
+                                  onChange={(e) => handleDocumentDescriptionChange(index, e.target.value)}
+                                />
+                              </div>
+                            ))}
+                          </>
+                        )}
+                        <div className="">
+                          <button
+                            type="button"
+                            className="bg-transparent text-center hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-lg flex items-center justify-center"
+                            onClick={handleDocumentClick}
+                          >
+                            <IconUploadTwentyFour className="w-4 h-4 mr-2" />
+                            {t('media.files.button_upload')}
+                          </button>
+                          {error && <p className="text-red-500">{error}</p>}
+                        </div>
+                      </div>
+
+                      {/* Upload/Save files. Check also name and type are set. */}
+                      {type && name && documentFiles.length > 0 &&
+                          <div className="mt-6 text-right">
+                            {
+                            <FormSaveButton 
+                              disabled={isLoadingMetadata}
+                              onClick={(e) => uploadDocuments(e)}
+                              isLoading={isLoadingMetadata}
+                            >
+                              {t('media.files.button_save')}
+                            </FormSaveButton>
+                            }
+                          </div>
+                        }
+                    </div>
                   </div>
-                }
+                </div>
               </Section>
             </>
           }
 
-          { instrument && 
-            (instrument.images?.length > 0) &&
-            (instrument.files?.length > 0) && 
-            (instrument.cover_image) &&
-              <Section id="description">
+          {instrument &&
+            hasMediaUploads &&
+            <Section id="description">
+              <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-25 rounded-lg">
                 <div className="mb-6">
-                  <label
-                    htmlFor="description"
-                    className="block text-md font-semibold text-gray-1000  pb-1"
-                  >
-                    {t('instrument.description')}
-                  </label>
-                  <div className="p-0 border border-gray-200 bg-white rounded-md">
+                  <h2 className="text-xl font-semibold text-gray-1000 pb-1">
+                    {t('details.title')}
+                  </h2>
+                  <p className="text-sm text-gray-600">
+                    {t('details.description')}
+                  </p>
+                  <div className="p-0 mt-4 border border-gray-200 bg-white rounded-md">
                     <Editor markdown={description} updateDescription={handleDescriptionChange} />
                   </div>
                 </div>
-                {
-                  instrument.description !== description && 
-                  <div className="mt-6 text-center">
-                    <button
-                      type="button"
-                      className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
-                      disabled={isLoadingMetadata}                      
-                      onClick={(e) => updateDescription(e)}
-                    >
-                      {isLoadingMetadata && <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>}
-                      {t('drafts.save')}
-                    </button>
-                  </div>
-                }
-                {
-                  (instrument.cover_image || cover) &&
-                  (instrument.description === description) && description &&
-                  <div className="mt-6 text-center">
-                    <button
-                      type="button"
-                      className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+                {/* If saved description is different from the description in the editor, show save button */}
+                {instrument.description !== description &&
+                  <div className="mt-6 text-right">
+                    <FormSaveButton 
                       disabled={isLoadingMetadata}
-                      onClick={() => router.push(`/preview/${instrument.id}`)}
+                      onClick={(e) => updateDescription(e)}
+                      isLoading={isLoadingMetadata}
                     >
-                      {
-                        isLoadingMetadata &&
-                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                      }
-                      {t('components.DraftForm.preview')}
-                    </button>
+                      {t('details.button_save')}
+                    </FormSaveButton>
                   </div>
                 }
-              </Section>
+              </div>
+              {/* If description is saved and there are media uploads, show preview button */}
+              {
+                hasMediaUploads &&
+                (instrument.description === description) && description &&
+                <div className="mt-6 text-right">
+                  <FormSaveButton 
+                    disabled={isLoadingMetadata}
+                    onClick={() => router.push(`/preview/${instrument.id}`)}
+                    isLoading={isLoadingMetadata}
+                    theme="green"
+                  >
+                    {t('preview')}
+                  </FormSaveButton>
+                </div>
+              }
+            </Section>
+
           }
         </form>
 
         <Section id="delete">
-          {
-            instrument &&
-            <div className="mt-6 text-center">
+          { instrument &&
+            <div className="mt-6 text-left">
               <button
                 type="button"
-                className="items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+                className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform text-red-500 border border-red-500 bg-transparent rounded-md hover:bg-red-500 hover:text-white focus:outline-none focus:bg-red-700 disabled:opacity-25"
                 disabled={isLoadingMetadata}
                 onClick={() => handleInstrumentDelete()}
               >
-                {isLoadingMetadata && <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>}
-                {t('components.DraftForm.delete')}
+                <Trash className="inline-block w-4 h-4 mr-2 -mt-0.5" />
+                {isLoadingMetadata && <ButtonSpinner />}
+                {t('delete')}
               </button>
             </div>
           }

@@ -272,8 +272,48 @@
                 "new_sub_heading": "Completa estos pasos para registrar tu instrumento",
                 "edit_sub_heading": "Sigue completando los pasos para registrar tu instrumento"
             },
+            "basic_info": {
+                "title": "Información básica",
+                "type": {
+                    "label": "Tipo de instrumento",
+                    "placeholder": "Selecciona el tipo de instrumento"
+                },
+                "name": {
+                    "label": "Nombre del instrumento",
+                    "placeholder": "Introduce el nombre del instrumento"
+                },
+                "button": "Guardar y continuar"
+            },
+            "media": {
+                "cover": {
+                    "title": "Portada",
+                    "description": "Imagen principal del instrumento. Se admite formato JPG y PNG",
+                    "button_upload": "Subir portada",
+                    "text_area_placeholder": "Añade aquí una descripción para la portada",
+                    "button_save": "Guardar portada"
+                },
+                "images": {
+                    "title": "Imágenes",
+                    "description": "Registra imágenes adicionales de vistas y detalles del instrumento. En formato JPG y PNG",
+                    "button_upload": "Subir imagen",
+                    "text_area_placeholder": "Descripción para esta imagen",
+                    "button_save": "Guardar imágenes"
+                },
+                "files": {
+                    "title": "Documentos",
+                    "description": "Registra documentos adicionales en formato PDF",
+                    "button_upload": "Subir documento",
+                    "text_area_placeholder": "Añade aquí una descripción para este documento",
+                    "button_save": "Guardar documentos"
+                }
+            },
+            "details": {
+                "title": "Detalles",
+                "description": "Descripción detallada del instrumento",
+                "button_save": "Guardar descripción"
+            },
             "delete": "Eliminar borrador",
-            "preview": "Previsualizar"
+            "preview": "Previsualizar y registrar"
         },
         "Preview": {
             "title": "Previsualización del borrador"
@@ -303,7 +343,7 @@
             "failed_message": "Algo ha ido mal con el pago. Por favor, contacta con nosotros.",
             "home": "Volver al inicio"
         },
-        "ui": {
+        "UI": {
             "ProgressBar": {
                 "basic_info": {
                     "title": "Info básica",

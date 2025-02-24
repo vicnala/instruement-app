@@ -304,7 +304,7 @@
             "failed_message": "Something went wrong with the payment. Please contact us.",
             "home": "Return to the home page"
         },
-        "ui": {
+        "UI": {
             "ProgressBar": {
                 "basic_info": {
                     "title": "Basic Info",
