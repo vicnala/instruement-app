@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl'
 import { Link, usePathname } from '@/i18n/routing'
 import { useStateContext } from '@/app/context'
-import { ButtonLink } from '@/components/ui/ButtonLink'
+import { ButtonLink } from '@/components/UI/ButtonLink'
 
 export const BottomNav = () => {
 	const t = useTranslations()

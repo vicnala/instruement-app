@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { useTranslations } from "next-intl";
 import { ModeToggle } from "./ModeToggle";
 import { useStateContext } from "@/app/context";
-import { ButtonLink } from "@/components/ui/ButtonLink";
+import { ButtonLink } from "@/components/UI/ButtonLink";
 import IconHomeTwentyFour from "@/components/Icons/Home";
 import IconAccount from "@/components/Icons/Account";
 
@@ -17,8 +17,8 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <div className={address ? 'hidden md:block relative z-100' : ''}>
-      <div className='fixed top-0 left-0 w-full'>
+    <div className={address ? 'hidden md:block fixed top-0 left-0 right-0 z-50' : ''}>
+      <div className='w-full'>
         <header className='bg-canvas px-safe dark:bg-black dark:bg-opacity-90'>
           <div className='mx-auto flex flex-row min-h-[15vh] md:min-h-[10vh] max-w-screen-lg items-center justify-between px-3.5'>
             <Link href="/">
