@@ -5,6 +5,7 @@
     "what_will_happen": "¿Qué ocurrirá?",
     "more_info": "Más información",
     "or": "o",
+    "to": "a",
     "find_luthier": "Encuentra un luthier ➡️",
     "invite_luthier": "Invite your luthier ➡️",
     "luthier_verification_request": "Enviar solicitud",
@@ -67,6 +68,7 @@
     },
     "instrument": {
         "owner": "Propietario",
+        "minter": "Minter",
         "type": "Tipo de instrumento",
         "type_helper": "Contacta con nosotros si no encuentras el tipo de instrumento en la lista",
         "type_error": "Por favor, selecciona el tipo de instrumento",
@@ -82,12 +84,16 @@
         "description_error": "Por favor, introduce la descripción del instrumento",
         "image": "Imagen principal",
         "image_helper": "Selecciona la imagen principal",
-        "images": "Imágenes y documentos en formato",
+        "images": "Imágenes en formato",
         "images_helper": "Añade 2-10 imágenes adicionales que detallen el instrumento.",
         "images_error": "Por favor, añade al menos dos y no más de diez imágenes",
         "image_error": "Una imagen es requerida",
-        "images_description_placeholder": "Añade una description para ésta imagen",
-        "select_detail_image": "Añade más imágenes",
+        "images_description_placeholder": "Añade una descripción para esta imagen",
+        "select_detail_image": "Añade imágenes",
+        "document": "Documento",
+        "files": "Archivos en formato",
+        "files_description_placeholder": "Añade una descripción para este documento",
+        "select_detail_files": "Añade documentos",
         "traits": {
             "Description": "Descripción",
             "Certificates": "Certificados",
@@ -192,9 +198,10 @@
         "update": "Actualizar",
         "set_description": "Guardar descripción",
         "update_description": "Guardar",
-        "create_cover": "Crear imagen principal",
+        "create_cover": "Guardar imagen principal",
         "update_cover": "Actualizar imagen principal",
         "upload_images": "Guardar imágenes",
+        "upload_documents": "Guardar documentos",
         "pay": "Pagar registro"
     },
     "pay": {
@@ -236,7 +243,7 @@
         "update": "Actualizar",
         "set_description": "Guardar",
         "update_description": "Actualizar",
-        "edit": "Estás editando el borrador del instrumento"
+        "edit": "Estás editando el borrador"
     },
     "Metadata": {
       "title": "Instruement",
@@ -257,6 +264,64 @@
             "title_single": "Tu Instrumento Registrado",
             "title_plural": "Tus Instrumentos Registrados",
             "description": "Instrumentos bajo tu propiedad. Puedes gestionar su configuración, ver datos o iniciar su transferencia."
+        },
+        "DraftForm": {
+            "title": {
+                "new": "Registra tu instrumento",
+                "edit": "Editando borrador",
+                "new_sub_heading": "Completa estos pasos para registrar tu instrumento",
+                "edit_sub_heading": "Sigue completando los pasos para registrar tu instrumento"
+            },
+            "delete": "Eliminar borrador",
+            "preview": "Previsualizar"
+        },
+        "Preview": {
+            "title": "Previsualización del borrador"
+        },
+        "Instrument": {
+            "images": "Imágenes",
+            "documents": "Documentos",
+            "scan": "Escanear QR de usuario",
+            "stop": "Parar",
+            "close": "Cerrar"
+        },
+        "CheckoutForm": {
+            "payment_details": "Detalles del pago",
+            "pay": "Pagar",
+            "name": "Nombre",
+            "card_name": "Nombre que aparece en la tarjeta",
+            "concept_register": "para el registro del borrador",
+            "requires_confirmation": "Procesando",
+            "requires_action": "Autenticando",
+            "succeeded": "Pago realizado con éxito 🥳"
+        },
+        "PaymentResult": {
+            "title": "El pago por el registro del borrador",
+            "succesful": "ha finalizado con éxito!",
+            "failed": "ha fallado!",
+            "success_message": "El instrumento registrado estará disponible en tu billetera en breve.",
+            "failed_message": "Algo ha ido mal con el pago. Por favor, contacta con nosotros.",
+            "home": "Volver al inicio"
+        },
+        "ui": {
+            "ProgressBar": {
+                "basic_info": {
+                    "title": "Info básica",
+                    "description": "Tipo y nombre"
+                },
+                "media": {
+                    "title": "Medios",
+                    "description": "Imágenes y documentos"
+                },
+                "details": {
+                    "title": "Detalles",
+                    "description": "Descripción"
+                },
+                "preview": {
+                    "title": "Previsualizar",
+                    "description": "Revisar y registrar"
+                }
+            }
         }
     }
   }

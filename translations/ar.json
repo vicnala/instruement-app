@@ -5,6 +5,7 @@
     "what_will_happen": "What will happen?",
     "more_info": "More info",
     "or": "or",
+    "to": "to",
     "find_luthier": "Find a luthier ➡️",
     "invite_luthier": "Invite your luthier ➡️",
     "luthier_verification_request": "Apply for verification",
@@ -68,6 +69,7 @@
     },
     "instrument": {
         "owner": "Owner",
+        "minter": "Minter",
         "type": "Instrument type",
         "type_helper": "Contact us if you can't find your instrument in the list",
         "type_error": "Please enter one type",
@@ -83,12 +85,16 @@
         "description_error": "Please enter the instrument description",
         "image": "Primary image",
         "image_helper": "Select the primary image",
-        "images": "Images and documents with format",
+        "images": "Images with format",
         "images_helper": "Add 2-10 additional images detailing the instrument",
         "images_error": "Please add at least two and no more that ten images",
         "image_error": "Please upload an image of the instrument",
         "images_description_placeholder": "Add a description for this image",
         "select_detail_image": "Add more images",
+        "document": "Document",
+        "files": "Files with format",
+        "files_description_placeholder": "Add a description for this file",
+        "select_detail_files": "Add documents",
         "traits": {
             "Description": "Description",
             "Certificates": "Certificates",
@@ -193,9 +199,10 @@
         "update": "Update",
         "set_description": "Save description",
         "update_description": "Save",
-        "create_cover": "Create cover",
+        "create_cover": "Save cover",
         "update_cover": "Update cover",
         "upload_images": "Upload images",
+        "upload_documents": "Upload documents",
         "pay": "Pay registration"
     },
     "pay": {
@@ -237,7 +244,7 @@
         "update": "Update",
         "set_description": "Save",
         "update_description": "Update",
-        "edit": "You are editing the draft of the instrument"
+        "edit": "You are editing the draft"
     },
     "Metadata": {
       "title": "Instruement",
@@ -258,6 +265,64 @@
             "title_single": "Your Registered Instrument",
             "title_plural": "Your Registered Instruments",
             "description": "Instruments under your ownership. You can manage settings, view data or initiate their transfer."
+        },
+        "DraftForm": {
+            "title": {
+                "new": "Register Your Instrument",
+                "edit": "Editing Draft",
+                "new_sub_heading": "Complete these steps to register your instrument",
+                "edit_sub_heading": "Continue completing the steps to register your instrument"
+            },
+            "delete": "Delete draft",
+            "preview": "Preview"
+        },
+        "Preview": {
+            "title": "Preview of draft"
+        },
+        "Instrument": {
+            "images": "Images",
+            "documents": "Documents",
+            "scan": "Scan user QR",
+            "stop": "Stop",
+            "close": "Close"
+        },
+        "CheckoutForm": {
+            "payment_details": "Your payment details",
+            "pay": "Pay",
+            "name": "Name",
+            "card_name": "Cardholder name",
+            "concept_register": "for registration of draft",
+            "requires_confirmation": "Processing",
+            "requires_action": "Authenticating",
+            "succeeded": "Payment Succeeded 🥳"
+        },
+        "PaymentResult": {
+            "title": "Payment result for draft",
+            "succesful": "succesful!",
+            "failed": "failed!",
+            "success_message": "The registered instrument will be in your wallet shortly.",
+            "failed_message": "Something went wrong with the payment. Please contact us.",
+            "home": "Return to the home page"
+        },
+        "ui": {
+            "ProgressBar": {
+                "basic_info": {
+                    "title": "Basic Info",
+                    "description": "Type and name"
+                },
+                "media": {
+                    "title": "Media",
+                    "description": "Images & docs"
+                },
+                "details": {
+                    "title": "Details",
+                    "description": "Description"
+                },
+                "preview": {
+                    "title": "Preview",
+                    "description": "Review and register"
+                }
+            }
         }
     }
   }

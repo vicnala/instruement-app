@@ -16,7 +16,7 @@ import getStripe from "@/lib/get-stripejs";
 import { formatAmountForDisplay } from "@/lib/stripe-helpers";
 import { Instrument } from "@/lib/definitions";
 import Page from "../Page";
-import Loading from "../Loading";
+import Section from "../Section";
 
 function CheckoutForm({ amount, address, id, minterAddress }: { amount: number, address?: string, id: string, minterAddress: string }): JSX.Element {
   const locale = useLocale();
@@ -24,26 +24,27 @@ function CheckoutForm({ amount, address, id, minterAddress }: { amount: number, 
   const [input, setInput] = React.useState<{ cardholderName: string; }>({ cardholderName: "" });
 
   const [paymentType, setPaymentType] = React.useState<string>("");
-  const [payment, setPayment] = React.useState<{
-    status: "initial" | "processing" | "error";
-  }>({ status: "initial" });
+  const [payment, setPayment] = React.useState<{status: "initial" | "processing" | "error";}>({ status: "initial" });
   const [errorMessage, setErrorMessage] = React.useState<string>("");
+  const [ready, setReady] = React.useState<boolean>(false);
 
   const stripe = useStripe();
   const elements = useElements();
+
+  const currency = process.env.NEXT_PUBLIC_CURRENCY ? process.env.NEXT_PUBLIC_CURRENCY.toUpperCase() : "EUR";
 
   const PaymentStatus = ({ status }: { status: string }) => {
     switch (status) {
       case "processing":
       case "requires_payment_method":
       case "requires_confirmation":
-        return <h2>Processing...</h2>;
+        return <h2>{t("components.CheckoutForm.requires_confirmation")}...</h2>;
 
       case "requires_action":
-        return <h2>Authenticating...</h2>;
+        return <h2>{t('components.CheckoutForm.requires_action')}...</h2>;
 
       case "succeeded":
-        return <h2>Payment Succeeded 🥳</h2>;
+        return <h2>{t('components.CheckoutForm.succeeded')} 🥳</h2>;
 
       case "error":
         return (
@@ -115,40 +116,55 @@ function CheckoutForm({ amount, address, id, minterAddress }: { amount: number, 
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <fieldset className="elements-style">
-          <legend>Your payment details:</legend>
-          {paymentType === "card" ? (
-            <div className="p-6 flex flex-col gap-2">
-              <input
-                placeholder="Cardholder name"
-                className="elements-style"
-                type="Text"
-                name="cardholderName"
-                onChange={handleInputChange}
-                required
+        <Section>
+          <h2 className='text-xl font-semibold text-center'>
+            {t('components.CheckoutForm.payment_details')} {t('components.CheckoutForm.concept_register')} #{id}
+          </h2>
+        </Section>
+        <Section>
+          <fieldset className="elements-style">
+            {paymentType === "card" ? (
+              <div className="p-6 flex flex-col gap-2">
+                <label htmlFor="cardholderName" className="block text-md font-semibold text-gray-1000 pb-1">
+                  {t('components.CheckoutForm.name')}
+                </label>
+                <input
+                  placeholder={t('components.CheckoutForm.card_name')}
+                  className="elements-style"
+                  type="Text"
+                  name="cardholderName"
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+            ) : null}
+            <div className="FormRow elements-style">
+              <PaymentElement
+                onReady={(el) => setReady(true)}
+                onChange={(e) => setPaymentType(e.value.type)}
               />
             </div>
-          ) : null}
-          <div className="FormRow elements-style">
-            <PaymentElement
-              onChange={(e) => {
-                setPaymentType(e.value.type);
-              }}
-            />
-          </div>
-        </fieldset>
-        <button
-          className="elements-style-background"
-          type="submit"
-          disabled={
-            !["initial", "succeeded", "error"].includes(payment.status) ||
-            !stripe
+          </fieldset>
+        </Section>
+        <Section>
+          {
+            ready &&
+            <button
+              className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+              type="submit"
+              disabled={
+                !["initial", "succeeded", "error"].includes(payment.status) ||
+                !stripe
+              }
+            >
+              {t('components.CheckoutForm.pay')} {formatAmountForDisplay(amount, currency)}
+            </button>
           }
-        >
-          Pay {formatAmountForDisplay(amount, "EUR")}
-        </button>
+        </Section>
       </form>
-      <PaymentStatus status={payment.status} />
+      <Section>
+        <PaymentStatus status={payment.status} />
+      </Section>
     </>
   );
 }
@@ -193,30 +209,24 @@ export default function ElementsForm(
     }
   }, [id, minter, instrument]);
 
-  if (isLoading) return (
-    <Page>
-      <div className="text-center">
-        <Loading />
-      </div>
-    </Page>
-  )
-
   return (instrument && minter && amount > 0 &&
-    <Elements
-      stripe={getStripe()}
-      options={{
-        appearance: {
-          variables: {
-            colorIcon: "#6772e5",
-            fontFamily: "Roboto, Open Sans, Segoe UI, sans-serif",
+    <Page>
+      <Elements
+        stripe={getStripe()}
+        options={{
+          appearance: {
+            variables: {
+              colorIcon: "#6772e5",
+              fontFamily: "Roboto, Open Sans, Segoe UI, sans-serif",
+            },
           },
-        },
-        currency: process.env.NEXT_PUBLIC_CURRENCY || 'eur',
-        mode: "payment",
-        amount: Math.round((amount * 100)),
-      }}
-    >
-      <CheckoutForm amount={amount} address={address} id={id} minterAddress={minterAddress || ''} />
-    </Elements>
+          currency: process.env.NEXT_PUBLIC_CURRENCY || 'eur',
+          mode: "payment",
+          amount: Math.round((amount * 100)),
+        }}
+      >
+        <CheckoutForm amount={amount} address={address} id={id} minterAddress={minterAddress || ''} />
+      </Elements>
+    </Page>
   );
 }

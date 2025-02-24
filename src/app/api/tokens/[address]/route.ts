@@ -36,34 +36,38 @@ export async function GET(
     return Response.json({ message })
   }
 
-  const cahin = CHAIN_ID;
-  const contractAddress = NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS;
-
   try {
-    const engine = new Engine({
-      url: ENGINE_URL,
-      accessToken: ENGINE_ACCESS_TOKEN,
-    });
+    // const engine = new Engine({
+    //   url: ENGINE_URL,
+    //   accessToken: ENGINE_ACCESS_TOKEN
+    // });
 
-    const { result } = await engine.erc721.getOwned(
-      address,
-      cahin,
-      contractAddress
-    );
+    // const { result } = await engine.erc721.getOwned(
+    //   address,
+    //   CHAIN_ID,
+    //   NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS
+    // );
 
-    // console.log('tokens', result?.length);
-
+    const fetchResult = await fetch(`${ENGINE_URL}/contract/${CHAIN_ID}/${NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS}/erc721/get-owned?walletAddress=${address}`, {
+      headers: { Authorization: `Bearer ${ENGINE_ACCESS_TOKEN}` },
+      cache: 'no-store'
+    })
+    const { result } = await fetchResult.json()
+    
     if (result) {
+       console.log(address, 'has', result?.length, 'tokens from', NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS, 'on chain', CHAIN_ID);
       return Response.json(result)
     }
 
     return Response.json(
-      { message: 'Tokens error' }
+      { message: 'Tokens error' },
+      { status: 400 }
     )
   } catch (err: any) {
     console.error(`/api/tokens/${address} error ${err.message}`)
     return Response.json(
-      { message: err.message }
+      { message: err.message },
+      { status: 400 }
     )
   }
 }

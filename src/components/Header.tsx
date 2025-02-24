@@ -17,9 +17,9 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <div className=''>
-      <div className='fixed top-0 left-0 z-20 w-full'>
-        <header className='bg-white px-safe dark:bg-black dark:bg-opacity-90'>
+    <div className={address ? 'hidden md:block relative z-100' : ''}>
+      <div className='fixed top-0 left-0 w-full'>
+        <header className='bg-canvas px-safe dark:bg-black dark:bg-opacity-90'>
           <div className='mx-auto flex flex-row min-h-[15vh] md:min-h-[10vh] max-w-screen-lg items-center justify-between px-3.5'>
             <Link href="/">
               <Image
@@ -31,15 +31,18 @@ export function Header() {
               />
             </Link>
             <nav className='flex items-center space-x-6'>
-              <Link href="/" className={`${pathname === '/' ? 'text-it-400 dark:text-white' : 'text-gray-500 hover:text-it-400 dark:text-gray-600 dark:hover:text-it-100'}`}>
-                <IconHomeTwentyFour className="w-5 h-5" />
-              </Link>
-              {!pathname.includes('/drafts') && (
+              {
+                address && 
+                <Link href="/" className={`${pathname === '/' ? 'text-it-400 dark:text-white' : 'text-gray-500 hover:text-it-400 dark:text-gray-600 dark:hover:text-it-100'}`}>
+                  <IconHomeTwentyFour className="w-5 h-5" />
+                </Link>
+              }
+              {
+                isMinter && 
                 <ButtonLink href="/drafts/new" size="sm" colorSchema="it">
                   {t('components.Header.new_instrument')}
                 </ButtonLink>
-              )}
-
+              }
               {
                 address &&
                 <div className='hidden sm:block'>

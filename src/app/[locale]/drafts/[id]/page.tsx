@@ -1,13 +1,14 @@
 import { setRequestLocale } from "next-intl/server";
-import Edit from "@/components/Drafts/Edit";
+import DraftForm from "@/components/Drafts/DraftForm";
 
 export default function DraftEditPage({
-  searchParams,
   params: { locale, id },
 }: {
-  searchParams?: { address?: string };
   params: { locale: string, id: string };
 }) {
   setRequestLocale(locale);
-  return <Edit id={id} locale={locale} address={searchParams?.address} />;
+
+  return (
+    <DraftForm locale={locale} instrumentId={id} />
+  );
 }

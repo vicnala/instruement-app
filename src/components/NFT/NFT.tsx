@@ -27,12 +27,13 @@ export default function NFTComponent({
         )
       }
     >
-      <div className="relative w-full bg-it-50">
+      <div className="relative w-full aspect-square bg-it-50">
         {nft.metadata.image && (
           <MediaRenderer
             src={nft.metadata.image}
             client={client}
-            className="object-cover object-center"
+            style={{ objectFit: "cover" }}
+            className="w-full h-full"
           />
         )}
       </div>

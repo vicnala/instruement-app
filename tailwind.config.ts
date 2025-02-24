@@ -18,6 +18,7 @@ const config = {
 			colors: {
 				contrast: "#171412",
 				tertiary: "#F6F6F6",
+				canvas: "#FAFAFB",
 				it: {
 					'25': '#FFF9F3',
 					'50': '#FCF2E8',

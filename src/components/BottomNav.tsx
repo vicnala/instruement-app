@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl'
 import { Link, usePathname } from '@/i18n/routing'
 import { useStateContext } from '@/app/context'
+import { ButtonLink } from '@/components/ui/ButtonLink'
 
 export const BottomNav = () => {
 	const t = useTranslations()
@@ -15,7 +16,7 @@ export const BottomNav = () => {
 		<div className='sm:hidden'>
 			{
 				address &&
-				<nav className='fixed bottom-0 w-full bg-black pb-safe dark:border-t dark:border-gray-900'>
+				<nav className='fixed z-100 bottom-0 w-full bg-white pb-safe dark:border-t dark:border-gray-900 shadow-[0_0px_10px_0px_rgba(0,0,0,0.2)]'>
 					{
 						<div className='mx-auto flex h-16 max-w-md items-center justify-around px-6'>
 							<Link key="home" href="/">
@@ -44,31 +45,9 @@ export const BottomNav = () => {
 							</Link>
 							{
 								isMinter &&
-								<Link key="drafts" href="/drafts">
-									<div
-										className={`flex h-full w-full flex-col items-center justify-center space-y-1 ${pathname.includes('/drafts')
-												? 'text-indigo-500 dark:text-indigo-400'
-												: 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50'
-											}`}
-									>
-										<svg
-											viewBox="0 0 24 24"
-											fill="currentColor"
-											height="1em"
-											width="1em"
-											className="text-gray-100 dark:text-gray-600"
-										>
-											<path d="M17.03 9.78a.75.75 0 00-1.06-1.06l-5.47 5.47-2.47-2.47a.75.75 0 00-1.06 1.06l3 3a.75.75 0 001.06 0l6-6z" />
-											<path
-												fillRule="evenodd"
-												d="M14.136 1.2a3.61 3.61 0 00-4.272 0L8.489 2.21a2.11 2.11 0 01-.929.384l-1.686.259a3.61 3.61 0 00-3.021 3.02L2.594 7.56a2.11 2.11 0 01-.384.929L1.2 9.864a3.61 3.61 0 000 4.272l1.01 1.375c.2.274.333.593.384.929l.259 1.686a3.61 3.61 0 003.02 3.021l1.687.259c.336.051.655.183.929.384l1.375 1.01a3.61 3.61 0 004.272 0l1.375-1.01a2.11 2.11 0 01.929-.384l1.686-.259a3.61 3.61 0 003.021-3.02l.259-1.687a2.11 2.11 0 01.384-.929l1.01-1.375a3.61 3.61 0 000-4.272l-1.01-1.375a2.11 2.11 0 01-.384-.929l-.259-1.686a3.61 3.61 0 00-3.02-3.021l-1.687-.259a2.11 2.11 0 01-.929-.384L14.136 1.2zm-3.384 1.209a2.11 2.11 0 012.496 0l1.376 1.01a3.61 3.61 0 001.589.658l1.686.258a2.11 2.11 0 011.765 1.766l.26 1.686a3.61 3.61 0 00.657 1.59l1.01 1.375a2.11 2.11 0 010 2.496l-1.01 1.376a3.61 3.61 0 00-.658 1.589l-.258 1.686a2.11 2.11 0 01-1.766 1.765l-1.686.26a3.61 3.61 0 00-1.59.657l-1.375 1.01a2.11 2.11 0 01-2.496 0l-1.376-1.01a3.61 3.61 0 00-1.589-.658l-1.686-.258a2.11 2.11 0 01-1.766-1.766l-.258-1.686a3.61 3.61 0 00-.658-1.59l-1.01-1.375a2.11 2.11 0 010-2.496l1.01-1.376a3.61 3.61 0 00.658-1.589l.258-1.686a2.11 2.11 0 011.766-1.766l1.686-.258a3.61 3.61 0 001.59-.658l1.375-1.01z"
-											/>
-										</svg>
-										<span className='text-xs text-gray-300 dark:text-gray-700'>
-											{t('navbar.drafts')}
-										</span>
-									</div>
-								</Link>
+								<ButtonLink href="/drafts/new" size="sm" colorSchema="it">
+									{t('components.Header.new_instrument')}
+							  	</ButtonLink>
 							}
 							<Link key="account" href="/account">
 								<div

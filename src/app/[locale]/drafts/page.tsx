@@ -8,11 +8,7 @@ import Section from "@/components/Section";
 import DraftGrid from "@/components/Drafts/DraftGrid";
 import NotConnected from "@/components/NotConnected";
 
-export default function Drafts({
-  searchParams
-}: {
-  searchParams?: { address?: string };
-}) {
+export default function Drafts() {
   const locale = useLocale();
   const { minter, isLoading } = useStateContext()
 
@@ -29,7 +25,7 @@ export default function Drafts({
       <Page>
         <Section>
           <div className='text-center flex flex-col'>
-            <DraftGrid address={searchParams?.address} />
+            <DraftGrid locale={locale} />
           </div>
         </Section>
       </Page> :
