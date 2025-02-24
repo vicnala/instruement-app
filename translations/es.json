@@ -318,7 +318,11 @@
             "preview": "Previsualizar y registrar"
         },
         "Preview": {
-            "title": "Previsualización del borrador"
+            "title": "Previsualización del borrador",
+            "no_description": "Sin descripción",
+            "register_now": "Registrar ahora",
+            "additional_images": "Imágenes adicionales",
+            "documents": "Documentos"
         },
         "Instrument": {
             "images": "Imágenes",

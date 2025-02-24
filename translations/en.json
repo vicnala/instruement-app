@@ -313,7 +313,11 @@
             "preview": "Preview and register"
         },
         "Preview": {
-            "title": "Preview of draft"
+            "title": "Preview of draft",
+            "no_description": "No description",
+            "register_now": "Register now",
+            "additional_images": "Additional images",
+            "documents": "Documents"
         },
         "Instrument": {
             "images": "Images",
