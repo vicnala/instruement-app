@@ -10,13 +10,11 @@ export const BottomNav = () => {
 	const { address, isMinter } = useStateContext()
 	const pathname = usePathname();
 
-	// console.log(pathname === '/');
-
 	return (
 		<div className='sm:hidden'>
 			{
 				address &&
-				<nav className='fixed z-100 bottom-0 w-full bg-white pb-safe dark:border-t dark:border-gray-900 shadow-[0_0px_10px_0px_rgba(0,0,0,0.2)]'>
+				<nav className='fixed z-100 bottom-0 w-full bg-white pb-safe dark:bg-black dark:bg-opacity-90 dark:border-t dark:border-gray-900 shadow-[0_0px_10px_0px_rgba(0,0,0,0.2)]'>
 					{
 						<div className='mx-auto flex h-16 max-w-md items-center justify-around px-6'>
 							<Link key="home" href="/">
