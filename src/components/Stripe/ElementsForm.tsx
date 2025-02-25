@@ -35,7 +35,18 @@ function CheckoutForm({ amount, address, id, minterAddress, instrument }: { amou
 
   const currency = process.env.NEXT_PUBLIC_CURRENCY ? process.env.NEXT_PUBLIC_CURRENCY.toUpperCase() : "EUR";
 
-  
+  const [consent, setConsent] = React.useState({
+    terms: false,
+    privacy: false
+  });
+
+  const handleConsentChange = (field: 'terms' | 'privacy') => {
+    setConsent(prev => ({
+      ...prev,
+      [field]: !prev[field]
+    }));
+  };
+
   const PaymentStatus = ({ status }: { status: string }) => {
     switch (status) {
       case "processing":
@@ -174,20 +185,51 @@ function CheckoutForm({ amount, address, id, minterAddress, instrument }: { amou
           </div>
         </Section>
         <Section>
-          <div className="mx-auto text-right">
-            {
-              ready &&
-              <button
-                className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
-                type="submit"
-                disabled={
-                  !["initial", "succeeded", "error"].includes(payment.status) ||
-                  !stripe
-                }
-              >
-                {t('pay')} {formatAmountForDisplay(amount, currency)}
-              </button>
-            }
+          <div className="mx-auto">
+            <div className="flex flex-col gap-3 mb-4">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={consent.terms}
+                  onChange={() => handleConsentChange('terms')}
+                  className="w-4 h-4 text-it-500 rounded focus:ring-it-500"
+                  aria-label={t('terms_consent')}
+                />
+                <span className="text-sm text-gray-600">
+                  {t('i_accept')} <a href="/terms" className="text-it-500 hover:text-it-700 underline" target="_blank" rel="noopener noreferrer">{t('terms_of_use')}</a>
+                </span>
+              </label>
+              
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={consent.privacy}
+                  onChange={() => handleConsentChange('privacy')}
+                  className="w-4 h-4 text-it-500 rounded focus:ring-it-500"
+                  aria-label={t('privacy_consent')}
+                />
+                <span className="text-sm text-gray-600">
+                  {t('i_accept')} <a href="/privacy" className="text-it-500 hover:text-it-700 underline" target="_blank" rel="noopener noreferrer">{t('privacy_policy')}</a>
+                </span>
+              </label>
+            </div>
+            
+            <div className="text-right">
+              {ready && (
+                <button
+                  className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+                  type="submit"
+                  disabled={
+                    !["initial", "succeeded", "error"].includes(payment.status) ||
+                    !stripe ||
+                    !consent.terms ||
+                    !consent.privacy
+                  }
+                >
+                  {t('pay')} {formatAmountForDisplay(amount, currency)}
+                </button>
+              )}
+            </div>
           </div>
         </Section>
       </form>

@@ -347,7 +347,12 @@
             "requires_confirmation": "Procesando",
             "requires_action": "Autenticando",
             "payment_succeeded": "Pago realizado con éxito",
-            "payment_error": "Error en el pago"
+            "payment_error": "Error en el pago",
+            "terms_consent": "Acepto los términos y condiciones",
+            "privacy_consent": "Acepto la política de privacidad",
+            "i_accept": "Acepto",
+            "terms_of_use": "términos de uso",
+            "privacy_policy": "política de privacidad"
         },
         "PaymentResult": {
             "title": "El pago por el registro del borrador",

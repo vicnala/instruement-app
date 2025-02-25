@@ -342,7 +342,12 @@
             "requires_confirmation": "Processing",
             "requires_action": "Authenticating",
             "payment_succeeded": "Payment Succeeded",
-            "payment_error": "Payment Error"
+            "payment_error": "Payment Error",
+            "terms_consent": "I have read and agree to the Terms of Use governing my use of this service.",
+            "privacy_consent": "I consent to the collection and processing of my data as outlined in the Privacy Policy.",
+            "i_accept": "I accept",
+            "terms_of_use": "terms of use",
+            "privacy_policy": "privacy policy"
         },
         "PaymentResult": {
             "title": "Payment result for draft",
