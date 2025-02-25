@@ -339,7 +339,8 @@
             "concept_register": "para el registro del borrador",
             "requires_confirmation": "Procesando",
             "requires_action": "Autenticando",
-            "succeeded": "Pago realizado con éxito 🥳"
+            "payment_succeeded": "Pago realizado con éxito",
+            "payment_error": "Error en el pago"
         },
         "PaymentResult": {
             "title": "El pago por el registro del borrador",

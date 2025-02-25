@@ -20,7 +20,7 @@ import Section from "../Section";
 
 function CheckoutForm({ amount, address, id, minterAddress }: { amount: number, address?: string, id: string, minterAddress: string }): JSX.Element {
   const locale = useLocale();
-  const t = useTranslations();
+  const t = useTranslations('components.CheckoutForm');
   const [input, setInput] = React.useState<{ cardholderName: string; }>({ cardholderName: "" });
 
   const [paymentType, setPaymentType] = React.useState<string>("");
@@ -38,18 +38,18 @@ function CheckoutForm({ amount, address, id, minterAddress }: { amount: number, 
       case "processing":
       case "requires_payment_method":
       case "requires_confirmation":
-        return <h2>{t("components.CheckoutForm.requires_confirmation")}...</h2>;
+        return <h2>{t("requires_confirmation")}...</h2>;
 
       case "requires_action":
-        return <h2>{t('components.CheckoutForm.requires_action')}...</h2>;
+        return <h2>{t('requires_action')}...</h2>;
 
       case "succeeded":
-        return <h2>{t('components.CheckoutForm.succeeded')} 🥳</h2>;
+        return <h2>{t('payment_succeeded')} 🥳</h2>;
 
       case "error":
         return (
           <>
-            <h2>Error 😭</h2>
+            <h2>{t('payment_error')}</h2>
             <p className="error-message">{errorMessage}</p>
           </>
         );
@@ -117,20 +117,22 @@ function CheckoutForm({ amount, address, id, minterAddress }: { amount: number, 
     <>
       <form onSubmit={handleSubmit}>
         <Section>
-          <h2 className='text-xl font-semibold text-center'>
-            {t('components.CheckoutForm.payment_details')} {t('components.CheckoutForm.concept_register')} #{id}
-          </h2>
+          <div className="max-w-2xl mx-auto">
+            <h2 className='text-xl text-3xl font-semibold'>
+              {t('payment_details')} {t('concept_register')} #{id}
+            </h2>
+          </div>
         </Section>
         <Section>
-          <fieldset className="elements-style">
+          <fieldset className="elements-style max-w-2xl mx-auto">
             {paymentType === "card" ? (
-              <div className="p-6 flex flex-col gap-2">
-                <label htmlFor="cardholderName" className="block text-md font-semibold text-gray-1000 pb-1">
-                  {t('components.CheckoutForm.name')}
+              <div className="flex flex-col gap-0 pb-3">
+                <label htmlFor="cardholderName" className="block text-md text-gray-1000">
+                  {t('name')}
                 </label>
                 <input
-                  placeholder={t('components.CheckoutForm.card_name')}
-                  className="elements-style"
+                  placeholder={t('card_name')}
+                  className="elements-style px-4 py-2 text-it-950 border border-gray-50 shadow-sm rounded-md focus:border-gray-400 focus:ring-it-300 focus:outline-none focus:ring focus:ring-opacity-40 placeholder:text-gray-700 placeholder:text-md"
                   type="Text"
                   name="cardholderName"
                   onChange={handleInputChange}
@@ -147,19 +149,21 @@ function CheckoutForm({ amount, address, id, minterAddress }: { amount: number, 
           </fieldset>
         </Section>
         <Section>
-          {
-            ready &&
-            <button
-              className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
-              type="submit"
-              disabled={
-                !["initial", "succeeded", "error"].includes(payment.status) ||
-                !stripe
-              }
-            >
-              {t('components.CheckoutForm.pay')} {formatAmountForDisplay(amount, currency)}
-            </button>
-          }
+          <div className="max-w-2xl mx-auto text-right">
+            {
+              ready &&
+              <button
+                className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+                type="submit"
+                disabled={
+                  !["initial", "succeeded", "error"].includes(payment.status) ||
+                  !stripe
+                }
+              >
+                {t('pay')} {formatAmountForDisplay(amount, currency)}
+              </button>
+            }
+          </div>
         </Section>
       </form>
       <Section>

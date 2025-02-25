@@ -330,7 +330,8 @@
             "concept_register": "for registration of draft",
             "requires_confirmation": "Processing",
             "requires_action": "Authenticating",
-            "succeeded": "Payment Succeeded 🥳"
+            "payment_succeeded": "Payment Succeeded",
+            "payment_error": "Payment Error"
         },
         "PaymentResult": {
             "title": "Payment result for draft",
