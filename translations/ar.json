@@ -274,7 +274,8 @@
                 "button": "Save & continue",
                 "type": {
                     "label": "Instrument type",
-                    "placeholder": "Select instrument type"
+                    "placeholder": "Select instrument type",
+                    "description": "Available options reflect your endorsed construction skills"
                 },
                 "name": {
                     "label": "Instrument name",

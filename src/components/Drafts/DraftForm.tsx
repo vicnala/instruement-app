@@ -9,7 +9,7 @@ import Page from "@/components/Page";
 import Section from "@/components/Section";
 import IconUploadTwentyFour from "@/components/Icons/Upload"
 import IconTrashTwentyFour from "@/components/Icons/Trash"
-import { FileText, Trash } from 'lucide-react';
+import { FileText, Trash, ChevronDown } from 'lucide-react';
 
 import { Instrument, InstrumentFile, InstrumentImage } from "@/lib/definitions";
 import { useRouter } from "@/i18n/routing";
@@ -609,34 +609,35 @@ export default function DraftForm(
               <h2 className="text-xl font-semibold text-gray-1000 pb-8">
                 {t('basic_info.title')}
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-0 md:gap-3 sm:gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-0 md:gap-6 sm:gap-6">
                 <div>
-                  <label htmlFor="type" className="block text-md font-semibold text-gray-600 pb-1">
+                  <label htmlFor="type" className="block text-md font-semibold text-gray-1000 pb-1">
                     {t('basic_info.type.label')}
                   </label>
                   <div className="relative mb-2 font-medium">
                     <div
                       onClick={() => instrument?.type ? null : setOpen(!open)}
-                      className={`bg-white p-2 flex border border-gray-200 items-center justify-between rounded-md ${!type && "text-gray-700"}`}
+                      className={`bg-white text-md p-2 flex border border-gray-200 items-center justify-between rounded-md ${!type && "text-gray-700"} ${!instrument?.type && "cursor-pointer"}`}
                     >
                       {type ? type : t('basic_info.type.placeholder')}
+                      <ChevronDown className="h-5 w-5 text-gray-400" />
                     </div>
-                    <ul className={`absolute z-10 top-0 w-full bg-white rounded-md border border-gray-300 overflow-y-auto ${open ? "max-h-60" : "max-h-0 invisible"} `}>
+                    <ul className={`absolute z-10 top-0 w-full bg-white rounded-md border border-it-300 overflow-y-auto ${open ? "max-h-60 shadow-sm" : "max-h-0 invisible"} `}>
                       <div className="flex items-center px-2 sticky top-0 bg-white">
                         <input
                           type="text"
                           value={inputValue}
                           onChange={(e) => setInputValue(e.target.value.toLowerCase())}
-                          placeholder={t('basic_info.type.placeholder')}
-                          className="placeholder:text-gray-700 p-2 outline-none"
+                          placeholder={t('basic_info.type.input_placeholder')}
+                          className="placeholder:text-gray-300 py-2 outline-none"
                           disabled={instrument?.type ? true : false}
                         />
                       </div>
                       {instrumentTypes?.length && instrumentTypes.map((ins: any) => (
                         <li
                           key={ins?.label}
-                          className={`p-2 text-sm hover:bg-sky-600 hover:text-white
-                              ${ins?.value?.toLowerCase() === type?.toLowerCase() && "bg-sky-600 text-white"}
+                          className={`p-2 text-md hover:bg-it-50 hover:text-it-950 cursor-pointer
+                              ${ins?.value?.toLowerCase() === type?.toLowerCase() && "bg-it-300 text-it-950 hover:bg-it-400"}
                               ${ins?.value?.toLowerCase().startsWith(inputValue) ? "block" : "hidden"}`}
                           onClick={() => {
                             setOpen(false);
@@ -649,20 +650,26 @@ export default function DraftForm(
                         </li>
                       ))}
                     </ul>
+                    <p className="text-sm text-gray-600 pt-2">
+                      {t('basic_info.type.description')} 
+                    </p>
                   </div>
                 </div>
 
                 <div className="col-span-2">
-                  <label htmlFor="name" className="block text-md font-semibold text-gray-600 pb-1">
+                  <label htmlFor="name" className="block text-md font-semibold text-gray-1000 pb-1">
                     {t('basic_info.name.label')}
                   </label>
                   <input
                     name="name"
-                    className="block w-full px-4 py-2 text-it-950 border rounded-md focus:border-it-400 focus:ring-it-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                    className={`text-md block w-full px-2 py-2 text-it-950 border rounded-md focus:border-it-400 focus:ring-it-300 focus:outline-none focus:ring focus:ring-opacity-40 ${instrument?.title ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                     onChange={(e) => { setName(e.target.value) }}
                     value={name}
                     disabled={instrument?.title ? true : false}
                   />
+                  <p className="text-sm text-gray-600 pt-2">
+                    {t('basic_info.name.description')}
+                  </p>
                 </div>
               </div>
               {type && name && !instrumentId && (

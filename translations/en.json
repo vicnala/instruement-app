@@ -274,11 +274,16 @@
                 "button": "Save & continue",
                 "type": {
                     "label": "Instrument type",
-                    "placeholder": "Select instrument type"
+                    "placeholder": "Select instrument type",
+                    "description": "Available options reflect your endorsed construction skills",
+                    "description_modal": "When registering an instrument, you can choose from instrument types that correspond to your endorsed construction skills. For example, if you have the \"Violin construction\" endorsement, you'll see \"Violin\" as an available option in the dropdown menu. This ensures that each registered instrument reflects your verified expertise as a luthier.",
+                    "input_placeholder": "Select"
                 },
                 "name": {
                     "label": "Instrument name",
-                    "placeholder": "Enter instrument name"
+                    "placeholder": "Enter instrument name",
+                    "description": "Choose a meaningful name for your instrument",
+                    "description_modal": "Choose a meaningful name for your instrument. This will help you identify it later."
                 }
             },
             "media": {

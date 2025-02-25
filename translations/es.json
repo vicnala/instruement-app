@@ -278,11 +278,16 @@
                 "title": "Información básica",
                 "type": {
                     "label": "Tipo de instrumento",
-                    "placeholder": "Selecciona el tipo de instrumento"
+                    "placeholder": "Selecciona el tipo de instrumento",
+                    "description": "Las opciones disponibles reflejan tus habilidades de construcción avaladas",
+                    "description_modal": "Al registrar un instrumento, puedes elegir entre los tipos de instrumentos que corresponden a tus habilidades de construcción avaladas. Por ejemplo, si tienes el aval de \"Construcción de violín\", verás \"Violín\" como una opción disponible en el menú desplegable. Esto asegura que cada instrumento registrado refleje tu experiencia verificada como lutier.",
+                    "input_placeholder": "Selecciona"
                 },
                 "name": {
                     "label": "Nombre del instrumento",
-                    "placeholder": "Introduce el nombre del instrumento"
+                    "placeholder": "Introduce el nombre del instrumento",
+                    "description": "Elige un nombre significativo para tu instrumento",
+                    "description_modal": "Elige un nombre significativo para tu instrumento. Este puede estar inspirado en sus características únicas, su futuro propietario, o una persona o lugar de importancia personal."
                 },
                 "button": "Guardar y continuar"
             },
