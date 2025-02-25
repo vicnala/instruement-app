@@ -31,10 +31,7 @@ export async function login(payload: VerifyLoginPayloadParams, callbackUrl: stri
       isMinter: false,
       isLuthier: false,
       isVerified: false,
-      user: {
-        id: undefined,
-        instruments: []
-      }
+      userId: undefined
     };
 
     try {
@@ -50,8 +47,7 @@ export async function login(payload: VerifyLoginPayloadParams, callbackUrl: stri
             context.isLuthier = isLuthier;
             context.isVerified = isVerified;
             context.isMinter = isMinter;
-            context.user.id = userData.data.user_id;
-            context.user.instruments = userData.data.instruments;
+            context.userId = userData.data.user_id;
           }
         }
       }
