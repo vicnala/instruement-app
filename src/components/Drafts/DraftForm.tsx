@@ -61,7 +61,7 @@ export default function DraftForm(
   const [completed, setCompleted] = useState(false);
 
   // Regular declaration - placed after state declarations
-  const hasMediaUploads = instrument ? !!(instrument.cover_image && instrument.images.length >= 2) : false;
+  const hasMediaUploads = instrument ? !!(instrument.cover_image && instrument.images.length >= 1) : false;
   const hasDescription = instrument ? instrument.description && instrument.description.trim().length > 0 : false;
 
   // Add useEffect to handle step transitions
@@ -296,9 +296,9 @@ export default function DraftForm(
 
   // Handle cover delete
   const handleCoverDelete = async () => {
-    setCoverFile(() => undefined);
-    setCover(() => undefined);
-    setCoverDescription(() => '');
+    setCoverFile(undefined);
+    setCover(undefined);
+    setCoverDescription('');
   };
 
   // Handle image delete
@@ -414,8 +414,6 @@ export default function DraftForm(
   // Upload cover
   const uploadCover = async (e: any) => {
     e.preventDefault()
-    setIsLoadingMetadata(true);
-
     if (instrumentId && coverFile) {
       const formData = new FormData();
       formData.append("instrument_id", instrumentId);
@@ -437,16 +435,14 @@ export default function DraftForm(
         alert(`Error: ${error.message}`);
       }
     }
-    setIsLoadingMetadata(false);
-    setReloadUser(true);
-    setInstrument(undefined);
+    setCover(undefined);
+    setCoverFile(undefined);
+    setCoverDescription('');
   }
 
   // Upload images
   const uploadImages = async (e: any) => {
     e.preventDefault()
-    setIsLoadingMetadata(true);
-
     if (instrumentId && imageFiles.length) {
       for (let index = 0; index < imageFiles.length; index++) {
         const formData = new FormData();
@@ -470,19 +466,14 @@ export default function DraftForm(
         }
       }
     }
-    setIsLoadingMetadata(false);
-    setReloadUser(true);
     setImages([]);
     setImageFiles([]);
     setImageDescriptions([]);
-    setInstrument(undefined);
   }
 
   // Upload documents
   const uploadDocuments = async (e: any) => {
     e.preventDefault()
-    setIsLoadingMetadata(true);
-
     if (instrumentId && documentFiles.length) {
       for (let index = 0; index < documentFiles.length; index++) {
         const formData = new FormData();
@@ -506,11 +497,8 @@ export default function DraftForm(
         }
       }
     }
-    setIsLoadingMetadata(false);
-    setReloadUser(true);
     setDocumentFiles([]);
     setDocumentsDescriptions([]);
-    setInstrument(undefined);
   }
 
   // Handle instrument delete
@@ -769,22 +757,6 @@ export default function DraftForm(
                           </div>
                           {error && <p className="text-red-500">{error}</p>}
                         </>
-
-                        {/* Upload/Save cover image. Check also name and type are set. */}
-                        {type && name && cover && !instrument.cover_image &&
-                          <div className="mt-2">
-                            {
-                              <FormSaveButton
-                                disabled={isLoadingMetadata}
-                                onClick={(e) => uploadCover(e)}
-                                isLoading={isLoadingMetadata}
-                              >
-                                {t('media.cover.button_save')}
-                              </FormSaveButton>
-                            }
-                          </div>
-                        }
-
                       </div>
                     </div>
 
@@ -872,22 +844,7 @@ export default function DraftForm(
                           </button>
                           {error && <p className="text-red-500">{error}</p>}
                         </div>
-
                       </div>
-                      {/* Upload/Save images. Check also name and type are set. */}
-                      {type && name && images.length > 0 &&
-                        <div className="mt-6 text-right">
-                          {
-                            <FormSaveButton
-                              disabled={isLoadingMetadata}
-                              onClick={(e) => uploadImages(e)}
-                              isLoading={isLoadingMetadata}
-                            >
-                              {t('media.images.button_save')}
-                            </FormSaveButton>
-                          }
-                        </div>
-                      }
 
                       <Divider spacing="md" />
 
@@ -977,23 +934,36 @@ export default function DraftForm(
                           {error && <p className="text-red-500">{error}</p>}
                         </div>
                       </div>
-
-                      {/* Upload/Save files. Check also name and type are set. */}
-                      {type && name && documentFiles.length > 0 &&
-                        <div className="mt-6 text-right">
-                          {
-                            <FormSaveButton
-                              disabled={isLoadingMetadata}
-                              onClick={(e) => uploadDocuments(e)}
-                              isLoading={isLoadingMetadata}
-                            >
-                              {t('media.files.button_save')}
-                            </FormSaveButton>
-                          }
-                        </div>
-                      }
                     </div>
                   </div>
+                  {/* Upload/Save cover image. Check also name and type are set. */}
+                  {
+                    (type && name) && (
+                      (cover && !instrument?.cover_image) ||
+                      (images.length > 0) ||
+                      (documentFiles.length > 0) ) &&
+                      <div className="mt-6 text-right">
+                      {
+                        <FormSaveButton
+                          disabled={isLoadingMetadata}
+                          onClick={(e) => {
+                            setIsLoadingMetadata(true);
+                            if (cover) uploadCover(e);
+                            if (images.length > 0) uploadImages(e);
+                            if (documentFiles.length > 0) uploadDocuments(e);
+                            setTimeout(() => {
+                              setIsLoadingMetadata(false);
+                              setReloadUser(true);
+                              setInstrument(undefined);
+                            }, 1000);
+                          }}
+                          isLoading={isLoadingMetadata}
+                        >
+                          {t('media.save')}
+                        </FormSaveButton>
+                      }
+                    </div>
+                  }
                 </div>
               </Section>
             </>
@@ -1030,7 +1000,7 @@ export default function DraftForm(
               {/* If description is saved and there are media uploads, show preview button */}
               {
                 hasMediaUploads &&
-                (instrument.description === description) && description &&
+                (instrument.description) &&
                 <div className="mt-6 text-right">
                   <FormSaveButton
                     disabled={isLoadingMetadata}
@@ -1043,7 +1013,6 @@ export default function DraftForm(
                 </div>
               }
             </Section>
-
           }
         </form>
 
