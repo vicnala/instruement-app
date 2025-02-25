@@ -123,9 +123,7 @@ export default function Preview(
         <Loading />
       </div>
     </Page>
-  )  
-
-  console.log(instrument);
+  )
 
   return (
     minter ?
