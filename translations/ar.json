@@ -297,6 +297,7 @@
                 },
                 "images": {
                     "title": "Images",
+                    "title_with_min": "Images ({min} min)",
                     "description": "Register a minimum of two additional images of views and details of the instrument. In JPG and PNG format",
                     "button_upload": "Upload image",
                     "text_area_placeholder": "Add a description for this image",
