@@ -9,17 +9,23 @@ export default async function PreviewPage({
 }) {
   const authResult: any = await authedOnly(`/preview/${id}`);
   const authContext = authResult.parsedJWT.ctx;
-  const authUser = authContext.user;
-  const userInstrumentIds = authUser.instruments || [];
+  const isMinter = authContext.isMinter;
 
-  let requestedInstrumentId;
-  try {
-    requestedInstrumentId = parseInt(id);
-  } catch (error) {
-    return <NotFound />;
-  }
+  // const authUser = authContext.user;
+  // const userInstrumentIds = authUser.instruments || [];
 
-  if (!userInstrumentIds.includes(requestedInstrumentId)) {
+  // let requestedInstrumentId;
+  // try {
+  //   requestedInstrumentId = parseInt(id);
+  // } catch (error) {
+  //   return <NotFound />;
+  // }
+
+  // if (!userInstrumentIds.includes(requestedInstrumentId)) {
+  //   return <NotFound />;
+  // }
+
+  if (!isMinter) {
     return <NotFound />;
   }
 

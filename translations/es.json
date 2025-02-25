@@ -292,6 +292,7 @@
                 "button": "Guardar y continuar"
             },
             "media": {
+                "save": "Guardar medios",
                 "cover": {
                     "title": "Portada",
                     "description": "Imagen principal del instrumento. Se admite formato JPG y PNG",

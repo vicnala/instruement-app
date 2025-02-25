@@ -7,26 +7,34 @@ export async function POST(request: Request) {
 
   const authData: any = await userAuthData();
   const authContext = authData.parsedJWT.ctx;
+  const isMinter = authContext.isMinter;
   
-  const authUser = authContext.user;
-  const userInstrumentIds = authUser.instruments || [];
-
-  let requestedInstrumentId;
-  try {
-    requestedInstrumentId = parseInt(formData.instrument_id);
-  } catch (error) {
+  if (!isMinter) {
     return Response.json(
-      { data: { message: `Instrument ID parse error` } },
-      { status: 400 }
+      { data: { message: `Forbidden` } },
+      { status: 401 }
     )
   }
 
-  if (!userInstrumentIds.includes(requestedInstrumentId)) {
-    return Response.json(
-      { data: { message: `Wrong instrument ID` } },
-      { status: 400 }
-    )
-  }
+  // const authUser = authContext.user;
+  // const userInstrumentIds = authUser.instruments || [];
+
+  // let requestedInstrumentId;
+  // try {
+  //   requestedInstrumentId = parseInt(formData.instrument_id);
+  // } catch (error) {
+  //   return Response.json(
+  //     { data: { message: `Instrument ID parse error` } },
+  //     { status: 400 }
+  //   )
+  // }
+
+  // if (!userInstrumentIds.includes(requestedInstrumentId)) {
+  //   return Response.json(
+  //     { data: { message: `Wrong instrument ID` } },
+  //     { status: 400 }
+  //   )
+  // }
 
   try {
     const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/file`, {
