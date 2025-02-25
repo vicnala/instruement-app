@@ -7,8 +7,7 @@ import { useTranslations } from "next-intl";
 import { ModeToggle } from "./ModeToggle";
 import { useStateContext } from "@/app/context";
 import { ButtonLink } from "@/components/UI/ButtonLink";
-import IconHomeTwentyFour from "@/components/Icons/Home";
-import IconAccount from "@/components/Icons/Account";
+import { House, User } from "lucide-react";
 
 
 export function Header() {
@@ -17,7 +16,7 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <div className={address ? 'hidden md:block fixed top-0 left-0 right-0 z-50' : ''}>
+    <div className={`fixed top-0 left-0 right-0 z-50 ${address ? 'hidden md:block' : ''}`}>
       <div className='w-full'>
         <header className='bg-canvas px-safe dark:bg-black dark:bg-opacity-90'>
           <div className='mx-auto flex flex-row min-h-[15vh] md:min-h-[10vh] max-w-screen-lg items-center justify-between px-3.5'>
@@ -34,7 +33,7 @@ export function Header() {
               {
                 address && 
                 <Link href="/" className={`${pathname === '/' ? 'text-it-400 dark:text-white' : 'text-gray-500 hover:text-it-400 dark:text-gray-600 dark:hover:text-it-100'}`}>
-                  <IconHomeTwentyFour className="w-5 h-5" />
+                  <House className="w-5 h-5" />
                 </Link>
               }
               {
@@ -48,8 +47,7 @@ export function Header() {
                 <div className='hidden sm:block'>
                   <div className='flex items-center space-x-6'>
                     <Link key="my-instruments" href="/account">
-                      <IconAccount
-                        className={`w-5 h-5 ${pathname.includes('/account')
+                      <User className={`w-5 h-5 ${pathname.includes('/account')
                             ? 'text-it-400 dark:text-white'
                             : 'text-gray-500 hover:text-it-400 dark:text-gray-600 dark:hover:text-it-100'
                         }`}
@@ -59,7 +57,6 @@ export function Header() {
                   </div>
                 </div>
               }
-
             </nav>
           </div>
         </header>
