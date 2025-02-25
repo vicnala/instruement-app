@@ -57,6 +57,9 @@ export function Header() {
                   </div>
                 </div>
               }
+              {
+                process.env.NODE_ENV === 'development' && <ModeToggle />
+              }
             </nav>
           </div>
         </header>
