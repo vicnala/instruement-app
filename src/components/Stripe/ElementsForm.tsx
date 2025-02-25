@@ -17,10 +17,12 @@ import { formatAmountForDisplay } from "@/lib/stripe-helpers";
 import { Instrument } from "@/lib/definitions";
 import Page from "../Page";
 import Section from "../Section";
+import Image from "next/image";
 
-function CheckoutForm({ amount, address, id, minterAddress }: { amount: number, address?: string, id: string, minterAddress: string }): JSX.Element {
+function CheckoutForm({ amount, address, id, minterAddress, instrument }: { amount: number, address?: string, id: string, minterAddress: string, instrument: Instrument }): JSX.Element {
   const locale = useLocale();
-  const t = useTranslations('components.CheckoutForm');
+  const t = useTranslations('components.ElementsForm');
+
   const [input, setInput] = React.useState<{ cardholderName: string; }>({ cardholderName: "" });
 
   const [paymentType, setPaymentType] = React.useState<string>("");
@@ -33,6 +35,7 @@ function CheckoutForm({ amount, address, id, minterAddress }: { amount: number, 
 
   const currency = process.env.NEXT_PUBLIC_CURRENCY ? process.env.NEXT_PUBLIC_CURRENCY.toUpperCase() : "EUR";
 
+  
   const PaymentStatus = ({ status }: { status: string }) => {
     switch (status) {
       case "processing":
@@ -117,39 +120,61 @@ function CheckoutForm({ amount, address, id, minterAddress }: { amount: number, 
     <>
       <form onSubmit={handleSubmit}>
         <Section>
-          <div className="max-w-2xl mx-auto">
-            <h2 className='text-xl text-3xl font-semibold'>
-              {t('payment_details')} {t('concept_register')} #{id}
-            </h2>
+          <div className="mb-6">
+            <h2 className="text-2xl sm:text-3xl font-semibold">{ t('title') }</h2>
+            <p className="text-md sm:text-lg text-gray-600">{ t('subtitle') }</p>
+          </div>
+          <div className=" mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <div className="grid grid-cols-3 gap-6 bg-it-50 border border-it-100 shadow-sm rounded-[15px] overflow-hidden">
+                <div className="col-span-1">
+                  <Image
+                    src={instrument.cover_image.file_url}
+                    alt={instrument.cover_image.description || 'Instrument cover image'}
+                    width={300}
+                    height={300}
+                    className="object-cover"
+                  />
+                </div>
+                <div className="col-span-2 py-4">
+                  <h2 className="text-xl text-3xl font-semibold">
+                    {instrument.title}
+                  </h2>
+                  <p className="text-gray-600">
+                    {instrument.type_name}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <fieldset className="elements-style mx-auto">
+                {paymentType === "card" ? (
+                  <div className="flex flex-col gap-0 pb-3">
+                    <label htmlFor="cardholderName" className="block text-md text-gray-1000">
+                      {t('name')}
+                    </label>
+                    <input
+                      placeholder={t('card_name')}
+                      className="elements-style px-4 py-2 text-it-950 border border-gray-50 shadow-sm rounded-md focus:border-gray-400 focus:ring-it-300 focus:outline-none focus:ring focus:ring-opacity-40 placeholder:text-gray-700 placeholder:text-md"
+                      type="Text"
+                      name="cardholderName"
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                ) : null}
+                <div className="FormRow elements-style">
+                  <PaymentElement
+                    onReady={(el) => setReady(true)}
+                    onChange={(e) => setPaymentType(e.value.type)}
+                  />
+                </div>
+              </fieldset>
+            </div>
           </div>
         </Section>
         <Section>
-          <fieldset className="elements-style max-w-2xl mx-auto">
-            {paymentType === "card" ? (
-              <div className="flex flex-col gap-0 pb-3">
-                <label htmlFor="cardholderName" className="block text-md text-gray-1000">
-                  {t('name')}
-                </label>
-                <input
-                  placeholder={t('card_name')}
-                  className="elements-style px-4 py-2 text-it-950 border border-gray-50 shadow-sm rounded-md focus:border-gray-400 focus:ring-it-300 focus:outline-none focus:ring focus:ring-opacity-40 placeholder:text-gray-700 placeholder:text-md"
-                  type="Text"
-                  name="cardholderName"
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-            ) : null}
-            <div className="FormRow elements-style">
-              <PaymentElement
-                onReady={(el) => setReady(true)}
-                onChange={(e) => setPaymentType(e.value.type)}
-              />
-            </div>
-          </fieldset>
-        </Section>
-        <Section>
-          <div className="max-w-2xl mx-auto text-right">
+          <div className="mx-auto text-right">
             {
               ready &&
               <button
@@ -185,7 +210,7 @@ export default function ElementsForm(
   React.useEffect(() => {
     const getInstrument = async () => {     
       try {
-        const result = await fetch(`/api/instrument/${id}`, {
+        const result = await fetch(`/api/instrument/${id}?locale=${locale}`, {
           method: "GET",
           headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
         })
@@ -201,6 +226,20 @@ export default function ElementsForm(
           if (type) {
             setAmount(type.user_register_price_eur);
           }
+          const coverId = data.data.cover_image;
+          if (coverId) {
+            const result = await fetch(`/api/file/${coverId}`, {
+              method: "GET",
+              headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
+            })
+            const { data: imageData } = await result.json()
+            if (imageData.code !== 'success') {
+              console.log(`GET /api/file/${coverId} ERROR`, imageData.message);
+            } else {
+              _instrument.cover_image = imageData.data;
+            }
+          }
+          
           setInstrument(_instrument);
         }
       } catch (error: any) {
@@ -229,7 +268,13 @@ export default function ElementsForm(
           amount: Math.round((amount * 100)),
         }}
       >
-        <CheckoutForm amount={amount} address={address} id={id} minterAddress={minterAddress || ''} />
+        <CheckoutForm 
+          amount={amount} 
+          address={address} 
+          id={id} 
+          minterAddress={minterAddress || ''} 
+          instrument={instrument}
+        />
       </Elements>
     </Page>
   );

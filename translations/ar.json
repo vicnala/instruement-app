@@ -331,7 +331,9 @@
             "stop": "Stop",
             "close": "Close"
         },
-        "CheckoutForm": {
+        "ElementsForm": {
+            "title": "Register Your Instrument Now",
+            "subtitle": "Fill out your payment details",
             "payment_details": "Your payment details",
             "pay": "Pay",
             "name": "Name",

@@ -336,7 +336,9 @@
             "stop": "Parar",
             "close": "Cerrar"
         },
-        "CheckoutForm": {
+        "ElementsForm": {
+            "title": "Registra tu instrumento ahora",
+            "subtitle": "Rellena tus datos de pago",
             "payment_details": "Detalles del pago",
             "pay": "Pagar",
             "name": "Nombre",
