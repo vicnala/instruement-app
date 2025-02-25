@@ -302,6 +302,7 @@
                 },
                 "images": {
                     "title": "Imágenes",
+                    "title_with_min": "Imágenes (min {min})",
                     "description": "Registra un mínimo de dos imágenes adicionales de vistas y detalles del instrumento. En formato JPG y PNG",
                     "button_upload": "Subir imagen",
                     "text_area_placeholder": "Descripción para esta imagen",

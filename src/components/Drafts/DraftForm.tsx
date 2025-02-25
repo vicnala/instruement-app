@@ -61,7 +61,8 @@ export default function DraftForm(
   const [completed, setCompleted] = useState(false);
 
   // Regular declaration - placed after state declarations
-  const hasMediaUploads = instrument ? !!(instrument.cover_image && instrument.images.length >= 1) : false;
+  const minImages = 2;
+  const hasMediaUploads = instrument ? !!(instrument.cover_image && instrument.images.length >= minImages) : false;
   const hasDescription = instrument ? instrument.description && instrument.description.trim().length > 0 : false;
 
   // Add useEffect to handle step transitions
@@ -602,7 +603,7 @@ export default function DraftForm(
                   <label htmlFor="type" className="block text-md font-semibold text-gray-1000 pb-1">
                     {t('basic_info.type.label')}
                   </label>
-                  <div className="relative mb-2 font-medium">
+                  <div className="relative">
                     <div
                       onClick={() => instrument?.type ? null : setOpen(!open)}
                       className={`bg-white text-md p-2 flex border border-gray-200 items-center justify-between rounded-md ${!type && "text-gray-700"} ${!instrument?.type && "cursor-pointer"}`}
@@ -660,8 +661,9 @@ export default function DraftForm(
                   </p>
                 </div>
               </div>
-              {type && name && !instrumentId && (
-                <div className="mt-6 text-right">
+            </div>
+            {type && name && !instrumentId && (
+                <div className="mt-4 text-right">
                   <FormSaveButton
                     disabled={isLoadingMetadata}
                     onClick={(e) => createInstrument(e)}
@@ -671,7 +673,6 @@ export default function DraftForm(
                   </FormSaveButton>
                 </div>
               )}
-            </div>
           </Section>
           {instrument &&
             <>
@@ -765,7 +766,7 @@ export default function DraftForm(
                         <Divider spacing="md" />
                       </div>
                       <h2 className="text-xl font-semibold text-gray-1000 pb-1" >
-                        {t('media.images.title')}
+                        {t('media.images.title_with_min', { min: minImages })}
                       </h2>
                       <p className="text-sm text-gray-600 max-w-sm">
                         {t('media.images.description')}
@@ -936,35 +937,35 @@ export default function DraftForm(
                       </div>
                     </div>
                   </div>
-                  {/* Upload/Save cover image. Check also name and type are set. */}
-                  {
-                    (type && name) && (
-                      (cover && !instrument?.cover_image) ||
-                      (images.length > 0) ||
-                      (documentFiles.length > 0) ) &&
-                      <div className="mt-6 text-right">
-                      {
-                        <FormSaveButton
-                          disabled={isLoadingMetadata}
-                          onClick={(e) => {
-                            setIsLoadingMetadata(true);
-                            if (cover) uploadCover(e);
-                            if (images.length > 0) uploadImages(e);
-                            if (documentFiles.length > 0) uploadDocuments(e);
-                            setTimeout(() => {
-                              setIsLoadingMetadata(false);
-                              setReloadUser(true);
-                              setInstrument(undefined);
-                            }, 1000);
-                          }}
-                          isLoading={isLoadingMetadata}
-                        >
-                          {t('media.save')}
-                        </FormSaveButton>
-                      }
-                    </div>
-                  }
                 </div>
+                {/* Upload/Save cover image. Check also name and type are set. */}
+                {
+                  (type && name) && (
+                    (cover && !instrument?.cover_image) ||
+                    (images.length > 0) ||
+                    (documentFiles.length > 0) ) &&
+                    <div className="mt-6 text-right">
+                    {
+                      <FormSaveButton
+                        disabled={isLoadingMetadata}
+                        onClick={(e) => {
+                          setIsLoadingMetadata(true);
+                          if (cover) uploadCover(e);
+                          if (images.length > 0) uploadImages(e);
+                          if (documentFiles.length > 0) uploadDocuments(e);
+                          setTimeout(() => {
+                            setIsLoadingMetadata(false);
+                            setReloadUser(true);
+                            setInstrument(undefined);
+                          }, 1000);
+                        }}
+                        isLoading={isLoadingMetadata}
+                      >
+                        {t('media.save')}
+                      </FormSaveButton>
+                    }
+                  </div>
+                }
               </Section>
             </>
           }
