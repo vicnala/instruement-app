@@ -593,8 +593,8 @@ export default function DraftForm(
         </Section>
 
         <form className="">
-          <Section id="basic-info" className="pb-[1px]">
-            <div className="px-3 sm:px-6 pt-5 pb-6 sm:py-8 || bg-gray-50 rounded-t-lg">
+          <Section id="basic-info" className="pb-[3px]">
+            <div className="px-3 sm:px-6 pt-5 pb-6 sm:py-8 || bg-gray-50 rounded-lg">
               <h2 className="text-xl font-semibold text-gray-1000 pb-8">
                 {t('basic_info.title')}
               </h2>
@@ -661,11 +661,10 @@ export default function DraftForm(
                   </p>
                 </div>
               </div>
-            </div>
-            {type && name && !instrumentId && (
+              {!instrumentId && (
                 <div className="mt-4 text-right">
                   <FormSaveButton
-                    disabled={isLoadingMetadata}
+                    disabled={isLoadingMetadata || !type || !name}
                     onClick={(e) => createInstrument(e)}
                     isLoading={isLoadingMetadata}
                   >
@@ -673,11 +672,12 @@ export default function DraftForm(
                   </FormSaveButton>
                 </div>
               )}
+            </div>
           </Section>
           {instrument &&
             <>
-              <Section id="media" className="pb-[1px]">
-                <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-50">
+              <Section id="media" className="pb-[3px]">
+                <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-50 rounded-lg">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8">
                     <div className="col-span-1 min-h-[300px]">
                       <h2 className="text-xl font-semibold text-gray-1000 pb-1">
@@ -937,35 +937,35 @@ export default function DraftForm(
                       </div>
                     </div>
                   </div>
+                  <div className="mt-6 text-right">
+                  {/* Upload/Save cover image. Check also name and type are set. */}
+                  {
+                    <FormSaveButton
+                      disabled={
+                        isLoadingMetadata || 
+                        !type || 
+                        !name || 
+                        (!cover && !instrument?.cover_image) || 
+                        (images.length + (instrument?.images?.length || 0) < minImages)
+                      }
+                      onClick={(e) => {
+                        setIsLoadingMetadata(true);
+                        if (cover) uploadCover(e);
+                        if (images.length > 0) uploadImages(e);
+                        if (documentFiles.length > 0) uploadDocuments(e);
+                        setTimeout(() => {
+                          setIsLoadingMetadata(false);
+                          setReloadUser(true);
+                          setInstrument(undefined);
+                        }, 1000);
+                      }}
+                      isLoading={isLoadingMetadata}
+                    >
+                      {t('media.save')}
+                    </FormSaveButton>
+                  }
                 </div>
-                {/* Upload/Save cover image. Check also name and type are set. */}
-                {
-                  (type && name) && (
-                    (cover && !instrument?.cover_image) ||
-                    (images.length > 0) ||
-                    (documentFiles.length > 0) ) &&
-                    <div className="mt-6 text-right">
-                    {
-                      <FormSaveButton
-                        disabled={isLoadingMetadata}
-                        onClick={(e) => {
-                          setIsLoadingMetadata(true);
-                          if (cover) uploadCover(e);
-                          if (images.length > 0) uploadImages(e);
-                          if (documentFiles.length > 0) uploadDocuments(e);
-                          setTimeout(() => {
-                            setIsLoadingMetadata(false);
-                            setReloadUser(true);
-                            setInstrument(undefined);
-                          }, 1000);
-                        }}
-                        isLoading={isLoadingMetadata}
-                      >
-                        {t('media.save')}
-                      </FormSaveButton>
-                    }
-                  </div>
-                }
+                </div>
               </Section>
             </>
           }
@@ -986,33 +986,40 @@ export default function DraftForm(
                   </div>
                 </div>
                 {/* If saved description is different from the description in the editor, show save button */}
-                {instrument.description !== description &&
-                  <div className="mt-6 text-right">
-                    <FormSaveButton
-                      disabled={isLoadingMetadata}
-                      onClick={(e) => updateDescription(e)}
-                      isLoading={isLoadingMetadata}
-                    >
-                      {t('details.button_save')}
-                    </FormSaveButton>
-                  </div>
-                }
-              </div>
-              {/* If description is saved and there are media uploads, show preview button */}
-              {
-                hasMediaUploads &&
-                (instrument.description) &&
                 <div className="mt-6 text-right">
                   <FormSaveButton
-                    disabled={isLoadingMetadata}
-                    onClick={() => router.push(`/preview/${instrument.id}`)}
+                    disabled={
+                      isLoadingMetadata || 
+                      !hasMediaUploads || 
+                      !description || 
+                      description === instrument.description
+                    }
+                    onClick={(e) => updateDescription(e)}
                     isLoading={isLoadingMetadata}
-                    theme="green"
                   >
-                    {t('preview')}
+                    {t('details.button_save')}
                   </FormSaveButton>
                 </div>
-              }
+              </div>
+              {/* If description is saved and there are media uploads, show preview button */}
+              <div className="mt-6 text-right">
+                <FormSaveButton
+                  disabled={
+                    isLoadingMetadata || 
+                    !hasMediaUploads || 
+                    !description || 
+                    description !== instrument.description || 
+                    images.length > 0 || 
+                    documentFiles.length > 0
+                  }
+                  onClick={() => router.push(`/preview/${instrument.id}`)}
+                  isLoading={isLoadingMetadata}
+                  theme="green"
+                >
+                  {t('preview')}
+                </FormSaveButton>
+              </div>
+
             </Section>
           }
         </form>
