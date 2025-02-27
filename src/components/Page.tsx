@@ -14,7 +14,7 @@ const Page = ({ children }: Props) => {
 		<>
 			<Header />
 			{
-				<main className={`${address ? 'pt-0' : ''} sm:pt-[10vh] mx-auto max-w-screen-lg px-safe`}>
+				<main className={`${address ? 'pt-0' : 'pt-[10vh]'} sm:pt-[10vh] mx-auto max-w-screen-lg px-safe`}>
 					<div className='px-3.5 py-6 sm:py-0'>{children}</div>
 				</main>
 			}
