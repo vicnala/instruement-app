@@ -248,7 +248,8 @@
     "pages": {},
     "components": {
         "Header": {
-            "new_instrument": "New instrument"
+            "new_instrument": "New Instrument",
+            "account": "Account"
         },
         "DraftGrid": {
             "title_single": "Draft Registration",

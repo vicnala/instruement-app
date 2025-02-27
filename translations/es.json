@@ -253,7 +253,8 @@
     "pages": {},
     "components": {
         "Header": {
-            "new_instrument": "Nuevo instrumento"
+            "new_instrument": "Nuevo instrumento",
+            "account": "Cuenta"
         },
         "DraftGrid": {
             "title_single": "Registro en borrador",

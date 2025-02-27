@@ -11,7 +11,7 @@ import { House, User } from "lucide-react";
 
 
 export function Header() {
-  const t = useTranslations();
+  const t = useTranslations('components.Header');
   const { address, isMinter } = useStateContext()
   const pathname = usePathname();
 
@@ -22,7 +22,7 @@ export function Header() {
           <div className='mx-auto flex flex-row min-h-[10vh] max-w-screen-lg items-center justify-between px-3.5'>
             <Link href="/">
               <Image
-                src="/images/logo.png"
+                src="/images/instruement-logo-contrast.png"
                 alt="Instruement"
                 width={125}
                 height={53}
@@ -39,7 +39,7 @@ export function Header() {
               {
                 isMinter && 
                 <ButtonLink href="/drafts/new" size="sm" colorSchema="it">
-                  {t('components.Header.new_instrument')}
+                  {t('new_instrument')}
                 </ButtonLink>
               }
               {
@@ -51,7 +51,7 @@ export function Header() {
                             ? 'text-it-400 dark:text-white'
                             : 'text-gray-500 hover:text-it-400 dark:text-gray-600 dark:hover:text-it-100'
                         }`}
-                        aria-label={t('navbar.account')}
+                        aria-label={t('account')}
                       />
                     </Link>
                   </div>
