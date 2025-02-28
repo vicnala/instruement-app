@@ -337,7 +337,12 @@
             "documents": "Documentos",
             "scan": "Escanear QR de usuario",
             "stop": "Parar",
-            "close": "Cerrar"
+            "close": "Cerrar",
+            "owner": "Propietario",
+            "minter": "Minter",
+            "description": "Descripción",
+            "transfer": "Transferir",
+            "to": "A la cuenta"
         },
         "ElementsForm": {
             "title": "Registra tu instrumento ahora",

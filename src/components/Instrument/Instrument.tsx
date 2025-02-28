@@ -17,9 +17,11 @@ import QRModal from "./QRModal";
 export default function Instrument(
 	{ locale, id, to }: Readonly<{ locale: string, id: string, to: string | undefined }>
 ) {
-	const t = useTranslations();
-	const [isLoadingInstrumentNft, setIsLoadingInstrumentNft] = useState(false)
+	const t = useTranslations('components.Instrument');
+	const [isLoadingInstrumentAsset, setIsLoadingInstrumentAsset] = useState(false)
+	const [isLoadingInstrument, setIsLoadingInstrument] = useState(false)
 	const [isLoadingMinter, setIsLoadingMinter] = useState(false)
+	const [instrumentAsset, setInstrumentAsset] = useState<any>()
 	const [instrument, setInstrument] = useState<any>()
 	const [images, setImages] = useState<any[]>([])
 	const [documents, setDocuments] = useState<any[]>([])
@@ -31,12 +33,13 @@ export default function Instrument(
     const [scannedResult, setScannedResult] = useState<string | undefined>("")
 	const [isModalOpen, setModalOpen] = useState(false);
 	
+
 	useEffect(() => {
-		async function getInstrument() {
+		async function getInstrumentAsset() {
 			try {
 				const result = await fetch(`/api/token/${id}`)
 				const data = await result.json();
-				setInstrument(data);
+				setInstrumentAsset(data);
 				
 				console.log("instrument.data", data);
 
@@ -92,18 +95,42 @@ export default function Instrument(
 			} catch (error) {
 				console.error(`/api/token/${id}`, error)
 			}
-			setIsLoadingInstrumentNft(false)
+			setIsLoadingInstrumentAsset(false)
 		}
 
-		if (!isLoadingInstrumentNft && !instrument) {
+		if (!isLoadingInstrumentAsset && !instrumentAsset) {
 			if (id) {
-				setIsLoadingInstrumentNft(true)
-				getInstrument().catch((e) => {
+				setIsLoadingInstrumentAsset(true)
+				getInstrumentAsset().catch((e) => {
 					console.error(`/api/token/${id}`, e.message);
 				})
 			}
 		}
-	}, [id, isLoadingInstrumentNft, instrument])
+	}, [id, isLoadingInstrumentAsset, instrumentAsset])
+
+
+  useEffect(() => {
+    async function getInstrument() {
+      try {
+        const result = await fetch(`/api/instrument/asset/${id}?locale=${locale}`)
+        const data = await result.json();
+        console.log("instrument.data", data);
+        setInstrument(data);
+      } catch (error) {
+        console.error(`/api/instrument/asset/${id}`, error)
+      }
+      setIsLoadingInstrument(false);
+    }
+
+    if (!isLoadingInstrument && !instrument) {
+      if (id) {
+        setIsLoadingInstrument(true)
+        getInstrument().catch((e) => {
+          console.error(`/api/instrument/asset/${id}`, e.message);
+        })
+      }
+    }
+  }, [id, isLoadingInstrument, instrument, locale])
 
 
 	useEffect(() => {
@@ -127,7 +154,6 @@ export default function Instrument(
 
 	}, [minter])
 	
-
 	useEffect(() => {
 		async function getOwner() {
 			const owner = await ownerOf({ contract, tokenId: BigInt(id) });			
@@ -149,22 +175,35 @@ export default function Instrument(
 	return (
 		<Page>
 			{
-				instrument && instrument.metadata ? <>
+				instrumentAsset && instrumentAsset.metadata ? 
+				<>
+					<div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8">
+            <div className="col-span-1">
+
+            </div>
+            <div className="col-span-2">
+              
+              <h2 className='text-3xl font-semibold text-black dark:text-it-50'>
+								{instrumentAsset.metadata.name}
+							</h2>
+            </div>
+          </div>
+					{/* Header Section */}
 					<Section>
 						<div className='text-center flex flex-col'>
 							<h2 className='text-3xl font-semibold text-black dark:text-it-50'>
-								{instrument.metadata.name}
+								{instrumentAsset.metadata.name}
 							</h2>
-							<img className="mx-auto" src={instrument.metadata.image} width={200} height={200} alt={`Instrument #${id}`} />
+							<img className="mx-auto" src={instrumentAsset.metadata.image} width={200} height={200} alt={`Instrument #${id}`} />
 							<div className='mt-4'>
 								<p className='text-s text-black dark:text-gray-400'>
 									Instruement #{id}
 								</p>
 								<p className='text-s text-black dark:text-gray-400'>
-									{t('instrument.owner')} {truncateEthAddress(instrument.owner)}
+									{t('owner')} {truncateEthAddress(instrumentAsset.owner)}
 								</p>
 								<p className='text-s text-black dark:text-gray-400'>
-									{t('instrument.minter')} {minter && truncateEthAddress(minter)}
+									{t('minter')} {minter && truncateEthAddress(minter)}
 									{
 										minterUser && <b>
 											{" "} {minterUser.business_name}
@@ -174,20 +213,22 @@ export default function Instrument(
 							</div>
 						</div>
 					</Section>
+					{/* Description Section */}
 					<Section>
 						<h2 className='text-2xl font-semibold text-black dark:text-it-50'>
-							{t('instrument.description')}
+							{t('description')}
 						</h2>
 						<div className='flex flex-col'>
-							<p>{instrument.metadata.description}</p>
+							<p>{instrumentAsset.metadata.description}</p>
 						</div>
 					</Section>
+					{/* Images Section */}
 					{
 						images && images.length &&
 							<Section>
 								<div className='flex flex-col'>
 									<h2 className='text-3xl font-semibold text-black dark:text-it-50'>
-										{t('components.Instrument.images')}
+										{t('images')}
 									</h2>
 									{
 										images.map((img: any, index: number) =>
@@ -200,12 +241,13 @@ export default function Instrument(
 								</div>
 							</Section>
 					}
+					{/* Documents Section */}
 					{
 						documents && documents.length &&
 							<Section>
 								<div className='flex flex-col'>
 									<h2 className='text-3xl font-semibold text-black dark:text-it-50'>
-										{t('components.Instrument.documents')}
+										{t('documents')}
 									</h2>
 									{
 										documents.map((doc: any, index: number) =>
@@ -222,18 +264,20 @@ export default function Instrument(
 							</Section>
 					}
 					<div className="mt-6 text-center">
+					{/* Scan Button */}
 					{
 						contract && address && isOwner && !to &&
-						<Section>
-							<button
-								type="button"
-								className="items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
-								onClick={() => setModalOpen(true)}
-							>
-								{isModalOpen ? t('components.Instrument.stop') : t('components.Instrument.scan')}
-							</button>
-						</Section>
+							<Section>
+								<button
+									type="button"
+									className="items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+									onClick={() => setModalOpen(true)}
+								>
+									{isModalOpen ? t('stop') : t('scan')}
+								</button>
+							</Section>
 					}
+					{/* Transaction Button */}
 					{
 						contract && address && isOwner && (to || scannedResult) &&
 						<Section>
@@ -255,7 +299,7 @@ export default function Instrument(
 								unstyled
 								className="items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
 								>
-								{ t('transfer.transfer') } #{id} { t('to') } {truncateEthAddress(to || scannedResult || '')}
+								{ t('transfer') } #{id} { t('to') } {truncateEthAddress(to || scannedResult || '')}
 							</TransactionButton>
 						</Section>
 					}
@@ -270,7 +314,9 @@ export default function Instrument(
 							styles={{}}
 						/>
 					</QRModal>
-				</> : <></>
+				</> 
+				: 
+				<></>
 			}
 		</Page>
 	);
