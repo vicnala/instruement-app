@@ -14,7 +14,7 @@ const FormSaveButton = ({
   isLoading,
   theme = 'it' 
 }: FormSaveButtonProps) => {
-  const baseClasses = "inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform rounded-md focus:outline-none disabled:opacity-25";
+  const baseClasses = "font-bold inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform rounded-md focus:outline-none disabled:opacity-25";
   const themeClasses = theme === 'it' 
     ? "bg-it-300 hover:bg-it-400 focus:bg-it-700" 
     : "bg-green-300 hover:bg-green-400 focus:bg-green-700";
@@ -23,12 +23,12 @@ const FormSaveButton = ({
     <button
       type="button"
       className={`
-        inline-flex items-center px-4 py-2 tracking-wide transition-colors duration-200 transform rounded-md focus:outline-none
+        font-bold inline-flex items-center px-4 py-2 tracking-wide transition-colors duration-200 transform rounded-md focus:outline-none
         ${disabled 
-          ? 'bg-gray-200 text-gray-500 cursor-not-allowed border border-gray-200' 
+          ? 'bg-gray-200 text-gray-500 cursor-not-allowed border-2 border-gray-200' 
           : theme === 'green'
-            ? 'text-green-500 border border-green-500 hover:bg-green-500 hover:text-white focus:bg-green-700'
-            : 'text-it-500 border border-it-500 hover:bg-it-500 hover:text-white focus:bg-it-700'
+            ? 'text-green-500 border-2 border-green-500 hover:bg-green-500 hover:text-white focus:bg-green-700'
+            : 'text-it-500 border-2 border-it-500 hover:bg-it-500 hover:text-white focus:bg-it-700'
         }
       `}
       disabled={disabled}
