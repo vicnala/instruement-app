@@ -8,10 +8,10 @@ import React, {
   ReactNode
 } from "react"
 import { getContract } from "thirdweb";
-import { baseSepolia } from "thirdweb/chains";
 import { useActiveAccount } from "thirdweb/react";
 import { client } from "./client";
 import { getLuthierPermissions } from "@/lib/luthierPermissions";
+import chain from "@/lib/chain";
 
 type Props = {
   children: ReactNode
@@ -61,7 +61,7 @@ export const StateContextProvider = ({ children }: Props) => {
       const _contract = getContract({
         address: process.env.NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS,
         client,
-        chain: baseSepolia,
+        chain,
       });
       setContract(_contract);
     }

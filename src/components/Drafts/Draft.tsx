@@ -72,7 +72,7 @@ export default function Draft(
       onClick={() => router.push(`/drafts/${instrumentId}`)}
     >
       <div className="relative w-full aspect-square bg-white/[.04]"> 
-        <div className="absolute top-2 right-2 z-10 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-all">
+        <div className="absolute top-2 right-2 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-all">
           <IconEdit 
             width="20"
             height="20"

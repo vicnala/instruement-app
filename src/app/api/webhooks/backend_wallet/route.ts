@@ -1,14 +1,8 @@
 'use server'
 
 import { NextRequest, NextResponse } from "next/server";
-import {
-    getRpcClient,
-    eth_getTransactionReceipt,
-} from "thirdweb/rpc";
 import { Engine } from "@thirdweb-dev/engine";
 import { isExpired, isValidSignature } from "../webhookHelper";
-import { client } from "@/app/client";
-import { baseSepolia } from "thirdweb/chains";
 
 const {
     ENGINE_URL,
