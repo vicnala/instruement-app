@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { ConnectButton } from "thirdweb/react";
-import { baseSepolia } from "thirdweb/chains";
 import { useTheme } from "next-themes";
 import { useLocale } from "next-intl";
 import { client } from "@/app/client";
@@ -12,6 +11,7 @@ import {
   login,
   logout,
 } from "@/actions/login";
+import chain from "@/lib/chain";
 
 export const CustomConnectButton = (
   { callbackUrl }: Readonly<{ callbackUrl?: string | undefined }>
@@ -23,7 +23,7 @@ export const CustomConnectButton = (
       client={client}
       theme={theme === 'system' ? 'light' : theme === 'dark' ? 'dark' : 'light'}
       locale={locale.includes('en') ? 'en_US' : locale.includes('es') ? 'es_ES' : 'en_US'}
-      // accountAbstraction={{ chain: baseSepolia, sponsorGas: true }}
+      // accountAbstraction={{ chain: chain, sponsorGas: true }}
       auth={{
         isLoggedIn: async (address) => {
           // console.log("checking if logged in!", { address });
@@ -34,7 +34,7 @@ export const CustomConnectButton = (
           await login(params, callbackUrl);
         },
         getLoginPayload: async ({ address }) =>
-          await generatePayload({ address, chainId: baseSepolia.id }),
+          await generatePayload({ address, chainId: chain.id }),
         doLogout: async () => {
           // console.log("logging out!");
           await logout();

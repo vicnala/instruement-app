@@ -651,7 +651,7 @@ export default function DraftForm(
                   </label>
                   <input
                     name="name"
-                    className={`text-md block w-full px-2 py-2 text-it-950 border rounded-md focus:border-it-400 focus:ring-it-300 focus:outline-none focus:ring focus:ring-opacity-40 ${instrument?.title ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                    className={`text-md block w-full px-2 py-2 text-it-950 border rounded-md focus:border-it-400 focus:ring-it-300 focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-white dark:bg-opacity-90 ${instrument?.title ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                     onChange={(e) => { setName(e.target.value) }}
                     value={name}
                     disabled={instrument?.title ? true : false}
