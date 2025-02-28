@@ -38,14 +38,14 @@ export default function Instrument(
 				const data = await result.json();
 				setInstrument(data);
 				
-				// console.log("instrument.data", data);
+				console.log("instrument.data", data);
 
 				const properties = data.metadata.properties || data.metadata.attributes || [];
 				const fileDirHashTrait = properties.find((prop: any) => prop.trait_type === 'Files');
-				const registrarTarit = properties.find((prop: any) => prop.trait_type === 'Registrar');
+				const registrarTrait = properties.find((prop: any) => prop.trait_type === 'Registrar');
 
-				if (registrarTarit) {
-					setMinter(registrarTarit.value);
+				if (registrarTrait) {
+					setMinter(registrarTrait.value);
 				}
 
 				if (fileDirHashTrait) {
