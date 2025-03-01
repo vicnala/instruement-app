@@ -368,6 +368,11 @@
             "sub_heading": "Mantén control absoluto de tus certificados y de tu propiedad mediante tecnología blockchain de autocustodia",
             "button_description": "No requiere registro - conéctate de forma anónima",
             "auth_disclaimer": "Autenticación basada en"
+        },
+        "BottomNav": {
+            "home": "Inicio",
+            "new_instrument": "Nuevo instrumento",
+            "account": "Cuenta"
         }
     }
   }

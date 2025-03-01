@@ -363,6 +363,11 @@
             "sub_heading": "Keep absolute control of your certificates and ownership through self-custody blockchain technology",
             "button_description": "No registration required - connect anonymously",
             "auth_disclaimer": "Authentication powered by"
+        },
+        "BottomNav": {
+            "home": "Home",
+            "new_instrument": "New Instrument",
+            "account": "Account"
         }
     }
   }
