@@ -15,7 +15,7 @@ import NotConnected from '../NotConnected';
 export default function User(
   { locale }: Readonly<{ locale: string }>
 ) {
-  const t = useTranslations();
+  const t = useTranslations('components.HomeIndex.User');
   const { address, owned, isLoading, setReloadUser } = useStateContext()
   const { isModalOpen, modalContent, openModal, closeModal } = useModal()
   const [showForm, setShowForm] = useState(false)
@@ -113,14 +113,14 @@ export default function User(
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
                         <h2 className='text-3xl md:text-4xl font-bold text-gray-900 dark:text-it-50 mb-2'>
-                          {t('home.user.no_instruments')}
+                          {t('no_instruments')}
                         </h2>
                         <p className="text-md mb-4 text-base text-gray-900 dark:text-gray-500">
                           {
                             typeof navigator.share === 'function' ?
-                              t('home.user.no_instruments_sub.qr')
+                              t('no_instruments_sub.qr')
                               :
-                              t('home.user.no_instruments_sub.mailto')
+                              t('no_instruments_sub.mailto')
                           }
                         </p>
                       </div>
@@ -141,7 +141,7 @@ export default function User(
                                       fgColor="#070605"
                                     />
                                     <div className="pt-4">
-                                      {t('home.user.qr.press_to_share')}
+                                      {t('qr.press_to_share')}
                                     </div>
                                   </button>
                                   :
@@ -157,7 +157,7 @@ export default function User(
                                         onClick={() => copyToClipboard(address || '')}
                                         className="border border-it-400 bg-it-400 text-white p-2 rounded-r-md hover:bg-it-600 hover:border-it-600"
                                       >
-                                        {t('copy_to_clipboard')}
+                                        {t('share.copy_to_clipboard')}
                                       </button>
                                     </div>
                                   </>
@@ -195,10 +195,10 @@ export default function User(
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
                         <h5 className="mb-2 text-lg text-me-950 md:text-2xl font-bold">
-                          {t('home.user.no_instrument.card3_title')}
+                          {t('luthier.title')}
                         </h5>
                         <p className="mb-4 text-sm text-me-950 sm:text-base">
-                          {t('home.user.no_instrument.card3_text')}
+                          {t('luthier.description')}
                         </p>
                       </div>
                       <div className='flex items-center justify-center'>
@@ -212,7 +212,7 @@ export default function User(
                                 rel="noreferrer"
                                 className="inline-flex items-center bg-transparent hover:bg-me-500 text-me-1000 border border-me-500 hover:border-me-500 font-bold py-2 px-4 rounded-md text-base"
                               >
-                                {t('home.user.no_instrument.apply_invitation')}
+                                {t('apply_invitation')}
                               </a>
                             </div> 
                             */}
@@ -221,7 +221,7 @@ export default function User(
                                 onClick={toggleFormVisibility}
                                 className="inline-flex items-center bg-transparent hover:bg-me-500 text-me-1000 border border-me-500 hover:border-me-500 font-bold py-2 px-4 rounded-md text-base"
                               >
-                                {t('home.user.no_instrument.confirm_invitation')}
+                                {t('luthier.confirm_invitation_do')}
                               </button>
                             </div>
                           </div>
@@ -230,7 +230,7 @@ export default function User(
                             <input
                               ref={emailRef}
                               type="email"
-                              placeholder={t('home.user.no_instrument.enter_email')}
+                              placeholder={t('luthier.confirm_invitation_email_placeholder')}
                               className="border border-me-600 p-2 rounded-l-md border-r-0 flex-grow"
                               onChange={(e) => { setEmail(e.target.value) }}
                             />
@@ -238,13 +238,13 @@ export default function User(
                               onClick={() => sendUserConfirmationOTP()}
                               className="border border-me-600 bg-me-600 text-white font-semibold py-2 px-4 rounded-r-md hover:bg-me-700 hover:border-me-700"
                             >
-                              {t('home.user.no_instrument.confirm_email')}
+                              {t('luthier.confirm_invitation_confirm_email')}
                             </button>
                             <button
                               onClick={toggleFormVisibility}
                               className="ml-2 border border-gray-300 text-gray-700 p-2 rounded-md hover:border-gray-800 hover:text-gray-1000"
                             >
-                              {t('home.user.no_instrument.cancel_email')}
+                              {t('luthier.confirm_invitation_cancel_email')}
                             </button>
                           </div>
                         ) : (
@@ -252,7 +252,7 @@ export default function User(
                             <input
                               ref={otpRef}
                               type="text"
-                              placeholder={t('home.user.no_instrument.confirm_otp')}
+                              placeholder={t('luthier.confirm_invitation_otp')}
                               className="border border-me-600 p-2 rounded-l-md border-r-0 flex-grow"
                               onChange={(e) => { setOTP(e.target.value) }}
                             />
@@ -260,13 +260,13 @@ export default function User(
                               onClick={() => sendUserOTPVerification()}
                               className="border border-me-600 bg-me-600 text-white font-semibold py-2 px-4 rounded-r-md hover:bg-me-700 hover:border-me-700"
                             >
-                              {t('home.user.no_instrument.confirm_email')}
+                              {t('luthier.confirm_invitation_confirm_otp')}
                             </button>
                             <button
                               onClick={toggleFormVisibility}
                               className="ml-2 border border-gray-300 text-gray-700 p-2 rounded-md hover:border-gray-800 hover:text-gray-1000"
                             >
-                              {t('home.user.no_instrument.cancel_email')}
+                              {t('luthier.confirm_invitation_cancel_otp')}
                             </button>
                           </div>
                         )}

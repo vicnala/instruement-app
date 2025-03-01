@@ -122,61 +122,6 @@
         "drafts": "Drafts",
         "new_draft": "New Draft"
     },
-    "home": {
-        "user": {
-            "registered": "Registered",
-            "registered_for_transfers": "Registered for transfers",
-            "registered_for_transfer": "Registered for transfer",
-            "my_instruments": "My Instruments",
-            "registration": "Register a new instrument",
-            "instruments_of": "Instruments of",
-            "no_instruments": "Get your first registered instrument",
-            "no_instruments_sub": {
-                "qr": "Present this QR code to your luthier in person, or tap it to share your account address via message",
-                "mailto": "Share your account number with your luthier."
-            },
-            "no_instrument" : {
-                "card1_title": "You already know a verified luthier?",
-                "card1_text": "Get your first registered instrument by sending a registration request to your luthier.",
-                "card2_title": "You don't know a verified luthier yet?",
-                "card2_text": "Find a luthier near you or invite your current one to join the global network of verified luthiers.",
-                "card3_title": "Are you a luthier?",
-                "card3_text": "We are onboarding new luthiers by invitation. If you already received an invitation proceed to confirmation.",
-                "apply_invitation": "Apply for invitation",
-                "confirm_invitation": "Confirm your invitaion",
-                "confirm_otp": "Enter the code",
-                "enter_email": "Enter your email",
-                "confirm_email": "Send",
-                "cancel_email": "Cancel"
-            },
-            "with_instrument" : {
-                "card_title": "Do you want to register a new instrument?",
-                "card_text": "Send a registration request to your verified luthier."
-            },
-            "qr": {
-                "press_to_share": "Press to share"
-            }
-        },
-        "minter": {
-            "my_instruments": "My Instruments",
-            "registered_instruments": "Registered Instruments",
-            "no_registered": "You have not registered any instrument yet",
-            "hello": "Hello",
-            "verified_since": "Verified since",
-            "activate_title": "Activate your membership",
-            "activate_text": "Please activate your membership to access the services you have as a verified luthier.",
-            "activate_now": "Activate now",
-            "activate_more": "More info",
-            "register_title": "Register an instrument",
-            "register_text": "As verified luthier you can register instruments of your expertise: violin, viola, cello",
-            "register_now": "Register now",
-            "register_more": "More info",
-            "invite_title": "Invite your customers to get this App",
-            "invite_text": "They can then request a registration or a certificate for their instrument.",
-            "invite_now": "Send invitation",
-            "invite_more": "More instructions"
-        }
-    },
     "request": {
         "send": "Send a request now",
         "registration": {
@@ -383,6 +328,52 @@
                     "title": "Preview",
                     "description": "Review and register"
                 }
+            }
+        },
+        "HomeIndex": {
+            "User": {
+                "no_instruments": "Get your first registered instrument",
+                "no_instruments_sub": {
+                    "qr": "Present this QR code to your luthier in person, or tap it to share your account address via message",
+                    "mailto": "Share your account number with your luthier."
+                },
+                "qr": {
+                    "press_to_share": "Press to share"
+                },
+                "share": {
+                    "copy_to_clipboard": "Copy to clipboard"
+                },
+                "modals": {
+                    "share_account_what": {
+                        "title": "Account Number",
+                        "preview": "What is my account number?",
+                        "description": "The account number is a unique identifier that was automatically created when you opened your account. This number allows you to receive instrument registrations securely, as it only works for incoming transfers. You can share it with luthiers and other users to receive instrument registrations in your account. Once a registration is transferred to your account using this number, you will be the sole owner of that registration."
+                    },
+                    "share_account_how": {
+                        "title": "How to share your account number",
+                        "preview": "How can you share it?",
+                        "description": "Ideally you will use the messaging channel your already established with the other party. It can be f.e. email or any chat app or social network. If you use your mobile phone, you have the option to show a QR code which the Luthier will scan to obtain your account number."
+                    }
+                },
+                "luthier": {
+                    "title": "Are you a luthier?",
+                    "description": "We are onboarding new luthiers by invitation. If you already received an invitation proceed to confirmation.",
+                    "confirm_invitation_do": "Confirm your invitaion",
+                    "confirm_invitation_email_placeholder": "Enter your email",
+                    "confirm_invitation_confirm_email": "Send",
+                    "confirm_invitation_cancel_email": "Cancel",
+                    "confirm_invitation_otp": "Enter the code",
+                    "confirm_invitation_confirm_otp": "Send",
+                    "confirm_invitation_cancel_otp": "Cancel"
+                }
+            },
+            "Minter": {
+                "hello": "Hello",
+                "verified_since": "Verified since",
+                "register_title": "Register your instrument",
+                "register_text": "As verified luthier you can register instruments of your endorsed skills",
+                "register_now": "Register now",
+                "register_more": "More info"
             }
         }
     }
