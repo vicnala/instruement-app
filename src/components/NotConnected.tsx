@@ -7,7 +7,7 @@ import Section from "@/components/Section";
 import { CustomConnectButton } from "./CustomConnectButton";
 
 export default function NotConnected(
-    { locale, callbackUrl }: Readonly<{ locale: string, callbackUrl?: string | undefined }>
+    { locale, cb }: Readonly<{ locale: string, cb?: string | undefined }>
 ) {
     const t = useTranslations();
     return (
@@ -23,7 +23,7 @@ export default function NotConnected(
                                 {t('hero.sub_heading')}
                             </p>
                             <div className="">
-                                <CustomConnectButton callbackUrl={callbackUrl} />
+                                <CustomConnectButton cb={cb} />
                             </div>
                             <div className='mt-4'>
                                 <p className='text-sm md:text-md text-gray-900 dark:text-gray-400'>

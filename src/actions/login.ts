@@ -22,7 +22,7 @@ const thirdwebAuth = createAuth({
  
 export const generatePayload = thirdwebAuth.generatePayload;
  
-export async function login(payload: VerifyLoginPayloadParams, callbackUrl: string | undefined) {
+export async function login(payload: VerifyLoginPayloadParams, cb: string | undefined) {
   const locale = await getLocale();
   const verifiedPayload = await thirdwebAuth.verifyPayload(payload);
   if (verifiedPayload.valid) {
@@ -61,7 +61,7 @@ export async function login(payload: VerifyLoginPayloadParams, callbackUrl: stri
       context,
     });
     cookies().set("jwt", jwt);
-    redirect({ href: callbackUrl || '/', locale });
+    redirect({ href: cb || '/', locale });
   }
 }
  
@@ -75,17 +75,17 @@ export async function isLoggedIn() {
   return authResult.valid;
 }
 
-export async function authedOnly(callbackUrl: string) {
+export async function authedOnly(cb: string) {
   const locale = await getLocale();
 
   const jwt = cookies().get("jwt");
   if (!jwt?.value) {
-    redirect({ href: `/login?callbackUrl=${callbackUrl}`, locale });
+    redirect({ href: `/login?cb=${cb}`, locale });
   }
 
   const authResult = await thirdwebAuth.verifyJWT({ jwt: jwt?.value || '' });
   if (!authResult.valid) {
-    redirect({ href: `/login?callbackUrl=${callbackUrl}`, locale });
+    redirect({ href: `/login?cb=${cb}`, locale });
   }
   return authResult;
 }

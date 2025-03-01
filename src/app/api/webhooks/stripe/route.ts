@@ -46,16 +46,15 @@ async function fetchAndStreamFile(url: string) {
   }
 }
 
-export async function POST(req: Request) {
+export async function POST(request: Request) {
   let event: Stripe.Event;
-
 
   const headers = { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` };
 
   try {
     event = stripe.webhooks.constructEvent(
-      await (await req.blob()).text(),
-      req.headers.get("stripe-signature") as string,
+      await (await request.blob()).text(),
+      request.headers.get("stripe-signature") as string,
       STRIPE_WEBHOOK_SECRET_KEY as string,
     );
   } catch (err) {

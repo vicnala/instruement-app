@@ -6,9 +6,9 @@ import NotConnected from "@/components/NotConnected";
 import { getLocale } from "next-intl/server";
 import { isLoggedIn } from "@/actions/login";
 
-export default async function Login({ searchParams }: { searchParams?: { callbackUrl?: string | undefined }}) {
+export default async function Login({ searchParams }: { searchParams?: { cb?: string | undefined }}) {
   const locale = await getLocale();
   return (
-    <NotConnected locale={locale} callbackUrl={searchParams?.callbackUrl} />
+    <NotConnected locale={locale} cb={searchParams?.cb} />
   )
 }

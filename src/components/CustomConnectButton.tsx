@@ -14,7 +14,7 @@ import {
 import chain from "@/lib/chain";
 
 export const CustomConnectButton = (
-  { callbackUrl }: Readonly<{ callbackUrl?: string | undefined }>
+  { cb }: Readonly<{ cb?: string | undefined }>
 ) => {
   const { theme } = useTheme();
   const locale = useLocale();
@@ -31,7 +31,7 @@ export const CustomConnectButton = (
         },
         doLogin: async (params) => {
           // console.log("logging in!");
-          await login(params, callbackUrl);
+          await login(params, cb);
         },
         getLoginPayload: async ({ address }) =>
           await generatePayload({ address, chainId: chain.id }),
