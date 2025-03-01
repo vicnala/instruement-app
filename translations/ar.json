@@ -12,25 +12,6 @@
     "transfer_property": "Transfer Instrument Ownership",
     "qr_scan": "Scan QR Address",
     "copy_to_clipboard": "Copy to clipboard",
-    "hero": {
-        "heading": "Secure your musical instrument's digital identity",
-        "sub_heading": "Keep absolute control of your certificates and ownership through self-custody blockchain technology",
-        "button_description": "No registration required - connect anonymously",
-        "add_to_home_screen": "For the best experience add this App to your home screen.",
-        "show_how": "Show me how",
-        "auth_disclaimer": "Authentication powered by"
-    },
-    "features": {
-        "our_story": "The Story",
-        "heading": "Get peace of mind",
-        "text": "Why it matters",
-        "features": {
-            "value": "Value",
-            "persistence": "Persistence",
-            "ownership": "Ownership",
-            "trust": "Trust"
-        }
-    },
     "user" : {
         "address": "User address",
         "not_minter": "You do not have the required role"
@@ -376,6 +357,12 @@
                 "register_now": "Register now",
                 "register_more": "More info"
             }
+        },
+        "NotConnected": {
+            "heading": "Secure your musical instrument's digital identity",
+            "sub_heading": "Keep absolute control of your certificates and ownership through self-custody blockchain technology",
+            "button_description": "No registration required - connect anonymously",
+            "auth_disclaimer": "Authentication powered by"
         }
     }
   }

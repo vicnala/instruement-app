@@ -12,25 +12,6 @@
     "transfer_property": "Transferir el Instrumento",
     "qr_scan": "Escanear dirección QR",
     "copy_to_clipboard": "Copiar al portapapeles",
-    "hero": {
-        "heading": "Asegura la identidad digital de tu instrumento musical",
-        "sub_heading": "Mantén control absoluto de tus certificados y de tu propiedad mediante tecnología blockchain de autocustodia",
-        "button_description": "No requiere registro - conéctate de forma anónima",
-        "add_to_home_screen": "Para una mejor experiencia añade esta aplicación a tu pantalla de inicio.",
-        "show_how": "Muéstrame cómo",
-        "auth_disclaimer": "Autenticación basada en"
-    },
-    "features": {
-        "our_story": "La história",
-        "heading": "Consigue tranquilidad",
-        "text": "Porqué importa?",
-        "features": {
-            "value": "Valor",
-            "persistence": "Persistencia",
-            "ownership": "Propiedad",
-            "trust": "Confianza"
-        }
-    },
     "user" : {
         "address": "Wallet del usuario",
         "not_minter": "No dispones del rol requerido"
@@ -381,6 +362,12 @@
                 "register_now": "Registrar instrumento",
                 "register_more": "Más información"
             }
+        },
+        "NotConnected": {
+            "heading": "Asegura la identidad digital de tu instrumento musical",
+            "sub_heading": "Mantén control absoluto de tus certificados y de tu propiedad mediante tecnología blockchain de autocustodia",
+            "button_description": "No requiere registro - conéctate de forma anónima",
+            "auth_disclaimer": "Autenticación basada en"
         }
     }
   }
