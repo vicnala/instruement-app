@@ -332,7 +332,12 @@
             "documents": "Documents",
             "scan": "Scan user QR",
             "stop": "Stop",
-            "close": "Close"
+            "close": "Close",
+            "owner": "Owner",
+            "minter": "Minter",
+            "description": "Description",
+            "transfer": "Transfer",
+            "to": "To the account"
         },
         "ElementsForm": {
             "title": "Register Your Instrument Now",
