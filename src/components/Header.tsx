@@ -18,16 +18,25 @@ export function Header() {
   return (
     <div className={`fixed top-0 left-0 right-0 z-50 ${address ? 'hidden sm:block' : ''}`}>
       <div className='w-full'>
-        <header className='bg-canvas px-safe dark:bg-black dark:bg-opacity-90'>
+        <header className='bg-canvas px-safe dark:bg-contrast'>
           <div className='mx-auto flex flex-row min-h-[10vh] max-w-screen-lg items-center justify-between px-3.5'>
             <Link href="/">
-              <Image
-                src="/images/instruement-logo-contrast.png"
-                alt="Instruement"
-                width={125}
-                height={53}
-                className="dark:filter dark:invert"
-              />
+              <div className="relative">
+                <Image
+                  src="/images/instruement-logo-contrast.png"
+                  alt="Instruement"
+                  width={125}
+                  height={53}
+                  className="block dark:hidden"
+                />
+                <Image
+                  src="/images/instruement-logo-dark.png"
+                  alt="Instruement"
+                  width={125}
+                  height={53}
+                  className="hidden dark:block"
+                />
+              </div>
             </Link>
             <nav className='flex items-center space-x-6'>
               {

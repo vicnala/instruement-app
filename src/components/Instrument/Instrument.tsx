@@ -12,6 +12,8 @@ import Page from "@/components/Page";
 import Section from "@/components/Section";
 import { client } from "@/app/client";
 import QRModal from "./QRModal";
+import Image from "next/image";
+import { Download } from "lucide-react";
 
 
 export default function Instrument(
@@ -41,7 +43,7 @@ export default function Instrument(
 				const data = await result.json();
 				setInstrumentAsset(data);
 				
-				console.log("instrument.data", data);
+				console.log("instrumentAsset.data", data);
 
 				const properties = data.metadata.properties || data.metadata.attributes || [];
 				const fileDirHashTrait = properties.find((prop: any) => prop.trait_type === 'Files');
@@ -88,6 +90,10 @@ export default function Instrument(
 							if (uri) documents.push({ uri, description: fileDescription.description });
 						}
 					}
+
+          console.log("images", images);
+          console.log("documents", documents);
+
 					setImages(images);
 					setDocuments(documents);
 				}
@@ -114,8 +120,9 @@ export default function Instrument(
       try {
         const result = await fetch(`/api/instrument/asset/${id}?locale=${locale}`)
         const data = await result.json();
-        console.log("instrument.data", data);
-        setInstrument(data);
+        const { data: instrumentData } = data;
+        console.log("instrumentData ", instrumentData);
+        setInstrument(instrumentData);
       } catch (error) {
         console.error(`/api/instrument/asset/${id}`, error)
       }
@@ -179,90 +186,107 @@ export default function Instrument(
 				<>
 					<div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8">
             <div className="col-span-1">
+              <div className="rounded-lg relative bg-it-100 border border-it-200 shadow-md overflow-hidden">
+                <div className="w-full aspect-square bg-white/[.04]"> 
+                  <Image 
+                    className="mx-auto" 
+                    src={instrumentAsset.metadata.image} 
+                    width={800} 
+                    height={800} 
+                    alt={`Instrument #${id}`} 
+                  />
+                </div>
+                <p className="text-it-1000 p-4">
+                  {/* {instrumentAsset.cover_image.description || t('no_description')} */}
+                </p>
 
+                {/* Images Section */}
+                {
+                  images && images.length &&
+                  <div className='flex flex-col'>
+                    <h2 className='text-3xl font-semibold text-black dark:text-it-50'>
+                      {t('images')}
+                    </h2>
+                    {
+                      images.map((img: any, index: number) =>
+                        <div key={`${index}`} className="relative bg-it-100 border border-it-200 rounded-lg overflow-hidden">
+                            <div className="w-full aspect-square bg-white/[.04]">
+                              <Image 
+                                src={img.uri} 
+                                width={200} 
+                                height={200} 
+                                alt={`Instrument #${id}`} 
+                              />
+                            <p className="text-it-1000 p-2 text-sm">
+                              {img.description || t('no_description')}
+                            </p>
+                          </div>
+                        </div>
+                      )
+                    }
+                  </div>
+                }
+
+                {/* Documents Section */}
+                {
+                  documents && documents.length &&
+                  <div className="pt-4 md:pt-8">
+                      <h2 className='text-3xl font-semibold text-black dark:text-it-50'>
+                        {t('documents')}
+                      </h2>
+                      <div className='flex flex-col gap-2'>
+                      {
+                        documents.map((doc: any, index: number) =>
+                          <a 
+                            key={`${index}`}
+                            download={doc.description}
+                            href={doc.uri} 
+                            target="_blank" 
+                            rel="noreferrer"
+                            className="w-full flex items-center justify-between p-4 border border-gray-400 rounded-lg hover:bg-gray-50 transition-colors"
+                          >
+                            <div className="flex flex-col items-start">
+                              <h3 className="text-lg font-medium">{doc.description}</h3>
+                              <p className="text-sm text-gray-500">
+                                {doc.description || t('no_description')}
+                              </p>
+                            </div>
+                            <Download className="w-4 h-4" />
+                          </a>
+                        )
+                      }
+                    </div>
+                  </div>
+                }
+
+              </div>
             </div>
             <div className="col-span-2">
               
               <h2 className='text-3xl font-semibold text-black dark:text-it-50'>
 								{instrumentAsset.metadata.name}
 							</h2>
+              <p className='text-s text-black dark:text-gray-400'>
+									{t('owner')} {truncateEthAddress(instrumentAsset.owner)}
+              </p>
+              <p className='text-s text-black dark:text-gray-400'>
+                {t('minter')} {minter && truncateEthAddress(minter)}
+                {
+                  minterUser && <b>
+                    {" "} {minterUser.business_name}
+                  </b>
+                }
+              </p>
+              {/* Description Section */}
+              <h2 className='text-2xl font-semibold text-black dark:text-it-50'>
+                {t('description')}
+              </h2>
+              <div className='flex flex-col'>
+                <p>{instrumentAsset.metadata.description}</p>
+              </div>
             </div>
           </div>
-					{/* Header Section */}
-					<Section>
-						<div className='text-center flex flex-col'>
-							<h2 className='text-3xl font-semibold text-black dark:text-it-50'>
-								{instrumentAsset.metadata.name}
-							</h2>
-							<img className="mx-auto" src={instrumentAsset.metadata.image} width={200} height={200} alt={`Instrument #${id}`} />
-							<div className='mt-4'>
-								<p className='text-s text-black dark:text-gray-400'>
-									Instruement #{id}
-								</p>
-								<p className='text-s text-black dark:text-gray-400'>
-									{t('owner')} {truncateEthAddress(instrumentAsset.owner)}
-								</p>
-								<p className='text-s text-black dark:text-gray-400'>
-									{t('minter')} {minter && truncateEthAddress(minter)}
-									{
-										minterUser && <b>
-											{" "} {minterUser.business_name}
-										</b>
-									}
-								</p>
-							</div>
-						</div>
-					</Section>
-					{/* Description Section */}
-					<Section>
-						<h2 className='text-2xl font-semibold text-black dark:text-it-50'>
-							{t('description')}
-						</h2>
-						<div className='flex flex-col'>
-							<p>{instrumentAsset.metadata.description}</p>
-						</div>
-					</Section>
-					{/* Images Section */}
-					{
-						images && images.length &&
-							<Section>
-								<div className='flex flex-col'>
-									<h2 className='text-3xl font-semibold text-black dark:text-it-50'>
-										{t('images')}
-									</h2>
-									{
-										images.map((img: any, index: number) =>
-											<div key={`${index}`}>
-												<img src={img.uri} width={200} height={200} alt={`Instrument #${id}`} />
-												<p>{img.description}</p>
-											</div>
-										)
-									}
-								</div>
-							</Section>
-					}
-					{/* Documents Section */}
-					{
-						documents && documents.length &&
-							<Section>
-								<div className='flex flex-col'>
-									<h2 className='text-3xl font-semibold text-black dark:text-it-50'>
-										{t('documents')}
-									</h2>
-									{
-										documents.map((doc: any, index: number) =>
-											<div key={`${index}`}>
-												<p>
-													<a href={doc.uri} target="_blank" rel="noreferrer">
-														🔗 {doc.description} 
-													</a>
-												</p>
-											</div>
-										)
-									}
-								</div>
-							</Section>
-					}
+
 					<div className="mt-6 text-center">
 					{/* Scan Button */}
 					{
