@@ -275,6 +275,7 @@
         "Instrument": {
             "images": "Images",
             "documents": "Documents",
+            "no_description": "No description",
             "scan": "Scan user QR",
             "stop": "Stop",
             "close": "Close",

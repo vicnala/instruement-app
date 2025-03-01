@@ -280,6 +280,7 @@
         "Instrument": {
             "images": "Imágenes",
             "documents": "Documentos",
+            "no_description": "Sin descripción",
             "scan": "Escanear QR de usuario",
             "stop": "Parar",
             "close": "Cerrar",
