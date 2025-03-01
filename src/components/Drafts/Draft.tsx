@@ -2,19 +2,17 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "@/i18n/routing";
-import { hexToBigInt } from "thirdweb/utils";
-import { useStateContext } from "@/app/context";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { Instrument, InstrumentImage } from "@/lib/definitions";
 import Skeleton from "@/components/Skeleton";
 import IconEdit from '../Icons/Edit';
-import IconInfo from '../Icons/Info';
 
 export default function Draft(
   { instrumentId, locale }: { instrumentId: string, locale: string }
 ) {
   const router = useRouter();
-  const { address } = useStateContext()
+  const t = useTranslations('components.Drfat');
   const [instrument, setInstrument] = useState<Instrument>()
   const [image, setImage] = useState<InstrumentImage>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -71,14 +69,20 @@ export default function Draft(
       className="cursor-pointer transition-all hover:shadow-lg || flex flex-col w-full justify-stretch min-h-[200px] || overflow-hidden bg-it-25 border border-it-100 rounded-lg"
       onClick={() => router.push(`/drafts/${instrumentId}`)}
     >
-      <div className="relative w-full aspect-square bg-white/[.04]"> 
-        <div className="absolute top-2 right-2 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-all">
-          <IconEdit 
-            width="20"
-            height="20"
-            className="text-white"
-          />
-        </div>
+      <div className="relative w-full aspect-square bg-white/[.04]">
+        {
+          instrument.queue_id ?
+          <div className="absolute top-2 left-2 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-all">
+            {t("registering")}
+          </div> :
+          <div className="absolute top-2 right-2 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-all">
+            <IconEdit 
+              width="20"
+              height="20"
+              className="text-white"
+            />
+          </div>
+        }
         { image ? 
           <Image
             src={image.file_url}

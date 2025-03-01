@@ -266,6 +266,9 @@
             "title_plural": "Tus Instrumentos Registrados",
             "description": "Instrumentos bajo tu propiedad. Puedes gestionar su configuración, ver datos o iniciar su transferencia."
         },
+        "Drfat": {
+            "registering": "En proceso de registro"
+        },
         "DraftForm": {
             "title": {
                 "new": "Registra tu instrumento",
