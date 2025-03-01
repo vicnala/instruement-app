@@ -46,7 +46,7 @@ export default async function RootLayout({
           })}
         />
       </head>
-      <body className={`${catamaran.className} bg-canvas`}>
+      <body className={`${catamaran.className}`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
