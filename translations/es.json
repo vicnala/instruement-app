@@ -332,26 +332,35 @@
                 },
                 "modals": {
                     "share_account_what": {
-                        "title": "Número de cuenta",
+                        "title": "Tu número de cuenta",
                         "preview": "¿Qué es mi número de cuenta?",
                         "description": "El número de cuenta es un identificador único que se creó automáticamente cuando abriste tu cuenta. Este número te permite recibir registros de instrumentos de manera segura, ya que solo sirve para transferencias entrantes. Puedes compartirlo con luthiers y otros usuarios para recibir registros de instrumentos en tu cuenta. Una vez que un registro se transfiere a tu cuenta usando este número, serás la única persona propietaria de ese registro."
                     },
                     "share_account_how": {
-                        "title": "¿Cómo puedes compartir tu número de cuenta?",
-                        "preview": "¿Cómo puedes compartirlo?",
+                        "title": "Cómo puedes compartir tu número de cuenta",
+                        "preview": "¿Cómo puedo compartirlo?",
                         "description": "Idealmente usarás el canal de mensajería que ya tienes establecido con la otra parte. Puede ser, por ejemplo, email o cualquier aplicación de chat o red social. Si usas tu teléfono móvil, tienes la opción de mostrar un código QR que el o la luthier escaneará para obtener tu número de cuenta."
                     }
                 },
                 "luthier": {
                     "title": "¿Eres luthier?",
-                    "description": "Estamos incorporando nuevos luthiers por invitación. Si ya recibiste una invitación, procede a la confirmación.",
+                    "description": "Estamos incorporando nuevos luthiers por invitación. Procede a confirmar el email donde recibiste tu invitación.",
                     "confirm_invitation_do": "Confirma tu invitación",
+                    "confirm_invitation_email_label": "Email de negocio",
                     "confirm_invitation_email_placeholder": "Introduce tu email",
-                    "confirm_invitation_confirm_email": "Enviar",
+                    "confirm_invitation_email_description": "Te enviaremos un código de verificación a este email",
+                    "confirm_invitation_confirm_email": "Enviar código",
                     "confirm_invitation_cancel_email": "Cancelar",
+                    "confirm_invitation_otp_label": "Código de verificación",
                     "confirm_invitation_otp": "Introduce el código",
                     "confirm_invitation_confirm_otp": "Enviar",
-                    "confirm_invitation_cancel_otp": "Cancelar"
+                    "confirm_invitation_cancel_otp": "Cancelar",
+                    "privacy_policy": "He leído y acepto la",
+                    "privacy_policy_link": "Política de privacidad",
+                    "errors": {
+                        "no_valid_email": "El email no es válido",
+                        "otp_failed": "Algo ha ido mal con este paso. Por favor, inténtalo de nuevo."
+                    }
                 }
             },
             "Minter": {

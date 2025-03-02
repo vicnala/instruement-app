@@ -8,9 +8,10 @@ import { useModal } from "@/components/Modal/useModal";
 import Modal from "@/components/Modal/Modal";
 import IconInfo from "@/components/Icons/Info";
 import { useStateContext } from "@/app/context";
-import NFTGrid, { NFTGridLoading } from "@/components/NFT/NFTGrid";
+import NFTGrid from "@/components/NFT/NFTGrid";
 import DraftGrid from "@/components/Drafts/DraftGrid";
 import NotConnected from "../NotConnected";
+import ButtonSpinner from '@/components/UI/ButtonSpinner';
 
 export default function Minter(
   { locale }: Readonly<{ locale: string }>
@@ -23,7 +24,12 @@ export default function Minter(
     <Page>
       <Section>
         {
-          isLoading ? (<NFTGridLoading />) : 
+          isLoading ? 
+          (
+            <div className="flex justify-center items-center h-full">
+              <ButtonSpinner />
+            </div>
+          ) : 
             <div className='flex flex-col'>
               <DraftGrid locale={locale}/>
             </div>
@@ -31,7 +37,12 @@ export default function Minter(
       </Section>
       <Section>
         {
-          isLoading ? (<NFTGridLoading />) :
+          isLoading ? 
+          (
+            <div className="flex justify-center items-center h-full">
+              <ButtonSpinner />
+            </div>
+          ) :
             owned && owned.length ?
               <div className="flex flex-col pt-4">
                 <NFTGrid nftData={owned} /> 
