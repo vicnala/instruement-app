@@ -264,7 +264,12 @@
             "minter": "Minter",
             "description": "Description",
             "transfer": "Transfer",
-            "to": "To the account"
+            "to": "To the account",
+            "copy_url": "Copy Shareable URL",
+            "copy_response_url": "Copy Response URL",
+            "copied": "Copied!",
+            "valid_for": "Valid for",
+            "days": "days"
         },
         "ElementsForm": {
             "title": "Register Your Instrument Now",

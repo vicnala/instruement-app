@@ -269,7 +269,12 @@
             "minter": "Minter",
             "description": "Descripción",
             "transfer": "Transferir",
-            "to": "A la cuenta"
+            "to": "A la cuenta",
+            "copy_url": "Copiar URL compartible",
+            "copy_response_url": "Copiar URL de respuesta",
+            "copied": "Copiado!",
+            "valid_for": "Válido durante",
+            "days": "días"
         },
         "ElementsForm": {
             "title": "Registra tu instrumento ahora",
