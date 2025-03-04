@@ -148,9 +148,9 @@ export default function Preview(
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4 md:mt-8">
             {/* Left Column - Cover Image and Description */}
-            <div className="flex flex-col space-y-4">
+            <div className="flex flex-col space-y-8 md:space-y-10">
               {instrument?.cover_image && (
-                <>
+                <div>
                   <div className="rounded-lg relative bg-it-100 border border-it-200 shadow-md overflow-hidden">
                     <div className="absolute top-2 right-2 z-10 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-all cursor-pointer" 
                          onClick={() => window.open(instrument.cover_image.file_url, '_blank')}
@@ -176,10 +176,10 @@ export default function Preview(
                       {instrument.cover_image.description || t('no_description')}
                     </p>
                   </div>
-                </>
+                </div>
               )}
               {instrument?.images && instrument.images.length > 0 && (
-                <div className="pt-4 md:pt-8">
+                <div>
                   <h2 className="text-xl font-semibold mb-4">{t('additional_images')}</h2>
                   <div className="grid grid-cols-2 gap-2">
                     {instrument.images.map((image, index) => (
@@ -215,7 +215,7 @@ export default function Preview(
                 </div>
               )}
               {instrument?.files && instrument.files.length > 0 && (
-                <div className="pt-4 md:pt-8">
+                <div>
                   <h2 className="text-xl font-semibold mb-4">{t('documents')}</h2>
                   <div className="flex flex-col gap-2">
                   {instrument.files.map((file, index) => (
