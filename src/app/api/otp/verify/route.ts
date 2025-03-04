@@ -1,7 +1,7 @@
 'use server'
 
 export async function POST(request: Request) {
-  const { email, otp, address } = await request.json()
+  const { email, otp, address, accepted_terms } = await request.json()
 
   if (!email || !otp || !address) return Response.error()
 
@@ -13,7 +13,7 @@ export async function POST(request: Request) {
         'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`,
 
       },
-      body: JSON.stringify({ email, otp })
+      body: JSON.stringify({ email, otp, accepted_terms })
     })
     const data = await result.json();
 

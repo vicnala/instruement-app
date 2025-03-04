@@ -34,11 +34,11 @@
         },
         "share_account_what": {
             "preview": "What is my account number?",
-            "title": "Account Number",
+            "title": "Your Account Number",
             "description": "The account number is a unique identifier that was automatically created when you opened your account. This number allows you to receive instrument registrations securely, as it only works for incoming transfers. You can share it with luthiers and other users to receive instrument registrations in your account. Once a registration is transferred to your account using this number, you will be the sole owner of that registration."
         },
         "share_account_how": {
-            "preview": "How can you share it?",
+            "preview": "How can I share it?",
             "title": "How to share your account number",
             "description": "Ideally you will use the messaging channel your already established with the other party. It can be f.e. email or any chat app or social network. If you use your mobile phone, you have the option to show a QR code which the Luthier will scan to obtain your account number."
         },
@@ -257,17 +257,24 @@
             "documents": "Documents"
         },
         "Instrument": {
-            "images": "Images",
+            "current_owner": "Current owner",
+            "you_are_not_owner": "You are not the owner",
+            "additional_images": "Additional images",
             "documents": "Documents",
             "no_description": "No description",
             "scan": "Scan user QR",
             "stop": "Stop",
             "close": "Close",
-            "owner": "Owner",
             "minter": "Minter",
+            "registered_by": "Registered by",
             "description": "Description",
             "transfer": "Transfer",
-            "to": "To the account"
+            "to": "To the account",
+            "copy_url": "Copy Shareable URL",
+            "copy_response_url": "Copy Response URL",
+            "copied": "Copied!",
+            "valid_for": "Valid for",
+            "days": "days"
         },
         "ElementsForm": {
             "title": "Register Your Instrument Now",
@@ -342,14 +349,23 @@
                 },
                 "luthier": {
                     "title": "Are you a luthier?",
-                    "description": "We are onboarding new luthiers by invitation. If you already received an invitation proceed to confirmation.",
+                    "description": "We are onboarding new luthiers by invitation. Proceed to confirm the email where you received your invitation.",
                     "confirm_invitation_do": "Confirm your invitaion",
+                    "confirm_invitation_email_label": "Business email",
                     "confirm_invitation_email_placeholder": "Enter your email",
-                    "confirm_invitation_confirm_email": "Send",
+                    "confirm_invitation_email_description": "We will send you a verification code to this email",
+                    "confirm_invitation_confirm_email": "Send code",
                     "confirm_invitation_cancel_email": "Cancel",
+                    "confirm_invitation_otp_label": "Verification code",
                     "confirm_invitation_otp": "Enter the code",
-                    "confirm_invitation_confirm_otp": "Send",
-                    "confirm_invitation_cancel_otp": "Cancel"
+                    "confirm_invitation_confirm_otp": "Send code",
+                    "confirm_invitation_cancel_otp": "Cancel",
+                    "privacy_policy": "I have read and agree to the",
+                    "privacy_policy_link": "Privacy Policy",
+                    "errors": {
+                        "no_valid_email": "The email is not valid",
+                        "otp_failed": "Something went wrong with this step. Please try again."
+                    }
                 }
             },
             "Minter": {
@@ -366,6 +382,11 @@
             "sub_heading": "Keep absolute control of your certificates and ownership through self-custody blockchain technology",
             "button_description": "No registration required - connect anonymously",
             "auth_disclaimer": "Authentication powered by"
+        },
+        "BottomNav": {
+            "home": "Home",
+            "new_instrument": "New Instrument",
+            "account": "Account"
         }
     }
   }
