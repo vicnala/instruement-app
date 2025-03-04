@@ -254,14 +254,16 @@
             "documents": "Documents"
         },
         "Instrument": {
-            "images": "Images",
+            "current_owner": "Current owner",
+            "you_are_not_owner": "You are not the owner",
+            "additional_images": "Additional images",
             "documents": "Documents",
             "no_description": "No description",
             "scan": "Scan user QR",
             "stop": "Stop",
             "close": "Close",
-            "owner": "Owner",
             "minter": "Minter",
+            "registered_by": "Registered by",
             "description": "Description",
             "transfer": "Transfer",
             "to": "To the account",

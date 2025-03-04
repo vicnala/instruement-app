@@ -259,14 +259,16 @@
             "documents": "Documentos"
         },
         "Instrument": {
-            "images": "Imágenes",
+            "current_owner": "Propietario actual",
+            "you_are_not_owner": "No eres el propietario",
+            "additional_images": "Imágenes adicionales",
             "documents": "Documentos",
             "no_description": "Sin descripción",
             "scan": "Escanear QR de usuario",
             "stop": "Parar",
             "close": "Cerrar",
-            "owner": "Propietario",
             "minter": "Minter",
+            "registered_by": "Registrado por",
             "description": "Descripción",
             "transfer": "Transferir",
             "to": "A la cuenta",

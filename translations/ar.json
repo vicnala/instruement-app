@@ -254,17 +254,24 @@
             "documents": "Documents"
         },
         "Instrument": {
-            "images": "Images",
+            "current_owner": "Current owner",
+            "you_are_not_owner": "You are not the owner",
+            "additional_images": "Additional images",
             "documents": "Documents",
             "no_description": "No description",
             "scan": "Scan user QR",
             "stop": "Stop",
             "close": "Close",
-            "owner": "Owner",
             "minter": "Minter",
+            "registered_by": "Registered by",
             "description": "Description",
             "transfer": "Transfer",
-            "to": "To the account"
+            "to": "To the account",
+            "copy_url": "Copy Shareable URL",
+            "copy_response_url": "Copy Response URL",
+            "copied": "Copied!",
+            "valid_for": "Valid for",
+            "days": "days"
         },
         "ElementsForm": {
             "title": "Register Your Instrument Now",
