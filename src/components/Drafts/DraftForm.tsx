@@ -29,7 +29,7 @@ export default function DraftForm(
 ) {
   const t = useTranslations('components.DraftForm');
   const router = useRouter();
-  const { minter, setReloadUser, address: minterAddress } = useStateContext()
+  const { minter, setReloadUser } = useStateContext()
 
   const [open, setOpen] = useState(false)
   const [type, setType] = useState<string>("")
@@ -80,34 +80,7 @@ export default function DraftForm(
         setCurrentStep(2);
       }
     }
-  }, [instrument, hasMediaUploads, hasDescription]);
-
-  // Add handler for step changes
-  const handleStepChange = (step: number) => {
-    if (step === 1) {
-      // Can't go back to step 1 if instrument exists
-      if (!instrument) {
-        setCurrentStep(1);
-        setCompleted(false);
-      }
-    } else if (step === 2) {
-      if (instrument) {
-        setCurrentStep(2);
-        setCompleted(false);
-      }
-    } else if (step === 3) {
-      if (instrument && (instrument.cover_image || instrument.images.length > 0 || instrument.files.length > 0)) {
-        setCurrentStep(3);
-        setCompleted(false);
-      }
-    } else if (step === 4) {
-      if (instrument && instrument.description) {
-        setCurrentStep(4);
-        setCompleted(true);
-        router.push(`/preview/${instrument.id}`);
-      }
-    }
-  };
+  }, [instrument]);
 
   // Fetch instrument details and associated files/images when instrumentId changes
   useEffect(() => {
@@ -413,8 +386,10 @@ export default function DraftForm(
   }
 
   // Upload cover
-  const uploadCover = async (e: any) => {
-    e.preventDefault()
+  const uploadMedia = async (e: any) => {
+    e.preventDefault();
+    setIsLoadingMetadata(true);
+
     if (instrumentId && coverFile) {
       const formData = new FormData();
       formData.append("instrument_id", instrumentId);
@@ -436,14 +411,6 @@ export default function DraftForm(
         alert(`Error: ${error.message}`);
       }
     }
-    setCover(undefined);
-    setCoverFile(undefined);
-    setCoverDescription('');
-  }
-
-  // Upload images
-  const uploadImages = async (e: any) => {
-    e.preventDefault()
     if (instrumentId && imageFiles.length) {
       for (let index = 0; index < imageFiles.length; index++) {
         const formData = new FormData();
@@ -468,15 +435,6 @@ export default function DraftForm(
         }
       }
     }
-    setImages([]);
-    setImageFiles([]);
-    setImageDescriptions([]);
-    setReloadUser(true);
-  }
-
-  // Upload documents
-  const uploadDocuments = async (e: any) => {
-    e.preventDefault()
     if (instrumentId && documentFiles.length) {
       for (let index = 0; index < documentFiles.length; index++) {
         const formData = new FormData();
@@ -500,8 +458,19 @@ export default function DraftForm(
         }
       }
     }
+
+    setCover(undefined);
+    setCoverFile(undefined);
+    setCoverDescription('');
+    setImages([]);
+    setImageFiles([]);
+    setImageDescriptions([]);
     setDocumentFiles([]);
     setDocumentsDescriptions([]);
+    setReloadUser(true);
+    setInstrument(undefined);
+    setIsLoadingMetadata(false);
+    router.replace(`/drafts/${instrumentId}`);
   }
 
   // Handle instrument delete
@@ -569,7 +538,7 @@ export default function DraftForm(
 
             <ProgressBar
               currentStep={currentStep}
-              onStepChange={handleStepChange}
+              
               completed={completed}
               onCompletedChange={setCompleted}
             />
@@ -951,15 +920,9 @@ export default function DraftForm(
                         (images.length + (instrument?.images?.length || 0) < minImages)
                       }
                       onClick={(e) => {
-                        setIsLoadingMetadata(true);
-                        if (cover) uploadCover(e);
-                        if (images.length > 0) uploadImages(e);
-                        if (documentFiles.length > 0) uploadDocuments(e);
-                        setTimeout(() => {
-                          setIsLoadingMetadata(false);
-                          setReloadUser(true);
-                          setInstrument(undefined);
-                        }, 1000);
+                        if (cover && images.length > 0 && documentFiles.length > 0) {
+                          uploadMedia(e);
+                        }
                       }}
                       isLoading={isLoadingMetadata}
                     >
