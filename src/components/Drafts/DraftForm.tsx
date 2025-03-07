@@ -451,6 +451,7 @@ export default function DraftForm(
         const file = imageFiles[index];
         formData.append("description", imageDescriptions[index]);
         formData.append("file", file);
+        
         try {
           const result = await fetch(`/api/file`, {
             method: "POST",
@@ -470,6 +471,7 @@ export default function DraftForm(
     setImages([]);
     setImageFiles([]);
     setImageDescriptions([]);
+    setReloadUser(true);
   }
 
   // Upload documents
