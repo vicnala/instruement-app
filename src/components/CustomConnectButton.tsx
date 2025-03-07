@@ -12,17 +12,24 @@ import {
   logout,
 } from "@/actions/login";
 import chain from "@/lib/chain";
+import { useTranslations } from "next-intl";
 
 export const CustomConnectButton = (
   { cb }: Readonly<{ cb?: string | undefined }>
 ) => {
   const { theme } = useTheme();
   const locale = useLocale();
+  const t = useTranslations();
   return (
     <ConnectButton
       client={client}
       theme={theme === 'system' ? 'light' : theme === 'dark' ? 'dark' : 'light'}
       locale={locale.includes('en') ? 'en_US' : locale.includes('es') ? 'es_ES' : 'en_US'}
+      chain={chain}
+      switchButton={{
+        label: t('switch_network')
+      }}
+      autoConnect={true}
       // accountAbstraction={{ chain: chain, sponsorGas: true }}
       auth={{
         isLoggedIn: async (address) => {

@@ -21,7 +21,7 @@ export async function GET(
     ENGINE_URL,
     ENGINE_ACCESS_TOKEN,
     NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS,
-    CHAIN_ID
+    NEXT_PUBLIC_CHAIN_ID
   } = process.env;
 
   if (!BACKEND_WALLET_ADDRESS ||
@@ -31,12 +31,12 @@ export async function GET(
     !ENGINE_URL ||
     !ENGINE_ACCESS_TOKEN ||
     !NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS ||
-    !CHAIN_ID) {
+    !NEXT_PUBLIC_CHAIN_ID) {
     const message = "ERROR: check your .env file"
     return Response.json({ message })
   }
 
-  const cahin = CHAIN_ID;
+  const cahin = NEXT_PUBLIC_CHAIN_ID;
   const contractAddress = NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS;
 
   try {
@@ -87,7 +87,7 @@ export async function POST(
     ENGINE_URL,
     ENGINE_ACCESS_TOKEN,
     NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS,
-    CHAIN_ID
+    NEXT_PUBLIC_CHAIN_ID
   } = process.env;
 
   if (!BACKEND_WALLET_ADDRESS ||
@@ -97,14 +97,14 @@ export async function POST(
     !ENGINE_URL ||
     !ENGINE_ACCESS_TOKEN ||
     !NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS ||
-    !CHAIN_ID) {
+    !NEXT_PUBLIC_CHAIN_ID) {
     const message = "ERROR: check your .env file"
     return Response.json({ message })
   }
 
   // console.log(id, address);
 
-  const cahin = CHAIN_ID;
+  const cahin = NEXT_PUBLIC_CHAIN_ID;
   const contractAddress = NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS;
 
   try {

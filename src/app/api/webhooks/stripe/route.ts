@@ -11,7 +11,7 @@ const {
   ENGINE_ACCESS_TOKEN,
   NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS,
   BACKEND_WALLET_ADDRESS,
-  CHAIN_ID
+  NEXT_PUBLIC_CHAIN_ID
 } = process.env;
 
 type ImageDescription = {
@@ -97,7 +97,7 @@ export async function POST(request: Request) {
             !ENGINE_ACCESS_TOKEN ||
             !NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS ||
             !BACKEND_WALLET_ADDRESS ||
-            !CHAIN_ID
+            !NEXT_PUBLIC_CHAIN_ID
           ) {
             throw 'Server misconfigured. Did you forget to add a ".env.local" file?';
           }
@@ -238,7 +238,7 @@ export async function POST(request: Request) {
                       // console.log(">>> engine.erc721.mintTo <<< start");
         
                       const mintResult = await engine.erc721.mintTo(
-                        CHAIN_ID,
+                        NEXT_PUBLIC_CHAIN_ID,
                         NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS,
                         BACKEND_WALLET_ADDRESS,
                         { receiver: data.metadata?.address, metadata }
