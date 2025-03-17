@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     })
     const data = await result.json()
 
-    console.log(`POST /api/otp`, data);
+    // console.log(`POST /api/otp`, data);
 
     if (data?.code === 'success') {
       return Response.json({ code: 'success' })

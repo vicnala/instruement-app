@@ -53,7 +53,7 @@ export async function POST(request: Request) {
             body: JSON.stringify(addAdress)
           })
 
-          if (addAdressResult && addAdressResult.status === 2000) {
+          if (addAdressResult && addAdressResult.status === 200) {
             return Response.json({ code: 'success' })
           }
         }
