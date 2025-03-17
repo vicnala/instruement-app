@@ -364,6 +364,7 @@
                     "confirm_invitation_cancel_otp": "Cancelar",
                     "privacy_policy": "He leído y acepto la",
                     "privacy_policy_link": "Política de privacidad",
+                    "reload_notice": "Nota: en caso de una validación exitosa, la página se recargará y necesitarás iniciar sesión de nuevo.",
                     "errors": {
                         "no_valid_email": "El email no es válido",
                         "otp_failed": "Algo ha ido mal con este paso. Por favor, inténtalo de nuevo."

@@ -359,6 +359,7 @@
                     "confirm_invitation_cancel_otp": "Cancel",
                     "privacy_policy": "I have read and agree to the",
                     "privacy_policy_link": "Privacy Policy",
+                    "reload_notice": "Note: on successful validation, the page will reload and you will need to log in again.",
                     "errors": {
                         "no_valid_email": "The email is not valid",
                         "otp_failed": "Something went wrong with this step. Please try again."

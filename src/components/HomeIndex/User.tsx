@@ -13,6 +13,7 @@ import NFTGrid from '@/components/NFT/NFTGrid';
 import NotConnected from '../NotConnected';
 import ButtonSpinner from '@/components/UI/ButtonSpinner';
 import FormSaveButton from '@/components/UI/FormSaveButton';
+import { OTPForm } from "@/components/UI/OtpInput";
 import { CircleCheck } from 'lucide-react';
 
 export default function User(
@@ -59,10 +60,9 @@ export default function User(
   }
 
   // Handle OTP change
-  const handleOTPChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newOTP = e.target.value
-    setOTP(newOTP)
-    setIsValidOTP(validateOTP(newOTP))
+  const handleOTPChange = (value: string) => {
+    setOTP(value)
+    setIsValidOTP(validateOTP(value))
   }
 
   const sendUserConfirmationOTP = async () => {
@@ -326,21 +326,13 @@ export default function User(
                               {t('luthier.confirm_invitation_otp_label')}
                             </label>
                             <div className="relative">
-                              <input
-                                ref={otpRef}
-                                type="text"
-                                id="business-otp"
-                                placeholder={t('luthier.confirm_invitation_otp')}
-                                className="border border-me-600 p-2 rounded-md w-full mb-2 pr-10"
-                                onChange={handleOTPChange}
+                              <OTPForm
+                                maxLength={6}
+                                value={otp}
+                                onChange={(value) => handleOTPChange(value)}
                               />
-                              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                <CircleCheck 
-                                  className={`h-6 w-6 ${otp ? (isValidOTP ? 'text-green-500' : 'text-gray-100') : 'hidden'}`} 
-                                />
-                              </div>
                             </div>
-                            <div className="flex justify-between items-center w-full">
+                            <div className="grid grid-cols-[3fr_minmax(130px,_1fr)] gap-2 pt-4 pb-2">
                               <div className="flex items-center">
                                 <input
                                   type="checkbox"
@@ -360,7 +352,7 @@ export default function User(
                                   </a>
                                 </label>
                               </div>
-                              <div className="flex gap-2">
+                              <div className="flex items-center justify-end">
                                 <FormSaveButton
                                   ref={otpButtonRef}
                                   disabled={!isValidOTP || !privacyPolicyAccepted}
@@ -371,6 +363,11 @@ export default function User(
                                 </FormSaveButton>
                               </div>
                             </div>
+                            {isValidOTP && privacyPolicyAccepted && (
+                              <p className="text-md text-me-600 italic mt-2 border-l-2 border-me-600 pl-2">
+                                {t('luthier.reload_notice')}
+                              </p>
+                            )}
                           </div>
                         )}
                       </div>
