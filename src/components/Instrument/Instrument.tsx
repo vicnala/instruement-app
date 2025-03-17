@@ -17,6 +17,8 @@ import { Download, Copy } from "lucide-react";
 import { usePathname, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import Divider from "@/components/UI/Divider";
+import Loading from "../Loading";
+import NotConnected from "@/components/NotConnected";
 
 // Add these utility functions at the top of the file, outside the component
 const generateKeyPair = async () => {
@@ -74,7 +76,7 @@ export default function Instrument(
 	const [documents, setDocuments] = useState<any[]>([])
 	const [minter, setMinter] = useState<string>()
 	const [minterUser, setMinterUser] = useState<any>()
-	const { address, contract } = useStateContext()
+	const { address, contract, isLoading, setReloadUser } = useStateContext()
 	const [isOwner, setIsOwner] = useState<boolean>(false)
 	const [copySuccess, setCopySuccess] = useState(false);
 	const pathname = usePathname();
@@ -90,8 +92,8 @@ export default function Instrument(
 				const result = await fetch(`/api/token/${id}`)
 				const data = await result.json();
 				setInstrumentAsset(data);
+				// console.log("instrumentAsset.data", data);
 
-				console.log("instrumentAsset.data", data);
 
 				const properties = data.metadata.properties || data.metadata.attributes || [];
 				const fileDirHashTrait = properties.find((prop: any) => prop.trait_type === 'Files');
@@ -103,14 +105,12 @@ export default function Instrument(
 
 				if (fileDirHashTrait) {
 					const fileDirHash = fileDirHashTrait.value;
-
 					// console.log("fileDirHash", fileDirHash);
 
 					const fileDescriptionsUrl = await resolveScheme({
 						client,
 						uri: `ipfs://${fileDirHash}/descriptions`
 					});
-
 					// console.log("fileDescriptionsUrl", fileDescriptionsUrl);
 
 					const result = await fetch(fileDescriptionsUrl)
@@ -139,8 +139,8 @@ export default function Instrument(
 						}
 					}
 
-					console.log("images", images);
-					console.log("documents", documents);
+					// console.log("images", images);
+					// console.log("documents", documents);
 
 					setImages(images);
 					setDocuments(documents);
@@ -169,7 +169,7 @@ export default function Instrument(
 				const result = await fetch(`/api/instrument/asset/${id}?locale=${locale}`)
 				const data = await result.json();
 				const { data: instrumentData } = data;
-				console.log("instrumentData ", instrumentData);
+				// console.log("instrumentData ", instrumentData);
 				setInstrument(instrumentData);
 			} catch (error) {
 				console.error(`/api/instrument/asset/${id}`, error)
@@ -193,7 +193,6 @@ export default function Instrument(
 			try {
 				const result = await fetch(`/api/user/${minter}`)
 				const data = await result.json();
-				console.log("data", data);
 				setMinterUser(data);
 			} catch (error) {
 				console.error(`/api/user/${minter}`, error)
@@ -279,8 +278,17 @@ export default function Instrument(
 		}
 	};
 
-	return (
+	
+	if (isLoading) return (
 		<Page>
+		<div className="text-center">
+			<Loading />
+		</div>
+		</Page>
+	)
+
+	return (
+		address ? <Page>
 			{
 				instrumentAsset && instrumentAsset.metadata ?
 					<>
@@ -502,6 +510,7 @@ export default function Instrument(
 					:
 					<></>
 			}
-		</Page>
+		</Page> :
+		<NotConnected locale={locale} />
 	);
 }

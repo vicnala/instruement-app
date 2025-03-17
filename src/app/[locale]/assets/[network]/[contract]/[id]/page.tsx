@@ -1,6 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 
-export default function DraftEditPage({
+export default function AssetPage({
   params: { locale, network, contract, id },
 }: {
   params: { locale: string, network: string, contract: string, id: string };

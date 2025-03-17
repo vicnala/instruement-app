@@ -15,6 +15,7 @@ import ButtonSpinner from '@/components/UI/ButtonSpinner';
 import FormSaveButton from '@/components/UI/FormSaveButton';
 import { OTPForm } from "@/components/UI/OtpInput";
 import { CircleCheck } from 'lucide-react';
+import { logout } from '@/actions/login';
 
 export default function User(
   { locale }: Readonly<{ locale: string }>
@@ -124,6 +125,7 @@ export default function User(
       }
       if (otpRef && otpRef.current) otpRef.current.value = '';
       setReloadUser(true);
+      await logout();
     } catch (error) {
       console.log('sendUserOTPVerification', error)
     } finally {

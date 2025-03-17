@@ -1,5 +1,6 @@
 {
     "connect_wallet": "Please, connect your wallet",
+    "switch_network": "Switch network",
     "wrong": "Something went wrong",
     "loading": "Loading",
     "what_will_happen": "What will happen?",
@@ -186,6 +187,9 @@
             "title_single": "Your Registered Instrument",
             "title_plural": "Your Registered Instruments",
             "description": "Instruments under your ownership. You can manage settings, view data or initiate their transfer."
+        },
+        "Drfat": {
+            "registering": "Registering"
         },
         "DraftForm": {
             "title": {

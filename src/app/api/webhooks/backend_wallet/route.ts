@@ -7,7 +7,7 @@ import { isExpired, isValidSignature } from "../webhookHelper";
 const {
     ENGINE_URL,
     ENGINE_ACCESS_TOKEN,
-    CHAIN_ID,
+    NEXT_PUBLIC_CHAIN_ID,
     BACKEND_WALLET_WEBHOOK_SECRET
 } = process.env;
 
@@ -78,7 +78,7 @@ export async function POST( request: Request, response: Response ) {
             if (
                 !ENGINE_URL ||
                 !ENGINE_ACCESS_TOKEN ||
-                !CHAIN_ID
+                !NEXT_PUBLIC_CHAIN_ID
             ) {
                 return NextResponse.json(
                     { message: "BAD ENV" },
@@ -91,7 +91,7 @@ export async function POST( request: Request, response: Response ) {
                 accessToken: ENGINE_ACCESS_TOKEN,
             });
         
-            const { result } = await engine.transaction.getTransactionLogs(CHAIN_ID, queueId);
+            const { result } = await engine.transaction.getTransactionLogs(NEXT_PUBLIC_CHAIN_ID, queueId);
             
             const tokensMintedEvent = result.find(r => r.eventName === 'TokensMinted');
             if (tokensMintedEvent && tokensMintedEvent.args) {

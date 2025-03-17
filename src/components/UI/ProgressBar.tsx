@@ -4,14 +4,14 @@ import { CheckCircle, Circle, Eye } from 'lucide-react';
 
 interface ProgressBarProps {
   currentStep: number;
-  onStepChange: (step: number) => void;
+  // onStepChange: (step: number) => void;
   completed?: boolean;
   onCompletedChange?: (completed: boolean) => void;
 }
 
 const ProgressBar = ({ 
   currentStep, 
-  onStepChange, 
+  // onStepChange, 
   completed = false,
   onCompletedChange 
 }: ProgressBarProps) => {
@@ -37,7 +37,7 @@ const ProgressBar = ({
 
   const handleNext = () => {
     if (currentStep < 3) {
-      onStepChange(currentStep + 1);
+      // onStepChange(currentStep + 1);
     } else {
       onCompletedChange?.(true);
     }
@@ -45,7 +45,7 @@ const ProgressBar = ({
 
   const handleBack = () => {
     if (currentStep > 1) {
-      onStepChange(currentStep - 1);
+      // onStepChange(currentStep - 1);
       onCompletedChange?.(false);
     }
   };

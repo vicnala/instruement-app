@@ -12,7 +12,7 @@ export const BottomNav = () => {
 	const pathname = usePathname();
 
 	return (
-		<>
+		<div className='sm:hidden'>
 			{
 				address &&
 				<nav className='sm:hidden fixed z-100 bottom-0 w-full bg-canvas pb-safe dark:bg-contrast dark:border-t dark:border-gray-900 shadow-[0_0px_10px_0px_rgba(0,0,0,0.2)]'>
@@ -54,6 +54,6 @@ export const BottomNav = () => {
 					}
 				</nav>
 			}
-		</>
+		</div>
 	)
 }

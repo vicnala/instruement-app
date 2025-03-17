@@ -21,7 +21,7 @@ export async function GET(
     ENGINE_URL,
     ENGINE_ACCESS_TOKEN,
     NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS,
-    CHAIN_ID
+    NEXT_PUBLIC_CHAIN_ID
   } = process.env;
 
   if (!BACKEND_WALLET_ADDRESS ||
@@ -31,7 +31,7 @@ export async function GET(
     !ENGINE_URL ||
     !ENGINE_ACCESS_TOKEN ||
     !NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS ||
-    !CHAIN_ID) {
+    !NEXT_PUBLIC_CHAIN_ID) {
     const message = "ERROR: check your .env file"
     return Response.json({ message })
   }
@@ -44,18 +44,18 @@ export async function GET(
 
     // const { result } = await engine.erc721.getOwned(
     //   address,
-    //   CHAIN_ID,
+    //   NEXT_PUBLIC_CHAIN_ID,
     //   NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS
     // );
 
-    const fetchResult = await fetch(`${ENGINE_URL}/contract/${CHAIN_ID}/${NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS}/erc721/get-owned?walletAddress=${address}`, {
+    const fetchResult = await fetch(`${ENGINE_URL}/contract/${NEXT_PUBLIC_CHAIN_ID}/${NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS}/erc721/get-owned?walletAddress=${address}`, {
       headers: { Authorization: `Bearer ${ENGINE_ACCESS_TOKEN}` },
       cache: 'no-store'
     })
     const { result } = await fetchResult.json()
     
     if (result) {
-       console.log(address, 'has', result?.length, 'tokens from', NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS, 'on chain', CHAIN_ID);
+       console.log(address, 'has', result?.length, 'tokens from', NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS, 'on chain', NEXT_PUBLIC_CHAIN_ID);
       return Response.json(result)
     }
 

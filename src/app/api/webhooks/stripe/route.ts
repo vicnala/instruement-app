@@ -11,8 +11,7 @@ const {
   ENGINE_ACCESS_TOKEN,
   NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS,
   BACKEND_WALLET_ADDRESS,
-  THIRDWEB_SECRET_KEY,
-  CHAIN_ID
+  NEXT_PUBLIC_CHAIN_ID
 } = process.env;
 
 type ImageDescription = {
@@ -46,16 +45,15 @@ async function fetchAndStreamFile(url: string) {
   }
 }
 
-export async function POST(req: Request) {
+export async function POST(request: Request) {
   let event: Stripe.Event;
-
 
   const headers = { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` };
 
   try {
     event = stripe.webhooks.constructEvent(
-      await (await req.blob()).text(),
-      req.headers.get("stripe-signature") as string,
+      await (await request.blob()).text(),
+      request.headers.get("stripe-signature") as string,
       STRIPE_WEBHOOK_SECRET_KEY as string,
     );
   } catch (err) {
@@ -99,8 +97,7 @@ export async function POST(req: Request) {
             !ENGINE_ACCESS_TOKEN ||
             !NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS ||
             !BACKEND_WALLET_ADDRESS ||
-            !THIRDWEB_SECRET_KEY ||
-            !CHAIN_ID
+            !NEXT_PUBLIC_CHAIN_ID
           ) {
             throw 'Server misconfigured. Did you forget to add a ".env.local" file?';
           }
@@ -196,11 +193,11 @@ export async function POST(req: Request) {
                     
                     // upload files to IPFS
                     const uris = await upload({ client, files });
-        
                     // console.log("uris", uris);
                     
                     // get the cover umage URI as the first uri
                     const coverURI = uris[0];
+                    // console.log("coverURI", coverURI);
         
                     if (coverURI) {
                       const fileDirSplit = coverURI.split('/');
@@ -238,17 +235,16 @@ export async function POST(req: Request) {
                         accessToken: ENGINE_ACCESS_TOKEN,
                       });
 
-                      console.log(">>> engine.erc721.mintTo <<< start");
-                      
+                      // console.log(">>> engine.erc721.mintTo <<< start");
         
                       const mintResult = await engine.erc721.mintTo(
-                        CHAIN_ID,
+                        NEXT_PUBLIC_CHAIN_ID,
                         NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS,
                         BACKEND_WALLET_ADDRESS,
                         { receiver: data.metadata?.address, metadata }
                       );
 
-                      console.log(">>> engine.erc721.mintTo <<< end");
+                      // console.log(">>> engine.erc721.mintTo <<< end");
                       
                       const { queueId } = mintResult.result;
 

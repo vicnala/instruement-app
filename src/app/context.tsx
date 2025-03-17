@@ -8,7 +8,12 @@ import React, {
   ReactNode
 } from "react"
 import { getContract } from "thirdweb";
-import { useActiveAccount } from "thirdweb/react";
+import {
+  useActiveAccount,
+  useActiveWallet,
+  useSwitchActiveWalletChain,
+  useActiveWalletChain
+} from "thirdweb/react";
 import { client } from "./client";
 import { getLuthierPermissions } from "@/lib/luthierPermissions";
 import chain from "@/lib/chain";
@@ -45,6 +50,9 @@ const StateContext = createContext<StateContextType>(stateContextDefaultValues)
 
 export const StateContextProvider = ({ children }: Props) => {
   const activeAccount = useActiveAccount();
+  const activeWallet = useActiveWallet();
+  const activeChain = useActiveWalletChain();
+  const switchActiveWalletChain = useSwitchActiveWalletChain();
 
   const [isLuthier, setIsLuthier] = useState(false)
   const [isVerified, setIsVerified] = useState(false)
@@ -66,6 +74,12 @@ export const StateContextProvider = ({ children }: Props) => {
       setContract(_contract);
     }
   }
+
+    useEffect(() => {
+        if (activeWallet && activeChain?.id !== chain.id) {
+            switchActiveWalletChain(chain);
+        }
+    }, [activeWallet, activeChain, switchActiveWalletChain]);
 
   useEffect(() => {
     async function getUser() {
