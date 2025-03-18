@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { forwardRef } from "react";
 import { OTPInput, REGEXP_ONLY_DIGITS } from "input-otp";
 import { cn } from "@/lib/utils";
 
@@ -11,16 +11,18 @@ type OTPFormProps = {
   containerClassName?: string;
   className?: string;
   inputMode?: "numeric" | "text" | "decimal" | "tel" | "search" | "email" | "url";
+  autoFocus?: boolean;
 };
 
-export function OTPForm({
+export const OTPForm = forwardRef<HTMLDivElement, OTPFormProps>(({
   maxLength = 6,
   value,
   onChange,
   containerClassName,
   className,
   inputMode = "numeric",
-}: OTPFormProps) {
+  autoFocus = false,
+}, ref) => {
   // Clean up pasted text by removing whitespace and non-digit characters
   const cleanPastedText = (text: string) => {
     // Remove all whitespace and keep only digits
@@ -35,13 +37,14 @@ export function OTPForm({
       inputMode={inputMode}
       pattern={REGEXP_ONLY_DIGITS}
       pasteTransformer={cleanPastedText}
+      autoFocus={autoFocus}
       containerClassName={cn(
         "group flex items-center gap-2",
         containerClassName
       )}
       className={cn("hidden", className)}
       render={({ slots }) => (
-        <div className="flex items-center gap-2">
+        <div ref={ref} className={cn("flex items-center gap-2", containerClassName)}>
           {slots.map((slot, index) => (
             <div
               key={index}
@@ -70,4 +73,4 @@ export function OTPForm({
       )}
     />
   );
-} 
+}); 

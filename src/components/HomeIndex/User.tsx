@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useTranslations } from "next-intl";
 import { QRCodeCanvas } from 'qrcode.react'
 import Page from "@/components/Page";
@@ -36,6 +36,12 @@ export default function User(
   const otpRef = useRef<HTMLInputElement>(null)
   const emailButtonRef = useRef<HTMLButtonElement>(null)
   const otpButtonRef = useRef<HTMLButtonElement>(null)
+  const otpFormRef = useRef<HTMLDivElement>(null)
+
+  // Focus on OTP input when otpOk becomes true
+  useEffect(() => {
+    // No need for manual focus as we're using autoFocus prop
+  }, [otpOk]);
 
   const toggleFormVisibility = () => {
     setShowForm(prevState => !prevState)
@@ -332,6 +338,9 @@ export default function User(
                                 maxLength={6}
                                 value={otp}
                                 onChange={(value) => handleOTPChange(value)}
+                                containerClassName="otpform-container"
+                                ref={otpFormRef}
+                                autoFocus={otpOk}
                               />
                             </div>
                             <div className="grid grid-cols-[3fr_minmax(130px,_1fr)] gap-2 pt-4 pb-2">
