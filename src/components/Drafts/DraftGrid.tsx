@@ -11,7 +11,7 @@ export default function DraftGrid({ locale }: { locale: string }) {
 
   if (minter && minter.instruments && minter.instruments.length > 0) {
     return (
-      <div className="pb-4">
+      <div className='flex flex-col pb-6'>
         <div className="pb-2">
           <h2 className='text-2xl text-left font-bold text-black dark:text-white pb-2'>
             {minter.instruments.length > 1 ? t('components.DraftGrid.title_plural') : t('components.DraftGrid.title_single')}

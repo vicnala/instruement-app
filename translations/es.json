@@ -376,7 +376,8 @@
                 }
             },
             "Minter": {
-                "hello": "Hola",
+                "hello": "Te damos la bienvenida",
+                "hello_sub": "te damos la bienvenida a nuestra herramienta digital para luthieres. En el video breve de introducción aprenderás a registrar tu primer instrumento.",
                 "verified_since": "Verificado desde",
                 "register_title": "Registra tu instrumento",
                 "register_text": "Registra tu instrumento para empezar a registrar instrumentos",
