@@ -15,6 +15,8 @@ import ButtonSpinner from '@/components/UI/ButtonSpinner';
 import FormSaveButton from '@/components/UI/FormSaveButton';
 import { CircleCheck } from 'lucide-react';
 import { logout } from '@/actions/login';
+import { OTPInput } from 'input-otp';
+import { Slot, FakeDash } from './Slot';
 
 export default function User(
   { locale }: Readonly<{ locale: string }>
@@ -59,11 +61,17 @@ export default function User(
     setIsValidEmail(validateEmail(newEmail))
   }
 
+  // // Handle OTP change
+  // const handleOTPChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const newOTP = e.target.value
+  //   setOTP(newOTP)
+  //   setIsValidOTP(validateOTP(newOTP))
+  // }
+
   // Handle OTP change
-  const handleOTPChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newOTP = e.target.value
-    setOTP(newOTP)
-    setIsValidOTP(validateOTP(newOTP))
+  const handleOTPChange = (newValue: string) => {
+    setOTP(newValue)
+    setIsValidOTP(validateOTP(newValue))
   }
 
   const sendUserConfirmationOTP = async () => {
@@ -328,15 +336,27 @@ export default function User(
                               {t('luthier.confirm_invitation_otp_label')}
                             </label>
                             <div className="relative">
-                              <input
-                                ref={otpRef}
-                                type="text"
-                                id="business-otp"
-                                placeholder={t('luthier.confirm_invitation_otp')}
-                                className="border border-me-600 p-2 rounded-md w-full mb-2 pr-10"
-                                onChange={handleOTPChange}
+                            <OTPInput
+                                  maxLength={6}
+                                  containerClassName="group flex items-center has-[:disabled]:opacity-30"
+                                  render={({ slots }) => (
+                                      <>
+                                      <div className="flex">
+                                          {slots.slice(0, 3).map((slot, idx) => (
+                                          <Slot key={idx} {...slot} />
+                                          ))}
+                                      </div>
+                                      <FakeDash />
+                                      <div className="flex">
+                                          {slots.slice(3).map((slot, idx) => (
+                                          <Slot key={idx} {...slot} />
+                                          ))}
+                                      </div>
+                                      </>
+                                  )}
+                                  onChange={(newValue: string) =>  handleOTPChange(newValue)}
                               />
-                              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                              <div className="absolute inset-y-0 right-32 flex items-center pr-3 pointer-events-none">
                                 <CircleCheck 
                                   className={`h-6 w-6 ${otp ? (isValidOTP ? 'text-green-500' : 'text-gray-100') : 'hidden'}`} 
                                 />
