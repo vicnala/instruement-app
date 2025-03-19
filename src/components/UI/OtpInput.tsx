@@ -14,15 +14,7 @@ type OTPFormProps = {
   autoFocus?: boolean;
 };
 
-export const OTPForm = forwardRef<HTMLDivElement, OTPFormProps>(({
-  maxLength = 6,
-  value,
-  onChange,
-  containerClassName,
-  className,
-  inputMode = "numeric",
-  autoFocus = false,
-}, ref) => {
+export const OTPForm = (props: OTPFormProps) => {
   // Clean up pasted text by removing whitespace and non-digit characters
   const cleanPastedText = (text: string) => {
     // Remove all whitespace and keep only digits
@@ -31,20 +23,20 @@ export const OTPForm = forwardRef<HTMLDivElement, OTPFormProps>(({
 
   return (
     <OTPInput
-      maxLength={maxLength}
-      value={value}
-      onChange={onChange}
-      inputMode={inputMode}
+      maxLength={props.maxLength || 6}
+      value={props.value}
+      onChange={props.onChange}
+      inputMode={props.inputMode}
       pattern={REGEXP_ONLY_DIGITS}
       pasteTransformer={cleanPastedText}
-      autoFocus={autoFocus}
+      autoFocus={props.autoFocus}
       containerClassName={cn(
         "group flex items-center gap-2",
-        containerClassName
+        props.containerClassName
       )}
-      className={cn("hidden", className)}
+      className={cn("hidden", props.className)}
       render={({ slots }) => (
-        <div ref={ref} className={cn("flex items-center gap-2", containerClassName)}>
+        <div className={cn("flex items-center gap-2", props.containerClassName)}>
           {slots.map((slot, index) => (
             <div
               key={index}
@@ -73,4 +65,4 @@ export const OTPForm = forwardRef<HTMLDivElement, OTPFormProps>(({
       )}
     />
   );
-}); 
+};

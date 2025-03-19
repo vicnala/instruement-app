@@ -37,7 +37,6 @@ export default function User(
   const otpRef = useRef<HTMLInputElement>(null)
   const emailButtonRef = useRef<HTMLButtonElement>(null)
   const otpButtonRef = useRef<HTMLButtonElement>(null)
-  const otpFormRef = useRef<HTMLDivElement>(null)
 
   // Focus on OTP input when otpOk becomes true
   useEffect(() => {
@@ -347,7 +346,6 @@ export default function User(
                                 value={otp}
                                 onChange={(value) => handleOTPChange(value)}
                                 containerClassName="otpform-container"
-                                ref={otpFormRef}
                                 autoFocus={otpOk}
                               />
                             </div>
