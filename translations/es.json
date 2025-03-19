@@ -395,6 +395,21 @@
             "home": "Inicio",
             "new_instrument": "Nuevo instrumento",
             "account": "Cuenta"
+        },
+        "Account": {
+            "Minter": {
+                "verfied_since": "Verificado desde",
+                "instrument_type_specialization": "Especialización",
+                "endorsed_skills": "Habilidades avaladas",
+                "about": "Sobre",
+                "account": {
+                    "minter_account": "Puede registrar",
+                    "verified_luthier": "Luthier verificado",
+                    "not_verified_luthier": "Luthier no verificado"
+                },
+                "address": "Dirección de la cuenta",
+                "wallet_actions_title": "Acciones de cuenta"
+            }
         }
     }
   }

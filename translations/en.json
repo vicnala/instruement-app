@@ -390,6 +390,21 @@
             "home": "Home",
             "new_instrument": "New Instrument",
             "account": "Account"
+        },
+        "Account": {
+            "Minter": {
+                "verfied_since": "Verified since",
+                "instrument_type_specialization": "Specialization",
+                "endorsed_skills": "Endorsed skills",
+                "about": "About",
+                "account": {
+                    "minter_account": "Can register",
+                    "verified_luthier": "Verified luthier",
+                    "not_verified_luthier": "Not verified luthier"
+                },
+                "address": "Account address",
+                "wallet_actions_title": "Account actions"
+            }
         }
     }
   }
