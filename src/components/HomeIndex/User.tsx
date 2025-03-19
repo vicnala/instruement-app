@@ -16,8 +16,7 @@ import FormSaveButton from '@/components/UI/FormSaveButton';
 import { OTPForm } from "@/components/UI/OtpInput";
 import { CircleCheck } from 'lucide-react';
 import { logout } from '@/actions/login';
-import { OTPInput } from 'input-otp';
-import { Slot, FakeDash } from './Slot';
+
 
 export default function User(
   { locale }: Readonly<{ locale: string }>
