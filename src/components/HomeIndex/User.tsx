@@ -17,6 +17,7 @@ import { OTPForm } from "@/components/UI/OtpInput";
 import { CircleCheck } from 'lucide-react';
 import { logout } from '@/actions/login';
 
+
 export default function User(
   { locale }: Readonly<{ locale: string }>
 ) {
