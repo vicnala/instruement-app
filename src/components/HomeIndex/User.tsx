@@ -66,6 +66,13 @@ export default function User(
     setIsValidEmail(validateEmail(newEmail))
   }
 
+  // // Handle OTP change
+  // const handleOTPChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const newOTP = e.target.value
+  //   setOTP(newOTP)
+  //   setIsValidOTP(validateOTP(newOTP))
+  // }
+
   // Handle OTP change
   const handleOTPChange = (value: string) => {
     setOTP(value)
