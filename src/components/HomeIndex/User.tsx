@@ -17,6 +17,7 @@ import { OTPForm } from "@/components/UI/OtpInput";
 import { CircleCheck } from 'lucide-react';
 import { logout } from '@/actions/login';
 
+
 export default function User(
   { locale }: Readonly<{ locale: string }>
 ) {
@@ -36,7 +37,6 @@ export default function User(
   const otpRef = useRef<HTMLInputElement>(null)
   const emailButtonRef = useRef<HTMLButtonElement>(null)
   const otpButtonRef = useRef<HTMLButtonElement>(null)
-  const otpFormRef = useRef<HTMLDivElement>(null)
 
   // Focus on OTP input when otpOk becomes true
   useEffect(() => {
@@ -65,6 +65,13 @@ export default function User(
     setEmail(newEmail)
     setIsValidEmail(validateEmail(newEmail))
   }
+
+  // // Handle OTP change
+  // const handleOTPChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const newOTP = e.target.value
+  //   setOTP(newOTP)
+  //   setIsValidOTP(validateOTP(newOTP))
+  // }
 
   // Handle OTP change
   const handleOTPChange = (value: string) => {
@@ -339,7 +346,6 @@ export default function User(
                                 value={otp}
                                 onChange={(value) => handleOTPChange(value)}
                                 containerClassName="otpform-container"
-                                ref={otpFormRef}
                                 autoFocus={otpOk}
                               />
                             </div>
