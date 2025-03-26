@@ -196,7 +196,7 @@ function CheckoutForm({ amount, address, id, minterAddress, instrument }: { amou
                   aria-label={t('terms_consent')}
                 />
                 <span className="text-sm text-gray-600">
-                  {t('i_accept')} <a href="/terms" className="text-it-500 hover:text-it-700 underline" target="_blank" rel="noopener noreferrer">{t('terms_of_use')}</a>
+                  {t('i_accept')} <a href="https://instruement.com/terms-of-use/" className="text-it-500 hover:text-it-700 underline" target="_blank" rel="noopener noreferrer">{t('terms_of_use')}</a>
                 </span>
               </label>
               
@@ -209,7 +209,7 @@ function CheckoutForm({ amount, address, id, minterAddress, instrument }: { amou
                   aria-label={t('privacy_consent')}
                 />
                 <span className="text-sm text-gray-600">
-                  {t('i_accept')} <a href="/privacy" className="text-it-500 hover:text-it-700 underline" target="_blank" rel="noopener noreferrer">{t('privacy_policy')}</a>
+                  {t('i_accept')} <a href="https://instruement.com/privacy-policy/" className="text-it-500 hover:text-it-700 underline" target="_blank" rel="noopener noreferrer">{t('privacy_policy')}</a>
                 </span>
               </label>
             </div>

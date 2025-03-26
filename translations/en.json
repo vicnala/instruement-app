@@ -292,8 +292,8 @@
             "terms_consent": "I have read and agree to the Terms of Use governing my use of this service.",
             "privacy_consent": "I consent to the collection and processing of my data as outlined in the Privacy Policy.",
             "i_accept": "I accept",
-            "terms_of_use": "terms of use",
-            "privacy_policy": "privacy policy"
+            "terms_of_use": "the terms of use",
+            "privacy_policy": "the privacy policy"
         },
         "PaymentResult": {
             "title": "Payment result for draft",

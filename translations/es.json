@@ -297,8 +297,8 @@
             "terms_consent": "Acepto los términos y condiciones",
             "privacy_consent": "Acepto la política de privacidad",
             "i_accept": "Acepto",
-            "terms_of_use": "términos de uso",
-            "privacy_policy": "política de privacidad"
+            "terms_of_use": "los términos de uso",
+            "privacy_policy": "la política de privacidad"
         },
         "PaymentResult": {
             "title": "El pago por el registro del borrador",
