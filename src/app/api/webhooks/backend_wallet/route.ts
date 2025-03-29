@@ -21,9 +21,7 @@ export async function POST( request: Request, response: Response ) {
             { status: 401 },
         );
     }
-    
-    const data = await request.json()
-    
+       
     if (!signatureFromHeader || !timestampFromHeader) {
         return NextResponse.json(
             { message: "Missing signature or timestamp header" },
@@ -31,6 +29,8 @@ export async function POST( request: Request, response: Response ) {
         );
     }
     
+    const data = await request.json();
+
     if (
         !isValidSignature(
             JSON.stringify(data),
@@ -39,6 +39,7 @@ export async function POST( request: Request, response: Response ) {
             BACKEND_WALLET_WEBHOOK_SECRET,
         )
     ) {
+        console.log("ERROR: Invalid signature");
         return NextResponse.json(
             { message: "Invalid signature" },
             { status: 401 },
@@ -94,12 +95,22 @@ export async function POST( request: Request, response: Response ) {
             const { result } = await engine.transaction.getTransactionLogs(NEXT_PUBLIC_CHAIN_ID, queueId);
             
             const tokensMintedEvent = result.find(r => r.eventName === 'TokensMinted');
+            const tokensTransferEvent = result.find(r => r.eventName === 'Transfer');
+
+            let mintedTo, tokenIdMinted;
             if (tokensMintedEvent && tokensMintedEvent.args) {
-                const mintedTo = tokensMintedEvent.args.mintedTo;
-                const tokenIdMinted = tokensMintedEvent.args.tokenIdMinted;
-                
-                console.log("TokensMinted", tokenIdMinted, 'to', mintedTo);
-            
+                mintedTo = tokensMintedEvent.args.mintedTo;
+                tokenIdMinted = tokensMintedEvent.args.tokenIdMinted;
+            } else {
+                if (tokensTransferEvent && tokensTransferEvent.args) {
+                    mintedTo = tokensTransferEvent.args.to;
+                    tokenIdMinted = tokensTransferEvent.args.tokenId;
+                } else {
+                    console.error(`Update asset_id FAILED for draft #${getData?.data?.id} queue_id ${queueId}: No events found`);
+                }
+            }
+
+            if (mintedTo && tokenIdMinted) {
                 const instrumentId = getData.data.id;
     
                 const postResult = await fetch(`${process.env.INSTRUEMENT_API_URL}/instrument/${instrumentId}`, {
@@ -115,7 +126,6 @@ export async function POST( request: Request, response: Response ) {
                     return Response.json({ message: "Received" })
                 }
             }
-
         } else {
             // console.error(`GET /instrument/queue/${queueId} FAILED with ${getData?.data?.message}`);
             return NextResponse.json(
