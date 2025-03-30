@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react"
 import { TransactionButton } from "thirdweb/react";
 import { transferFrom, ownerOf } from "thirdweb/extensions/erc721";
+import { isAddress } from "thirdweb/utils";
 import truncateEthAddress from 'truncate-eth-address'
 import { useTranslations } from "next-intl";
 import { resolveScheme } from "thirdweb/storage";
@@ -499,8 +500,13 @@ export default function Instrument(
 						<QRModal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
 							<Scanner
 								onScan={(result) => {
-									setScannedResult(result[0].rawValue)
-									setModalOpen(false)
+									if (result.length) {
+										const address = result[0].rawValue || '';
+										if (isAddress(address)) {
+											setScannedResult(result[0].rawValue)
+											setModalOpen(false)
+										}
+									}
 								}}
 								classNames={{}}
 								styles={{}}
