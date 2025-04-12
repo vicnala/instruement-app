@@ -136,12 +136,24 @@ export default function Minter(
                             </div>
                         )}
 
-                        {/* About Section */}
+                        {/* Products & Services Section */}
                         <div className="mb-6 max-w-md">
-                            <h3 className="text-md font-semibold mb-2">{t('about')}</h3>
-                            <p className="text-gray-600">
-                                {minter?.description || "No description available."}
-                            </p>
+                            {minter?.products_services && minter.products_services.length > 0 ? (
+                                minter.products_services
+                                .filter((item: any) => item.lang === locale)
+                                .map((item: any, index: number) => (
+                                    <>
+                                        <h3 className="text-md font-semibold mb-2">{item.title}</h3>
+                                        <div 
+                                            key={index} 
+                                            className="text-gray-600 prose prose-sm max-w-none"
+                                            dangerouslySetInnerHTML={{ __html: item.content }}
+                                        />
+                                    </>
+                                    ))
+                            ) : (
+                                <p className="text-gray-600">{t('no_content_available')}</p>
+                            )}
                         </div>
 
                     </div>
@@ -150,7 +162,7 @@ export default function Minter(
                             {/* Address details: */}
                             <div className="mb-6">
                                 <h3 className="text-md font-semibold mb-2">{t('address')}</h3>
-                                <p className="text-gray-600">
+                                <div className="text-gray-600">
                                     <div className="flex items-center gap-2">
                                         <input
                                             type="text"
@@ -183,7 +195,7 @@ export default function Minter(
                                             </svg>
                                         </button>
                                     </div>
-                                </p>
+                                </div>
                             </div>
                             <h3 className="text-md font-semibold mb-2">{t('wallet_actions_title')}</h3>
                             {/* Connect Button */}

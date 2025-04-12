@@ -402,6 +402,8 @@
                 "instrument_type_specialization": "Especialización",
                 "endorsed_skills": "Habilidades avaladas",
                 "about": "Sobre",
+                "products_services": "Productos y servicios",
+                "no_content_available": "No hay contenido disponible",
                 "account": {
                     "minter_account": "Puede registrar",
                     "verified_luthier": "Luthier verificado",

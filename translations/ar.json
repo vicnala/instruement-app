@@ -397,6 +397,8 @@
                 "instrument_type_specialization": "Specialization",
                 "endorsed_skills": "Endorsed skills",
                 "about": "About",
+                "products_services": "Products & Services",
+                "no_content_available": "No content available",
                 "account": {
                     "minter_account": "Can register",
                     "verified_luthier": "Verified luthier",
