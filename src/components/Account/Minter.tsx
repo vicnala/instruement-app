@@ -31,15 +31,13 @@ export default function Minter(
         <Page>
             {/* Cover Image Section */}
             <div className="relative w-full h-60 mb-16">
-                {minter?.cover_image && (
-                    <div className="w-full h-full overflow-hidden rounded-[15px]">
-                        <img
-                            src={minter.cover_image.url}
-                            alt={minter.business_name || "Cover"}
-                            className="w-full h-full object-cover"
-                        />
-                    </div>
-                )}
+                <div className="w-full h-full overflow-hidden rounded-[15px]">
+                    <img
+                        src={minter?.cover_image?.url || "https://static.instruement.com/web/img/default-cover.jpg"}
+                        alt={minter?.business_name || "Cover"}
+                        className="w-full h-full object-cover"
+                    />
+                </div>
 
                 {/* Profile Photo floating on cover image */}
                 {minter?.profile_photo && (
