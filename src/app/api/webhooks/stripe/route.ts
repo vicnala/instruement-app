@@ -215,7 +215,7 @@ export async function POST(request: Request) {
                         properties: [
                           {
                             trait_type: "Registrar",
-                            value: BACKEND_WALLET_ADDRESS
+                            value: data.metadata.minterAddress
                           },
                           {
                             trait_type: "Type",
