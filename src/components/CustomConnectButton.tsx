@@ -30,7 +30,7 @@ export const CustomConnectButton = (
         label: t('switch_network')
       }}
       autoConnect={true}
-      // accountAbstraction={{ chain: chain, sponsorGas: true }}
+      accountAbstraction={{ chain: chain, sponsorGas: true }}
       auth={{
         isLoggedIn: async (address) => {
           // console.log("checking if logged in!", { address });
