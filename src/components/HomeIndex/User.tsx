@@ -315,13 +315,13 @@ export default function User(
                                 />
                               </div>
                             </div>
-                            <p className="text-md text-gray-700 dark:text-gray-300 pt-2 mb-2">
+                            <p className="text-md text-gray-700 dark:text-gray-300 pt-2 mb-2 text-pretty">
                               {t('luthier.confirm_invitation_email_description')}
                             </p>
-                            <div className="flex justify-end items-center w-full">
-                              <div className="flex justify-between items-center gap-2">
+                            <div className="">
+                              <div className="flex sm:flex-1 flex-wrap justify-between items-center gap-2">
                                 {otpError && (
-                                  <p className="text-red-500 text-sm">{otpError}</p>
+                                  <p className="text-red-500 text-sm text-pretty">{otpError}</p>
                                 )}
                                 <FormSaveButton
                                   ref={emailButtonRef}
@@ -381,7 +381,7 @@ export default function User(
                               </div>
                             </div>
                             {isValidOTP && privacyPolicyAccepted && (
-                              <p className="text-md text-me-600 italic mt-2 border-l-2 border-me-600 pl-2">
+                              <p className="text-md text-me-600 italic mt-2 border-l-2 border-me-600 pl-2 text-pretty">
                                 {t('luthier.reload_notice')}
                               </p>
                             )}
