@@ -123,9 +123,12 @@ export async function POST(request: Request) {
                 result = await fetch(`${process.env.INSTRUEMENT_API_URL}/instrument/${instrumentId}`, { cache: 'no-store', method: 'GET', headers })
                 const { code, message, data: instrument }  = await result.json()
 
-                // console.log('instrument mint', instrument);
-
                 if (code === 'success') {
+                  if (instrument.queue_id) {
+                    return NextResponse.json({ message: `Already processing queueId ${instrument.queue_id} for instrument ${instrumentId}` }, { status: 200 });
+                  }
+                  // console.log('instrument mint', instrument);
+
                   const files: File[] = [];
                   const descriptions: ImageDescription[] = [];
 
