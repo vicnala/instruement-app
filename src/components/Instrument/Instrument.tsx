@@ -20,6 +20,7 @@ import Cookies from 'js-cookie';
 import Divider from "@/components/UI/Divider";
 import Loading from "../Loading";
 import NotConnected from "@/components/NotConnected";
+import { useRouter } from "@/i18n/routing";
 
 // Add these utility functions at the top of the file, outside the component
 const generateKeyPair = async () => {
@@ -67,6 +68,7 @@ const COOKIE_EXPIRY_DAYS = 3;
 export default function Instrument(
 	{ locale, id, to }: Readonly<{ locale: string, id: string, to: string | undefined }>
 ) {
+	const router = useRouter();
 	const tInstrument = useTranslations('components.Instrument');
 	const [isLoadingInstrumentAsset, setIsLoadingInstrumentAsset] = useState(false)
 	const [isLoadingInstrument, setIsLoadingInstrument] = useState(false)
@@ -85,6 +87,8 @@ export default function Instrument(
 
 	const [scannedResult, setScannedResult] = useState<string | undefined>("")
 	const [isModalOpen, setModalOpen] = useState(false);
+
+	const [isTransfering, setIsTransfering] = useState(false);
 
 
 	useEffect(() => {
@@ -435,6 +439,7 @@ export default function Instrument(
 										onClick={() => handleCopyUrl(generateShareableUrl)}
 										className="flex items-center gap-2 px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
 										aria-label={tInstrument('copy_url')}
+										disabled={isTransfering}
 									>
 										<Copy className="w-4 h-4" />
 										{copySuccess ? tInstrument('copied') : `${tInstrument('copy_url')} (${tInstrument('valid_for')} ${COOKIE_EXPIRY_DAYS} ${tInstrument('days')})`}
@@ -450,6 +455,7 @@ export default function Instrument(
 										onClick={() => handleCopyUrl(async () => generateResponseUrl())}
 										className="flex items-center gap-2 px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
 										aria-label={tInstrument('copy_response_url')}
+										disabled={isTransfering}
 									>
 										<Copy className="w-4 h-4" />
 										{copySuccess ? tInstrument('copied') : tInstrument('copy_response_url')}
@@ -465,6 +471,7 @@ export default function Instrument(
 										type="button"
 										className="items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
 										onClick={() => setModalOpen(true)}
+										disabled={isTransfering}
 									>
 										{isModalOpen ? tInstrument('stop') : tInstrument('scan')}
 									</button>
@@ -476,6 +483,7 @@ export default function Instrument(
 								<Section>
 									<TransactionButton
 										transaction={() => {
+											setIsTransfering(true);
 											return transferFrom({
 												contract: contract,
 												from: address,
@@ -484,9 +492,12 @@ export default function Instrument(
 											});
 										}}
 										onTransactionConfirmed={() => {
-											alert("Instrument transfered!");
+											alert(`${tInstrument("transfered_to")} ${to ? to : scannedResult ? scannedResult : ''}`);
+											setReloadUser(true);
+											router.replace('/');
 										}}
 										onError={(error) => {
+											setIsTransfering(false);
 											console.error("Transaction error", error);
 										}}
 										unstyled
@@ -503,8 +514,25 @@ export default function Instrument(
 									if (result.length) {
 										const address = result[0].rawValue || '';
 										if (isAddress(address)) {
-											setScannedResult(result[0].rawValue)
+											setScannedResult(address)
 											setModalOpen(false)
+										} else {
+											if (result[0].format === 'qr_code') {
+												const split1 = result[0].rawValue.split(':');
+												if (split1.length === 2) {
+													const type = split1[0];
+													if (type === 'ethereum') {
+														const split2 = split1[1].split('@');
+														if (split2.length === 2) {
+															const address = split2[0];
+															if (isAddress(address)) {
+																setScannedResult(address)
+																setModalOpen(false)
+															}
+														}
+													}
+												}
+											}
 										}
 									}
 								}}

@@ -280,7 +280,8 @@
             "copy_response_url": "Copiar URL de respuesta",
             "copied": "Copiado!",
             "valid_for": "Válido durante",
-            "days": "días"
+            "days": "días",
+            "transfered_to": "Instrumento transferido a"
         },
         "ElementsForm": {
             "title": "Registra tu instrumento ahora",
