@@ -7,14 +7,13 @@ import Page from "@/components/Page";
 import Section from "@/components/Section";
 import Modal from "@/components/Modal/Modal";
 import { useModal } from "@/components/Modal/useModal";
-import IconInfo from '@/components/Icons/Info';
 import { useStateContext } from '@/app/context';
 import NFTGrid from '@/components/NFT/NFTGrid';
 import NotConnected from '../NotConnected';
 import ButtonSpinner from '@/components/UI/ButtonSpinner';
 import FormSaveButton from '@/components/UI/FormSaveButton';
 import { OTPForm } from "@/components/UI/OtpInput";
-import { CircleCheck } from 'lucide-react';
+import { CircleCheck, Expand, Shrink, Copy, Info } from 'lucide-react';
 import { logout } from '@/actions/login';
 
 
@@ -37,7 +36,7 @@ export default function User(
   const otpRef = useRef<HTMLInputElement>(null)
   const emailButtonRef = useRef<HTMLButtonElement>(null)
   const otpButtonRef = useRef<HTMLButtonElement>(null)
-
+  const [isExpanded, setIsExpanded] = useState(false)
   // Focus on OTP input when otpOk becomes true
   useEffect(() => {
     // No need for manual focus as we're using autoFocus prop
@@ -180,9 +179,9 @@ export default function User(
                 address ?
                 <>
                   <div className='p-6 rounded-[15px] mb-4 md:mb-6 border border-it-100 dark:border-it-800 bg-it-50 dark:bg-gray-950'>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 items-center md:grid-cols-2 gap-6">
                       <div>
-                        <h2 className='text-3xl md:text-4xl font-bold text-gray-900 dark:text-it-200 mb-2'>
+                        <h2 className='text-4xl font-bold text-contrast dark:text-it-200 mb-2'>
                           {t('no_instruments')}
                         </h2>
                         <p className="text-md mb-4 text-base text-gray-900 dark:text-gray-300">
@@ -193,54 +192,38 @@ export default function User(
                         <div className="flex items-center justify-center">
                           <div>
                             <div className="p-4 rounded-xl bg-white border border-gray-50">
-                              <button
-                                onClick={() => copyToClipboard(address || '')}
-                                className="bg-transparent"
-                              >
-                                <QRCodeCanvas
-                                  value={address || ''}
-                                  size={200}
-                                  bgColor="#ffffff"
-                                  fgColor="#070605"
-                                />
-                                <div className="pt-4 text-gray-500">
-                                  {t('share.copy_to_clipboard')}
-                                </div>
-                              </button>
-                              {/* {
-                                typeof navigator.share === 'function' ?
-                                  <button
-                                    onClick={() => openShareScreen(address || '')}
-                                    className="bg-transparent"
-                                  >
-                                    <QRCodeCanvas
-                                      value={address || ''}
-                                      size={200}
-                                      bgColor="#ffffff"
-                                      fgColor="#070605"
-                                    />
-                                    <div className="pt-4">
-                                      {t('qr.press_to_share')}
-                                    </div>
-                                  </button>
-                                  :
-                                  <>
-                                    <div className="flex items-center">
-                                      <input
-                                        type="text"
-                                        value={address}
-                                        className="border border-r-0 border-it-400 p-2 rounded-l-md flex-grow"
-                                        readOnly
-                                      ></input>
-                                      <button
-                                        onClick={() => copyToClipboard(address || '')}
-                                        className="border border-it-400 bg-it-400 text-white p-2 rounded-r-md hover:bg-it-600 hover:border-it-600"
+                              <div className={`flex justify-between items-center ${isExpanded ? 'flex-col gap-4' : 'gap-2'}`}>
+                                <button
+                                  className={`grow bg-transparent transition-all duration-300 ease-in-out leading-[1.5]`}
+                                >
+                                  <QRCodeCanvas
+                                    value={address || ''}
+                                    size={isExpanded ? 250 : 60}
+                                    bgColor="#ffffff"
+                                    fgColor="#070605"
+                                  />
+                                </button>
+                                <div className="flex gap-2">
+                                  <div className="leading-none">
+                                      <button 
+                                        onClick={() => setIsExpanded(!isExpanded)}
+                                        className="p-1"
+                                        title={t('qr.press_to_expand_shrink')}
                                       >
-                                        {t('share.copy_to_clipboard')}
+                                        {isExpanded ? <Shrink className="text-gray-500 h-6 w-6" /> : <Expand className="text-gray-500 h-6 w-6" />}
                                       </button>
-                                    </div>
-                                  </>
-                              } */}
+                                  </div>
+                                  <div className="leading-none">
+                                      <button 
+                                        onClick={() => copyToClipboard(address || '')}
+                                        className="p-1"
+                                        title={t('share.copy_to_clipboard')}
+                                      >
+                                        <Copy className="text-gray-500 h-6 w-6" />
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                             <div className="flex justify-left mt-4">
                               <div className="flex flex-col space-y-2">
@@ -249,9 +232,9 @@ export default function User(
                                     title: t('modals.share_account_what.title'),
                                     description: t('modals.share_account_what.description')
                                   })}
-                                  className="inline-flex text-gray-500 dark:text-gray-500 text-sm"
+                                  className="text-it-400 hover:text-contrast dark:text-it-400 text-sm flex items-center"
                                 >
-                                  <IconInfo height="1.2em" width="1.2em" className="mr-1" /> 
+                                  <Info className="h-5 w-5 mr-1" />
                                   {t('modals.share_account_what.preview')}
                                 </button>
                                 
@@ -260,9 +243,9 @@ export default function User(
                                     title: t('modals.share_account_how.title'),
                                     description: t('modals.share_account_how.description')
                                   })}
-                                  className="inline-flex text-gray-500 dark:text-gray-500 text-sm"
+                                  className="text-it-400 hover:text-contrast dark:text-it-400 text-sm flex items-center"
                                 >
-                                  <IconInfo height="1.2em" width="1.2em" className="mr-1" /> 
+                                  <Info className="h-5 w-5 mr-1" />
                                   {t('modals.share_account_how.preview')}
                                 </button>
                               </div>
@@ -276,10 +259,10 @@ export default function User(
                   <div className="p-6 rounded-[15px] mb-3.5 border border-me-100 dark:border-me-800 bg-me-25 dark:bg-gray-950">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <h3 className="mb-2 text-2xl md:text-3xl text-me-1000 dark:text-me-200 font-bold">
+                        <h3 className="mb-2 text-3xl text-me-1000 dark:text-me-200 font-bold">
                           {t('luthier.title')}
                         </h3>
-                        <p className="mb-4 text-md text-gray-900 dark:text-gray-300 ">
+                        <p className="mb-4 text-base text-gray-900 dark:text-gray-300 ">
                           {t('luthier.description')}
                         </p>
                       </div>

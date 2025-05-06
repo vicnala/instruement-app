@@ -571,13 +571,13 @@ export default function DraftForm(
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-0 md:gap-6 sm:gap-6">
                 <div>
-                  <label htmlFor="type" className="block text-md font-semibold text-gray-1000 pb-1">
+                  <label htmlFor="type" className="block text-base font-semibold text-gray-1000 pb-1">
                     {t('basic_info.type.label')}
                   </label>
                   <div className="relative">
                     <div
                       onClick={() => instrument?.type ? null : setOpen(!open)}
-                      className={`bg-white text-md p-2 flex border border-gray-200 items-center justify-between rounded-md ${!type && "text-gray-700"} ${!instrument?.type && "cursor-pointer"}`}
+                      className={`bg-white text-base p-2 flex border border-gray-200 items-center justify-between rounded-md ${!type && "text-gray-700"} ${!instrument?.type && "cursor-pointer"}`}
                     >
                       {type ? type : t('basic_info.type.placeholder')}
                       <ChevronDown className="h-5 w-5 text-gray-400" />
@@ -596,7 +596,7 @@ export default function DraftForm(
                       {instrumentTypes?.length && instrumentTypes.map((ins: any) => (
                         <li
                           key={ins?.label}
-                          className={`p-2 text-md hover:bg-it-50 hover:text-it-950 cursor-pointer
+                          className={`p-2 text-base hover:bg-it-50 hover:text-it-950 cursor-pointer
                               ${ins?.value?.toLowerCase() === type?.toLowerCase() && "bg-it-300 text-it-950 hover:bg-it-400"}
                               ${ins?.value?.toLowerCase().startsWith(inputValue) ? "block" : "hidden"}`}
                           onClick={() => {
@@ -617,12 +617,12 @@ export default function DraftForm(
                 </div>
 
                 <div className="col-span-2">
-                  <label htmlFor="name" className="block text-md font-semibold text-gray-1000 pb-1">
+                  <label htmlFor="name" className="block text-base font-semibold text-gray-1000 pb-1">
                     {t('basic_info.name.label')}
                   </label>
                   <input
                     name="name"
-                    className={`text-md block w-full px-2 py-2 text-it-950 border rounded-md focus:border-it-400 focus:ring-it-300 focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-white dark:bg-opacity-90 ${instrument?.title ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                    className={`text-base block w-full px-2 py-2 text-it-950 border rounded-md focus:border-it-400 focus:ring-it-300 focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-white dark:bg-opacity-90 ${instrument?.title ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                     onChange={(e) => { setName(e.target.value) }}
                     value={name}
                     disabled={instrument?.title ? true : false}
@@ -737,9 +737,9 @@ export default function DraftForm(
                         <Divider spacing="md" />
                       </div>
                       <h2 className="text-xl font-semibold text-gray-1000 pb-1" >
-                        {t('media.images.title_with_min', { min: minImages })}
+                        {t('media.images.title')}
                       </h2>
-                      <p className="text-sm text-gray-600 max-w-sm">
+                      <p className="text-sm text-gray-600 max-w-lg">
                         {t('media.images.description')}
                       </p>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-6 mt-4">

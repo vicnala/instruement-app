@@ -175,7 +175,7 @@
     "pages": {},
     "components": {
         "Header": {
-            "new_instrument": "New Instrument",
+            "new_instrument": "Register Instrument",
             "account": "Account"
         },
         "DraftGrid": {
@@ -229,7 +229,7 @@
                 "images": {
                     "title": "Images",
                     "title_with_min": "Images ({min} min)",
-                    "description": "Register a minimum of two additional images of views and details of the instrument. In JPG and PNG format",
+                    "description": "Register a minimum of two additional images of views and details of the instrument. No need to upload again the cover image. In JPG and PNG format",
                     "button_upload": "Upload image",
                     "text_area_placeholder": "Add a description for this image",
                     "button_save": "Save images"
@@ -327,11 +327,12 @@
             "User": {
                 "no_instruments": "Get your first registered instrument",
                 "no_instruments_sub": {
-                    "qr": "Present this QR code to your luthier in person, or tap it to share your account address via message",
+                    "qr": "Present the QR code to your luthier in person, or copy and share the account address.",
                     "mailto": "Share your account number with your luthier."
                 },
                 "qr": {
-                    "press_to_share": "Press to share"
+                    "press_to_share": "Press to share",
+                    "press_to_expand_shrink": "Press to expand/shrink"
                 },
                 "share": {
                     "copy_to_clipboard": "Copy to clipboard"
@@ -340,7 +341,7 @@
                     "share_account_what": {
                         "title": "Account Number",
                         "preview": "What is my account number?",
-                        "description": "The account number is a unique identifier that was automatically created when you opened your account. This number allows you to receive instrument registrations securely, as it only works for incoming transfers. You can share it with luthiers and other users to receive instrument registrations in your account. Once a registration is transferred to your account using this number, you will be the sole owner of that registration."
+                        "description": "The account number is a unique identifier that was automatically created when you opened your account. This number allows you to receive instrument registrations securely, as it only works for incoming transfers. You can share it with luthiers and other users to receive registered instruments in your account. Once a registration is transferred to your account using this number, you will be the sole owner of that registration."
                     },
                     "share_account_how": {
                         "title": "How to share your account number",
@@ -388,7 +389,7 @@
         },
         "BottomNav": {
             "home": "Home",
-            "new_instrument": "New Instrument",
+            "new_instrument": "Register Instrument",
             "account": "Account"
         },
         "Account": {

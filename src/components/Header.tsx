@@ -47,7 +47,7 @@ export function Header() {
               }
               {
                 isMinter && 
-                <ButtonLink href="/drafts/new" size="sm" colorSchema="it">
+                <ButtonLink href="/drafts/new" size="md" colorSchema="it">
                   {t('new_instrument')}
                 </ButtonLink>
               }
