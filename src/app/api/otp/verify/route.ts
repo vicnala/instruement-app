@@ -6,7 +6,7 @@ export async function POST(request: Request) {
   if (!email || !otp || !address) return Response.error()
 
   try {
-    const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/otp/verify`, {
+    const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/otp/verify`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     if (data?.code === 'success') {
       const { session } = data.data;
       if (session) {
-        const userResult = await fetch(`${process.env.INSTRUEMENT_API_URL}/user/${encodeURIComponent(email)}`, {
+        const userResult = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/user/${encodeURIComponent(email)}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
             session
           }
 
-          const addAdressResult = await fetch(`${process.env.INSTRUEMENT_API_URL}/address`, {
+          const addAdressResult = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/address`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

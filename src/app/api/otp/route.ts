@@ -6,7 +6,7 @@ export async function POST(request: Request) {
   if (!email) return Response.error()
 
   try {
-    const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/otp/send`, {
+    const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/otp/send`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

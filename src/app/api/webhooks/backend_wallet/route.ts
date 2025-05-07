@@ -66,7 +66,7 @@ export async function POST( request: Request, response: Response ) {
     console.log('/api/webhooks/backend_wallet', status, chainId, queueId);
 
     try {
-        const getResult = await fetch(`${process.env.INSTRUEMENT_API_URL}/instrument/queue/${queueId}`, {
+        const getResult = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/queue/${queueId}`, {
             cache: 'no-store',
             method: 'GET',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` }
@@ -113,7 +113,7 @@ export async function POST( request: Request, response: Response ) {
             if (mintedTo && tokenIdMinted) {
                 const instrumentId = getData.data.id;
     
-                const postResult = await fetch(`${process.env.INSTRUEMENT_API_URL}/instrument/${instrumentId}`, {
+                const postResult = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${instrumentId}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` },
                     body: JSON.stringify({ asset_id: tokenIdMinted })

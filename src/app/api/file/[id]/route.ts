@@ -26,7 +26,7 @@ export async function DELETE(
   }
 
   try {
-    const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/file/${id}`, {
+    const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/file/${id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`,
@@ -77,7 +77,7 @@ export async function GET(
   }
 
   try {
-    const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/file/${id}`, {
+    const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/file/${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

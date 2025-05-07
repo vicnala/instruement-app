@@ -55,7 +55,7 @@ export async function POST(
   if (description) postData['description'] = description;
 
   try {
-    const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/instrument/${id}`, {
+    const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${id}`, {
       cache: 'no-store',
       method: 'POST',
       headers: {
@@ -130,7 +130,7 @@ export async function GET(
   // }
 
   try {
-    const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/instrument/${id}?locale=${locale}`, {
+    const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${id}?locale=${locale}`, {
       cache: 'no-store',
       method: 'GET',
       headers: {
@@ -169,7 +169,7 @@ export async function DELETE(
   )
 
   try {
-    const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/instrument/${id}`, {
+    const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`,

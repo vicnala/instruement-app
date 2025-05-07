@@ -19,7 +19,7 @@ export async function GET(
   // )
 
   try {
-    const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/user/${address}`, {
+    const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/user/${address}`, {
       cache: 'no-store',
       headers: {
         'Content-Type': 'application/json',

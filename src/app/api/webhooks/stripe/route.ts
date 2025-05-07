@@ -110,7 +110,7 @@ export async function POST(request: Request) {
           if (data.metadata.minterAddress && data.metadata.id) {
             let result, blob;
             try {
-              result = await fetch(`${process.env.INSTRUEMENT_API_URL}/user/${data.metadata.minterAddress}`, {  cache: 'no-store', headers })
+              result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/user/${data.metadata.minterAddress}`, {  cache: 'no-store', headers })
               const { code, message, data: minter } = await result.json()
 
               if (code === 'success') {
@@ -120,7 +120,7 @@ export async function POST(request: Request) {
                   throw new Error(`/api/webhooks/stripe wrong instrument id`);
                 }
                 
-                result = await fetch(`${process.env.INSTRUEMENT_API_URL}/instrument/${instrumentId}`, { cache: 'no-store', method: 'GET', headers })
+                result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${instrumentId}`, { cache: 'no-store', method: 'GET', headers })
                 const { code, message, data: instrument }  = await result.json()
 
                 if (code === 'success') {
@@ -139,7 +139,7 @@ export async function POST(request: Request) {
                   // IMAGES
                   let imageIndex: number = 0;
                   for (const imageId of imagesIds) {
-                    result = await fetch(`${process.env.INSTRUEMENT_API_URL}/file/${imageId}`, { headers });
+                    result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/file/${imageId}`, { headers });
                     const { data: _image } = await result.json();
                     // console.log("_image", _image);
 
@@ -161,7 +161,7 @@ export async function POST(request: Request) {
                   // DOCUMENTS
                   let documentIndex: number = 0;
                   for (const fileId of filesIds) {
-                    result = await fetch(`${process.env.INSTRUEMENT_API_URL}/file/${fileId}`, { headers });
+                    result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/file/${fileId}`, { headers });
                     const { data: _file } = await result.json();
                     // console.log("_file", _file);
                     blob = await fetchAndStreamFile(_file.file_url);
@@ -253,7 +253,7 @@ export async function POST(request: Request) {
 
                       console.log('queueId', queueId, 'for draft', instrumentId);
 
-                      result = await fetch(`${process.env.INSTRUEMENT_API_URL}/instrument/${instrumentId}`, {
+                      result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${instrumentId}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` },
                         body: JSON.stringify({ queue_id: queueId })

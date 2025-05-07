@@ -35,7 +35,7 @@ export async function login(payload: VerifyLoginPayloadParams, cb: string | unde
     };
 
     try {
-      result = await fetch(`${process.env.INSTRUEMENT_API_URL}/user/${verifiedPayload.payload.address}`, {
+      result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/user/${verifiedPayload.payload.address}`, {
         headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` },
         cache: 'no-store'
       })

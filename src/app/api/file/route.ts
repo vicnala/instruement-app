@@ -37,7 +37,7 @@ export async function POST(request: Request) {
   // }
 
   try {
-    const result = await fetch(`${process.env.INSTRUEMENT_API_URL}/file`, {
+    const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/file`, {
       method: 'POST',
       headers: {
         // 'accept': 'application/json',
