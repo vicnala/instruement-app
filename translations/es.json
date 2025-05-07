@@ -180,7 +180,7 @@
     "pages": {},
     "components": {
         "Header": {
-            "new_instrument": "Nuevo instrumento",
+            "new_instrument": "Registrar instrumento",
             "account": "Cuenta"
         },
         "DraftGrid": {
@@ -234,7 +234,7 @@
                 "images": {
                     "title": "Imágenes",
                     "title_with_min": "Imágenes (min {min})",
-                    "description": "Registra un mínimo de dos imágenes adicionales de vistas y detalles del instrumento. En formato JPG y PNG",
+                    "description": "Registra un mínimo de dos imágenes adicionales de vistas y detalles del instrumento. No es necesario subir de nuevo la portada. En formato JPG y PNG",
                     "button_upload": "Subir imagen",
                     "text_area_placeholder": "Descripción para esta imagen",
                     "button_save": "Guardar imágenes"
@@ -333,11 +333,12 @@
             "User": {
                 "no_instruments": "Obtén tu primer instrumento registrado",
                 "no_instruments_sub": {
-                    "qr": "Presenta este código QR a tu luthier en persona, o púlsalo para compartir la dirección de tu cuenta por mensaje",
+                    "qr": "Presenta el código QR a tu luthier en persona, o copia y comparte la dirección de tu cuenta.",
                     "mailto": "Comparte tu número de cuenta con tu luthier."
                 },
                 "qr": {
-                    "press_to_share": "Pulsa para compartir"
+                    "press_to_share": "Pulsa para compartir",
+                    "press_to_expand_shrink": "Pulsa para expandir/contraer"
                 },
                 "share": {
                     "copy_to_clipboard": "Copiar al portapapeles"
@@ -346,7 +347,7 @@
                     "share_account_what": {
                         "title": "Tu número de cuenta",
                         "preview": "¿Qué es mi número de cuenta?",
-                        "description": "El número de cuenta es un identificador único que se creó automáticamente cuando abriste tu cuenta. Este número te permite recibir registros de instrumentos de manera segura, ya que solo sirve para transferencias entrantes. Puedes compartirlo con luthiers y otros usuarios para recibir registros de instrumentos en tu cuenta. Una vez que un registro se transfiere a tu cuenta usando este número, serás la única persona propietaria de ese registro."
+                        "description": "El número de cuenta es un identificador único que se creó automáticamente cuando abriste tu cuenta. Este número te permite recibir registros de instrumentos de manera segura, ya que solo sirve para transferencias entrantes. Puedes compartirlo con luthiers y otros usuarios para recibir instrumentos registrados en tu cuenta. Una vez que un registro se transfiere a tu cuenta usando este número, serás la única persona propietaria de ese registro."
                     },
                     "share_account_how": {
                         "title": "Cómo puedes compartir tu número de cuenta",
@@ -394,7 +395,7 @@
         },
         "BottomNav": {
             "home": "Inicio",
-            "new_instrument": "Nuevo instrumento",
+            "new_instrument": "Registrar instrumento",
             "account": "Cuenta"
         },
         "Account": {

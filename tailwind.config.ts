@@ -15,6 +15,21 @@ const config = {
 			padding: "2rem",
 		},
 		extend: {
+			fontSize: {
+				'xs': ['clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem)', { lineHeight: '1.5' }],
+				'sm': ['clamp(0.875rem, 0.8rem + 0.375vw, 1rem)', { lineHeight: '1.5' }],
+				'base': ['clamp(1rem, 0.9132rem + 0.3563vw, 1.1875rem)', { lineHeight: '1.5' }],
+				'lg': ['clamp(1.125rem, 1rem + 0.625vw, 1.25rem)', { lineHeight: '1.5' }],
+				'xl': ['clamp(1.25rem, 1.125rem + 0.625vw, 1.5rem)', { lineHeight: '1.5' }],
+				'2xl': ['clamp(1.5rem, 1.25rem + 1.25vw, 1.875rem)', { lineHeight: '1.3' }],
+				'3xl': ['clamp(1.875rem, 1.5rem + 1.875vw, 2.25rem)', { lineHeight: '1.3' }],
+				'4xl': ['clamp(2.25rem, 1.875rem + 1.875vw, 3rem)', { lineHeight: '1.2' }],
+				'5xl': ['clamp(3rem, 2.5rem + 2.5vw, 3.75rem)', { lineHeight: '1.1' }],
+				'6xl': ['clamp(3.75rem, 3rem + 3.75vw, 4.5rem)', { lineHeight: '1.1' }],
+				'7xl': ['clamp(4.5rem, 3.75rem + 3.75vw, 6rem)', { lineHeight: '1' }],
+				'8xl': ['clamp(6rem, 5rem + 5vw, 8rem)', { lineHeight: '1' }],
+				'9xl': ['clamp(8rem, 6rem + 10vw, 12rem)', { lineHeight: '1' }],
+			},
 			colors: {
 				contrast: "#171412",
 				tertiary: "#F6F6F6",
