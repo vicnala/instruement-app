@@ -26,6 +26,7 @@ export default function DraftGrid({ locale }: { locale: string }) {
               key={instrumentId.toString()}
               instrumentId={instrumentId.toString()}
               locale={locale}
+              api_key={minter.api_key}
             />
           ))}
         </div>

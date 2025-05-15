@@ -7,9 +7,10 @@ import { useTranslations } from "next-intl";
 import { Instrument, InstrumentImage } from "@/lib/definitions";
 import Skeleton from "@/components/Skeleton";
 import IconEdit from '../Icons/Edit';
+import FileUploadService from "@/services/FileUploadService";
 
 export default function Draft(
-  { instrumentId, locale }: { instrumentId: string, locale: string }
+  { instrumentId, locale, api_key }: { instrumentId: string, locale: string, api_key: string }
 ) {
   const router = useRouter();
   const t = useTranslations('components.Drfat');
@@ -26,34 +27,31 @@ export default function Draft(
         })
 
         const { data } = await result.json()
-        // console.log("GET", `/api/instrument/${instrumentId}`, data.data);
 
         if (data.code !== 'success') {
           console.log(`GET /api/instrument/${instrumentId} ERROR`, data.message);
-          // alert(`Error: ${data.message}`);
           setIsLoading(false);
         } else {
           setInstrument(data.data);
           if (data.data.cover_image) {
-            const result = await fetch(`/api/file/${data.data.cover_image}`, {
-              method: "GET",
-              headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-            })
-            const { data: imageData } = await result.json();
-            // console.log('Image data:', imageData.data);
-            setImage(imageData.data);
-          } else {
-            const _image = {
-              file_url: data.data.placeholder_image || '',
-              description: ''
+            try {
+              const result = await FileUploadService.getFile(data.data.cover_image, api_key);
+              if (result.data.code !== 'success') {
+                console.log(`GET /api/file/${data.data.cover_image} ERROR`, result.data.message);
+              } else {
+                setImage(result.data.data as InstrumentImage);
+              }
+            } catch (error: any) {
+              console.log(`GET /api/file/${data.data.cover_image} ERROR`, error.message);
+              setImage({ file_url: data.data.placeholder_image || '', description: '' } as InstrumentImage);
             }
-            setImage(_image as InstrumentImage);
+          } else {
+            setImage({ file_url: data.data.placeholder_image || '', description: '' } as InstrumentImage);
           }
           setIsLoading(false);
         }
       } catch (error: any) {
         console.log(`GET /api/instrument/${instrumentId} ERROR`, error.message)
-        // alert(`Error: ${error.message}`);
         setIsLoading(false);
       } 
     }

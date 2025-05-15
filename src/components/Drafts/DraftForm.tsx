@@ -42,23 +42,21 @@ export default function DraftForm(
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
 
+  const [hasCover, setHasCover] = useState(false)
+  const [hasImages, setHasImages] = useState(false)
+  const [hasFiles, setHasFiles] = useState(false)
+
   const [coverDescription, setCoverDescription] = useState<string>('')
-  const [images, setImages] = useState<File[]>([])
   const [imageDescriptions, setImageDescriptions] = useState<string[]>([])
   const [documentDescriptions, setDocumentsDescriptions] = useState<string[]>([])
 
   const [error, setError] = useState<string | null>(null)
 
   const [isLoadingMetadata, setIsLoadingMetadata] = useState(false)
-
+  const [isLoading, setIsLoading] = useState(false)
   // Add new state for tracking progress
   const [currentStep, setCurrentStep] = useState<ProgressStep>(1);
   const [completed, setCompleted] = useState(false);
-
-  // Regular declaration - placed after state declarations
-  const minImages = 2;
-  const hasMediaUploads = instrument ? !!(instrument.cover_image && instrument.images.length >= minImages) : false;
-  const hasDescription = instrument ? instrument.description && instrument.description.trim().length > 0 : false;
  
   // Add useEffect to handle step transitions
   useEffect(() => {
@@ -66,21 +64,23 @@ export default function DraftForm(
       setCurrentStep(1);
       setCompleted(false);
     } else if (instrument) {
-      if (hasMediaUploads && hasDescription) {
+      const hasDescription = instrument ? instrument.description && instrument.description.trim().length > 0 : false;
+      if (hasCover && hasImages && hasFiles && hasDescription) {
         setCurrentStep(4);
         setCompleted(true);
-      } else if (hasMediaUploads) {
+      } else if (hasCover && hasImages && hasFiles) {
         setCurrentStep(3);
       } else {
         setCurrentStep(2);
       }
     }
-  }, [instrument, hasMediaUploads, hasDescription]);
+  }, [instrument, hasCover, hasImages, hasFiles]);
 
   // Fetch instrument details and associated files/images when instrumentId changes
   useEffect(() => {
     const getInstrument = async () => {
       if (!minter || typeof minter === 'boolean') return;
+      setIsLoading(true);
       try {
         const result = await fetch(`/api/instrument/${instrumentId}?locale=${locale}`, {
           method: "GET",
@@ -168,6 +168,7 @@ export default function DraftForm(
         console.log(`GET /api/instrument/${instrumentId} ERROR`, error.message)
         // alert(`Error: ${error.message}`);
       }
+      setIsLoading(false);
     }
     if (instrumentId && !instrument) {
       getInstrument();
@@ -242,7 +243,6 @@ export default function DraftForm(
       }
       try {
         const { data } = await DraftService.createInstrument(minter, selected, name);
-        console.log("POST /api/instrument", data);
         if (data.code === 'success') {
           if (data.data) {
             // setReloadUser(true);
@@ -277,17 +277,23 @@ export default function DraftForm(
     setName('');
     setDescription('');
     setCoverDescription('');
-    setImages([]);
     setImageDescriptions([]);
     setDocumentsDescriptions([]);
     setReloadUser(true);
     router.push(`/`)
   };
 
-  // // console.log("cover_image", instrument?.cover_image);
-  // console.log("images", instrument?.images);
-  // console.log("imageFiles", imageFiles);
-  // console.log("files", instrument?.files);
+  const handleCoverChange = (media: (InstrumentImage | InstrumentFile)[]) => {
+    setHasCover(media.length > 0);
+  };
+
+  const handleImagesChange = (media: (InstrumentImage | InstrumentFile)[]) => {
+    setHasImages(media.length >= parseInt(process.env.NEXT_PUBLIC_MIN_IMAGES || '2'));
+  };
+
+  const handleFilesChange = (media: (InstrumentImage | InstrumentFile)[]) => {
+    setHasFiles(media.length > 0);
+  };
 
   return (
     minter ?
@@ -300,7 +306,7 @@ export default function DraftForm(
                   {
                     instrument ?
                       <>
-                        {hasMediaUploads && description ? (
+                        {hasCover && hasImages && hasFiles && description ? (
                           <>
                             <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('title.ready_to_register')}</h2>
                             <p className="text-sm sm:text-base text-gray-600">{t('title.ready_to_register_sub')}</p>
@@ -323,16 +329,14 @@ export default function DraftForm(
 
             <ProgressBar
               currentStep={currentStep}
-              
               completed={completed}
               onCompletedChange={setCompleted}
             />
-
           </div>
           <div>
             {
               instrument &&
-              hasMediaUploads &&
+              hasCover && hasImages && hasFiles &&
               (instrument.description === description) && description &&
               <div className="text-right mt-6">
                 <FormSaveButton
@@ -430,7 +434,10 @@ export default function DraftForm(
               )}
             </div>
           </Section>
-          {instrument &&
+          {
+            isLoading ?
+              <Loading />
+            : instrument &&
             <>
               <Section id="media" className="pb-[3px]">
                 <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-50 rounded-lg">
@@ -445,7 +452,14 @@ export default function DraftForm(
                       <div className="mt-4">
                         <>
                           <div className="flex flex-col">
-                            <MediaManager instrument={instrument} multiple={false} api_key={minter.api_key} isCover={true} accept={'image'} />
+                            <MediaManager
+                              instrument={instrument}
+                              multiple={false}
+                              api_key={minter.api_key}
+                              isCover={true}
+                              accept={'image'}
+                              onMediaChange={handleCoverChange}
+                            />
                           </div>
                           {error && <p className="text-red-500">{error}</p>}
                         </>
@@ -463,7 +477,14 @@ export default function DraftForm(
                         {t('media.images.description')}
                       </p>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-6 mt-4">
-                        <MediaManager instrument={instrument} multiple={true} api_key={minter.api_key} isCover={false} accept={'image'} />
+                        <MediaManager
+                          instrument={instrument}
+                          multiple={true}
+                          api_key={minter.api_key}
+                          isCover={false}
+                          accept={'image'}
+                          onMediaChange={handleImagesChange}
+                        />
                       </div>
 
                       <Divider spacing="md" />
@@ -475,7 +496,14 @@ export default function DraftForm(
                         {t('media.files.description')}
                       </p>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-6 mt-4">
-                        <MediaManager instrument={instrument} multiple={true} api_key={minter.api_key} isCover={false} accept={'file'} />
+                        <MediaManager
+                          instrument={instrument}
+                          multiple={true}
+                          api_key={minter.api_key}
+                          isCover={false}
+                          accept={'file'}
+                          onMediaChange={handleFilesChange}
+                        />
                       </div>
                     </div>
                   </div>
@@ -485,7 +513,7 @@ export default function DraftForm(
           }
 
           {instrument &&
-            hasMediaUploads &&
+            hasCover && hasImages && hasFiles &&
             <Section id="description">
               <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-50 rounded-b-lg">
                 <div className="mb-6">
@@ -504,7 +532,9 @@ export default function DraftForm(
                   <FormSaveButton
                     disabled={
                       isLoadingMetadata || 
-                      !hasMediaUploads || 
+                      !hasCover || 
+                      !hasImages || 
+                      !hasFiles || 
                       !description || 
                       description === instrument.description
                     }
@@ -520,10 +550,11 @@ export default function DraftForm(
                 <FormSaveButton
                   disabled={
                     isLoadingMetadata || 
-                    !hasMediaUploads || 
+                    !hasCover || 
+                    !hasImages || 
+                    !hasFiles || 
                     !description || 
-                    description !== instrument.description || 
-                    images.length > 0
+                    description !== instrument.description
                   }
                   onClick={() => router.push(`/preview/${instrument.id}`)}
                   isLoading={isLoadingMetadata}

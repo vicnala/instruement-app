@@ -206,7 +206,28 @@ const MediaManager: React.FC<FilesUploadProps> = ({
           // Only keep successfully uploaded files
           const successfulUploads = data
             .filter((d: any) => d.code === 'success')
-            .map((d: any) => d.data);
+            .map((d: any) => {
+
+              
+              // Parche hasta que se arregle el endpoint
+              if (typeof d.data === 'string') {
+                return {
+                  id: 666,
+                  instrument_id: instrument.id,
+                  user_id: instrument.user_id,
+                  created_at: new Date().toISOString(),
+                  updated_at: new Date().toISOString(),
+                  file: d.data,
+                  file_url: d.data,
+                  base_url: process.env.NEXT_PUBLIC_BASE_URL,
+                  filesize: 0
+                };
+
+                // TODO: Eliminar el parche cuando se arregle el endpoint
+              } else {
+                return d.data;
+              }
+            });
 
           setImagePreviews([]);
           setSelectedFiles([]);
@@ -232,8 +253,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
 
       <div className="grid grid-cols-2 gap-4 p-4">
         {
-          // Prefer showing uploadedFiles if any exist
-          uploadedFiles.length > 0 ?
+          uploadedFiles.length > 0 &&
             uploadedFiles.map((file, index) => (
               <div
                 key={file.id || `file-${index}`}
@@ -263,59 +283,59 @@ const MediaManager: React.FC<FilesUploadProps> = ({
                   </button>
                 </div>
               </div>
-            )) : selectedFiles.length > 0 ?
-              <>
-                {selectedFiles.map((file, index) => (
-                  <div
-                    key={`image-${index}`}
-                    className="w-full h-64 relative"
-                  >
-                    {
-                      accept === 'image' && imagePreviews[index] ?                  
-                      <Image
-                        className="rounded"
-                        src={imagePreviews[index]}
-                        alt={"image-" + index}
-                        objectFit="scale-down"
-                        fill
-                      />
-                    : 
-                      <div key={`document-${index}`} className="aspect-square bg-it-200 flex items-center justify-center p-2">
-                        <FileText className="w-4 h-4 mr-2" />
-                        <span>{file.name || `document-${index}`}</span>
+            ))
+        }    
+        {
+          selectedFiles.length > 0 &&
+            selectedFiles.map((file, index) => (
+              <div
+                key={`image-${index}`}
+                className="w-full h-64 relative"
+              >
+                {
+                  accept === 'image' && imagePreviews[index] ?                  
+                  <Image
+                    className="rounded"
+                    src={imagePreviews[index]}
+                    alt={"image-" + index}
+                    objectFit="scale-down"
+                    fill
+                  />
+                : 
+                  <div key={`document-${index}`} className="aspect-square bg-it-200 flex items-center justify-center p-2">
+                    <FileText className="w-4 h-4 mr-2" />
+                    <span>{file.name || `document-${index}`}</span>
+                  </div>
+                }
+                {
+                  progressInfos &&
+                  progressInfos.length > 0 &&
+                  <div>
+                    <div className="space-y-2">
+                      <div className="h-2.5 w-full rounded-full bg-gray-200">
+                        <div 
+                          className="h-2.5 rounded-full bg-blue-600 transition-all duration-300"
+                          style={{ width: `${progressInfos[index].percentage}%` }}>
+                        </div>    
                       </div>
-                    }
+                      <p className="text-sm text-gray-600">{`${progressInfos[index].percentage}`}% uploaded</p>
+                      {message[index] === 'error' && <p className="text-xs text-red-600">Upload failed. Please try again.</p>}
+                      {message[index] === 'success' && <p className="text-xs text-green-600">Uploaded successfully!</p>}
+                    </div>
                     {
-                      progressInfos &&
-                      progressInfos.length > 0 &&
-                      <div>
-                        <div className="space-y-2">
-                          <div className="h-2.5 w-full rounded-full bg-gray-200">
-                            <div 
-                              className="h-2.5 rounded-full bg-blue-600 transition-all duration-300"
-                              style={{ width: `${progressInfos[index].percentage}%` }}>
-                            </div>    
-                          </div>
-                          <p className="text-sm text-gray-600">{`${progressInfos[index].percentage}`}% uploaded</p>
-                          {message[index] === 'error' && <p className="text-xs text-red-600">Upload failed. Please try again.</p>}
-                          {message[index] === 'success' && <p className="text-xs text-green-600">Uploaded successfully!</p>}
-                        </div>
-                        {
-                          progressInfos[index].percentage === 100 &&
-                          <button
-                            type="button"
-                            className="bg-transparent text-center hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-sm md:text-lg flex items-center justify-center w-full"
-                            onClick={() => handleDelete(index, 'image')}
-                          >
-                            <IconTrashTwentyFour className="w-4 h-4 mr-2" />
-                          </button>
-                        }
-                      </div>
+                      progressInfos[index].percentage === 100 &&
+                      <button
+                        type="button"
+                        className="bg-transparent text-center hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-sm md:text-lg flex items-center justify-center w-full"
+                        onClick={() => handleDelete(index, 'image')}
+                      >
+                        <IconTrashTwentyFour className="w-4 h-4 mr-2" />
+                      </button>
                     }
                   </div>
-                ))}
-              </>
-          : <></>
+                }
+              </div>
+            ))
         }
       </div>
       <button
