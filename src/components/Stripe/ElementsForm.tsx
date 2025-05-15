@@ -18,6 +18,8 @@ import { Instrument } from "@/lib/definitions";
 import Page from "../Page";
 import Section from "../Section";
 import Image from "next/image";
+import FileUploadService from "@/services/FileUploadService";
+
 
 function CheckoutForm({ amount, address, id, minterAddress, instrument }: { amount: number, address?: string, id: string, minterAddress: string, instrument: Instrument }): JSX.Element {
   const locale = useLocale();
@@ -270,15 +272,10 @@ export default function ElementsForm(
           }
           const coverId = data.data.cover_image;
           if (coverId) {
-            const result = await fetch(`/api/file/${coverId}`, {
-              method: "GET",
-              headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-            })
-            const { data: imageData } = await result.json()
-            if (imageData.code !== 'success') {
-              console.log(`GET /api/file/${coverId} ERROR`, imageData.message);
-            } else {
-              _instrument.cover_image = imageData.data;
+            const { data } = await FileUploadService.getFile(coverId, minter?.api_key);
+            console.log("GET /api/file/", data);
+            if (data.code === 'success') {
+              _instrument.cover_image = data.data;
             }
           }
           
@@ -289,10 +286,11 @@ export default function ElementsForm(
         alert(`Error: ${error.message}`);
       } 
     }
-    if (id && minter && !instrument) {
+    
+    if (id && minter && !instrument && !isLoading) {
       getInstrument();
     }
-  }, [id, minter, instrument]);
+  }, [id, minter, instrument, isLoading]);
 
   return (instrument && minter && amount > 0) ? (
     <Page>

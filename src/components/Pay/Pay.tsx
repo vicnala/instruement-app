@@ -7,6 +7,7 @@ import Page from "@/components/Page";
 import Section from "@/components/Section";
 import { Instrument } from "@/lib/definitions";
 import Loading from "@/components/Loading";
+import NotConnected from "@/components/NotConnected";
 
 export default function Pay(
   { locale, id }: Readonly<{ locale: string, id: string }>
@@ -39,11 +40,17 @@ export default function Pay(
     </Page>
   )
 
+  if (minter) {
+    return (
+      <Page>
+        <div className="text-center">
+          Pay Page of #{id}
+        </div>
+      </Page>
+    );
+  }
+
   return (
-    <Page>
-      <div className="text-center">
-        Pay Page of #{id}
-      </div>
-    </Page>
+    <NotConnected locale={locale} />
   );
 }
