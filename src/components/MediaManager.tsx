@@ -50,8 +50,10 @@ const MediaManager: React.FC<FilesUploadProps> = ({
       const existingDescriptions: string[] = [];
       
       if (isCover && instrument.cover_image) {
-        existingMedia.push(instrument.cover_image);
-        existingDescriptions.push(instrument.cover_image.description || '');
+        if (instrument.cover_image.id) {
+          existingMedia.push(instrument.cover_image);
+          existingDescriptions.push(instrument.cover_image.description || '');
+        }
       } else if (accept === 'image' && instrument.images) {
         existingMedia.push(...instrument.images);
         existingDescriptions.push(...instrument.images.map(img => img.description || ''));
@@ -338,21 +340,24 @@ const MediaManager: React.FC<FilesUploadProps> = ({
             ))
         }
       </div>
-      <button
-        type="button"
-        className="bg-transparent text-center hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-sm md:text-lg flex items-center justify-center w-full"
-        onClick={handleClick}
-      >
-        <IconUploadTwentyFour className="w-4 h-4 mr-2" />
-        {
-          isCover ?
-            <>{t('media.cover.button_upload')}</> :
-            accept === 'image' ?
-            <>{t('media.images.button_upload')}</> :
-            accept === 'file' ? <>{t('media.files.button_upload')}</> :
-            <></>
-        }
-      </button>
+      {
+        ((isCover && uploadedFiles.length === 0) || !isCover) &&
+          <button
+            type="button"
+            className="bg-transparent text-center hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-sm md:text-lg flex items-center justify-center w-full"
+            onClick={handleClick}
+          >
+            <IconUploadTwentyFour className="w-4 h-4 mr-2" />
+            {
+              isCover ?
+                <>{t('media.cover.button_upload')}</> :
+                accept === 'image' ?
+                <>{t('media.images.button_upload')}</> :
+                accept === 'file' ? <>{t('media.files.button_upload')}</> :
+                <></>
+            }
+          </button>
+      }
     </div>
   );
 };
