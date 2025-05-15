@@ -9,8 +9,10 @@ import Loading from "@/components/Loading";
 import NotConnected from "@/components/NotConnected";
 import Image from "next/image";
 import { useRouter } from "@/i18n/routing";
-import { Instrument, InstrumentFile, InstrumentImage } from "@/lib/definitions";
+import { Instrument } from "@/lib/definitions";
 import { Expand, Download } from "lucide-react";
+import InstrumentService from "@/services/InstrumentService";
+
 export default function Preview(
   { locale, id }: Readonly<{ locale: string, id?: string }>
 ) {
@@ -22,100 +24,24 @@ export default function Preview(
 
   useEffect(() => {
     const getInstrument = async () => {
+      if (!id || isLoadingInstrument) return;
+      
       setIsLoadingInstrument(true);
-      try {
-        const result = await fetch(`/api/instrument/${id}?locale=${locale}`, {
-          method: "GET",
-          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-        })
-        const { data } = await result.json()
-        // console.log("GET", `/api/instrument/${id}`, data.data);
-
-        if (data.code !== 'success') {
-          console.log(`GET /api/instrument/${id} ERROR`, data.message);
-          // alert(`Error: ${data.message}`);
-        } else {
-          const imageIds = data.data.images;
-          const fileIds = data.data.files;
-          const coverId = data.data.cover_image;
-
-          if (imageIds && imageIds.length > 0) {
-            const sorted = imageIds
-              .filter((id: number) => id !== coverId)
-              .sort((ida: number, idb: number) => ida > idb ? 1 : -1);
-            const _images: InstrumentImage[] = await Promise.all(
-              sorted.map(async (imgId: number) => {
-                const result = await fetch(`/api/file/${imgId}`, {
-                  method: "GET",
-                  headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-                })
-                const { data: imageData } = await result.json()
-                if (imageData.code !== 'success') {
-                  console.log(`GET /api/file/${imgId} ERROR`, imageData.message);
-                  return ({
-                    id: imgId,
-                    file_url: data.data.placeholder_image,
-                    description: 'Image not found'
-                  })
-                } else {
-                  return imageData.data;
-                }
-              })
-            ) || [];
-          
-            data.data.images = _images;
-          }
-
-          if (fileIds && fileIds.length > 0) {
-            const sorted = fileIds.sort((ida: number, idb: number) => ida > idb ? 1 : -1);
-            const files: InstrumentFile[] = await Promise.all(
-              sorted.map(async (fileId: number) => {
-                const result = await fetch(`/api/file/${fileId}`, {
-                  method: "GET",
-                  headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-                })
-                const { data: fileData } = await result.json()
-                if (fileData.code !== 'success') {
-                  console.log(`GET /api/file/${fileId} ERROR`, fileData.message);
-                  return ({
-                    id: fileId,
-                    file_url: "/images/icons/android-chrome-512x512.png",
-                    description: 'File not found'
-                  })
-                } else {
-                  return fileData.data;
-                }
-              })
-            ) || [];
-          
-            data.data.files = files;
-          }
-
-          if (coverId) {
-            const result = await fetch(`/api/file/${coverId}`, {
-              method: "GET",
-              headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-            })
-            const { data: imageData } = await result.json()
-            if (imageData.code !== 'success') {
-              console.log(`GET /api/file/${coverId} ERROR`, imageData.message);
-            } else {
-              data.data.cover_image = imageData.data;
-            }
-          }
-          setInstrument(data.data);
-        }
-        setIsLoadingInstrument(false);
-      } catch (error: any) {
-        console.log(`POST /api/instrument/${id} ERROR`, error.message)
-        setIsLoadingInstrument(false);
-        // alert(`Error: ${error.message}`);
-      } 
+      const data = await InstrumentService.getInstrument(id, locale, minter?.api_key);
+      
+      if (data) {
+        setInstrument(data);
+      }
+      
+      setIsLoadingInstrument(false);
     }
-    if (id && !isLoadingInstrument) {
+
+    if (id && !isLoadingInstrument && !instrument && minter) {
+      setIsLoadingInstrument(true);
       getInstrument();
     }
-  }, []);
+
+  }, [id, locale, isLoadingInstrument, instrument, minter]);
 
   if (isLoading || isLoadingInstrument) return (
     <Page>
@@ -129,7 +55,6 @@ export default function Preview(
     minter ?
     <Page>
         <Section>
-
           <div className="flex justify-between items-start px-3 md:px-6 py-2 md:py-4 border border-it-100 bg-it-50 rounded-[15px]">
             <div>
               <h1 className="text-3xl font-bold text-it-1000">{instrument?.title}</h1>
@@ -259,7 +184,6 @@ export default function Preview(
                 type="button"
                 className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
                 onClick={() => router.push(`/pay/${instrument.id}${address && `?address=${address}`}`)}
-
               >
                 {t('register_now')}
               </button>

@@ -1,14 +1,12 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useEffect } from "react"
 import dynamic from "next/dynamic"
 import { useTranslations } from "next-intl";
 import { useStateContext } from "@/app/context";
 import NotConnected from "@/components/NotConnected";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
-import IconUploadTwentyFour from "@/components/Icons/Upload"
-import IconTrashTwentyFour from "@/components/Icons/Trash"
 import { FileText, Trash, ChevronDown } from 'lucide-react';
 
 import { Instrument, InstrumentFile, InstrumentImage } from "@/lib/definitions";
@@ -19,8 +17,8 @@ import ButtonSpinner from "../UI/ButtonSpinner"
 import FormSaveButton from "../UI/FormSaveButton"
 import Divider from "../UI/Divider"
 import MediaManager from "@/components/MediaManager";
-import FileUploadService from "@/services/FileUploadService";
 import DraftService from "@/services/DraftService";
+import InstrumentService from "@/services/InstrumentService";
 
 const Editor = dynamic(() => import("@/components/Editor"), { ssr: false })
 
@@ -79,101 +77,24 @@ export default function DraftForm(
   // Fetch instrument details and associated files/images when instrumentId changes
   useEffect(() => {
     const getInstrument = async () => {
-      if (!minter || typeof minter === 'boolean') return;
+      if (!minter || typeof minter === 'boolean' || !instrumentId) return;
+      
       setIsLoading(true);
-      try {
-        const result = await fetch(`/api/instrument/${instrumentId}?locale=${locale}`, {
-          method: "GET",
-          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-        })
-        const { data } = await result.json()
-
-        if (data.code !== 'success') {
-          console.log(`GET /api/instrument/${instrumentId} ERROR`, data.message);
-          // alert(`Error: ${data.message}`);
-        } else {
-          setName(data.data.title);
-          setDescription(data.data.description);
-          const imageIds = data.data.images;
-          const fileIds = data.data.files;
-          const coverId = data.data.cover_image;
-
-          if (imageIds && imageIds.length > 0) {
-            const sorted = imageIds
-              .filter((id: number) => id !== coverId)
-              .sort((ida: number, idb: number) => ida > idb ? 1 : -1);
-            const _images: InstrumentImage[] = await Promise.all(
-              sorted.map(async (imgId: number) => {
-                try {
-                  const result = await FileUploadService.getFile(imgId, minter.api_key);
-                  if (result.data.code !== 'success') {
-                    console.log(`GET image ${imgId} ERROR`, result.data.message);
-                    return ({
-                      id: imgId,
-                      file_url: data.data.placeholder_image,
-                      description: 'Image not found'
-                    })
-                  } else {
-                    return result.data.data;
-                  }
-                } catch (error) {
-                  console.log(`GET image ${imgId} ERROR`, error);
-                }
-              })
-            ) || [];
-
-            data.data.images = _images;
-          }
-
-          if (fileIds && fileIds.length > 0) {
-            const sorted = fileIds.sort((ida: number, idb: number) => ida > idb ? 1 : -1);
-            const files: InstrumentFile[] = await Promise.all(
-              sorted.map(async (fileId: number) => {
-                try {
-                  const result = await FileUploadService.getFile(fileId, minter.api_key);
-                  if (result.data.code !== 'success') {
-                    console.log(`GET file ${fileId} ERROR`, result.data.message);
-                  return ({
-                    id: fileId,
-                    file_url: "/images/icons/android-chrome-512x512.png",
-                    description: 'File not found'
-                  })
-                } else {
-                    return result.data.data;
-                  }
-                } catch (error) {
-                  console.log(`GET file ${fileId} ERROR`, error);
-                }
-              })
-            ) || [];
-
-            data.data.files = files;
-          }
-
-          if (coverId) {
-            try {
-              const result = await FileUploadService.getFile(coverId, minter.api_key);
-              if (result.data.code !== 'success') {
-                console.log(`GET cover file ${coverId} ERROR`, result.data.message);
-            } else {
-                data.data.cover_image = result.data.data;
-              }
-            } catch (error) {
-              console.log(`GET cover file ${coverId} ERROR`, error);
-            }
-          }
-          setInstrument(data.data);
-        }
-      } catch (error: any) {
-        console.log(`GET /api/instrument/${instrumentId} ERROR`, error.message)
-        // alert(`Error: ${error.message}`);
+      const data = await InstrumentService.getInstrument(instrumentId, locale, minter.api_key);
+      
+      if (data) {
+        setName(data.title);
+        setDescription(data.description);
+        setInstrument(data);
       }
+      
       setIsLoading(false);
     }
+
     if (instrumentId && !instrument) {
       getInstrument();
     }
-  }, [instrumentId, instrument, minter]);
+  }, [instrumentId, instrument, minter, locale]);
 
   // Update instrument types based on minter skills and instrument type
   useEffect(() => {
@@ -421,7 +342,7 @@ export default function DraftForm(
                   </p>
                 </div>
               </div>
-              {instrument?.title !== name && instrument?.type !== type  && (
+              {instrument?.title !== name && instrument?.type !== type && !isLoading && (
                 <div className="mt-4 text-right">
                   <FormSaveButton
                     disabled={isLoadingMetadata || !type || !name}

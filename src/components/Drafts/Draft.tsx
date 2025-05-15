@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import { Instrument, InstrumentImage } from "@/lib/definitions";
 import Skeleton from "@/components/Skeleton";
 import IconEdit from '../Icons/Edit';
-import FileUploadService from "@/services/FileUploadService";
+import InstrumentService from "@/services/InstrumentService";
 
 export default function Draft(
   { instrumentId, locale, api_key }: { instrumentId: string, locale: string, api_key: string }
@@ -20,46 +20,28 @@ export default function Draft(
 
   useEffect(() => {
     const getInstrument = async () => {
-      try {
-        const result = await fetch(`/api/instrument/${instrumentId}?locale=${locale}`, {
-          method: "GET",
-          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-        })
-
-        const { data } = await result.json()
-
-        if (data.code !== 'success') {
-          console.log(`GET /api/instrument/${instrumentId} ERROR`, data.message);
-          setIsLoading(false);
+      if (!instrumentId || isLoading) return;
+      
+      setIsLoading(true);
+      const data = await InstrumentService.getInstrument(instrumentId, locale, api_key);
+      
+      if (data) {
+        setInstrument(data);
+        if (data.cover_image) {
+          setImage(data.cover_image);
         } else {
-          setInstrument(data.data);
-          if (data.data.cover_image) {
-            try {
-              const result = await FileUploadService.getFile(data.data.cover_image, api_key);
-              if (result.data.code !== 'success') {
-                console.log(`GET /api/file/${data.data.cover_image} ERROR`, result.data.message);
-              } else {
-                setImage(result.data.data as InstrumentImage);
-              }
-            } catch (error: any) {
-              console.log(`GET /api/file/${data.data.cover_image} ERROR`, error.message);
-              setImage({ file_url: data.data.placeholder_image || '', description: '' } as InstrumentImage);
-            }
-          } else {
-            setImage({ file_url: data.data.placeholder_image || '', description: '' } as InstrumentImage);
-          }
-          setIsLoading(false);
+          setImage({ file_url: data.placeholder_image || '', description: '' } as InstrumentImage);
         }
-      } catch (error: any) {
-        console.log(`GET /api/instrument/${instrumentId} ERROR`, error.message)
-        setIsLoading(false);
-      } 
+      }
+      
+      setIsLoading(false);
     }
-    if (instrumentId && !isLoading) {
+
+    if (instrumentId && !isLoading && !instrument) {
       setIsLoading(true);
       getInstrument();
     }
-  }, []);
+  }, [instrumentId, locale, api_key, isLoading, instrument]);
 
   return (
     instrument && !instrument.asset_id ?
