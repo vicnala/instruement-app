@@ -11,7 +11,7 @@ export async function POST(
   const { id } = await params
   const { type, name, description } = await request.json()
   
-  // console.log(`POST /api/instrument/${id}`, postData);
+  console.log(`POST /api/instrument/${id}`, type, name, description);
 
   if (!id) return Response.json(
     { message: 'No id provided' },

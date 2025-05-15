@@ -202,7 +202,8 @@
             },
             "basic_info": {
                 "title": "Basic Info",
-                "button": "Save & continue",
+                "button_save_and_continue": "Save & continue",
+                "button_save": "Save",
                 "type": {
                     "label": "Instrument type",
                     "placeholder": "Select instrument type",
@@ -230,14 +231,14 @@
                     "title": "Images",
                     "title_with_min": "Images ({min} min)",
                     "description": "Register a minimum of two additional images of views and details of the instrument. No need to upload again the cover image. In JPG and PNG format",
-                    "button_upload": "Upload image",
+                    "button_upload": "Upload images",
                     "text_area_placeholder": "Add a description for this image",
                     "button_save": "Save images"
                 },
                 "files": {
                     "title": "Documents",
                     "description": "Register additional documents in PDF format. Documents are optional.",
-                    "button_upload": "Upload document",
+                    "button_upload": "Upload documents",
                     "text_area_placeholder": "Add a description for this document",
                     "button_save": "Save documents"
                 }

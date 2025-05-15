@@ -1,28 +1,49 @@
-import http from "../app/http-common";
+import { wp } from "../app/http-common";
 
-const upload = (file: File, onUploadProgress: any): Promise<any> => {
+
+const upload = (
+  file: File,
+  instrumentId: string | undefined,
+  api_key: string,
+  isCover: boolean,
+  onUploadProgress: any): Promise<any> => 
+{
   let formData = new FormData();
 
-  formData.append('post_id', '1');
-  formData.append('action', 'upload-attachment');
+  if (!instrumentId) new Promise<void>(reject => reject());
+
+  formData.append("instrument_id", instrumentId || '');
+  formData.append("description", '');
+  if (isCover) {
+    formData.append("cover_image", "true");
+  }
   formData.append("file", file);
 
-  return http.post(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/media`, formData, {
+  return wp.post(`/file`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
-      'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`
+      'X-API-Key': api_key
     },
     onUploadProgress,
   });
 };
 
-const getFiles = () : Promise<any> => {
-  return http.get("/files");
+const getFile = (id: number, api_key: string): Promise<any> => {
+  return wp.get(`/file/${id}`, {
+    headers: {
+      'X-API-Key': api_key
+    }
+  });
 };
 
-const FileUploadService = {
-  upload,
-  getFiles,
+const deleteFile = (id: number, api_key: string): Promise<any> => {
+  return wp.delete(`/file/${id}`, {
+    headers: {
+      'X-API-Key': api_key
+    }
+  });
 };
+
+const FileUploadService = { upload, deleteFile, getFile };
 
 export default FileUploadService;

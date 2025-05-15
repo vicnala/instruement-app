@@ -220,7 +220,8 @@
                     "description": "Elige un nombre significativo para tu instrumento",
                     "description_modal": "Elige un nombre significativo para tu instrumento. Este puede estar inspirado en sus características únicas, su futuro propietario, o una persona o lugar de importancia personal."
                 },
-                "button": "Guardar y continuar"
+                "button_save_and_continue": "Guardar y continuar",
+                "button_save": "Guardar"
             },
             "media": {
                 "save": "Guardar medios",
@@ -235,14 +236,14 @@
                     "title": "Imágenes",
                     "title_with_min": "Imágenes (min {min})",
                     "description": "Registra un mínimo de dos imágenes adicionales de vistas y detalles del instrumento. No es necesario subir de nuevo la portada. En formato JPG y PNG",
-                    "button_upload": "Subir imagen",
+                    "button_upload": "Subir imágenes",
                     "text_area_placeholder": "Descripción para esta imagen",
                     "button_save": "Guardar imágenes"
                 },
                 "files": {
                     "title": "Documentos",
                     "description": "Registra documentos adicionales en formato PDF. Los documentos son opcionales.",
-                    "button_upload": "Subir documento",
+                    "button_upload": "Subir documentos",
                     "text_area_placeholder": "Añade aquí una descripción para este documento",
                     "button_save": "Guardar documentos"
                 }

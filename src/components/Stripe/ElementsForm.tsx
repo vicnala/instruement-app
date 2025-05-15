@@ -242,7 +242,7 @@ function CheckoutForm({ amount, address, id, minterAddress, instrument }: { amou
 
 export default function ElementsForm(
   { locale, id, address }: Readonly<{ locale: string, id: string, address?: string }>
-): JSX.Element {
+): JSX.Element | null {
   const t = useTranslations();
   const { address: minterAddress, minter, isLoading } = useStateContext()
   const [instrument, setInstrument] = React.useState<Instrument>()
@@ -294,7 +294,7 @@ export default function ElementsForm(
     }
   }, [id, minter, instrument]);
 
-  return (instrument && minter && amount > 0 &&
+  return (instrument && minter && amount > 0) ? (
     <Page>
       <Elements
         stripe={getStripe()}
@@ -319,5 +319,5 @@ export default function ElementsForm(
         />
       </Elements>
     </Page>
-  );
+  ) : null;
 }

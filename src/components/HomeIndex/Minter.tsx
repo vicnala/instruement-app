@@ -45,7 +45,7 @@ export default function Minter(
           !owned?.length &&
           <div className="flex flex-row flex-wrap gap-6">
             <div className="flex object-cover aspect-3/2 flex-[2] min-w-[300px] rounded-[15px] overflow-hidden">
-              <iframe className="w-full h-full aspect-video object-contain" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+              {/* <iframe className="w-full h-full aspect-video object-contain" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe> */}
             </div>
             <div className="flex flex-col gap-2 justify-center flex-[1] min-w-[30ch]">
               <h2 className="text-3xl font-semibold text-gray-900 dark:text-gray-100">

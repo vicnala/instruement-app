@@ -30,7 +30,7 @@ export default function Draft(
 
         if (data.code !== 'success') {
           console.log(`GET /api/instrument/${instrumentId} ERROR`, data.message);
-          alert(`Error: ${data.message}`);
+          // alert(`Error: ${data.message}`);
           setIsLoading(false);
         } else {
           setInstrument(data.data);
@@ -53,7 +53,7 @@ export default function Draft(
         }
       } catch (error: any) {
         console.log(`GET /api/instrument/${instrumentId} ERROR`, error.message)
-        alert(`Error: ${error.message}`);
+        // alert(`Error: ${error.message}`);
         setIsLoading(false);
       } 
     }

@@ -33,7 +33,7 @@ export default function Preview(
 
         if (data.code !== 'success') {
           console.log(`GET /api/instrument/${id} ERROR`, data.message);
-          alert(`Error: ${data.message}`);
+          // alert(`Error: ${data.message}`);
         } else {
           const imageIds = data.data.images;
           const fileIds = data.data.files;
@@ -108,8 +108,8 @@ export default function Preview(
         setIsLoadingInstrument(false);
       } catch (error: any) {
         console.log(`POST /api/instrument/${id} ERROR`, error.message)
-        alert(`Error: ${error.message}`);
         setIsLoadingInstrument(false);
+        // alert(`Error: ${error.message}`);
       } 
     }
     if (id && !isLoadingInstrument) {

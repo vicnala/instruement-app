@@ -48,6 +48,46 @@ const stateContextDefaultValues: StateContextType = {
 
 const StateContext = createContext<StateContextType>(stateContextDefaultValues)
 
+export const getWPUser = async (activeAccount: any, setIsLuthier: Function, setIsVerified: Function, setIsMinter: Function, setMinter: Function) => {
+  try {
+    const result = await fetch(`/api/user/${activeAccount.address}`, { cache: 'no-store' })
+    const data = await result.json();
+    // data is the "data", there is NO { code: 'xx', ... }
+    // console.log(`/api/user/${address}`, data);
+
+    const { isLuthier, isVerified, isMinter } = getLuthierPermissions(data);
+
+    if (isLuthier) setIsLuthier(true);
+    else setIsLuthier(false);
+
+    if (isVerified) setIsVerified(true);
+    else setIsVerified(false)
+
+    if (isMinter) {
+      setIsMinter(true)
+      setMinter(data)
+    } else {
+      setIsMinter(false)
+      setMinter(false)
+    }
+  } catch (error) {
+    setIsMinter(false)
+    setMinter(false)
+    setIsVerified(false)
+    setIsLuthier(false)
+  }
+}
+
+export const getUserTokens = async (activeAccount: any, setOwned: Function) => {
+  try {
+    const result = await fetch(`/api/tokens/${activeAccount.address}`, { cache: 'no-store' })
+    const data = await result.json();
+    setOwned(data);
+  } catch (error) {
+    setOwned([]);
+  }
+}
+
 export const StateContextProvider = ({ children }: Props) => {
   const activeAccount = useActiveAccount();
   const activeWallet = useActiveWallet();
@@ -84,54 +124,12 @@ export const StateContextProvider = ({ children }: Props) => {
   useEffect(() => {
     async function getUser() {
       // console.log("context", activeAccount);
-
       setIsLoading(true);
       setReloadUser(false);
       if (activeAccount?.address) {
         setAddress(activeAccount.address);
-        try {
-          const result = await fetch(`/api/user/${activeAccount.address}`, { cache: 'no-store' })
-          const data = await result.json();
-          // data is the "data", there is NO { code: 'xx', ... }
-          // console.log(`/api/user/${address}`, data);
-
-          const { isLuthier, isVerified, isMinter } = getLuthierPermissions(data);
-
-          if (isLuthier) setIsLuthier(true);
-          else setIsLuthier(false);
-
-          if (isVerified) setIsVerified(true);
-          else setIsVerified(false)
-
-          if (isMinter) {
-            setIsMinter(true)
-            setMinter(data)
-          } else {
-            setIsMinter(false)
-            setMinter(false)
-          }
-        } catch (error) {
-          console.log(error)
-          setIsMinter(false)
-          setMinter(false)
-          setIsVerified(false)
-          setIsLuthier(false)
-        }
-
-        try {
-          const result = await fetch(`/api/tokens/${activeAccount.address}`, { cache: 'no-store' })
-          const data = await result.json();
-
-          if (data && data.length) {
-            setOwned(data);
-          } else {
-            setOwned([]);
-          }
-        } catch (error) {
-          console.log(error)
-          setOwned([]);
-        }
-
+        await getWPUser(activeAccount, setIsLuthier, setIsVerified, setIsMinter, setMinter);
+        await getUserTokens(activeAccount, setOwned);
       }
       setIsLoading(false)
     }

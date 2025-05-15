@@ -18,6 +18,9 @@ import ProgressBar from "../UI/ProgressBar"
 import ButtonSpinner from "../UI/ButtonSpinner"
 import FormSaveButton from "../UI/FormSaveButton"
 import Divider from "../UI/Divider"
+import MediaManager from "@/components/MediaManager";
+import FileUploadService from "@/services/FileUploadService";
+import DraftService from "@/services/DraftService";
 
 const Editor = dynamic(() => import("@/components/Editor"), { ssr: false })
 
@@ -33,27 +36,19 @@ export default function DraftForm(
 
   const [open, setOpen] = useState(false)
   const [type, setType] = useState<string>("")
-  const [instrumentTypes, setInstrumentTypes] = useState([])
+  const [instrumentTypes, setInstrumentTypes] = useState<any[]>([])
   const [instrument, setInstrument] = useState<Instrument>()
   const [inputValue, setInputValue] = useState("")
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
 
-  const [cover, setCover] = useState<File>()
-  const [coverFile, setCoverFile] = useState<File>()
   const [coverDescription, setCoverDescription] = useState<string>('')
-
   const [images, setImages] = useState<File[]>([])
-  const [imageFiles, setImageFiles] = useState<File[]>([])
   const [imageDescriptions, setImageDescriptions] = useState<string[]>([])
-
-  const [documentFiles, setDocumentFiles] = useState<File[]>([])
   const [documentDescriptions, setDocumentsDescriptions] = useState<string[]>([])
 
   const [error, setError] = useState<string | null>(null)
-  const refCover = useRef<HTMLInputElement>(null)
-  const refImage = useRef<HTMLInputElement>(null)
-  const refDocument = useRef<HTMLInputElement>(null)
+
   const [isLoadingMetadata, setIsLoadingMetadata] = useState(false)
 
   // Add new state for tracking progress
@@ -64,7 +59,7 @@ export default function DraftForm(
   const minImages = 2;
   const hasMediaUploads = instrument ? !!(instrument.cover_image && instrument.images.length >= minImages) : false;
   const hasDescription = instrument ? instrument.description && instrument.description.trim().length > 0 : false;
-
+ 
   // Add useEffect to handle step transitions
   useEffect(() => {
     if (!instrument) {
@@ -80,22 +75,22 @@ export default function DraftForm(
         setCurrentStep(2);
       }
     }
-  }, [instrument]);
+  }, [instrument, hasMediaUploads, hasDescription]);
 
   // Fetch instrument details and associated files/images when instrumentId changes
   useEffect(() => {
     const getInstrument = async () => {
+      if (!minter || typeof minter === 'boolean') return;
       try {
         const result = await fetch(`/api/instrument/${instrumentId}?locale=${locale}`, {
           method: "GET",
           headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
         })
         const { data } = await result.json()
-        // console.log("GET", `/api/instrument/${instrumentId}`, data.data);
 
         if (data.code !== 'success') {
-          // console.log(`GET /api/instrument/${instrumentId} ERROR`, data.message);
-          alert(`Error: ${data.message}`);
+          console.log(`GET /api/instrument/${instrumentId} ERROR`, data.message);
+          // alert(`Error: ${data.message}`);
         } else {
           setName(data.data.title);
           setDescription(data.data.description);
@@ -109,20 +104,20 @@ export default function DraftForm(
               .sort((ida: number, idb: number) => ida > idb ? 1 : -1);
             const _images: InstrumentImage[] = await Promise.all(
               sorted.map(async (imgId: number) => {
-                const result = await fetch(`/api/file/${imgId}`, {
-                  method: "GET",
-                  headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-                })
-                const { data: imageData } = await result.json()
-                if (imageData.code !== 'success') {
-                  console.log(`GET /api/file/${imgId} ERROR`, imageData.message);
-                  return ({
-                    id: imgId,
-                    file_url: data.data.placeholder_image,
-                    description: 'Image not found'
-                  })
-                } else {
-                  return imageData.data;
+                try {
+                  const result = await FileUploadService.getFile(imgId, minter.api_key);
+                  if (result.data.code !== 'success') {
+                    console.log(`GET image ${imgId} ERROR`, result.data.message);
+                    return ({
+                      id: imgId,
+                      file_url: data.data.placeholder_image,
+                      description: 'Image not found'
+                    })
+                  } else {
+                    return result.data.data;
+                  }
+                } catch (error) {
+                  console.log(`GET image ${imgId} ERROR`, error);
                 }
               })
             ) || [];
@@ -134,20 +129,20 @@ export default function DraftForm(
             const sorted = fileIds.sort((ida: number, idb: number) => ida > idb ? 1 : -1);
             const files: InstrumentFile[] = await Promise.all(
               sorted.map(async (fileId: number) => {
-                const result = await fetch(`/api/file/${fileId}`, {
-                  method: "GET",
-                  headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-                })
-                const { data: fileData } = await result.json()
-                if (fileData.code !== 'success') {
-                  console.log(`GET /api/file/${fileId} ERROR`, fileData.message);
+                try {
+                  const result = await FileUploadService.getFile(fileId, minter.api_key);
+                  if (result.data.code !== 'success') {
+                    console.log(`GET file ${fileId} ERROR`, result.data.message);
                   return ({
                     id: fileId,
                     file_url: "/images/icons/android-chrome-512x512.png",
                     description: 'File not found'
                   })
                 } else {
-                  return fileData.data;
+                    return result.data.data;
+                  }
+                } catch (error) {
+                  console.log(`GET file ${fileId} ERROR`, error);
                 }
               })
             ) || [];
@@ -156,41 +151,39 @@ export default function DraftForm(
           }
 
           if (coverId) {
-            const result = await fetch(`/api/file/${coverId}`, {
-              method: "GET",
-              headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-            })
-            const { data: imageData } = await result.json()
-            if (imageData.code !== 'success') {
-              console.log(`GET /api/file/${coverId} ERROR`, imageData.message);
+            try {
+              const result = await FileUploadService.getFile(coverId, minter.api_key);
+              if (result.data.code !== 'success') {
+                console.log(`GET cover file ${coverId} ERROR`, result.data.message);
             } else {
-              data.data.cover_image = imageData.data;
+                data.data.cover_image = result.data.data;
+              }
+            } catch (error) {
+              console.log(`GET cover file ${coverId} ERROR`, error);
             }
           }
           setInstrument(data.data);
         }
       } catch (error: any) {
-        console.log(`POST /api/instrument/${instrumentId} ERROR`, error.message)
-        alert(`Error: ${error.message}`);
+        console.log(`GET /api/instrument/${instrumentId} ERROR`, error.message)
+        // alert(`Error: ${error.message}`);
       }
     }
     if (instrumentId && !instrument) {
       getInstrument();
     }
-  }, [instrumentId, instrument]);
+  }, [instrumentId, instrument, minter]);
 
   // Update instrument types based on minter skills and instrument type
   useEffect(() => {
-    if (minter) {
-      const minterSkillsConstruction = minter && minter.skills
+    if (minter && typeof minter !== 'boolean' && minter.skills && minter.instrument_types) {
+      const minterSkillsConstruction = minter.skills
         .filter((s: any) => s.slug.includes('construction'))
         .map((s: any) => s.slug.split('-construction')[0]) || [];
 
-      const minterInstrumentTypes = minter.instrument_types ?
-        minter.instrument_types
-          .map((ins: any) => ({ value: ins.name, label: ins.name, category: ins.slug }))
-          .filter((ins: any) => minterSkillsConstruction.includes(ins.category)) :
-        [];
+      const minterInstrumentTypes = minter.instrument_types
+        .map((ins: any) => ({ value: ins.name, label: ins.name, category: ins.slug }))
+        .filter((ins: any) => minterSkillsConstruction.includes(ins.category));
 
       setInstrumentTypes(minterInstrumentTypes);
 
@@ -208,116 +201,6 @@ export default function DraftForm(
     setDescription(markdown)
   }
 
-  // Handle cover click
-  const handleCoverClick = () => {
-    refCover.current?.click();
-  }
-
-  // Handle images click
-  const handleImagesClick = () => {
-    refImage.current?.click();
-  }
-
-  // Handle documents click
-  const handleDocumentClick = () => {
-    refDocument.current?.click();
-  }
-
-  // Handle cover change
-  const handleCoverChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files && files.length === 1) {
-      const _files = Array.from(files);
-      setCoverFile(_files[0] as File);
-      const file = files[0];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setCover(reader.result as unknown as File);
-        setCoverDescription(() => '');
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  // Handle image change
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      const _files = Array.from(files);
-      setImageFiles((prevFiles: any) => [...prevFiles, _files[0] as File]);
-      const file = files[0];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImages((prevImages: any) => [...prevImages, reader.result as string]);
-        setImageDescriptions((prevDescriptions: any) => [...prevDescriptions, '']);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  // Handle current file delete
-  const handleCurrentFileDelete = async (id: number) => {
-    setIsLoadingMetadata(true);
-    try {
-      await fetch(`/api/file/${id}`, { method: "DELETE" });
-    } catch (error) {
-      console.log("DELETE /api/file error", error)
-    }
-    setIsLoadingMetadata(false);
-    setReloadUser(true);
-    setInstrument(undefined);
-  };
-
-  // Handle cover delete
-  const handleCoverDelete = async () => {
-    setCoverFile(undefined);
-    setCover(undefined);
-    setCoverDescription('');
-  };
-
-  // Handle image delete
-  const handleImageDelete = async (index: number) => {
-    setImageFiles((prevFiles: any) => prevFiles.filter((_: any, i: any) => i !== index));
-    setImages((prevImages: any) => prevImages.filter((_: any, i: any) => i !== index));
-    setImageDescriptions((prevDescriptions: any) => prevDescriptions.filter((_: any, i: any) => i !== index));
-  };
-
-  // Handle document delete
-  const handleDocumentDelete = async (index: number) => {
-    setDocumentFiles((prevFiles: any) => prevFiles.filter((_: any, i: any) => i !== index));
-    // setDocuments((prevImages: any) => prevImages.filter((_: any, i: any) => i !== index));
-    setDocumentsDescriptions((prevDescriptions: any) => prevDescriptions.filter((_: any, i: any) => i !== index));
-  };
-
-  // Handle cover description change
-  const handleCoverDescriptionChange = (value: string) => {
-    setCoverDescription(value);
-  };
-
-  // Handle image description change
-  const handleImageDescriptionChange = (index: number, value: string) => {
-    const newDescriptions = [...imageDescriptions];
-    newDescriptions[index] = value;
-    setImageDescriptions(newDescriptions);
-  };
-
-  // Handle document change
-  const handleDocumentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      const _files = Array.from(files);
-      setDocumentFiles((prevFiles: File[]) => [...prevFiles, _files[0] as File]);
-      setDocumentsDescriptions((prevDescriptions: any) => [...prevDescriptions, '']);
-    }
-  };
-
-  // Handle document description change
-  const handleDocumentDescriptionChange = (index: number, value: string) => {
-    const newDescriptions = [...documentDescriptions];
-    newDescriptions[index] = value;
-    setDocumentsDescriptions(newDescriptions);
-  };
-
   // Update instrument description
   const updateDescription = async (e: any) => {
     e.preventDefault()
@@ -332,18 +215,16 @@ export default function DraftForm(
         })
         const { data } = await result.json()
 
-        // console.log("POST", `/api/instrument/${instrumentId}`, data);
-
         if (data.code !== 'success') {
           console.log(`POST /api/instrument/${instrumentId} ERROR`, data.message);
-          alert(`Error: ${data.message}`);
+          // alert(`Error: ${data.message}`);
         } else {
-          setReloadUser(true);
+          // setReloadUser(true);
           setInstrument(undefined);
         }
       } catch (error: any) {
         console.log(`POST /api/instrument/${instrumentId} ERROR`, error.message)
-        alert(`Error: ${error.message}`);
+        // alert(`Error: ${error.message}`);
       }
     }
     setIsLoadingMetadata(false)
@@ -360,17 +241,12 @@ export default function DraftForm(
         return;
       }
       try {
-        const result = await fetch(`/api/instrument`, {
-          method: "POST",
-          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-          body: JSON.stringify({ user_id: minter.user_id, type: selected.category, name })
-        })
-        const { data } = await result.json()
-
+        const { data } = await DraftService.createInstrument(minter, selected, name);
+        console.log("POST /api/instrument", data);
         if (data.code === 'success') {
           if (data.data) {
-            setReloadUser(true);
-            setInstrument(undefined);
+            // setReloadUser(true);
+            setInstrument(data.data);
             router.replace(`/drafts/${data.data.id}`);
           }
         } else {
@@ -378,125 +254,35 @@ export default function DraftForm(
           alert(`Error: ${data.message}`);
         }
       } catch (error: any) {
-        console.log("POST /api/instrument ERROR", error)
-        alert(`Error: ${error.message}`);
+        console.log("POST /api/instrument ERROR", error.response.data.data.message)
+        alert(`Error: ${error.response.data.data.message}`);
       }
     }
     setIsLoadingMetadata(false)
-  }
-
-  // Upload cover
-  const uploadMedia = async (e: any) => {
-    e.preventDefault();
-    setIsLoadingMetadata(true);
-
-    if (instrumentId && coverFile) {
-      const formData = new FormData();
-      formData.append("instrument_id", instrumentId);
-      formData.append("description", coverDescription);
-      formData.append("cover_image", "true");
-      formData.append("file", coverFile);
-      try {
-        const result = await fetch(`/api/file`, {
-          method: "POST",
-          body: formData
-        })
-        const { data } = await result.json();
-        if (data.code !== 'success') {
-          console.log("POST /api/file ERROR", data.message);
-          alert(`Error: ${data.message}`);
-        }
-      } catch (error: any) {
-        console.log("POST /api/file POST error", error);
-        alert(`Error: ${error.message}`);
-      }
-    }
-    if (instrumentId && imageFiles.length) {
-      for (let index = 0; index < imageFiles.length; index++) {
-        const formData = new FormData();
-        formData.append("instrument_id", instrumentId);
-        const file = imageFiles[index];
-        formData.append("description", imageDescriptions[index]);
-        formData.append("file", file);
-        
-        try {
-          const result = await fetch(`/api/file`, {
-            method: "POST",
-            body: formData
-          })
-          const { data } = await result.json();
-          if (data.code !== 'success') {
-            console.log("POST /api/file ERROR", data.message);
-            alert(`Error: ${data.message}`);
-          }
-        } catch (error: any) {
-          console.log("POST /api/file POST error", error);
-          alert(`Error: ${error.message}`);
-        }
-      }
-    }
-    if (instrumentId && documentFiles.length) {
-      for (let index = 0; index < documentFiles.length; index++) {
-        const formData = new FormData();
-        formData.append("instrument_id", instrumentId);
-        const file = documentFiles[index];
-        formData.append("description", documentDescriptions[index]);
-        formData.append("file", file);
-        try {
-          const result = await fetch(`/api/file`, {
-            method: "POST",
-            body: formData
-          })
-          const { data } = await result.json();
-          if (data.code !== 'success') {
-            console.log("POST /api/file ERROR", data.message);
-            alert(`Error: ${data.message}`);
-          }
-        } catch (error: any) {
-          console.log("POST /api/file POST error", error);
-          alert(`Error: ${error.message}`);
-        }
-      }
-    }
-
-    setCover(undefined);
-    setCoverFile(undefined);
-    setCoverDescription('');
-    setImages([]);
-    setImageFiles([]);
-    setImageDescriptions([]);
-    setDocumentFiles([]);
-    setDocumentsDescriptions([]);
-    setReloadUser(true);
-    setInstrument(undefined);
-    setIsLoadingMetadata(false);
-    router.replace(`/drafts/${instrumentId}`);
   }
 
   // Handle instrument delete
   const handleInstrumentDelete = async () => {
     setIsLoadingMetadata(true);
     try {
-      await fetch(`/api/instrument/${instrumentId}`, { method: "DELETE" });
+      if (instrument) {
+        await DraftService.deleteInstrument(instrument.id);
+      }
     } catch (error) {
       console.log("POST /api/instrument DELETE error", error)
     }
     setIsLoadingMetadata(false);
+    setInstrument(undefined);
+    setType('');
+    setName('');
+    setDescription('');
+    setCoverDescription('');
+    setImages([]);
+    setImageDescriptions([]);
+    setDocumentsDescriptions([]);
     setReloadUser(true);
-    // setInstrument(undefined);
     router.push(`/`)
   };
-
-  // Render loading state if instrumentId exists but instrument is not loaded
-  if (instrumentId && !instrument) return (
-    <Page>
-      <div className="text-center">
-        <Loading />
-      </div>
-    </Page>
-  )
-
-  // console.log(instrument);
 
   // // console.log("cover_image", instrument?.cover_image);
   // console.log("images", instrument?.images);
@@ -506,7 +292,6 @@ export default function DraftForm(
   return (
     minter ?
       <Page>
-
         <Section id="progress-bar">
           <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-it-50 rounded-[15px] border border-it-200 overflow-hidden">
             <div className="w-full mx-auto mb-4 sm:mb-8">
@@ -622,24 +407,24 @@ export default function DraftForm(
                   </label>
                   <input
                     name="name"
-                    className={`text-base block w-full px-2 py-2 text-it-950 border rounded-md focus:border-it-400 focus:ring-it-300 focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-white dark:bg-opacity-90 ${instrument?.title ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                    className={`text-base block w-full px-2 py-2 text-it-950 border rounded-md focus:border-it-400 focus:ring-it-300 focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-white dark:bg-opacity-90`}
                     onChange={(e) => { setName(e.target.value) }}
                     value={name}
-                    disabled={instrument?.title ? true : false}
+                    disabled={false}
                   />
                   <p className="text-sm text-gray-600 pt-2">
                     {t('basic_info.name.description')}
                   </p>
                 </div>
               </div>
-              {!instrumentId && (
+              {instrument?.title !== name && instrument?.type !== type  && (
                 <div className="mt-4 text-right">
                   <FormSaveButton
                     disabled={isLoadingMetadata || !type || !name}
                     onClick={(e) => createInstrument(e)}
                     isLoading={isLoadingMetadata}
                   >
-                    {t('basic_info.button')}
+                    {instrument?.title ? t('basic_info.button_save') : t('basic_info.button_save_and_continue')}
                   </FormSaveButton>
                 </div>
               )}
@@ -660,72 +445,7 @@ export default function DraftForm(
                       <div className="mt-4">
                         <>
                           <div className="flex flex-col">
-                            <input
-                              type="file"
-                              accept={process.env.NEXT_PUBLIC_MIME_TYPE_ACCEPT || ""}
-                              id="cover"
-                              name="cover"
-                              multiple={false}
-                              ref={refCover}
-                              className="hidden"
-                              onChange={handleCoverChange}
-                            />
-                            {/* Show saved cover image with description */}
-                            {!cover && instrument.cover_image && instrument.cover_image.file_url &&
-                              <div
-                                key={instrument.cover_image.id}
-                                className="max-w-sm bg-it-50 border border-it-200 rounded-lg shadow overflow-hidden"
-                              >
-                                <div className="relative overflow-hidden text-ellipsis">
-                                  <img className="" src={instrument.cover_image.file_url} alt={instrument.cover_image.description} />
-                                  <button
-                                    type="button"
-                                    className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
-                                    onClick={() => handleCurrentFileDelete(instrument.cover_image.id)}
-                                  >
-                                    <IconTrashTwentyFour />
-                                  </button>
-                                </div>
-                                <div className="w-full p-2 border-none focus:outline-none">
-                                  {instrument.cover_image.description}
-                                </div>
-                              </div>
-                            }
-                            {/* Show selected cover image with description textarea. Not saved yet. */}
-                            {!!cover &&
-                              <div
-                                key={'cover'}
-                                className="max-w-sm bg-white border border-gray-200 rounded-lg overflow-hidden"
-                              >
-                                <div className="relative overflow-hidden text-ellipsis border-b border-gray-100">
-                                  <img className="" src={cover as any} alt="" />
-                                  <button
-                                    type="button"
-                                    className="absolute top-2 right-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
-                                    onClick={() => handleCoverDelete()}
-                                  >
-                                    <IconTrashTwentyFour />
-                                  </button>
-                                </div>
-                                <textarea
-                                  className="w-full p-2 border-none focus:outline-none min-h-[100px]"
-                                  placeholder={t('media.cover.text_area_placeholder')}
-                                  value={coverDescription}
-                                  onChange={(e) => handleCoverDescriptionChange(e.target.value)}
-                                />
-                              </div>
-                            }
-                            {/* Show upload button if there is no cover image in instrument (not saved yet) */}
-                            {(!instrument.cover_image && !cover) &&
-                              <button
-                                type="button"
-                                className="bg-transparent text-center mt-2 hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-sm md:text-lg flex items-center justify-center"
-                                onClick={handleCoverClick}
-                              >
-                                <IconUploadTwentyFour className="w-4 h-4 mr-2" />
-                                {t('media.cover.button_upload')}
-                              </button>
-                            }
+                            <MediaManager instrument={instrument} multiple={false} api_key={minter.api_key} isCover={true} accept={'image'} />
                           </div>
                           {error && <p className="text-red-500">{error}</p>}
                         </>
@@ -743,79 +463,7 @@ export default function DraftForm(
                         {t('media.images.description')}
                       </p>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-6 mt-4">
-                        <input
-                          type="file"
-                          accept={process.env.NEXT_PUBLIC_MIME_TYPE_ACCEPT || ""}
-                          id="images"
-                          name="images"
-                          multiple={true}
-                          ref={refImage}
-                          className="hidden"
-                          onChange={handleImageChange}
-                        />
-                        {(instrument.images.length > 0 || images.length > 0) && (
-                          <>
-                            {/* Show saved images with description */}
-                            {instrument.images.length > 0 && instrument.images[0] &&
-                              instrument.images.map((img: InstrumentImage, index: number) => (
-                                <div
-                                  key={img.id}
-                                  className="max-w-sm bg-it-50 border border-it-200 rounded-lg shadow overflow-hidden"
-                                >
-                                  <div className="relative overflow-hidden text-ellipsis">
-                                    <img className="" src={img.file_url} alt={img.description} />
-                                    <button
-                                      type="button"
-                                      className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
-                                      onClick={() => handleCurrentFileDelete(img.id)}
-                                    >
-                                      <IconTrashTwentyFour />
-                                    </button>
-                                  </div>
-                                  <div className="w-full p-2 border-none focus:outline-none">
-                                    {img.description}
-                                  </div>
-                                </div>
-                              ))
-                            }
-                            {/* Show selected images with description textarea. Not saved yet. */}
-                            {images.length > 0 && images.map((img: any, index: number) => (
-                              <div
-                                key={index.toString()}
-                                className="max-w-sm bg-white border border-gray-200 rounded-lg overflow-hidden shadow dark:bg-gray-800 dark:border-gray-700 text-center"
-                              >
-                                <div className="relative overflow-hidden text-ellipsis border-b border-gray-100">
-                                  <img className="" src={img} alt="" />
-                                  <button
-                                    type="button"
-                                    className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
-                                    onClick={() => handleImageDelete(index)}
-                                  >
-                                    <IconTrashTwentyFour />
-                                  </button>
-                                </div>
-                                <textarea
-                                  className="w-full p-2 border-none focus:outline-none min-h-[100px]"
-                                  placeholder={t('media.images.text_area_placeholder')}
-                                  value={imageDescriptions[index]}
-                                  onChange={(e) => handleImageDescriptionChange(index, e.target.value)}
-                                />
-                              </div>
-                            ))}
-                          </>
-                        )}
-                        <div className="">
-                          {/* Upload button */}
-                          <button
-                            type="button"
-                            className="bg-transparent text-center hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-sm md:text-lg flex items-center justify-center w-full"
-                            onClick={handleImagesClick}
-                          >
-                            <IconUploadTwentyFour className="w-4 h-4 mr-2" />
-                            {t('media.images.button_upload')}
-                          </button>
-                          {error && <p className="text-red-500">{error}</p>}
-                        </div>
+                        <MediaManager instrument={instrument} multiple={true} api_key={minter.api_key} isCover={false} accept={'image'} />
                       </div>
 
                       <Divider spacing="md" />
@@ -827,109 +475,10 @@ export default function DraftForm(
                         {t('media.files.description')}
                       </p>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-6 mt-4">
-                        <input
-                          type="file"
-                          accept={process.env.NEXT_PUBLIC_FILE_TYPE_ACCEPT || ""}
-                          id="files"
-                          name="files"
-                          multiple={true}
-                          ref={refDocument}
-                          className="hidden"
-                          onChange={handleDocumentChange}
-                        />
-                        {(instrument.files.length > 0 || documentFiles.length > 0) && (
-                          <>
-                            {/* Show saved files with description */}
-                            {instrument && instrument.files.length > 0 &&
-                              instrument.files.map((file: InstrumentFile, index: number) => (
-                                <div
-                                  key={`F${index.toString()}`}
-                                  className="max-w-sm bg-it-50 border border-it-200 rounded-lg overflow-hidden shadow"
-                                >
-                                  <div className="relative overflow-hidden text-ellipsis">
-                                    <div className="aspect-square bg-it-200 flex items-center justify-center p-2">
-                                      <FileText className="w-4 h-4 mr-2" />
-                                      <span>{file.title}</span>
-                                    </div>
-                                    <button
-                                      type="button"
-                                      className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
-                                      onClick={() => handleCurrentFileDelete(file.id)}
-                                    >
-                                      <IconTrashTwentyFour />
-                                    </button>
-                                  </div>
-                                  <div className="w-full p-2 border-none focus:outline-none">
-                                    {file.description}
-                                  </div>
-                                </div>
-                              ))
-                            }
-                            {/* Show selected files with description textarea. Not saved yet. */}
-                            {!!documentFiles.length && documentFiles.map((file: any, index: number) => (
-                              <div
-                                key={`D${index.toString()}`}
-                                className="max-w-sm bg-gray-50 border border-gray-200 rounded-lg overflow-hidden"
-                              >
-                                <div className="relative overflow-hidden text-ellipsis">
-                                  <div className="aspect-square flex items-center justify-center p-2">
-                                    <FileText className="w-4 h-4 mr-2" />
-                                    <span className="text-center">{file.name}</span>
-                                  </div>
-                                  <button
-                                    type="button"
-                                    className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
-                                    onClick={() => handleDocumentDelete(index)}
-                                  >
-                                    <IconTrashTwentyFour />
-                                  </button>
-                                </div>
-                                <textarea
-                                  className="w-full p-2 border-none focus:outline-none min-h-[100px]"
-                                  placeholder={t('media.files.text_area_placeholder')}
-                                  value={documentDescriptions[index]}
-                                  onChange={(e) => handleDocumentDescriptionChange(index, e.target.value)}
-                                />
-                              </div>
-                            ))}
-                          </>
-                        )}
-                        <div className="">
-                          <button
-                            type="button"
-                            className="bg-transparent text-center hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-sm md:text-lg flex items-center justify-center"
-                            onClick={handleDocumentClick}
-                          >
-                            <IconUploadTwentyFour className="w-4 h-4 mr-2" />
-                            {t('media.files.button_upload')}
-                          </button>
-                          {error && <p className="text-red-500">{error}</p>}
-                        </div>
+                        <MediaManager instrument={instrument} multiple={true} api_key={minter.api_key} isCover={false} accept={'file'} />
                       </div>
                     </div>
                   </div>
-                  <div className="mt-6 text-right">
-                  {/* Upload/Save cover image. Check also name and type are set. */}
-                  {
-                    <FormSaveButton
-                      disabled={
-                        isLoadingMetadata || 
-                        !type || 
-                        !name || 
-                        (!cover && !instrument?.cover_image) || 
-                        (images.length + (instrument?.images?.length || 0) < minImages)
-                      }
-                      onClick={(e) => {
-                        if (cover && images.length > 0 && documentFiles.length > 0) {
-                          uploadMedia(e);
-                        }
-                      }}
-                      isLoading={isLoadingMetadata}
-                    >
-                      {t('media.save')}
-                    </FormSaveButton>
-                  }
-                </div>
                 </div>
               </Section>
             </>
@@ -974,8 +523,7 @@ export default function DraftForm(
                     !hasMediaUploads || 
                     !description || 
                     description !== instrument.description || 
-                    images.length > 0 || 
-                    documentFiles.length > 0
+                    images.length > 0
                   }
                   onClick={() => router.push(`/preview/${instrument.id}`)}
                   isLoading={isLoadingMetadata}

@@ -83,15 +83,13 @@ const MediaManager: React.FC<FilesUploadProps> = ({
     UploadService.deleteFile(file.id, api_key)
       .then(() => {
         if (type === 'image') {
-          setSelectedFiles(selectedFiles.filter((_, i) => i !== index));
           setImagePreviews(imagePreviews.filter((_, i) => i !== index));
-          setProgressInfos(progressInfos.filter((_, i) => i !== index));
-          setUploadedFiles(uploadedFiles.filter((_, i) => i !== index));
-          setMessage(message.filter((_, i) => i !== index));
-          setDescriptions(descriptions.filter((_, i) => i !== index));
-        } else if (type === 'file') {
-          setSelectedFiles(selectedFiles.filter((_, i) => i !== index));
         }
+        setSelectedFiles(selectedFiles.filter((_, i) => i !== index));
+        setProgressInfos(progressInfos.filter((_, i) => i !== index));
+        setUploadedFiles(uploadedFiles.filter((_, i) => i !== index));
+        setMessage(message.filter((_, i) => i !== index));
+        setDescriptions(descriptions.filter((_, i) => i !== index));
       })
       .catch((err: any) => {
         alert(`Error deleting file ${file.id}`);
@@ -201,12 +199,18 @@ const MediaManager: React.FC<FilesUploadProps> = ({
       setResizing(false);
 
       Promise.all(uploadPromises)
-        .then((data) => {
-          setUploadedFiles(prev => [...prev, ...data]);
-        })
-        .then(() => {
-          setSelectedFiles([]);
+        .then((data: any) => {
+
+          console.log(data);
+          
+          // Only keep successfully uploaded files
+          const successfulUploads = data
+            .filter((d: any) => d.code === 'success')
+            .map((d: any) => d.data);
+
           setImagePreviews([]);
+          setSelectedFiles([]);
+          setUploadedFiles(prev => [...prev, ...successfulUploads]);
         });
 
       setMessage([]);
@@ -227,84 +231,92 @@ const MediaManager: React.FC<FilesUploadProps> = ({
       { resizing && <p className="text-xs text-gray-600">Processing...</p> }
 
       <div className="grid grid-cols-2 gap-4 p-4">
-        {accept === 'image' && imagePreviews &&
-          imagePreviews.length > 0 &&
-          imagePreviews.map((url: String, index: number) => (
-            <div
-              key={`image-${index}`}
-              className=""
-            >
-              {imagePreviews[index] &&
-                <div className="w-full h-64 relative">
-                  <Image
-                    className="rounded"
-                    src={imagePreviews[index]}
-                    alt={"image-" + index}
-                    objectFit="scale-down"
-                    fill
-                  />
-                </div>
-              }
-              {
-                progressInfos &&
-                progressInfos.length > 0 &&
-                <div>
-                  <div className="space-y-2">
-                    <div className="h-2.5 w-full rounded-full bg-gray-200">
-                      <div 
-                        className="h-2.5 rounded-full bg-blue-600 transition-all duration-300"
-                        style={{ width: `${progressInfos[index].percentage}%` }}>
-                      </div>    
-                    </div>
-                    <p className="text-sm text-gray-600">{`${progressInfos[index].percentage}`}% uploaded</p>
-                    {message[index] === 'error' && <p className="text-xs text-red-600">Upload failed. Please try again.</p>}
-                    {message[index] === 'success' && <p className="text-xs text-green-600">Uploaded successfully!</p>}
-                  </div>
-                  {
-                    progressInfos[index].percentage === 100 &&
-                    <button
-                      type="button"
-                      className="bg-transparent text-center hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-sm md:text-lg flex items-center justify-center w-full"
-                      onClick={() => handleDelete(index, 'image')}
-                    >
-                      <IconTrashTwentyFour className="w-4 h-4 mr-2" />
-                    </button>
-                  }
-                </div>
-              }
-            </div>
-        ))}
-
-        {uploadedFiles.map((file, index) => (
-          <div
-            key={file.id}
-            className="max-w-sm bg-it-50 border border-it-200 rounded-lg shadow overflow-hidden"
-          >
-            <div className="relative overflow-hidden text-ellipsis">
-              {accept === 'image' ? (
-                <img className="" src={file.file_url} alt={file.description} />
-              ) : (
-                <div className="aspect-square bg-it-200 flex items-center justify-center p-2">
-                  <FileText className="w-4 h-4 mr-2" />
-                  <span>{file.title}</span>
-                </div>
-              )}
-              <button
-                type="button"
-                className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
-                onClick={() => handleDelete(index, accept)}
+        {
+          // Prefer showing uploadedFiles if any exist
+          uploadedFiles.length > 0 ?
+            uploadedFiles.map((file, index) => (
+              <div
+                key={file.id || `file-${index}`}
+                className=""
               >
-                <IconTrashTwentyFour />
-              </button>
-            </div>
-            {/* <textarea
-              className="w-full p-2 border-none focus:outline-none min-h-[100px]"
-              placeholder={t(`media.${accept === 'image' ? 'images' : 'files'}.text_area_placeholder`)}
-              value={descriptions[index]}
-              onChange={(e) => handleDescriptionChange(index, e.target.value)}
-            /> */}
-          </div>
-        ))}
+                <div className="w-full h-64 relative">
+                  {accept === 'image' && file.file_url ? (
+                    <Image
+                      className="rounded"
+                      src={file.file_url}
+                      alt={"image-" + index}
+                      objectFit="scale-down"
+                      fill
+                    />
+                  ) : (
+                    <div key={`document-${file.id || `document-${index}`}`} className="aspect-square bg-it-200 flex items-center justify-center p-2">
+                      <FileText className="w-4 h-4 mr-2" />
+                      <span>{file.title || `document-${index}`}</span>
+                    </div>
+                  )}
+                  <button
+                    type="button"
+                    className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
+                    onClick={() => handleDelete(index, accept)}
+                  >
+                    <IconTrashTwentyFour />
+                  </button>
+                </div>
+              </div>
+            )) : selectedFiles.length > 0 ?
+              <>
+                {selectedFiles.map((file, index) => (
+                  <div
+                    key={`image-${index}`}
+                    className="w-full h-64 relative"
+                  >
+                    {
+                      accept === 'image' && imagePreviews[index] ?                  
+                      <Image
+                        className="rounded"
+                        src={imagePreviews[index]}
+                        alt={"image-" + index}
+                        objectFit="scale-down"
+                        fill
+                      />
+                    : 
+                      <div key={`document-${index}`} className="aspect-square bg-it-200 flex items-center justify-center p-2">
+                        <FileText className="w-4 h-4 mr-2" />
+                        <span>{file.name || `document-${index}`}</span>
+                      </div>
+                    }
+                    {
+                      progressInfos &&
+                      progressInfos.length > 0 &&
+                      <div>
+                        <div className="space-y-2">
+                          <div className="h-2.5 w-full rounded-full bg-gray-200">
+                            <div 
+                              className="h-2.5 rounded-full bg-blue-600 transition-all duration-300"
+                              style={{ width: `${progressInfos[index].percentage}%` }}>
+                            </div>    
+                          </div>
+                          <p className="text-sm text-gray-600">{`${progressInfos[index].percentage}`}% uploaded</p>
+                          {message[index] === 'error' && <p className="text-xs text-red-600">Upload failed. Please try again.</p>}
+                          {message[index] === 'success' && <p className="text-xs text-green-600">Uploaded successfully!</p>}
+                        </div>
+                        {
+                          progressInfos[index].percentage === 100 &&
+                          <button
+                            type="button"
+                            className="bg-transparent text-center hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-sm md:text-lg flex items-center justify-center w-full"
+                            onClick={() => handleDelete(index, 'image')}
+                          >
+                            <IconTrashTwentyFour className="w-4 h-4 mr-2" />
+                          </button>
+                        }
+                      </div>
+                    }
+                  </div>
+                ))}
+              </>
+          : <></>
+        }
       </div>
       <button
         type="button"
