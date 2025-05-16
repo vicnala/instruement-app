@@ -219,6 +219,10 @@
                 }
             },
             "media": {
+                "processing": "Processing images...",
+                "uploaded": "uploaded",
+                "uploaded_successfully": "uploaded successfully",
+                "upload_failed": "Upload failed",
                 "save": "Save media files",
                 "cover": {
                     "title": "Cover",

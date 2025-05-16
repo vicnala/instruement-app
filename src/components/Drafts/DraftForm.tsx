@@ -139,14 +139,13 @@ export default function DraftForm(
 
         if (data.code !== 'success') {
           console.log(`POST /api/instrument/${instrumentId} ERROR`, data.message);
-          // alert(`Error: ${data.message}`);
+          alert(`Error: ${data.message}`);
         } else {
-          // setReloadUser(true);
           setInstrument(undefined);
         }
       } catch (error: any) {
         console.log(`POST /api/instrument/${instrumentId} ERROR`, error.message)
-        // alert(`Error: ${error.message}`);
+        alert(`Error: ${error.message}`);
       }
     }
     setIsLoadingMetadata(false)
@@ -155,18 +154,17 @@ export default function DraftForm(
   // Create new instrument
   const createInstrument = async (e: any) => {
     e.preventDefault()
-    setIsLoadingMetadata(true)
+    setIsLoading(true)
     if (type && name && !instrumentId) {
       const selected: any = instrumentTypes.find((i: any) => i.label === type);
       if (!selected) {
-        setIsLoadingMetadata(false)
+        setIsLoading(false)
         return;
       }
       try {
         const { data } = await DraftService.createInstrument(minter, selected, name);
         if (data.code === 'success') {
           if (data.data) {
-            // setReloadUser(true);
             setInstrument(data.data);
             router.replace(`/drafts/${data.data.id}`);
           }
@@ -179,7 +177,7 @@ export default function DraftForm(
         alert(`Error: ${error.response.data.data.message}`);
       }
     }
-    setIsLoadingMetadata(false)
+    setIsLoading(false)
   }
 
   // Handle instrument delete

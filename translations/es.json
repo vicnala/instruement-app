@@ -224,6 +224,10 @@
                 "button_save": "Guardar"
             },
             "media": {
+                "processing": "Procesando imágenes...",
+                "uploaded": "subido",
+                "uploaded_successfully": "subido correctamente",
+                "upload_failed": "Error al subir",
                 "save": "Guardar medios",
                 "cover": {
                     "title": "Portada",

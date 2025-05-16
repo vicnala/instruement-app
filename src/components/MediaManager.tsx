@@ -6,6 +6,7 @@ import UploadService from "../services/FileUploadService";
 import FileResizeService from "@/services/FileResizeService";
 import IconUploadTwentyFour from "@/components/Icons/Upload";
 import IconTrashTwentyFour from "./Icons/Trash";
+import ButtonSpinner from "@/components/UI/ButtonSpinner";
 import { InstrumentImage, InstrumentFile, Instrument } from "@/lib/definitions";
 
 interface ProgressInfo {
@@ -39,6 +40,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
   const [progressInfos, setProgressInfos] = useState<Array<ProgressInfo>>([]);
   const [message, setMessage] = useState<Array<string>>([]);
   const [descriptions, setDescriptions] = useState<string[]>([]);
+  const [deletingFileId, setDeletingFileId] = useState<string | null>(null);
   const progressInfosRef = useRef<any>(null);
   const [resizing, setResizing] = useState<Boolean>(false);
   const ref = useRef<HTMLInputElement>(null);
@@ -81,6 +83,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
 
   const handleDelete = (index: number, type: string) => {
     const file = uploadedFiles[index];
+    setDeletingFileId(file.id.toString());
 
     UploadService.deleteFile(file.id, api_key)
       .then(() => {
@@ -95,6 +98,9 @@ const MediaManager: React.FC<FilesUploadProps> = ({
       })
       .catch((err: any) => {
         alert(`Error deleting file ${file.id}`);
+      })
+      .finally(() => {
+        setDeletingFileId(null);
       });
   }
 
@@ -251,7 +257,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
         accept={accept === 'image' ? process.env.NEXT_PUBLIC_MIME_TYPE_ACCEPT : accept === 'file' ? process.env.NEXT_PUBLIC_FILE_TYPE_ACCEPT : ".jeg"}
       />
 
-      { resizing && <p className="text-xs text-gray-600">Processing...</p> }
+      { resizing && <p className="text-xs text-gray-600">{t("media.processing")}...</p> }
 
       <div className="grid grid-cols-2 gap-4 p-4">
         {
@@ -280,8 +286,13 @@ const MediaManager: React.FC<FilesUploadProps> = ({
                     type="button"
                     className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
                     onClick={() => handleDelete(index, accept)}
+                    disabled={deletingFileId === file.id.toString()}
                   >
-                    <IconTrashTwentyFour />
+                    {deletingFileId === file.id.toString() ? (
+                      <ButtonSpinner />
+                    ) : (
+                      <IconTrashTwentyFour />
+                    )}
                   </button>
                 </div>
               </div>
@@ -320,11 +331,11 @@ const MediaManager: React.FC<FilesUploadProps> = ({
                           style={{ width: `${progressInfos[index].percentage}%` }}>
                         </div>    
                       </div>
-                      <p className="text-sm text-gray-600">{`${progressInfos[index].percentage}`}% uploaded</p>
-                      {message[index] === 'error' && <p className="text-xs text-red-600">Upload failed. Please try again.</p>}
-                      {message[index] === 'success' && <p className="text-xs text-green-600">Uploaded successfully!</p>}
+                      <p className="text-sm text-gray-600">{`${progressInfos[index].percentage}`}% {t("media.uploaded")}</p>
+                      {message[index] === 'error' && <p className="text-xs text-red-600">{t("media.upload_failed")}</p>}
+                      {message[index] === 'success' && <p className="text-xs text-green-600">{t("media.uploaded_successfully")}</p>}
                     </div>
-                    {
+                    {/* {
                       progressInfos[index].percentage === 100 &&
                       <button
                         type="button"
@@ -333,7 +344,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
                       >
                         <IconTrashTwentyFour className="w-4 h-4 mr-2" />
                       </button>
-                    }
+                    } */}
                   </div>
                 }
               </div>
