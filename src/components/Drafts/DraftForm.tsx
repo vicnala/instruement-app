@@ -166,7 +166,7 @@ export default function DraftForm(
           const { data } = await DraftService.createInstrument(minter, selected, name);
           if (data.code === 'success') {
             if (data.data) {
-              setInstrument(data.data);
+              setReloadUser(true);
               router.replace(`/drafts/${data.data.id}`);
             }
           } else {
@@ -367,7 +367,7 @@ export default function DraftForm(
                   </p>
                 </div>
               </div>
-              {instrument?.title !== name && instrument?.type !== type && !isLoading && (
+              {(!instrumentId || (instrument?.title !== name && instrument?.type !== type)) &&
                 <div className="mt-4 text-right">
                   <FormSaveButton
                     disabled={isLoadingMetadata || !type || !name}
@@ -377,7 +377,7 @@ export default function DraftForm(
                     {instrument?.title ? t('basic_info.button_save') : t('basic_info.button_save_and_continue')}
                   </FormSaveButton>
                 </div>
-              )}
+              }
             </div>
           </Section>
           {
