@@ -214,28 +214,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
           // Only keep successfully uploaded files
           const successfulUploads = data
             .filter((d: any) => d.code === 'success')
-            .map((d: any) => {
-
-              
-              // Parche hasta que se arregle el endpoint
-              if (typeof d.data === 'string') {
-                return {
-                  id: 666,
-                  instrument_id: instrument.id,
-                  user_id: instrument.user_id,
-                  created_at: new Date().toISOString(),
-                  updated_at: new Date().toISOString(),
-                  file: d.data,
-                  file_url: d.data,
-                  base_url: process.env.NEXT_PUBLIC_BASE_URL,
-                  filesize: 0
-                };
-
-                // TODO: Eliminar el parche cuando se arregle el endpoint
-              } else {
-                return d.data;
-              }
-            });
+            .map((d: any) => d.data);
 
           setImagePreviews([]);
           setSelectedFiles([]);

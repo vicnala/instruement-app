@@ -273,7 +273,7 @@ export default function ElementsForm(
           const coverId = data.data.cover_image;
           if (coverId) {
             const { data } = await FileUploadService.getFile(coverId, minter?.api_key);
-            console.log("GET /api/file/", data);
+            // console.log("GET /api/file/", data);
             if (data.code === 'success') {
               _instrument.cover_image = data.data;
             }

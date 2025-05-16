@@ -23,15 +23,18 @@ export default function Draft(
       if (!instrumentId || isLoading) return;
       
       setIsLoading(true);
-      const data = await InstrumentService.getInstrument(instrumentId, locale, api_key);
-      
-      if (data) {
-        setInstrument(data);
-        if (data.cover_image) {
-          setImage(data.cover_image);
-        } else {
-          setImage({ file_url: data.placeholder_image || '', description: '' } as InstrumentImage);
+      try {
+        const data = await InstrumentService.getInstrument(instrumentId, locale, api_key);
+        if (data) {
+          setInstrument(data);
+          if (data.cover_image) {
+            setImage(data.cover_image);
+          } else {
+            setImage({ file_url: data.placeholder_image || '', description: '' } as InstrumentImage);
+          }
         }
+      } catch (error) {
+        console.error(error);
       }
       
       setIsLoading(false);
@@ -46,7 +49,7 @@ export default function Draft(
   return (
     <div
       className="cursor-pointer transition-all hover:shadow-lg || flex flex-col w-full justify-stretch min-h-[200px] || overflow-hidden bg-it-25 border border-it-100 rounded-lg"
-      onClick={() => router.push(`/drafts/${instrumentId}`)}
+      onClick={() => instrument && !instrument.queue_id && !instrument.asset_id ? router.push(`/drafts/${instrumentId}`) : null}
     >
       <div className="relative w-full aspect-square bg-white/[.04]">
         {
@@ -54,9 +57,12 @@ export default function Draft(
           <Skeleton width="100%" height="100%" /> :
           <>
             {
-              instrument && instrument.queue_id ?
+              instrument && instrument.queue_id && !instrument.asset_id ?
               <div className="absolute top-2 left-2 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-all">
                 {t("registering")}
+              </div> : instrument && instrument.asset_id ?
+              <div className="absolute top-2 left-2 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-all">
+                #{instrument.asset_id}
               </div> :
               <div className="absolute top-2 right-2 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-all">
                 <IconEdit 

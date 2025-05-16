@@ -21,7 +21,10 @@ type ImageDescription = {
 }
 
 async function fetchAndStreamFile(url: string) {
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    cache: 'no-store',
+    headers: {'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`} 
+  });
   if (response.body) {
     const reader = response.body.getReader();
     const stream = new ReadableStream({
@@ -127,152 +130,161 @@ export async function POST(request: Request) {
                   if (instrument.queue_id) {
                     return NextResponse.json({ message: `Already processing queueId ${instrument.queue_id} for instrument ${instrumentId}` }, { status: 200 });
                   }
-                  console.log('instrument mint', instrument);
+                  // console.log('instrument mint', instrument);
 
-                  return NextResponse.json({ message: `Received` }, { status: 200 });
+                  const files: File[] = [];
+                  const descriptions: ImageDescription[] = [];
 
-                  // const files: File[] = [];
-                  // const descriptions: ImageDescription[] = [];
+                  const coverId = instrument.cover_image;
+                  const imagesIds = instrument.images;
+                  const filesIds = instrument.files;
 
-                  // const coverId = instrument.cover_image;
-                  // const imagesIds = instrument.images;
-                  // const filesIds = instrument.files;
+                  // IMAGES
+                  let imageIndex: number = 0;
+                  for (const imageId of imagesIds) {
+                    try {
+                      result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/file/${imageId}`, { headers });                     
 
-                  // // IMAGES
-                  // let imageIndex: number = 0;
-                  // for (const imageId of imagesIds) {
-                  //   result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/file/${imageId}`, { headers });
-                  //   const { data: _image } = await result.json();
-                  //   // console.log("_image", _image);
-
-                  //   blob = await fetchAndStreamFile(_image.file_url);
-                  //   const fileName = `image_${imageIndex}`;
-                  //   if (blob) {
-                  //       const file = new File([blob], fileName, { type: _image.type });
-                  //       files.push(file);
-                  //       // imagesDescriptions.push(_image.description);
-                  //       descriptions.push({
-                  //         name: fileName,
-                  //         description: _image.description,
-                  //         cover: imageId === coverId ? true : false
-                  //       });
-                  //   }
-                  //   imageIndex++;
-                  // }
-
-                  // // DOCUMENTS
-                  // let documentIndex: number = 0;
-                  // for (const fileId of filesIds) {
-                  //   result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/file/${fileId}`, { headers });
-                  //   const { data: _file } = await result.json();
-                  //   // console.log("_file", _file);
-                  //   blob = await fetchAndStreamFile(_file.file_url);
-                  //   const fileName = `document_${documentIndex}`;
-                  //   if (blob) {
-                  //       const file = new File([blob], fileName, { type: _file.type });
-                  //       files.push(file);
-                  //       // filesDescriptions.push(_file.description);
-                  //       descriptions.push({
-                  //         name: fileName,
-                  //         description: _file.description,
-                  //         cover: false
-                  //       });
-                  //   }
-                  //   documentIndex++;
-                  // }
-
-                  // const _descriptionsString = JSON.stringify(descriptions);
-                  // const _descriptionsBlob = Buffer.from(_descriptionsString, 'utf-8');
-                  // const _descriptions = new File([_descriptionsBlob], `descriptions`, { type: 'text/plain' });
-                  // files.push(_descriptions);
-        
-                  // // console.log("descriptions", descriptions);
-
-                  // const coverFileName = descriptions.find(d => d.cover === true);
-
-                  // if (coverFileName) {
-                  //   // console.log('coverFileName', coverFileName.name);
-        
-                  //   // sort the files so the first one is the cover
-                  //   files.sort((a, b) => a.name === coverFileName.name ? -1 : 1);
-                    
-                  //   // upload files to IPFS
-                  //   const uris = await upload({ client, files });
-                  //   // console.log("uris", uris);
-                    
-                  //   // get the cover umage URI as the first uri
-                  //   const coverURI = uris[0];
-                  //   // console.log("coverURI", coverURI);
-        
-                  //   if (coverURI) {
-                  //     const fileDirSplit = coverURI.split('/');
-                  //     const FileDirHash = fileDirSplit[2];
-        
-                  //     const metadata = {
-                  //       image: coverURI,
-                  //       name: instrument.title,
-                  //       description: instrument.description,
-                  //       background_color: "",
-                  //       external_url: "",
-                  //       customImage: "",
-                  //       customAnimationUrl: "",
-                  //       animation_url: "",
-                  //       properties: [
-                  //         {
-                  //           trait_type: "Registrar",
-                  //           value: data.metadata.minterAddress
-                  //         },
-                  //         {
-                  //           trait_type: "Type",
-                  //           value: instrument.type
-                  //         },
-                  //         {
-                  //           trait_type: "Files",
-                  //           value: FileDirHash
-                  //         }
-                  //       ]
-                  //     }
-        
-                  //     // console.log('metadata', metadata);
-        
-                  //     const engine = new Engine({
-                  //       url: ENGINE_URL,
-                  //       accessToken: ENGINE_ACCESS_TOKEN,
-                  //     });
-
-                  //     // console.log(">>> engine.erc721.mintTo <<< start");
-        
-                  //     const mintResult = await engine.erc721.mintTo(
-                  //       NEXT_PUBLIC_CHAIN_ID,
-                  //       NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS,
-                  //       BACKEND_WALLET_ADDRESS,
-                  //       { receiver: data.metadata?.address, metadata }
-                  //     );
-
-                  //     // console.log(">>> engine.erc721.mintTo <<< end");
+                      if (result.status !== 200) {
+                        throw new Error(`/api/webhooks/stripe fetch file ${imageId} ERROR: ${result.statusText}`);
+                      }
                       
-                  //     const { queueId } = mintResult.result;
+                      const { data: _image } = await result.json();
+                      // console.log("_image", _image);
+  
+                      blob = await fetchAndStreamFile(_image.file_url);
+                      const fileName = `image_${imageIndex}`;
+                      if (blob) {
+                          const file = new File([blob], fileName, { type: _image.type });
+                          files.push(file);
+                          // imagesDescriptions.push(_image.description);
+                          descriptions.push({
+                            name: fileName,
+                            description: _image.description,
+                            cover: imageId === coverId ? true : false
+                          });
+                      }
+                      imageIndex++;
+                    } catch (error: any) {
+                      console.error(`/api/webhooks/stripe fetch file ${imageId} ERROR:`, error.message);
+                    }
+                  }
 
-                  //     console.log('queueId', queueId, 'for draft', instrumentId);
+                  // DOCUMENTS
+                  let documentIndex: number = 0;
+                  for (const fileId of filesIds) {
+                    try {
+                      result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/file/${fileId}`, { headers });
+                      const { data: _file } = await result.json();
+                      // console.log("_file", _file);
+                      blob = await fetchAndStreamFile(_file.file_url);
+                      const fileName = `document_${documentIndex}`;
+                      if (blob) {
+                        const file = new File([blob], fileName, { type: _file.type });
+                        files.push(file);
+                        // filesDescriptions.push(_file.description);
+                        descriptions.push({
+                          name: fileName,
+                          description: _file.description,
+                          cover: false
+                        });
+                      }
+                      documentIndex++;
+                    } catch (error: any) {
+                      console.error(`/api/webhooks/stripe fetch file ${fileId} ERROR:`, error.message);
+                    }
+                  }
 
-                  //     result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${instrumentId}`, {
-                  //       method: 'POST',
-                  //       headers,
-                  //       body: JSON.stringify({ queue_id: queueId })
-                  //     });
+                  const _descriptionsString = JSON.stringify(descriptions);
+                  const _descriptionsBlob = Buffer.from(_descriptionsString, 'utf-8');
+                  const _descriptions = new File([_descriptionsBlob], `descriptions`, { type: 'text/plain' });
+                  files.push(_descriptions);
+        
+                  // console.log("descriptions", descriptions);
 
-                  //     const updateData = await result.json();
-                  //     if (updateData?.code === 'success') {
-                  //       return NextResponse.json({ message: "Received" }, { status: 200 });
-                  //     } else {
-                  //       throw new Error(`/api/webhooks/stripe ${message}`);
-                  //     }
-                  //   } else {
-                  //     throw new Error(`/api/webhooks/stripe NO COVER URI`);
-                  //   }
-                  // } else {
-                  //   throw new Error(`/api/webhooks/stripe NO COVER URI FILE`);
-                  // }
+                  const coverFileName = descriptions.find(d => d.cover === true);
+
+                  if (coverFileName) {
+                    // console.log('coverFileName', coverFileName.name);
+        
+                    // sort the files so the first one is the cover
+                    files.sort((a, b) => a.name === coverFileName.name ? -1 : 1);
+                    
+                    // upload files to IPFS
+                    const uris = await upload({ client, files });
+                    // console.log("uris", uris);
+                    
+                    // get the cover umage URI as the first uri
+                    const coverURI = uris[0];
+                    // console.log("coverURI", coverURI);
+        
+                    if (coverURI) {
+                      const fileDirSplit = coverURI.split('/');
+                      const FileDirHash = fileDirSplit[2];
+        
+                      const metadata = {
+                        image: coverURI,
+                        name: instrument.title,
+                        description: instrument.description,
+                        background_color: "",
+                        external_url: "",
+                        customImage: "",
+                        customAnimationUrl: "",
+                        animation_url: "",
+                        properties: [
+                          {
+                            trait_type: "Registrar",
+                            value: data.metadata.minterAddress
+                          },
+                          {
+                            trait_type: "Type",
+                            value: instrument.type
+                          },
+                          {
+                            trait_type: "Files",
+                            value: FileDirHash
+                          }
+                        ]
+                      }
+                
+                      const engine = new Engine({
+                        url: ENGINE_URL,
+                        accessToken: ENGINE_ACCESS_TOKEN,
+                      });
+
+                      // console.log(">>> engine.erc721.mintTo <<< start");
+        
+                      const mintResult = await engine.erc721.mintTo(
+                        NEXT_PUBLIC_CHAIN_ID,
+                        NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS,
+                        BACKEND_WALLET_ADDRESS,
+                        { receiver: data.metadata?.address, metadata }
+                      );
+
+                      // console.log(">>> engine.erc721.mintTo <<< end");
+                      
+                      const { queueId } = mintResult.result;
+
+                      console.log('queueId', queueId, 'for draft', instrumentId);
+
+                      result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${instrumentId}`, {
+                        method: 'POST',
+                        headers,
+                        body: JSON.stringify({ queue_id: queueId })
+                      });
+
+                      const updateData = await result.json();
+                      if (updateData?.code === 'success') {
+                        return NextResponse.json({ message: "Received" }, { status: 200 });
+                      } else {
+                        throw new Error(`/api/webhooks/stripe ${message}`);
+                      }
+                    } else {
+                      throw new Error(`/api/webhooks/stripe NO COVER URI`);
+                    }
+                  } else {
+                    throw new Error(`/api/webhooks/stripe NO COVER URI FILE`);
+                  }
                 } else {
                   throw new Error(`/api/webhooks/stripe 1 ${message}`);
                 }
