@@ -127,7 +127,7 @@ export async function POST( request: Request, response: Response ) {
                 }
             }
         } else {
-            // console.error(`GET /instrument/queue/${queueId} FAILED with ${getData?.data?.message}`);
+            console.error(`GET /instrument/queue/${queueId} FAILED with ${getData?.data?.message}`);
             return NextResponse.json(
                 { message: getData?.message },
                 { status: 200 },

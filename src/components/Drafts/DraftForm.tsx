@@ -135,13 +135,13 @@ export default function DraftForm(
           headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
           body: JSON.stringify({ description: description || "" })
         })
-        const { data } = await result.json()
+        const { data, code, message} = await result.json()
 
-        if (data.code !== 'success') {
-          console.log(`POST /api/instrument/${instrumentId} ERROR`, data.message);
-          alert(`Error: ${data.message}`);
+        if (code !== 'success') {
+          console.log(`POST /api/instrument/${instrumentId} ERROR`, message);
+          alert(`Error: ${message}`);
         } else {
-          setInstrument(undefined);
+          // setInstrument({...instrument, description: data[0].description});
         }
       } catch (error: any) {
         console.log(`POST /api/instrument/${instrumentId} ERROR`, error.message)
@@ -180,7 +180,11 @@ export default function DraftForm(
       } else if (instrument) {
         try {
           const { data } = await DraftService.updateInstrument(instrumentId, instrument.type, name, description);
-          // console.log("POST /api/instrument UPDATE", data);
+          
+          
+          console.log("POST /api/instrument UPDATE", data);
+          
+          
           if (data.code === 'success') {
             if (data.data && data.data.length === 1) {
 
@@ -195,12 +199,16 @@ export default function DraftForm(
               }
             }
           } else {
-            console.log("POST /api/instrument ERROR", data.message);
+            console.log("updateInstrument FAILED", data.message);
             alert(`Error: ${data.message}`);
+            setReloadUser(true);
+            router.replace(`/`);
           }
         } catch (error: any) {
-          console.log("POST /api/instrument ERROR", error.response.data.message)
-          alert(`Error: ${error.response.data.message}`);
+          console.log("updateInstrument ERROR", error.response.data.message)
+          alert(`Error updateInstrument: ${error.response.data.message}`);
+          setReloadUser(true);
+          router.replace(`/`);
         }
       }
     }
