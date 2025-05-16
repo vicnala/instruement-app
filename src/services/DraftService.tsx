@@ -18,7 +18,7 @@ const createInstrument = (
 };
 
 const updateInstrument = (
-    instrumentId: number,
+    instrumentId: string,
     type: string,
     name: string,
     description: string,
@@ -41,6 +41,10 @@ const deleteInstrument = (
     return api.delete(`/instrument/${instrumentId}`);
 };
 
-const DraftService = { createInstrument, deleteInstrument };
+const DraftService = {
+    createInstrument,
+    updateInstrument,
+    deleteInstrument
+};
 
 export default DraftService;

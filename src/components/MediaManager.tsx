@@ -265,7 +265,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
             uploadedFiles.map((file, index) => (
               <div
                 key={file.id || `file-${index}`}
-                className=""
+                className="max-w-sm bg-it-50 border border-it-200 rounded-lg shadow overflow-hidden"
               >
                 <div className="w-full h-64 relative">
                   {accept === 'image' && file.file_url ? (

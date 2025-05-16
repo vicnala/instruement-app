@@ -152,29 +152,56 @@ export default function DraftForm(
   }
 
   // Create new instrument
-  const createInstrument = async (e: any) => {
+  const createOrUpdateInstrument = async (e: any) => {
     e.preventDefault()
-    setIsLoading(true)
-    if (type && name && !instrumentId) {
-      const selected: any = instrumentTypes.find((i: any) => i.label === type);
-      if (!selected) {
-        setIsLoading(false)
-        return;
-      }
-      try {
-        const { data } = await DraftService.createInstrument(minter, selected, name);
-        if (data.code === 'success') {
-          if (data.data) {
-            setInstrument(data.data);
-            router.replace(`/drafts/${data.data.id}`);
-          }
-        } else {
-          console.log("POST /api/instrument ERROR", data.message);
-          alert(`Error: ${data.message}`);
+    if (type && name && (!instrumentId || instrument)) {
+      if (!instrumentId) {
+        setIsLoading(true);
+        const selected: any = instrumentTypes.find((i: any) => i.label === type);
+        if (!selected) {
+          setIsLoading(false)
+          return;
         }
-      } catch (error: any) {
-        console.log("POST /api/instrument ERROR", error.response.data.data.message)
-        alert(`Error: ${error.response.data.data.message}`);
+        try {
+          const { data } = await DraftService.createInstrument(minter, selected, name);
+          if (data.code === 'success') {
+            if (data.data) {
+              setInstrument(data.data);
+              router.replace(`/drafts/${data.data.id}`);
+            }
+          } else {
+            console.log("POST /api/instrument ERROR", data.message);
+            alert(`Error: ${data.data.message}`);
+          }
+        } catch (error: any) {
+          console.log("POST /api/instrument ERROR", error.response.data.data.message)
+          alert(`Error: ${error.response.data.data.message}`);
+        }
+      } else if (instrument) {
+        try {
+          const { data } = await DraftService.updateInstrument(instrumentId, instrument.type, name, description);
+          // console.log("POST /api/instrument UPDATE", data);
+          if (data.code === 'success') {
+            if (data.data && data.data.length === 1) {
+
+
+              // TODO: Confirmar que el instrumento se actualiza correctamente
+              
+
+              if (instrument.title !== data.data[0].title) {
+                setInstrument({...instrument, title: data.data[0].title});
+              } else {
+                alert("Instrument name not updated!");
+              }
+            }
+          } else {
+            console.log("POST /api/instrument ERROR", data.message);
+            alert(`Error: ${data.message}`);
+          }
+        } catch (error: any) {
+          console.log("POST /api/instrument ERROR", error.response.data.message)
+          alert(`Error: ${error.response.data.message}`);
+        }
       }
     }
     setIsLoading(false)
@@ -211,7 +238,7 @@ export default function DraftForm(
   };
 
   const handleFilesChange = (media: (InstrumentImage | InstrumentFile)[]) => {
-    setHasFiles(media.length > 0);
+    setHasFiles(media.length >= 0);
   };
 
   return (
@@ -344,7 +371,7 @@ export default function DraftForm(
                 <div className="mt-4 text-right">
                   <FormSaveButton
                     disabled={isLoadingMetadata || !type || !name}
-                    onClick={(e) => createInstrument(e)}
+                    onClick={(e) => createOrUpdateInstrument(e)}
                     isLoading={isLoadingMetadata}
                   >
                     {instrument?.title ? t('basic_info.button_save') : t('basic_info.button_save_and_continue')}
@@ -354,9 +381,7 @@ export default function DraftForm(
             </div>
           </Section>
           {
-            isLoading ?
-              <Loading />
-            : instrument &&
+            instrumentId && instrument && !isLoading ?
             <>
               <Section id="media" className="pb-[3px]">
                 <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-50 rounded-lg">
@@ -370,16 +395,14 @@ export default function DraftForm(
                       </p>
                       <div className="mt-4">
                         <>
-                          <div className="flex flex-col">
-                            <MediaManager
-                              instrument={instrument}
-                              multiple={false}
-                              api_key={minter.api_key}
-                              isCover={true}
-                              accept={'image'}
-                              onMediaChange={handleCoverChange}
-                            />
-                          </div>
+                          <MediaManager
+                            instrument={instrument}
+                            multiple={false}
+                            api_key={minter.api_key}
+                            isCover={true}
+                            accept={'image'}
+                            onMediaChange={handleCoverChange}
+                          />
                           {error && <p className="text-red-500">{error}</p>}
                         </>
                       </div>
@@ -428,7 +451,7 @@ export default function DraftForm(
                   </div>
                 </div>
               </Section>
-            </>
+            </> : isLoading && <Loading />
           }
 
           {instrument &&
