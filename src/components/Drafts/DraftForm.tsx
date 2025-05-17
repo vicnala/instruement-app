@@ -59,6 +59,11 @@ export default function DraftForm(
 
   useEffect(() => {
     // handle preview button
+    // handle preview button
+    console.log(instrument?.description);
+    console.log(description);
+    
+    // handle preview button    
     console.log(instrument?.description);
     console.log(description);
     
@@ -150,9 +155,13 @@ export default function DraftForm(
             }
           } else {
             alert(`Error createInstrument: ${data.data.message}`);
+            setReloadUser(true);
+            router.replace(`/`);
           }
         } catch (error: any) {
           alert(`Error createInstrument: ${error.response.data.data.message}`);
+          setReloadUser(true);
+          router.replace(`/`);
         }
       } else if (instrument) {
         try {
@@ -169,10 +178,12 @@ export default function DraftForm(
             }
           } else {
             alert(`Error updateInstrument: ${data.message}`);
+            setReloadUser(true);
             router.replace(`/`);
           }
         } catch (error: any) {
           alert(`Error updateInstrument: ${error.response.data.message}`);
+          setReloadUser(true);
           router.replace(`/`);
         }
       }
@@ -190,14 +201,6 @@ export default function DraftForm(
     } catch (error) {
       console.log("POST /api/instrument DELETE error", error)
     }
-    setIsLoadingMetadata(false);
-    setInstrument(undefined);
-    setType('');
-    setName('');
-    setDescription('');
-    setCoverDescription('');
-    setImageDescriptions([]);
-    setDocumentsDescriptions([]);
     setReloadUser(true);
     router.push(`/`)
   };
