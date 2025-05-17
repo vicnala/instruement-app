@@ -59,9 +59,13 @@ export default function DraftForm(
 
   useEffect(() => {
     // handle preview button
+    console.log(instrument?.description);
+    console.log(description);
+    
     setCanPreview(
-      hasCover && hasImages && 
-      instrument && description && description.trim().length > 0 ? true : false
+      instrument &&
+      hasCover && hasImages &&
+      (instrument?.description === description) ? true : false
     );
     // handle step transitions
     if (!instrument) {
@@ -131,10 +135,10 @@ export default function DraftForm(
     e.preventDefault()
     if (type && name && (!instrumentId || instrument)) {
       if (!instrumentId) {
-        setIsLoading(true);
+        // setIsLoading(true);
         const selected: any = instrumentTypes.find((i: any) => i.label === type);
         if (!selected) {
-          setIsLoading(false)
+          // setIsLoading(false)
           return;
         }
         try {
@@ -158,6 +162,7 @@ export default function DraftForm(
               if (instrument.title !== data.data[0].title) {
                 // setInstrument({...instrument, title: data.data[0].title});
                 setReloadUser(true);
+                router.replace(`/drafts/${data.data[0].id}`);
               } else {
                 alert("Instrument name not updated!");
               }
@@ -172,7 +177,7 @@ export default function DraftForm(
         }
       }
     }
-    setIsLoading(false)
+    // setIsLoading(false);
   }
 
   // Handle instrument delete
@@ -250,10 +255,10 @@ export default function DraftForm(
           </div>
           <div>
             {
-              canPreview && instrument &&
+              instrument && (currentStep === 4) &&
               <div className="text-right mt-6">
                 <FormSaveButton
-                  disabled={instrument.description ? false : description ? false : true}
+                  disabled={!canPreview}
                   onClick={() => router.push(`/preview/${instrument.id}`)}
                   isLoading={isLoadingMetadata}
                   theme="green"
@@ -454,10 +459,10 @@ export default function DraftForm(
               </div>
               {/* If description is saved and there are media uploads, show preview button */}
               {
-                canPreview && instrument &&
+                instrument && (currentStep === 4) &&
                 <div className="mt-6 text-right">
                   <FormSaveButton
-                    disabled={instrument.description ? false : description ? false : true}
+                    disabled={!canPreview}
                     onClick={() => router.push(`/preview/${instrument.id}`)}
                     isLoading={isLoadingMetadata}
                     theme="green"
