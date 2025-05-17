@@ -55,9 +55,15 @@ export default function DraftForm(
   // Add new state for tracking progress
   const [currentStep, setCurrentStep] = useState<ProgressStep>(1);
   const [completed, setCompleted] = useState(false);
- 
-  // Add useEffect to handle step transitions
+  const [canPreview, setCanPreview] = useState<Boolean>(false);
+
   useEffect(() => {
+    // handle preview button
+    setCanPreview(
+      hasCover && hasImages && 
+      instrument && description && description.trim().length > 0 ? true : false
+    );
+    // handle step transitions
     if (!instrument) {
       setCurrentStep(1);
       setCompleted(false);
@@ -72,22 +78,19 @@ export default function DraftForm(
         setCurrentStep(2);
       }
     }
-  }, [instrument, hasCover, hasImages, hasFiles]);
-
+  }, [instrument, hasCover, hasImages, hasFiles, description]);
+  
   // Fetch instrument details and associated files/images when instrumentId changes
   useEffect(() => {
     const getInstrument = async () => {
       if (!minter || typeof minter === 'boolean' || !instrumentId) return;
-      
       setIsLoading(true);
       const data = await InstrumentService.getInstrument(instrumentId, locale, minter.api_key);
-      
       if (data) {
         setName(data.title);
         setDescription(data.description);
         setInstrument(data);
       }
-      
       setIsLoading(false);
     }
 
@@ -123,34 +126,6 @@ export default function DraftForm(
     setDescription(markdown)
   }
 
-  // Update instrument description
-  const updateDescription = async (e: any) => {
-    e.preventDefault()
-
-    setIsLoadingMetadata(true)
-    if (description) {
-      try {
-        const result = await fetch(`/api/instrument/${instrumentId}`, {
-          method: "POST",
-          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-          body: JSON.stringify({ description: description || "" })
-        })
-        const { data, code, message} = await result.json()
-
-        if (code !== 'success') {
-          console.log(`POST /api/instrument/${instrumentId} ERROR`, message);
-          alert(`Error: ${message}`);
-        } else {
-          // setInstrument({...instrument, description: data[0].description});
-        }
-      } catch (error: any) {
-        console.log(`POST /api/instrument/${instrumentId} ERROR`, error.message)
-        alert(`Error: ${error.message}`);
-      }
-    }
-    setIsLoadingMetadata(false)
-  }
-
   // Create new instrument
   const createOrUpdateInstrument = async (e: any) => {
     e.preventDefault()
@@ -170,44 +145,29 @@ export default function DraftForm(
               router.replace(`/drafts/${data.data.id}`);
             }
           } else {
-            console.log("POST /api/instrument ERROR", data.message);
-            alert(`Error: ${data.data.message}`);
+            alert(`Error createInstrument: ${data.data.message}`);
           }
         } catch (error: any) {
-          console.log("POST /api/instrument ERROR", error.response.data.data.message)
-          alert(`Error: ${error.response.data.data.message}`);
+          alert(`Error createInstrument: ${error.response.data.data.message}`);
         }
       } else if (instrument) {
         try {
           const { data } = await DraftService.updateInstrument(instrumentId, instrument.type, name, description);
-          
-          
-          console.log("POST /api/instrument UPDATE", data);
-          
-          
           if (data.code === 'success') {
             if (data.data && data.data.length === 1) {
-
-
-              // TODO: Confirmar que el instrumento se actualiza correctamente
-              
-
               if (instrument.title !== data.data[0].title) {
-                setInstrument({...instrument, title: data.data[0].title});
+                // setInstrument({...instrument, title: data.data[0].title});
+                setReloadUser(true);
               } else {
                 alert("Instrument name not updated!");
               }
             }
           } else {
-            console.log("updateInstrument FAILED", data.message);
-            alert(`Error: ${data.message}`);
-            setReloadUser(true);
+            alert(`Error updateInstrument: ${data.message}`);
             router.replace(`/`);
           }
         } catch (error: any) {
-          console.log("updateInstrument ERROR", error.response.data.message)
           alert(`Error updateInstrument: ${error.response.data.message}`);
-          setReloadUser(true);
           router.replace(`/`);
         }
       }
@@ -252,6 +212,7 @@ export default function DraftForm(
   return (
     minter ?
       <Page>
+      { isLoading ? <Loading /> : <>
         <Section id="progress-bar">
           <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-it-50 rounded-[15px] border border-it-200 overflow-hidden">
             <div className="w-full mx-auto mb-4 sm:mb-8">
@@ -289,12 +250,10 @@ export default function DraftForm(
           </div>
           <div>
             {
-              instrument &&
-              hasCover && hasImages && hasFiles &&
-              (instrument.description === description) && description &&
+              canPreview && instrument &&
               <div className="text-right mt-6">
                 <FormSaveButton
-                  disabled={isLoadingMetadata}
+                  disabled={instrument.description ? false : description ? false : true}
                   onClick={() => router.push(`/preview/${instrument.id}`)}
                   isLoading={isLoadingMetadata}
                   theme="green"
@@ -389,77 +348,75 @@ export default function DraftForm(
             </div>
           </Section>
           {
-            instrumentId && instrument && !isLoading ?
-            <>
-              <Section id="media" className="pb-[3px]">
-                <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-50 rounded-lg">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8">
-                    <div className="col-span-1 min-h-[300px]">
-                      <h2 className="text-xl font-semibold text-gray-1000 pb-1">
-                        {t('media.cover.title')}
-                      </h2>
-                      <p className="text-sm text-gray-600">
-                        {t('media.cover.description')}
-                      </p>
-                      <div className="mt-4">
-                        <>
-                          <MediaManager
-                            instrument={instrument}
-                            multiple={false}
-                            api_key={minter.api_key}
-                            isCover={true}
-                            accept={'image'}
-                            onMediaChange={handleCoverChange}
-                          />
-                          {error && <p className="text-red-500">{error}</p>}
-                        </>
-                      </div>
+            instrumentId && instrument &&
+            <Section id="media" className="pb-[3px]">
+              <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-50 rounded-lg">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8">
+                  <div className="col-span-1 min-h-[300px]">
+                    <h2 className="text-xl font-semibold text-gray-1000 pb-1">
+                      {t('media.cover.title')}
+                    </h2>
+                    <p className="text-sm text-gray-600">
+                      {t('media.cover.description')}
+                    </p>
+                    <div className="mt-4">
+                      <>
+                        <MediaManager
+                          instrument={instrument}
+                          multiple={false}
+                          api_key={minter.api_key}
+                          isCover={true}
+                          accept={'image'}
+                          onMediaChange={handleCoverChange}
+                        />
+                        {error && <p className="text-red-500">{error}</p>}
+                      </>
+                    </div>
+                  </div>
+
+                  <div className="col-span-1 md:col-span-2 min-h-[300px]">
+                    <div className="md:hidden">
+                      <Divider spacing="md" />
+                    </div>
+                    <h2 className="text-xl font-semibold text-gray-1000 pb-1" >
+                      {t('media.images.title')}
+                    </h2>
+                    <p className="text-sm text-gray-600 max-w-lg">
+                      {t('media.images.description')}
+                    </p>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-6 mt-4">
+                      <MediaManager
+                        instrument={instrument}
+                        multiple={true}
+                        api_key={minter.api_key}
+                        isCover={false}
+                        accept={'image'}
+                        onMediaChange={handleImagesChange}
+                      />
                     </div>
 
-                    <div className="col-span-1 md:col-span-2 min-h-[300px]">
-                      <div className="md:hidden">
-                        <Divider spacing="md" />
-                      </div>
-                      <h2 className="text-xl font-semibold text-gray-1000 pb-1" >
-                        {t('media.images.title')}
-                      </h2>
-                      <p className="text-sm text-gray-600 max-w-lg">
-                        {t('media.images.description')}
-                      </p>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-6 mt-4">
-                        <MediaManager
-                          instrument={instrument}
-                          multiple={true}
-                          api_key={minter.api_key}
-                          isCover={false}
-                          accept={'image'}
-                          onMediaChange={handleImagesChange}
-                        />
-                      </div>
+                    <Divider spacing="md" />
 
-                      <Divider spacing="md" />
-
-                      <h2 className="text-xl font-semibold text-gray-1000 pb-1">
-                        {t('media.files.title')}
-                      </h2>
-                      <p className="text-sm text-gray-600">
-                        {t('media.files.description')}
-                      </p>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-6 mt-4">
-                        <MediaManager
-                          instrument={instrument}
-                          multiple={true}
-                          api_key={minter.api_key}
-                          isCover={false}
-                          accept={'file'}
-                          onMediaChange={handleFilesChange}
-                        />
-                      </div>
+                    <h2 className="text-xl font-semibold text-gray-1000 pb-1">
+                      {t('media.files.title')}
+                    </h2>
+                    <p className="text-sm text-gray-600">
+                      {t('media.files.description')}
+                    </p>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-6 mt-4">
+                      <MediaManager
+                        instrument={instrument}
+                        multiple={true}
+                        api_key={minter.api_key}
+                        isCover={false}
+                        accept={'file'}
+                        onMediaChange={handleFilesChange}
+                      />
                     </div>
                   </div>
                 </div>
-              </Section>
-            </> : isLoading && <Loading />
+              </div>
+            </Section>
           }
 
           {instrument &&
@@ -488,7 +445,7 @@ export default function DraftForm(
                       !description || 
                       description === instrument.description
                     }
-                    onClick={(e) => updateDescription(e)}
+                    onClick={(e) => createOrUpdateInstrument(e)}
                     isLoading={isLoadingMetadata}
                   >
                     {t('details.button_save')}
@@ -496,24 +453,19 @@ export default function DraftForm(
                 </div>
               </div>
               {/* If description is saved and there are media uploads, show preview button */}
-              <div className="mt-6 text-right">
-                <FormSaveButton
-                  disabled={
-                    isLoadingMetadata || 
-                    !hasCover || 
-                    !hasImages || 
-                    !hasFiles || 
-                    !description || 
-                    description !== instrument.description
-                  }
-                  onClick={() => router.push(`/preview/${instrument.id}`)}
-                  isLoading={isLoadingMetadata}
-                  theme="green"
-                >
-                  {t('preview')}
-                </FormSaveButton>
-              </div>
-
+              {
+                canPreview && instrument &&
+                <div className="mt-6 text-right">
+                  <FormSaveButton
+                    disabled={instrument.description ? false : description ? false : true}
+                    onClick={() => router.push(`/preview/${instrument.id}`)}
+                    isLoading={isLoadingMetadata}
+                    theme="green"
+                  >
+                    {t('preview')}
+                  </FormSaveButton>
+                </div>
+              }
             </Section>
           }
         </form>
@@ -534,7 +486,8 @@ export default function DraftForm(
             </div>
           }
         </Section>
-
+        </>
+      }
       </Page> :
       <NotConnected locale={locale} />
   );

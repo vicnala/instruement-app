@@ -51,7 +51,7 @@ export async function POST(
 
   const postData: any = {};
   if (type) postData['type'] = type;
-  if (name) postData['name'] = name;
+  if (name) postData['title'] = name;
   if (description) postData['description'] = description;
 
   try {
