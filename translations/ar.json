@@ -305,7 +305,8 @@
             "title": "Payment result for draft",
             "succesful": "succesful!",
             "failed": "failed!",
-            "success_message": "The registered instrument will be in your wallet shortly.",
+            "success_message_loading": "Please wait for the registration process to complete...",
+            "success_message_ready": "The registered instrument is available in your wallet!",
             "failed_message": "Something went wrong with the payment. Please contact us.",
             "home": "Return to the home page"
         },

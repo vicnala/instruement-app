@@ -35,6 +35,13 @@ const updateInstrument = (
     });
 };
 
+const getInstrument = (
+    instrumentId: string,
+    locale: string,
+): Promise<any> => {
+    return api.get(`/instrument/${instrumentId}?locale=${locale}`);
+};
+
 const deleteInstrument = (
     instrumentId: number,
 ): Promise<any> => {
@@ -42,6 +49,7 @@ const deleteInstrument = (
 };
 
 const DraftService = {
+    getInstrument,
     createInstrument,
     updateInstrument,
     deleteInstrument
