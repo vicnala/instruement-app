@@ -1,4 +1,4 @@
-import { api, wp } from "../app/http-common";
+import { api } from "../app/http-common";
 
 const createInstrument = (
     minter: any,
@@ -48,11 +48,26 @@ const deleteInstrument = (
     return api.delete(`/instrument/${instrumentId}`);
 };
 
+const updateFileDescription = (
+    fileId: number,
+    description: string
+): Promise<any> => {
+    return api.post(`/file/${fileId}`, {
+        description
+    }, {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    });
+};
+
 const DraftService = {
     getInstrument,
     createInstrument,
     updateInstrument,
-    deleteInstrument
+    deleteInstrument,
+    updateFileDescription
 };
 
 export default DraftService;

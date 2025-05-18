@@ -202,7 +202,6 @@ export default function DraftForm(
   const handleCoverChange = (media: (InstrumentImage | InstrumentFile)[]) => {
     setHasCover(media.length > 0);
     if (media.length === 1) {
-      setCoverDescription(media[0].description);
       if (instrument) {
         if (!instrument.cover_image) {
           setInstrument({...instrument, cover_image: media[0] as InstrumentImage});

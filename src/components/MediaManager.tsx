@@ -8,6 +8,7 @@ import IconUploadTwentyFour from "@/components/Icons/Upload";
 import IconTrashTwentyFour from "./Icons/Trash";
 import ButtonSpinner from "@/components/UI/ButtonSpinner";
 import { InstrumentImage, InstrumentFile, Instrument } from "@/lib/definitions";
+import DraftService from "@/services/DraftService";
 
 interface ProgressInfo {
   fileName: string;
@@ -44,6 +45,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
   const progressInfosRef = useRef<any>(null);
   const [resizing, setResizing] = useState<Boolean>(false);
   const ref = useRef<HTMLInputElement>(null);
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize with existing media
   useEffect(() => {
@@ -109,16 +111,47 @@ const MediaManager: React.FC<FilesUploadProps> = ({
     newDescriptions[index] = value;
     setDescriptions(newDescriptions);
 
-    // Update the description in the uploaded file
-    const updatedFiles = [...uploadedFiles];
-    if (updatedFiles[index]) {
-      updatedFiles[index] = {
-        ...updatedFiles[index],
-        description: value
-      };
-      setUploadedFiles(updatedFiles);
+    // Clear any existing timeout
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
     }
+
+    // Set new timeout
+    debounceTimerRef.current = setTimeout(() => {
+      try {
+        if (uploadedFiles[index].id) {
+          DraftService.updateFileDescription(uploadedFiles[index].id, value)
+            .then((response: any) => {
+              const { data } = response;
+              if (data.code === 'success') {
+                const updatedFiles = [...uploadedFiles];
+                if (updatedFiles[index]) {
+                  updatedFiles[index] = {
+                    ...updatedFiles[index],
+                    description: value
+                  };
+                  setUploadedFiles(updatedFiles);
+                }
+              }
+            })
+            .catch((error: any) => {
+              console.log('updateFileDescription error2', error);
+            });
+        }
+      } catch (error) {
+        console.log('updateFileDescription error1', error);
+      }
+    }, 5000); // 5 seconds debounce
   };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
 
   const selectFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
     let images: Array<string> = [];
@@ -273,6 +306,12 @@ const MediaManager: React.FC<FilesUploadProps> = ({
                     )}
                   </button>
                 </div>
+                <textarea
+                  className="w-full p-2 border-none focus:outline-none min-h-[100px]"
+                  placeholder={isCover ? t('media.cover.text_area_placeholder') : accept === 'image' ? t('media.images.text_area_placeholder') : t('media.files.text_area_placeholder')}
+                  value={descriptions[index]}
+                  onChange={(e) => handleDescriptionChange(index, e.target.value)}
+                />
               </div>
             ))
         }    
@@ -283,21 +322,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
                 key={`image-${index}`}
                 className="w-full h-64 relative"
               >
-                {
-                  accept === 'image' && imagePreviews[index] ?                  
-                  <Image
-                    className="rounded"
-                    src={imagePreviews[index]}
-                    alt={"image-" + index}
-                    objectFit="scale-down"
-                    fill
-                  />
-                : 
-                  <div key={`document-${index}`} className="aspect-square bg-it-200 flex items-center justify-center p-2">
-                    <FileText className="w-4 h-4 mr-2" />
-                    <span>{file.name || `document-${index}`}</span>
-                  </div>
-                }
+                <div>
                 {
                   progressInfos &&
                   progressInfos.length > 0 &&
@@ -325,6 +350,28 @@ const MediaManager: React.FC<FilesUploadProps> = ({
                     } */}
                   </div>
                 }
+                </div>
+                {
+                  accept === 'image' && imagePreviews[index] ?                  
+                  <Image
+                    className="rounded"
+                    src={imagePreviews[index]}
+                    alt={"image-" + index}
+                    objectFit="scale-down"
+                    fill
+                  />
+                : 
+                  <div key={`document-${index}`} className="aspect-square bg-it-200 flex items-center justify-center p-2">
+                    <FileText className="w-4 h-4 mr-2" />
+                    <span>{file.name || `document-${index}`}</span>
+                  </div>
+                }
+                <textarea
+                  className="w-full p-2 border-none focus:outline-none min-h-[100px]"
+                  placeholder={isCover ? t('media.cover.text_area_placeholder') : accept === 'image' ? t('media.images.text_area_placeholder') : t('media.files.text_area_placeholder')}
+                  value={descriptions[index]}
+                  onChange={(e) => handleDescriptionChange(index, e.target.value)}
+                />
               </div>
             ))
         }
