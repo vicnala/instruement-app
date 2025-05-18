@@ -24,7 +24,7 @@ export default function Draft(
       
       setIsLoading(true);
       try {
-        const data = await InstrumentService.getInstrument(instrumentId, locale, api_key);
+        const data = await InstrumentService.getInstrument(instrumentId, locale, api_key, true);
         if (data) {
           setInstrument(data);
           if (data.cover_image) {

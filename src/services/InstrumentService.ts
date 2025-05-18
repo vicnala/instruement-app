@@ -2,7 +2,12 @@ import { Instrument, InstrumentImage, InstrumentFile } from "@/lib/definitions";
 import FileUploadService from "./FileUploadService";
 
 export default class InstrumentService {
-  static async getInstrument(id: string, locale: string, api_key?: string): Promise<Instrument | null> {
+  static async getInstrument(
+    id: string,
+    locale: string,
+    api_key?: string,
+    isDraft?: boolean
+  ): Promise<Instrument | null> {
     try {
       const result = await fetch(`/api/instrument/${id}?locale=${locale}`, {
         method: "GET",
@@ -20,7 +25,7 @@ export default class InstrumentService {
       const coverId = data.data.cover_image;
 
       // Fetch images
-      if (imageIds && imageIds.length > 0) {
+      if (!isDraft && imageIds && imageIds.length > 0) {
         const sorted = imageIds
           .filter((id: number) => id !== coverId)
           .sort((ida: number, idb: number) => ida > idb ? 1 : -1);
@@ -56,7 +61,7 @@ export default class InstrumentService {
       }
 
       // Fetch files
-      if (fileIds && fileIds.length > 0) {
+      if (!isDraft && fileIds && fileIds.length > 0) {
         const sorted = fileIds.sort((ida: number, idb: number) => ida > idb ? 1 : -1);
         const files: InstrumentFile[] = await Promise.all(
           sorted.map(async (fileId: number) => {
@@ -88,7 +93,7 @@ export default class InstrumentService {
         data.data.files = files;
       }
 
-      // Fetch cover image
+      // Always fetch cover image
       if (coverId) {
         try {
           if (!api_key) {
