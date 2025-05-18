@@ -97,9 +97,9 @@ export default function Preview(
                         className="object-cover w-full h-full"
                       />
                     </div>
-                    <p className="text-it-1000 p-4">
+                    {/* <p className="text-it-1000 p-4">
                       {instrument.cover_image.description || t('no_description')}
-                    </p>
+                    </p> */}
                   </div>
                 </div>
               )}

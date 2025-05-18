@@ -41,11 +41,12 @@ const MediaManager: React.FC<FilesUploadProps> = ({
   const [progressInfos, setProgressInfos] = useState<Array<ProgressInfo>>([]);
   const [message, setMessage] = useState<Array<string>>([]);
   const [descriptions, setDescriptions] = useState<string[]>([]);
+  const [originalDescriptions, setOriginalDescriptions] = useState<string[]>([]);
   const [deletingFileId, setDeletingFileId] = useState<string | null>(null);
+  const [updatingFileId, setUpdatingFileId] = useState<string | null>(null);
   const progressInfosRef = useRef<any>(null);
   const [resizing, setResizing] = useState<Boolean>(false);
   const ref = useRef<HTMLInputElement>(null);
-  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize with existing media
   useEffect(() => {
@@ -68,6 +69,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
       
       setUploadedFiles(existingMedia);
       setDescriptions(existingDescriptions);
+      setOriginalDescriptions(existingDescriptions);
     }
   }, [instrument, isCover, accept]);
 
@@ -110,48 +112,39 @@ const MediaManager: React.FC<FilesUploadProps> = ({
     const newDescriptions = [...descriptions];
     newDescriptions[index] = value;
     setDescriptions(newDescriptions);
-
-    // Clear any existing timeout
-    if (debounceTimerRef.current) {
-      clearTimeout(debounceTimerRef.current);
-    }
-
-    // Set new timeout
-    debounceTimerRef.current = setTimeout(() => {
-      try {
-        if (uploadedFiles[index].id) {
-          DraftService.updateFileDescription(uploadedFiles[index].id, value)
-            .then((response: any) => {
-              const { data } = response;
-              if (data.code === 'success') {
-                const updatedFiles = [...uploadedFiles];
-                if (updatedFiles[index]) {
-                  updatedFiles[index] = {
-                    ...updatedFiles[index],
-                    description: value
-                  };
-                  setUploadedFiles(updatedFiles);
-                }
-              }
-            })
-            .catch((error: any) => {
-              console.log('updateFileDescription error2', error);
-            });
-        }
-      } catch (error) {
-        console.log('updateFileDescription error1', error);
-      }
-    }, 5000); // 5 seconds debounce
   };
 
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current);
+  const handleUpdateDescription = async (index: number) => {
+    const file = uploadedFiles[index];
+    const newDescription = descriptions[index];
+    
+    if (file.id && newDescription !== originalDescriptions[index]) {
+      setUpdatingFileId(file.id.toString());
+      try {
+        const response = await DraftService.updateFileDescription(file.id, newDescription);
+        const { data } = response;
+        if (data.code === 'success') {
+          const updatedFiles = [...uploadedFiles];
+          if (updatedFiles[index]) {
+            updatedFiles[index] = {
+              ...updatedFiles[index],
+              description: newDescription
+            };
+            setUploadedFiles(updatedFiles);
+            
+            // Update original descriptions
+            const newOriginalDescriptions = [...originalDescriptions];
+            newOriginalDescriptions[index] = newDescription;
+            setOriginalDescriptions(newOriginalDescriptions);
+          }
+        }
+      } catch (error) {
+        console.log('updateFileDescription error', error);
+      } finally {
+        setUpdatingFileId(null);
       }
-    };
-  }, []);
+    }
+  };
 
   const selectFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
     let images: Array<string> = [];
@@ -306,12 +299,31 @@ const MediaManager: React.FC<FilesUploadProps> = ({
                     )}
                   </button>
                 </div>
-                <textarea
-                  className="w-full p-2 border-none focus:outline-none min-h-[100px]"
-                  placeholder={isCover ? t('media.cover.text_area_placeholder') : accept === 'image' ? t('media.images.text_area_placeholder') : t('media.files.text_area_placeholder')}
-                  value={descriptions[index]}
-                  onChange={(e) => handleDescriptionChange(index, e.target.value)}
-                />
+                {
+                  !isCover &&
+                  <div className="relative">
+                    <textarea
+                      className="w-full p-2 border-none focus:outline-none min-h-[100px]"
+                      placeholder={isCover ? t('media.cover.text_area_placeholder') : accept === 'image' ? t('media.images.text_area_placeholder') : t('media.files.text_area_placeholder')}
+                      value={descriptions[index]}
+                      onChange={(e) => handleDescriptionChange(index, e.target.value)}
+                    />
+                    {descriptions[index] !== originalDescriptions[index] && (
+                      <button
+                        type="button"
+                        className="absolute bottom-2 right-2 bg-it-500 hover:bg-it-700 text-white font-bold py-1 px-2 rounded"
+                        onClick={() => handleUpdateDescription(index)}
+                        disabled={updatingFileId === file.id.toString()}
+                      >
+                        {updatingFileId === file.id.toString() ? (
+                          <ButtonSpinner />
+                        ) : (
+                          t('details.button_save')
+                        )}
+                      </button>
+                    )}
+                  </div>
+                }
               </div>
             ))
         }    

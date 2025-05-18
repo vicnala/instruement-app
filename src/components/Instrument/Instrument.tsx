@@ -316,9 +316,9 @@ export default function Instrument(
 											alt={`Instrument #${id}`}
 										/>
 									</div>
-									<p className="text-it-1000 p-4">
-										{/* {instrumentAsset.cover_image.description || t('no_description')} */}
-									</p>
+									{/* <p className="text-it-1000 p-4">
+										{instrumentAsset.cover_image.description || t('no_description')}
+									</p> */}
 								</div>
 							</div>
 
