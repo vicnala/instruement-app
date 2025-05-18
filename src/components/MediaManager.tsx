@@ -251,7 +251,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
   }, [selectedFiles]);
 
   return (
-    <div className="">
+    <div className="grid">
       <input
         type="file"
         className="hidden"
@@ -263,7 +263,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
 
       { resizing && <p className="text-xs text-gray-600">{t("media.processing")}...</p> }
 
-      <div className="grid grid-cols-2 gap-4 p-4">
+      <div className="">
         {
           uploadedFiles.length > 0 &&
             uploadedFiles.map((file, index) => (
@@ -332,13 +332,40 @@ const MediaManager: React.FC<FilesUploadProps> = ({
             selectedFiles.map((file, index) => (
               <div
                 key={`image-${index}`}
-                className="w-full h-64 relative"
+                className="max-w-sm bg-it-50 border border-it-200 rounded-lg shadow overflow-hidden"
               >
+                <div className="w-full h-64 relative">
+                  {
+                    accept === 'image' && imagePreviews[index] ?                  
+                    <Image
+                      className="rounded"
+                      src={imagePreviews[index]}
+                      alt={"image-" + index}
+                      objectFit="scale-down"
+                      fill
+                    />
+                  : 
+                    <div key={`document-${index}`} className="aspect-square bg-it-200 flex items-center justify-center p-2">
+                      <FileText className="w-4 h-4 mr-2" />
+                      <span>{file.name || `document-${index}`}</span>
+                    </div>
+                  }
+                </div>
+                <div>
+                  {
+                    !isCover &&
+                    <textarea
+                      className="w-full p-2 border-none focus:outline-none min-h-[100px]"
+                      placeholder={isCover ? t('media.cover.text_area_placeholder') : accept === 'image' ? t('media.images.text_area_placeholder') : t('media.files.text_area_placeholder')}
+                      value={descriptions[index]}
+                      onChange={(e) => handleDescriptionChange(index, e.target.value)}
+                    />
+                  }
+                </div>
                 <div>
                 {
                   progressInfos &&
                   progressInfos.length > 0 &&
-                  <div>
                     <div className="space-y-2">
                       <div className="h-2.5 w-full rounded-full bg-gray-200">
                         <div 
@@ -350,40 +377,8 @@ const MediaManager: React.FC<FilesUploadProps> = ({
                       {message[index] === 'error' && <p className="text-xs text-red-600">{t("media.upload_failed")}</p>}
                       {message[index] === 'success' && <p className="text-xs text-green-600">{t("media.uploaded_successfully")}</p>}
                     </div>
-                    {/* {
-                      progressInfos[index].percentage === 100 &&
-                      <button
-                        type="button"
-                        className="bg-transparent text-center hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-sm md:text-lg flex items-center justify-center w-full"
-                        onClick={() => handleDelete(index, 'image')}
-                      >
-                        <IconTrashTwentyFour className="w-4 h-4 mr-2" />
-                      </button>
-                    } */}
-                  </div>
                 }
                 </div>
-                {
-                  accept === 'image' && imagePreviews[index] ?                  
-                  <Image
-                    className="rounded"
-                    src={imagePreviews[index]}
-                    alt={"image-" + index}
-                    objectFit="scale-down"
-                    fill
-                  />
-                : 
-                  <div key={`document-${index}`} className="aspect-square bg-it-200 flex items-center justify-center p-2">
-                    <FileText className="w-4 h-4 mr-2" />
-                    <span>{file.name || `document-${index}`}</span>
-                  </div>
-                }
-                <textarea
-                  className="w-full p-2 border-none focus:outline-none min-h-[100px]"
-                  placeholder={isCover ? t('media.cover.text_area_placeholder') : accept === 'image' ? t('media.images.text_area_placeholder') : t('media.files.text_area_placeholder')}
-                  value={descriptions[index]}
-                  onChange={(e) => handleDescriptionChange(index, e.target.value)}
-                />
               </div>
             ))
         }

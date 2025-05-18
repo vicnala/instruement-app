@@ -413,17 +413,14 @@ export default function DraftForm(
                     <p className="text-sm text-gray-600 max-w-lg">
                       {t('media.images.description')}
                     </p>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-6 mt-4">
-                      <MediaManager
-                        instrument={instrument}
-                        multiple={true}
-                        api_key={minter.api_key}
-                        isCover={false}
-                        accept={'image'}
-                        onMediaChange={handleImagesChange}
-                      />
-                    </div>
-
+                    <MediaManager
+                      instrument={instrument}
+                      multiple={true}
+                      api_key={minter.api_key}
+                      isCover={false}
+                      accept={'image'}
+                      onMediaChange={handleImagesChange}
+                    />
                     <Divider spacing="md" />
 
                     <h2 className="text-xl font-semibold text-gray-1000 pb-1">
@@ -432,16 +429,14 @@ export default function DraftForm(
                     <p className="text-sm text-gray-600">
                       {t('media.files.description')}
                     </p>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-6 mt-4">
-                      <MediaManager
-                        instrument={instrument}
-                        multiple={true}
-                        api_key={minter.api_key}
-                        isCover={false}
-                        accept={'file'}
-                        onMediaChange={handleFilesChange}
-                      />
-                    </div>
+                    <MediaManager
+                      instrument={instrument}
+                      multiple={true}
+                      api_key={minter.api_key}
+                      isCover={false}
+                      accept={'file'}
+                      onMediaChange={handleFilesChange}
+                    />
                   </div>
                 </div>
               </div>
