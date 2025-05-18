@@ -66,7 +66,7 @@ export async function POST(
     })
     const data = await result.json()
 
-    console.log(`POST /api/instrument/${id}`, data)
+    // console.log(`POST /api/instrument/${id}`, data)
 
     if (data?.code === 'success') {
       return Response.json(data)

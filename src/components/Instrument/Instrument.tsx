@@ -398,7 +398,7 @@ export default function Instrument(
 
 								{/* Documents Section */}
 								{
-									documents && documents.length &&
+									documents && documents.length ?
 									<div>
 										<h2 className='text-xl font-semibold text-it-1000 dark:text-it-50 mb-4'>
 											{tInstrument('documents')}
@@ -425,6 +425,11 @@ export default function Instrument(
 												)
 											}
 										</div>
+									</div> :
+									<div>
+										<h2 className='text-xl font-semibold text-it-1000 dark:text-it-50 mb-4'>
+											{tInstrument('no_documents_available')}
+										</h2>
 									</div>
 								}
 

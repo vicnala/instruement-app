@@ -281,7 +281,8 @@
             "copied": "Copied!",
             "valid_for": "Valid for",
             "days": "days",
-            "transfered_to": "Instrument transferred to"
+            "transfered_to": "Instrument transferred to",
+            "no_documents_available": "No documents available"
         },
         "ElementsForm": {
             "title": "Register Your Instrument Now",

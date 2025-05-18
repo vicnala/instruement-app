@@ -286,7 +286,8 @@
             "copied": "Copiado!",
             "valid_for": "Válido durante",
             "days": "días",
-            "transfered_to": "Instrumento transferido a"
+            "transfered_to": "Instrumento transferido a",
+            "no_documents_available": "No hay documentos disponibles"
         },
         "ElementsForm": {
             "title": "Registra tu instrumento ahora",
