@@ -58,15 +58,7 @@ export default function DraftForm(
   const [canPreview, setCanPreview] = useState<Boolean>(false);
 
   useEffect(() => {
-    // handle preview button
-    // handle preview button
-    console.log(instrument?.description);
-    console.log(description);
-    
     // handle preview button    
-    console.log(instrument?.description);
-    console.log(description);
-    
     setCanPreview(
       instrument &&
       hasCover && hasImages &&
@@ -99,6 +91,8 @@ export default function DraftForm(
         setName(data.title);
         setDescription(data.description);
         setInstrument(data);
+        // console.log("data", data);
+        // console.log("instrument", instrument);
       }
       setIsLoading(false);
     }
@@ -169,11 +163,11 @@ export default function DraftForm(
           if (data.code === 'success') {
             if (data.data && data.data.length === 1) {
               if (instrument.title !== data.data[0].title) {
-                // setInstrument({...instrument, title: data.data[0].title});
-                setReloadUser(true);
-                router.replace(`/drafts/${data.data[0].id}`);
-              } else {
-                alert("Instrument name not updated!");
+                setInstrument({...instrument, title: data.data[0].title});
+              } else if (instrument.type !== data.data[0].type) {
+                setInstrument({...instrument, type: data.data[0].type});
+              } else if (instrument.description !== data.data[0].description) {
+                setInstrument({...instrument, description: data.data[0].description});
               }
             }
           } else {
@@ -207,14 +201,42 @@ export default function DraftForm(
 
   const handleCoverChange = (media: (InstrumentImage | InstrumentFile)[]) => {
     setHasCover(media.length > 0);
+    if (media.length === 1) {
+      setCoverDescription(media[0].description);
+      if (instrument) {
+        if (!instrument.cover_image) {
+          setInstrument({...instrument, cover_image: media[0] as InstrumentImage});
+        } else if (instrument.cover_image && instrument.cover_image.id !== media[0].id) {
+          setInstrument({...instrument, cover_image: media[0] as InstrumentImage});
+        }
+      }
+    }
   };
 
   const handleImagesChange = (media: (InstrumentImage | InstrumentFile)[]) => {
     setHasImages(media.length >= parseInt(process.env.NEXT_PUBLIC_MIN_IMAGES || '2'));
+    if (media.length > 0) {
+      if (instrument) {
+        if (instrument.images.length === 0) {
+          setInstrument({...instrument, images: media as InstrumentImage[]});
+        } else if (instrument.images.length !== media.length) {
+          setInstrument({...instrument, images: media as InstrumentImage[]});
+        }
+      }
+    }
   };
 
   const handleFilesChange = (media: (InstrumentImage | InstrumentFile)[]) => {
     setHasFiles(media.length >= 0);
+    if (media.length > 0) {
+      if (instrument) {
+        if (instrument.files.length === 0) {
+          setInstrument({...instrument, files: media as InstrumentFile[]});
+        } else if (instrument.files.length !== media.length) {
+          setInstrument({...instrument, files: media as InstrumentFile[]});
+        }
+      }
+    }
   };
 
   return (
@@ -342,7 +364,7 @@ export default function DraftForm(
                   </p>
                 </div>
               </div>
-              {(!instrumentId || (instrument?.title !== name && instrument?.type !== type)) &&
+              {(!instrumentId || (instrument?.title ? instrument?.title !== name : true)) &&
                 <div className="mt-4 text-right">
                   <FormSaveButton
                     disabled={isLoadingMetadata || !type || !name}

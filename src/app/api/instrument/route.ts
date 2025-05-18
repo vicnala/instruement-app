@@ -4,7 +4,7 @@ import { userAuthData } from "@/actions/login";
 
 export async function POST(request: Request) {
   const { user_id, type, name } = await request.json()
-  console.log('POST /api/instrument', user_id, type, name);
+  console.log('POST /api/instrument params', user_id, type, name);
 
   const authData: any = await userAuthData();
   const authContext = authData.parsedJWT.ctx;
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
       body: JSON.stringify({ user_id, type, title: name })
     })
     const data = await result.json()
-    // console.log(`/api/instrument`, data)
+    // console.log(`POST /api/instrument result`, data);
 
     if (data?.code === 'success') {
       return Response.json(data)

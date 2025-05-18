@@ -136,8 +136,10 @@ const MediaManager: React.FC<FilesUploadProps> = ({
               images.push(URL.createObjectURL(resized as File));
             }
           } catch (error: unknown) {
-            if (error instanceof Error)
-            console.log('Resize error:', error.message);
+            if (error instanceof Error) {
+              console.log('Resize error:', error.message);
+            }
+            alert('Error resizing image');
           }
         }
         setSelectedFiles(resizedFiles);
@@ -207,10 +209,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
       setResizing(false);
 
       Promise.all(uploadPromises)
-        .then((data: any) => {
-
-          console.log(data);
-          
+        .then((data: any) => {          
           // Only keep successfully uploaded files
           const successfulUploads = data
             .filter((d: any) => d.code === 'success')
