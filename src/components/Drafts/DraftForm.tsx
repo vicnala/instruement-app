@@ -429,14 +429,16 @@ export default function DraftForm(
                     <p className="text-sm text-gray-600">
                       {t('media.files.description')}
                     </p>
-                    <MediaManager
-                      instrument={instrument}
-                      multiple={true}
-                      api_key={minter.api_key}
-                      isCover={false}
-                      accept={'file'}
-                      onMediaChange={handleFilesChange}
-                    />
+                    <div className="mt-4">
+                      <MediaManager
+                        instrument={instrument}
+                        multiple={true}
+                        api_key={minter.api_key}
+                        isCover={false}
+                        accept={'file'}
+                        onMediaChange={handleFilesChange}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

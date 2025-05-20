@@ -259,7 +259,9 @@
             },
             "files": {
                 "button_upload": "Subir documentos",
-                "button_save": "Guardar documentos"
+                "add_description": "Añadir descripción",
+                "save_description": "Guardar descripción",
+                "text_area_placeholder": "Añade una descripción para este documento"
             },
             "progress": {
                 "upload_failed": "Error al subir",
