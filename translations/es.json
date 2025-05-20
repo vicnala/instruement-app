@@ -224,32 +224,17 @@
                 "button_save": "Guardar"
             },
             "media": {
-                "processing": "Procesando imágenes...",
-                "uploaded": "subido",
-                "uploaded_successfully": "subido correctamente",
-                "upload_failed": "Error al subir",
-                "save": "Guardar medios",
                 "cover": {
                     "title": "Portada",
-                    "description": "Imagen principal del instrumento. Se admite formato JPG y PNG",
-                    "button_upload": "Subir portada",
-                    "text_area_placeholder": "Añade aquí una descripción para la portada",
-                    "button_save": "Guardar portada"
+                    "description": "Imagen principal del instrumento. Se admite formato JPG y PNG"
                 },
                 "images": {
                     "title": "Imágenes",
-                    "title_with_min": "Imágenes (min {min})",
-                    "description": "Registra un mínimo de dos imágenes adicionales de vistas y detalles del instrumento. No es necesario subir de nuevo la portada. En formato JPG y PNG",
-                    "button_upload": "Subir imágenes",
-                    "text_area_placeholder": "Descripción para esta imagen",
-                    "button_save": "Guardar imágenes"
+                    "description": "Registra un mínimo de dos imágenes adicionales de vistas y detalles del instrumento. No es necesario subir de nuevo la portada. En formato JPG y PNG"
                 },
                 "files": {
                     "title": "Documentos",
-                    "description": "Registra documentos adicionales en formato PDF. Los documentos son opcionales.",
-                    "button_upload": "Subir documentos",
-                    "text_area_placeholder": "Añade aquí una descripción para este documento",
-                    "button_save": "Guardar documentos"
+                    "description": "Registra documentos adicionales en formato PDF. Los documentos son opcionales."
                 }
             },
             "details": {
@@ -260,6 +245,26 @@
             },
             "delete": "Eliminar borrador",
             "preview": "Previsualizar y registrar"
+        },
+        "MediaManager": {
+            "processing": "Procesando imágenes",
+            "cover": {
+                "button_upload": "Subir portada"
+            },
+            "images": {
+                "button_upload": "Subir imágenes",
+                "add_description": "Añadir descripción",
+                "save_description": "Guardar descripción",
+                "text_area_placeholder": "Añade una descripción para esta imagen"
+            },
+            "files": {
+                "button_upload": "Subir documentos",
+                "button_save": "Guardar documentos"
+            },
+            "progress": {
+                "upload_failed": "Error al subir",
+                "upload_success": "Subido correctamente"
+            }
         },
         "Preview": {
             "title": "Previsualización del borrador",

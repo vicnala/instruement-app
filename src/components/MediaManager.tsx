@@ -31,7 +31,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
   accept,
   onMediaChange
 }) => {
-  const t = useTranslations('components.DraftForm');
+  const t = useTranslations('components.MediaManager');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState<(InstrumentImage | InstrumentFile)[]>([]);
   const [imagePreviews, setImagePreviews] = useState<Array<string>>([]);
@@ -297,7 +297,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
       { resizing && 
         <div className="flex items-center pb-4">
           <LoaderCircle className="w-4 h-4 animate-spin mr-1" />
-          <p className="text-xs text-gray-600">{t('media.processing')}</p>
+          <p className="text-xs text-gray-600">{t('processing')}</p>
         </div>
       }
 
@@ -310,10 +310,10 @@ const MediaManager: React.FC<FilesUploadProps> = ({
                 className="bg-it-50 border border-it-200 rounded-lg overflow-hidden"
               >
                 <div className="relative">
-                  {accept === 'image' && file.file_url ? (
+                  {accept === 'image' && file.base_url ? (
                     <Image
                       className="w-full h-auto"
-                      src={file.file_url}
+                      src={`${file.base_url}${(file as InstrumentImage).sizes.large.file}`}
                       alt={"image-" + index}
                       width={0}
                       height={0}
@@ -333,7 +333,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
                     disabled={deletingFileId === file.id.toString()}
                   >
                     {deletingFileId === file.id.toString() ? (
-                      <LoaderCircle className="w-4 h-4 animate-spin mr-2" />
+                      <LoaderCircle className="w-4 h-4 animate-spin" />
                     ) : (
                       <X className="w-4 h-4" />
                     )}
@@ -349,7 +349,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
                           className="border border-it-200 py-1 px-2 text-xs rounded-md text-gray-600 hover:border-it-500 hover:text-gray-900"
                           onClick={() => handleToggleDescription(index)}
                         >
-                          {t('details.add_description')}
+                          {t('images.add_description')}
                         </button>
                       </div>
                     ) : (
@@ -359,7 +359,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
                             textareaRefs.current[index] = el;
                           }}
                           className="text-gray-400 focus:text-gray-900 w-full p-2 border-none focus:outline-none min-h-[30px] bg-transparent focus:bg-white text-sm resize-none overflow-hidden"
-                          placeholder={isCover ? t('media.cover.text_area_placeholder') : accept === 'image' ? t('media.images.text_area_placeholder') : t('media.files.text_area_placeholder')}
+                          placeholder={accept === 'image' ? t('images.text_area_placeholder') : t('files.text_area_placeholder')}
                           value={descriptions[index]}
                           onChange={(e) => handleDescriptionChange(index, e.target.value)}
                           rows={1}
@@ -375,7 +375,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
                               {updatingFileId === file.id.toString() ? (
                                 <LoaderCircle className="w-4 h-4 animate-spin text-it-500" />
                               ) : (
-                                t('details.button_save')
+                                t('images.save_description')
                               )}
                             </button>
                           </div>
@@ -392,20 +392,25 @@ const MediaManager: React.FC<FilesUploadProps> = ({
             selectedFiles.map((file, index) => (
               <div
                 key={`image-${index}`}
-                className="max-w-sm bg-it-50 border border-it-200 rounded-lg shadow overflow-hidden"
+                className="bg-it-50 border border-it-200 rounded-lg shadow overflow-hidden"
               >
-                <div className="w-full h-64 relative">
+                <div className="relative">
                   {
                     accept === 'image' && imagePreviews[index] ?                  
-                    <Image
-                      className="rounded w-full h-auto"
-                      src={imagePreviews[index]}
-                      alt={"image-" + index}
-                      width={0}
-                      height={0}
-                      sizes="100vw"
-                      style={{ objectFit: 'contain' }}
-                    />
+                    <>
+                      <Image
+                        className="w-full h-auto opacity-75"
+                        src={imagePreviews[index]}
+                        alt={"image-" + index}
+                        width={0}
+                        height={0}
+                        sizes="100vw"
+                        style={{ objectFit: 'contain' }}
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                        <LoaderCircle className="w-8 h-8 animate-spin text-white" />
+                      </div>
+                    </>
                   : 
                     <div key={`document-${index}`} className="aspect-square bg-it-200 flex items-center justify-center p-2">
                       <FileText className="w-4 h-4 mr-2" />
@@ -414,30 +419,18 @@ const MediaManager: React.FC<FilesUploadProps> = ({
                   }
                 </div>
                 <div>
-                  {
-                    !isCover &&
-                    <textarea
-                      className="w-full p-2 border-none focus:outline-none min-h-[100px]"
-                      placeholder={isCover ? t('media.cover.text_area_placeholder') : accept === 'image' ? t('media.images.text_area_placeholder') : t('media.files.text_area_placeholder')}
-                      value={descriptions[index]}
-                      onChange={(e) => handleDescriptionChange(index, e.target.value)}
-                    />
-                  }
-                </div>
-                <div>
                 {
                   progressInfos &&
                   progressInfos.length > 0 &&
                     <div className="space-y-2">
-                      <div className="h-2.5 w-full rounded-full bg-gray-200">
+                      <div className="h-[3px] bg-it-200 w-full">
                         <div 
-                          className="h-2.5 rounded-full bg-blue-600 transition-all duration-300"
+                          className="h-[3px] bg-it-600 transition-all duration-300"
                           style={{ width: `${progressInfos[index].percentage}%` }}>
-                        </div>    
+                        </div>
                       </div>
-                      <p className="text-sm text-gray-600">{`${progressInfos[index].percentage}`}% {t("media.uploaded")}</p>
-                      {message[index] === 'error' && <p className="text-xs text-red-600">{t("media.upload_failed")}</p>}
-                      {message[index] === 'success' && <p className="text-xs text-green-600">{t("media.uploaded_successfully")}</p>}
+                      {message[index] === 'error' && <p className="text-xs text-red-600">{t("progress.upload_failed")}</p>}
+                      {/* {message[index] === 'success' && <p className="text-xs text-green-600">{t("progress.upload_success")}</p>} */}
                     </div>
                 }
                 </div>
@@ -455,11 +448,11 @@ const MediaManager: React.FC<FilesUploadProps> = ({
             <ArrowUpFromLine className="w-4 h-4 mr-2" />
             {
               isCover ?
-                <>{t('media.cover.button_upload')}</> :
-                accept === 'image' ?
-                <>{t('media.images.button_upload')}</> :
-                accept === 'file' ? <>{t('media.files.button_upload')}</> :
-                <></>
+              <>{t('cover.button_upload')}</> :
+              accept === 'image' ?
+              <>{t('images.button_upload')}</> :
+              accept === 'file' ? <>{t('files.button_upload')}</> :
+              <></>
             }
           </button>
       }

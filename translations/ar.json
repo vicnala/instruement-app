@@ -219,32 +219,17 @@
                 }
             },
             "media": {
-                "processing": "Processing images...",
-                "uploaded": "uploaded",
-                "uploaded_successfully": "uploaded successfully",
-                "upload_failed": "Upload failed",
-                "save": "Save media files",
                 "cover": {
                     "title": "Cover",
-                    "description": "Primary image of the instrument. Accepts JPG and PNG format",
-                    "button_upload": "Upload cover",
-                    "text_area_placeholder": "Add a description for the cover image here",
-                    "button_save": "Save cover"
+                    "description": "Primary image of the instrument. Accepts JPG and PNG format"
                 },
                 "images": {
                     "title": "Images",
-                    "title_with_min": "Images ({min} min)",
-                    "description": "Register a minimum of two additional images of views and details of the instrument. No need to upload again the cover image. In JPG and PNG format",
-                    "button_upload": "Upload images",
-                    "text_area_placeholder": "Add a description for this image",
-                    "button_save": "Save images"
+                    "description": "Register a minimum of two additional images of views and details of the instrument. No need to upload again the cover image. In JPG and PNG format"
                 },
                 "files": {
                     "title": "Documents",
-                    "description": "Register additional documents in PDF format. Documents are optional.",
-                    "button_upload": "Upload documents",
-                    "text_area_placeholder": "Add a description for this document",
-                    "button_save": "Save documents"
+                    "description": "Register additional documents in PDF format. Documents are optional."
                 }
             },
             "details": {
@@ -255,6 +240,28 @@
             },
             "delete": "Delete draft",
             "preview": "Preview and register"
+        },
+        "MediaManager": {
+            "processing": "Processing images",
+            "cover": {
+                "button_upload": "Upload cover"
+            },
+            "images": {
+                "button_upload": "Upload images",
+                "add_description": "Add description",
+                "save_description": "Save description",
+                "text_area_placeholder": "Add a description for this image"
+            },
+            "files": {
+                "button_upload": "Upload documents",
+                "add_description": "Add description",
+                "save_description": "Save description",
+                "text_area_placeholder": "Add a description for this document"
+            },
+            "progress": {
+                "upload_failed": "Upload failed",
+                "upload_success": "Uploaded successfully"
+            }
         },
         "Preview": {
             "title": "Preview of draft",
