@@ -255,6 +255,7 @@
             "details": {
                 "title": "Detalles",
                 "description": "Descripción detallada del instrumento",
+                "add_description": "Añadir descripción de imagen",
                 "button_save": "Guardar descripción"
             },
             "delete": "Eliminar borrador",

@@ -1,12 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { FileText } from 'lucide-react';
+import { FileText, ArrowUpFromLine, X, LoaderCircle } from 'lucide-react';
 import UploadService from "../services/FileUploadService";
 import FileResizeService from "@/services/FileResizeService";
-import IconUploadTwentyFour from "@/components/Icons/Upload";
-import IconTrashTwentyFour from "./Icons/Trash";
-import ButtonSpinner from "@/components/UI/ButtonSpinner";
 import { InstrumentImage, InstrumentFile, Instrument } from "@/lib/definitions";
 import DraftService from "@/services/DraftService";
 
@@ -44,9 +41,11 @@ const MediaManager: React.FC<FilesUploadProps> = ({
   const [originalDescriptions, setOriginalDescriptions] = useState<string[]>([]);
   const [deletingFileId, setDeletingFileId] = useState<string | null>(null);
   const [updatingFileId, setUpdatingFileId] = useState<string | null>(null);
+  const [visibleDescriptions, setVisibleDescriptions] = useState<boolean[]>([]);
   const progressInfosRef = useRef<any>(null);
   const [resizing, setResizing] = useState<Boolean>(false);
   const ref = useRef<HTMLInputElement>(null);
+  const textareaRefs = useRef<(HTMLTextAreaElement | null)[]>([]);
 
   // Initialize with existing media
   useEffect(() => {
@@ -70,6 +69,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
       setUploadedFiles(existingMedia);
       setDescriptions(existingDescriptions);
       setOriginalDescriptions(existingDescriptions);
+      setVisibleDescriptions(existingDescriptions.map(desc => desc.trim().length > 0));
     }
   }, [instrument, isCover, accept]);
 
@@ -112,7 +112,27 @@ const MediaManager: React.FC<FilesUploadProps> = ({
     const newDescriptions = [...descriptions];
     newDescriptions[index] = value;
     setDescriptions(newDescriptions);
+
+    // Adjust textarea height
+    const textarea = textareaRefs.current[index];
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
   };
+
+  // Adjust textarea heights when visibility changes
+  useEffect(() => {
+    visibleDescriptions.forEach((isVisible, index) => {
+      if (isVisible) {
+        const textarea = textareaRefs.current[index];
+        if (textarea) {
+          textarea.style.height = 'auto';
+          textarea.style.height = `${textarea.scrollHeight}px`;
+        }
+      }
+    });
+  }, [visibleDescriptions]);
 
   const handleUpdateDescription = async (index: number) => {
     const file = uploadedFiles[index];
@@ -250,8 +270,21 @@ const MediaManager: React.FC<FilesUploadProps> = ({
     }    
   }, [selectedFiles]);
 
+  const handleToggleDescription = (index: number) => {
+    const newVisibleDescriptions = [...visibleDescriptions];
+    newVisibleDescriptions[index] = !newVisibleDescriptions[index];
+    setVisibleDescriptions(newVisibleDescriptions);
+    
+    // Focus the textarea after it becomes visible
+    if (newVisibleDescriptions[index]) {
+      setTimeout(() => {
+        textareaRefs.current[index]?.focus();
+      }, 0);
+    }
+  };
+
   return (
-    <div className="grid">
+    <>
       <input
         type="file"
         className="hidden"
@@ -261,24 +294,31 @@ const MediaManager: React.FC<FilesUploadProps> = ({
         accept={accept === 'image' ? process.env.NEXT_PUBLIC_MIME_TYPE_ACCEPT : accept === 'file' ? process.env.NEXT_PUBLIC_FILE_TYPE_ACCEPT : ".jeg"}
       />
 
-      { resizing && <p className="text-xs text-gray-600">{t("media.processing")}...</p> }
+      { resizing && 
+        <div className="flex items-center pb-4">
+          <LoaderCircle className="w-4 h-4 animate-spin mr-1" />
+          <p className="text-xs text-gray-600">{t('media.processing')}</p>
+        </div>
+      }
 
-      <div className="">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(min(10rem,100%),1fr))] gap-3 mb-6">
         {
           uploadedFiles.length > 0 &&
             uploadedFiles.map((file, index) => (
               <div
                 key={file.id || `file-${index}`}
-                className="max-w-sm bg-it-50 border border-it-200 rounded-lg shadow overflow-hidden"
+                className="bg-it-50 border border-it-200 rounded-lg overflow-hidden"
               >
-                <div className="w-full h-64 relative">
+                <div className="relative">
                   {accept === 'image' && file.file_url ? (
                     <Image
-                      className="rounded"
+                      className="w-full h-auto"
                       src={file.file_url}
                       alt={"image-" + index}
-                      objectFit="scale-down"
-                      fill
+                      width={0}
+                      height={0}
+                      sizes="100vw"
+                      style={{ objectFit: 'contain' }}
                     />
                   ) : (
                     <div key={`document-${file.id || `document-${index}`}`} className="aspect-square bg-it-200 flex items-center justify-center p-2">
@@ -288,39 +328,59 @@ const MediaManager: React.FC<FilesUploadProps> = ({
                   )}
                   <button
                     type="button"
-                    className="absolute top-2 right-2 mt-2 mb-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full"
+                    className="absolute top-2 right-2 bg-red-500 hover:bg-red-700 text-white font-bold p-1 rounded-full aspect-square"
                     onClick={() => handleDelete(index, accept)}
                     disabled={deletingFileId === file.id.toString()}
                   >
                     {deletingFileId === file.id.toString() ? (
-                      <ButtonSpinner />
+                      <LoaderCircle className="w-4 h-4 animate-spin mr-2" />
                     ) : (
-                      <IconTrashTwentyFour />
+                      <X className="w-4 h-4" />
                     )}
                   </button>
                 </div>
                 {
                   !isCover &&
-                  <div className="relative">
-                    <textarea
-                      className="w-full p-2 border-none focus:outline-none min-h-[100px]"
-                      placeholder={isCover ? t('media.cover.text_area_placeholder') : accept === 'image' ? t('media.images.text_area_placeholder') : t('media.files.text_area_placeholder')}
-                      value={descriptions[index]}
-                      onChange={(e) => handleDescriptionChange(index, e.target.value)}
-                    />
-                    {descriptions[index] !== originalDescriptions[index] && (
-                      <button
-                        type="button"
-                        className="absolute bottom-2 right-2 bg-it-500 hover:bg-it-700 text-white font-bold py-1 px-2 rounded"
-                        onClick={() => handleUpdateDescription(index)}
-                        disabled={updatingFileId === file.id.toString()}
-                      >
-                        {updatingFileId === file.id.toString() ? (
-                          <ButtonSpinner />
-                        ) : (
-                          t('details.button_save')
+                  <div className="grid grid-rows">
+                    {!visibleDescriptions[index] ? (
+                      <div className="p-2">
+                        <button
+                          type="button"
+                          className="border border-it-200 py-1 px-2 text-xs rounded-md text-gray-600 hover:border-it-500 hover:text-gray-900"
+                          onClick={() => handleToggleDescription(index)}
+                        >
+                          {t('details.add_description')}
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <textarea
+                          ref={el => {
+                            textareaRefs.current[index] = el;
+                          }}
+                          className="text-gray-400 focus:text-gray-900 w-full p-2 border-none focus:outline-none min-h-[30px] bg-transparent focus:bg-white text-sm resize-none overflow-hidden"
+                          placeholder={isCover ? t('media.cover.text_area_placeholder') : accept === 'image' ? t('media.images.text_area_placeholder') : t('media.files.text_area_placeholder')}
+                          value={descriptions[index]}
+                          onChange={(e) => handleDescriptionChange(index, e.target.value)}
+                          rows={1}
+                        />
+                        {descriptions[index] !== originalDescriptions[index] && (
+                          <div className="p-2">
+                            <button
+                              type="button"
+                              className="border border-it-400 py-1 px-2 text-xs rounded-md text-gray-600 hover:border-it-500 hover:text-gray-900"
+                              onClick={() => handleUpdateDescription(index)}
+                              disabled={updatingFileId === file.id.toString()}
+                            >
+                              {updatingFileId === file.id.toString() ? (
+                                <LoaderCircle className="w-4 h-4 animate-spin text-it-500" />
+                              ) : (
+                                t('details.button_save')
+                              )}
+                            </button>
+                          </div>
                         )}
-                      </button>
+                      </>
                     )}
                   </div>
                 }
@@ -338,11 +398,13 @@ const MediaManager: React.FC<FilesUploadProps> = ({
                   {
                     accept === 'image' && imagePreviews[index] ?                  
                     <Image
-                      className="rounded"
+                      className="rounded w-full h-auto"
                       src={imagePreviews[index]}
                       alt={"image-" + index}
-                      objectFit="scale-down"
-                      fill
+                      width={0}
+                      height={0}
+                      sizes="100vw"
+                      style={{ objectFit: 'contain' }}
                     />
                   : 
                     <div key={`document-${index}`} className="aspect-square bg-it-200 flex items-center justify-center p-2">
@@ -387,10 +449,10 @@ const MediaManager: React.FC<FilesUploadProps> = ({
         ((isCover && uploadedFiles.length === 0) || !isCover) &&
           <button
             type="button"
-            className="bg-transparent text-center hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-sm md:text-lg flex items-center justify-center w-full"
+            className="bg-transparent text-center hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-base flex items-center justify-center w-full"
             onClick={handleClick}
           >
-            <IconUploadTwentyFour className="w-4 h-4 mr-2" />
+            <ArrowUpFromLine className="w-4 h-4 mr-2" />
             {
               isCover ?
                 <>{t('media.cover.button_upload')}</> :
@@ -401,7 +463,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
             }
           </button>
       }
-    </div>
+    </>
   );
 };
 

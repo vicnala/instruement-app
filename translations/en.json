@@ -250,6 +250,7 @@
             "details": {
                 "title": "Details",
                 "description": "Detailed description of the instrument",
+                "add_description": "Add image description",
                 "button_save": "Save description"
             },
             "delete": "Delete draft",

@@ -389,7 +389,6 @@ export default function DraftForm(
                       {t('media.cover.description')}
                     </p>
                     <div className="mt-4">
-                      <>
                         <MediaManager
                           instrument={instrument}
                           multiple={false}
@@ -399,7 +398,6 @@ export default function DraftForm(
                           onMediaChange={handleCoverChange}
                         />
                         {error && <p className="text-red-500">{error}</p>}
-                      </>
                     </div>
                   </div>
 
@@ -413,14 +411,16 @@ export default function DraftForm(
                     <p className="text-sm text-gray-600 max-w-lg">
                       {t('media.images.description')}
                     </p>
-                    <MediaManager
-                      instrument={instrument}
-                      multiple={true}
-                      api_key={minter.api_key}
-                      isCover={false}
-                      accept={'image'}
-                      onMediaChange={handleImagesChange}
-                    />
+                    <div className="mt-4">
+                      <MediaManager
+                        instrument={instrument}
+                        multiple={true}
+                        api_key={minter.api_key}
+                        isCover={false}
+                        accept={'image'}
+                        onMediaChange={handleImagesChange}
+                      />
+                    </div>
                     <Divider spacing="md" />
 
                     <h2 className="text-xl font-semibold text-gray-1000 pb-1">
