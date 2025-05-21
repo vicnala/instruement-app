@@ -313,7 +313,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
                   {accept === 'image' && file.base_url ? (
                     <Image
                       className="w-full h-auto"
-                      src={`${file.base_url}${(file as InstrumentImage).sizes.large.file}`}
+                      src={`${file.base_url}${(file as InstrumentImage).sizes.original.file}`}
                       alt={"image-" + index}
                       width={0}
                       height={0}
