@@ -440,9 +440,10 @@ const MediaManager: React.FC<FilesUploadProps> = ({
       </div>
       {
         ((isCover && uploadedFiles.length === 0) || !isCover) &&
+        <div className="flex justify-center px-3">
           <button
             type="button"
-            className="bg-transparent text-center hover:bg-it-500 text-gray-1000 hover:text-white border border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-base flex items-center justify-center w-full"
+            className="bg-transparent text-center hover:bg-it-500 text-gray-1000 hover:text-white border-[0.1rem] border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-base flex items-center justify-center  w-full"
             onClick={handleClick}
           >
             <ArrowUpFromLine className="w-4 h-4 mr-2" />
@@ -455,6 +456,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
               <></>
             }
           </button>
+        </div>
       }
     </>
   );

@@ -25,6 +25,8 @@ const Editor = dynamic(() => import("@/components/Editor"), { ssr: false })
 // Add this type definition at the top of the file
 type ProgressStep = 1 | 2 | 3 | 4;
 
+const MIN_DESCRIPTION_LENGTH = 140;
+
 export default function DraftForm(
   { locale, instrumentId }: Readonly<{ locale: string, instrumentId?: string }>
 ) {
@@ -285,7 +287,7 @@ export default function DraftForm(
                   disabled={!canPreview}
                   onClick={() => router.push(`/preview/${instrument.id}`)}
                   isLoading={isLoadingMetadata}
-                  theme="green"
+                  theme="me"
                 >
                   {t('preview')}
                 </FormSaveButton>
@@ -295,8 +297,8 @@ export default function DraftForm(
         </Section>
 
         <form className="">
-          <Section id="basic-info" className="pb-[3px]">
-            <div className="px-3 sm:px-6 pt-5 pb-6 sm:py-8 || bg-gray-50 rounded-lg">
+          <Section id="basic-info" className="pb-[0.1rem]">
+            <div className="px-3 sm:px-6 pt-5 pb-6 sm:py-8 || bg-gray-25 rounded-lg">
               <h2 className="text-xl font-semibold text-gray-1000 pb-8">
                 {t('basic_info.title')}
               </h2>
@@ -378,8 +380,8 @@ export default function DraftForm(
           </Section>
           {
             instrumentId && instrument &&
-            <Section id="media" className="pb-[3px]">
-              <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-50 rounded-lg">
+            <Section id="media" className="pb-1">
+              <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-25 rounded-lg">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8">
                   <div className="col-span-1 min-h-[300px]">
                     <h2 className="text-xl font-semibold text-gray-1000 pb-1">
@@ -448,34 +450,38 @@ export default function DraftForm(
           {instrument &&
             hasCover && hasImages && hasFiles &&
             <Section id="description">
-              <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-50 rounded-b-lg">
+              <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-25 rounded-lg">
                 <div className="mb-6">
                   <h2 className="text-xl font-semibold text-gray-1000 pb-1">
-                    {t('details.title')}
+                    {t('description.title')}
                   </h2>
                   <p className="text-sm text-gray-600">
-                    {t('details.description')}
+                    {t('description.description')}
                   </p>
                   <div className="p-0 mt-4 border border-gray-200 bg-white rounded-md">
                     <Editor markdown={description} updateDescription={handleDescriptionChange} />
                   </div>
+                  <div className="mt-2 text-xs text-gray-600 flex justify-end">
+                    <span className={`${description.length < MIN_DESCRIPTION_LENGTH ? 'text-red-500' : 'text-green-600'}`}>
+                      {description.length} {description.length < MIN_DESCRIPTION_LENGTH ? t('description.characters_min') : t('description.characters')}
+                    </span>
+                  </div>
                 </div>
-                {/* If saved description is different from the description in the editor, show save button */}
                 <div className="mt-6 text-right">
-                  <FormSaveButton
-                    disabled={
-                      isLoadingMetadata || 
-                      !hasCover || 
-                      !hasImages || 
-                      !hasFiles || 
-                      !description || 
-                      description === instrument.description
-                    }
-                    onClick={(e) => createOrUpdateInstrument(e)}
-                    isLoading={isLoadingMetadata}
-                  >
-                    {t('details.button_save')}
-                  </FormSaveButton>
+                  {hasCover && 
+                   hasImages && 
+                   hasFiles && 
+                   description && 
+                   description.length >= MIN_DESCRIPTION_LENGTH && 
+                   description !== instrument.description && (
+                    <FormSaveButton
+                      disabled={isLoadingMetadata}
+                      onClick={(e) => createOrUpdateInstrument(e)}
+                      isLoading={isLoadingMetadata}
+                    >
+                      {t('description.button_save')}
+                    </FormSaveButton>
+                  )}
                 </div>
               </div>
               {/* If description is saved and there are media uploads, show preview button */}
@@ -486,7 +492,7 @@ export default function DraftForm(
                     disabled={!canPreview}
                     onClick={() => router.push(`/preview/${instrument.id}`)}
                     isLoading={isLoadingMetadata}
-                    theme="green"
+                    theme="me"
                   >
                     {t('preview')}
                   </FormSaveButton>
@@ -501,7 +507,7 @@ export default function DraftForm(
             <div className="mt-6 text-left">
               <button
                 type="button"
-                className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform text-red-500 border border-red-500 bg-transparent rounded-md hover:bg-red-500 hover:text-white focus:outline-none focus:bg-red-700 disabled:opacity-25"
+                className="inline-flex items-center px-2 py-2 text-xs font-semibold tracking-wide transition-colors duration-200 transform text-red-500 border-[0.1rem] border-red-500 bg-transparent rounded-md hover:bg-red-500 hover:text-white focus:outline-none focus:bg-red-700 disabled:opacity-25"
                 disabled={isLoadingMetadata}
                 onClick={() => handleInstrumentDelete()}
               >

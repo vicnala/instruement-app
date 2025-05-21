@@ -237,11 +237,13 @@
                     "description": "Registra documentos adicionales en formato PDF. Los documentos son opcionales."
                 }
             },
-            "details": {
-                "title": "Detalles",
-                "description": "Descripción detallada del instrumento",
+            "description": {
+                "title": "Texto",
+                "description": "Descripción detallada del instrumento. Este texto estará disponible en público.",
                 "add_description": "Añadir descripción de imagen",
-                "button_save": "Guardar descripción"
+                "button_save": "Guardar descripción",
+                "characters_min": "de 140 caracteres mínimos",
+                "characters": "caracteres"
             },
             "delete": "Eliminar borrador",
             "preview": "Previsualizar y registrar"
@@ -273,7 +275,9 @@
             "no_description": "Sin descripción",
             "register_now": "Registrar ahora",
             "additional_images": "Imágenes adicionales",
-            "documents": "Documentos"
+            "documents": "Documentos",
+            "description": "Descripción",
+            "back_to_draft": "Volver al borrador"
         },
         "Instrument": {
             "current_owner": "Propietario actual",
@@ -334,8 +338,8 @@
                     "title": "Medios",
                     "description": "Imágenes y documentos"
                 },
-                "details": {
-                    "title": "Detalles",
+                "description": {
+                    "title": "Texto",
                     "description": "Descripción"
                 },
                 "preview": {

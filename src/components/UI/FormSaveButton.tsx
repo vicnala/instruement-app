@@ -27,12 +27,12 @@ const FormSaveButton = forwardRef(({
       className={`
         font-bold inline-flex items-center px-4 py-2 tracking-wide transition-colors duration-200 transform rounded-md focus:outline-none
         ${disabled 
-          ? 'bg-gray-200 text-gray-500 cursor-not-allowed border-2 border-gray-200' 
+          ? 'bg-transparent text-gray-300 cursor-not-allowed border-[0.1rem] border-gray-200' 
           : theme === 'green'
-            ? 'text-green-500 border-2 border-green-500 hover:bg-green-500 hover:text-white focus:bg-green-700'
+            ? 'text-green-500 border-[0.1rem] border-green-500 hover:bg-green-500 hover:text-white focus:bg-green-700'
             : theme === 'me'
-              ? 'text-me-1000 dark:text-me-500 border-2 border-me-500 hover:bg-me-500 hover:text-me-1000 dark:hover:text-me-1000 focus:bg-me-500 focus:text-me-600 dark:focus:text-me-800'
-              : 'text-it-1000 dark:text-it-500 border-2 border-it-500 hover:bg-it-500 hover:text-it-1000 dark:hover:text-it-1000 focus:bg-it-500 focus:text-it-600 dark:focus:text-it-800'
+              ? 'text-me-1000 dark:text-me-500 border-[0.1rem] border-me-500 hover:bg-me-500 hover:text-me-1000 dark:hover:text-me-1000 focus:bg-me-500 focus:text-me-600 dark:focus:text-me-800'
+              : 'text-it-1000 dark:text-it-500 border-[0.1rem] border-it-500 hover:bg-it-500 hover:text-it-1000 dark:hover:text-it-1000 focus:bg-it-500 focus:text-it-600 dark:focus:text-it-800'
         }
       `}
       disabled={disabled}

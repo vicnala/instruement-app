@@ -232,11 +232,12 @@
                     "description": "Register additional documents in PDF format. Documents are optional."
                 }
             },
-            "details": {
-                "title": "Details",
-                "description": "Detailed description of the instrument",
-                "add_description": "Add image description",
-                "button_save": "Save description"
+            "description": {
+                "title": "Text",
+                "description": "Detailed description of the instrument. This text will be available to the public.",
+                "button_save": "Save description",
+                "characters_min": "of 140 min characters",
+                "characters": "characters"
             },
             "delete": "Delete draft",
             "preview": "Preview and register"
@@ -268,7 +269,9 @@
             "no_description": "No description",
             "register_now": "Register now",
             "additional_images": "Additional images",
-            "documents": "Documents"
+            "documents": "Documents",
+            "description": "Description",
+            "back_to_draft": "Back to draft"
         },
         "Instrument": {
             "current_owner": "Current owner",
@@ -329,8 +332,8 @@
                     "title": "Media",
                     "description": "Images & docs"
                 },
-                "details": {
-                    "title": "Details",
+                "description": {
+                    "title": "Text",
                     "description": "Description"
                 },
                 "preview": {

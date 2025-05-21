@@ -30,8 +30,8 @@ const ProgressBar = ({
     },
     {
       number: 3,
-      title: t('details.title'),
-      description: t('details.description')
+      title: t('description.title'),
+      description: t('description.description')
     }
   ];
 

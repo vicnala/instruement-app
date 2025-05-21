@@ -219,7 +219,7 @@ function CheckoutForm({ amount, address, id, minterAddress, instrument }: { amou
             <div className="text-right">
               {ready && (
                 <button
-                  className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+                  className="inline-flex items-center text-lg px-6 py-3 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
                   type="submit"
                   disabled={
                     !["initial", "succeeded", "error"].includes(payment.status) ||

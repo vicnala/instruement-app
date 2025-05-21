@@ -10,7 +10,7 @@ import NotConnected from "@/components/NotConnected";
 import Image from "next/image";
 import { useRouter } from "@/i18n/routing";
 import { Instrument } from "@/lib/definitions";
-import { Expand, Download } from "lucide-react";
+import { Expand, Download, ArrowLeft } from "lucide-react";
 import InstrumentService from "@/services/InstrumentService";
 
 export default function Preview(
@@ -171,6 +171,7 @@ export default function Preview(
 
             {/* Right Column - Instrument Description */}
             <div>
+              <h2 className="text-xl font-semibold mb-4">{t('description')}</h2>
               <p className="text-lg text-gray-800">
                 {instrument?.description}
               </p>
@@ -179,12 +180,22 @@ export default function Preview(
 
           {
             instrument && instrument.type && instrument.title && instrument.description && instrument.images?.length > 0 &&
-            <div className="mt-6 px-3 md:px-6 py-2 md:py-4 text-center border border-it-100 bg-it-50 rounded-[15px]">
+            <div className="flex justify-between items-center mt-6 px-3 md:px-6 py-2 md:py-4 text-center border border-it-100 bg-it-50 rounded-[15px]">
+              {/* Button to go back to draft */}
               <button
                 type="button"
-                className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+                className="inline-flex items-center px-4 py-2 transition-colors duration-200 transform bg-transparent border-[0.1rem] border-it-400 rounded-md hover:bg-it-400 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+                onClick={() => router.push(`/drafts/${instrument.id}`)}
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                {t('back_to_draft')}
+              </button>
+              <button
+                type="button"
+                className="inline-flex items-center px-4 py-2 text-sm font-medium transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
                 onClick={() => router.push(`/pay/${instrument.id}${address && `?address=${address}`}`)}
               >
+                
                 {t('register_now')}
               </button>
             </div>
