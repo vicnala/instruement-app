@@ -12,6 +12,12 @@ import { useRouter } from "@/i18n/routing";
 import { Instrument } from "@/lib/definitions";
 import { Expand, Download, ArrowLeft } from "lucide-react";
 import InstrumentService from "@/services/InstrumentService";
+import { marked } from "marked";
+
+// Configure marked options
+marked.use({
+  breaks: true
+});
 
 export default function Preview(
   { locale, id }: Readonly<{ locale: string, id?: string }>
@@ -172,9 +178,10 @@ export default function Preview(
             {/* Right Column - Instrument Description */}
             <div>
               <h2 className="text-xl font-semibold mb-4">{t('description')}</h2>
-              <p className="text-lg text-gray-800">
-                {instrument?.description}
-              </p>
+              <div 
+                className="text-base text-it-1000"
+                dangerouslySetInnerHTML={{ __html: marked.parse(instrument?.description || '') as string }}
+              />
             </div>
           </div>
 

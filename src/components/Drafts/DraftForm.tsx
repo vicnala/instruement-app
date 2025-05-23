@@ -459,7 +459,11 @@ export default function DraftForm(
                     {t('description.description')}
                   </p>
                   <div className="p-0 mt-4 border border-gray-200 bg-white rounded-md">
-                    <Editor markdown={description} updateDescription={handleDescriptionChange} />
+                    <Editor 
+                      markdown={description} 
+                      updateDescription={handleDescriptionChange}
+                      contentEditableClassName="markdown-editor"
+                    />
                   </div>
                   <div className="mt-2 text-xs text-gray-600 flex justify-end">
                     <span className={`${description.length < MIN_DESCRIPTION_LENGTH ? 'text-red-500' : 'text-green-600'}`}>
