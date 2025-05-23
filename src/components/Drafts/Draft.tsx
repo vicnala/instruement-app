@@ -48,7 +48,7 @@ export default function Draft(
 
   return (
     <div
-      className="cursor-pointer transition-all hover:shadow-lg || flex flex-col w-full justify-stretch min-h-[200px] || overflow-hidden bg-it-25 border border-it-100 rounded-lg"
+      className="cursor-pointer transition-all hover:shadow-lg || flex flex-col w-full justify-stretch || overflow-hidden bg-it-25 border border-it-100 rounded-lg"
       onClick={() => instrument && !instrument.queue_id && !instrument.asset_id ? router.push(`/drafts/${instrumentId}`) : null}
     >
       <div className="relative w-full aspect-square bg-white/[.04]">
@@ -78,7 +78,7 @@ export default function Draft(
                 width={500}
                 height={500}
                 alt={image.description}
-                className="object-cover w-full h-full"
+                className="object-cover w-full"
               /> :
               <div className="w-full h-full rounded-lg">
               </div>
