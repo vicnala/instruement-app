@@ -5,12 +5,11 @@ import NFT, { LoadingNFTComponent } from "./NFT";
 
 type Props = {
   nftData: {
-    id: string;
-    uri: string
-    name: string,
-    description: string,
-    image: string,
-    properties: any[]
+    metadata: {
+      id: string,
+      name: string,
+      image: string
+    }
   }[];
   emptyText?: string;
 };
@@ -30,11 +29,13 @@ export default function NFTGrid({ nftData }: Props) {
             </p>
           </div>
           <div className="grid justify-start grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {nftData.map((nft: any, index: number) => (
-              <NFT
-                key={`${index}`}
-                nft={nft}
-              />
+            {nftData
+              .sort((a, b) => BigInt(a.metadata.id) < BigInt(b.metadata.id) ? 1 : -1)
+              .map((nft: any, index: number) => (
+                <NFT
+                  key={`${index}`}
+                  nft={nft}
+                />
             ))}
           </div>
         </div>

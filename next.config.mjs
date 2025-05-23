@@ -21,6 +21,13 @@ const nextConfig = {
         },
         {
           protocol: 'https',
+          hostname: '*.instruement.com',
+          port: '',
+          pathname: '/web/**',
+          search: '',
+        },
+        {
+          protocol: 'https',
           hostname: '*.ipfscdn.io',
           port: '',
           pathname: '/ipfs/**',

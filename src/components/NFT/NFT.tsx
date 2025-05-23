@@ -6,7 +6,13 @@ import { useRouter } from "@/i18n/routing";
 import { client } from "@/app/client";
 
 type Props = {
-  nft: any;
+  nft: {
+    metadata: {
+      id: string,
+      name: string,
+      image: string
+    }
+  };
 };
 
 export default function NFTComponent({

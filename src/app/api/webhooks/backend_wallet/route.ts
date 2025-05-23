@@ -72,6 +72,7 @@ export async function POST( request: Request, response: Response ) {
             headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` }
         })
         const getData = await getResult.json()
+        const instrumentId = getData.data.id;
     
         console.log(`GET /api/instrument/queue/${queueId}`, getData.message);
     
@@ -94,6 +95,8 @@ export async function POST( request: Request, response: Response ) {
         
             const { result } = await engine.transaction.getTransactionLogs(NEXT_PUBLIC_CHAIN_ID, queueId);
             
+            console.log("getTransactionLogs", result);
+
             const tokensMintedEvent = result.find(r => r.eventName === 'TokensMinted');
             const tokensTransferEvent = result.find(r => r.eventName === 'Transfer');
 
@@ -106,13 +109,11 @@ export async function POST( request: Request, response: Response ) {
                     mintedTo = tokensTransferEvent.args.to;
                     tokenIdMinted = tokensTransferEvent.args.tokenId;
                 } else {
-                    console.error(`Update asset_id FAILED for draft #${getData?.data?.id} queue_id ${queueId}: No events found`);
+                    console.error(`Update asset_id FAILED for draft #${instrumentId} queue_id ${queueId}: No events found`);
                 }
             }
 
             if (mintedTo && tokenIdMinted) {
-                const instrumentId = getData.data.id;
-    
                 const postResult = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${instrumentId}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` },
@@ -122,7 +123,7 @@ export async function POST( request: Request, response: Response ) {
                 const postData = await postResult.json()
                 
                 if (postData?.code === 'success') {
-                    console.log(`Update asset_id SUCCEED for draft #${getData?.data?.id} queue_id ${queueId} and asset_id #${tokenIdMinted}`);
+                    console.log(`Update asset_id SUCCEED for draft #${instrumentId} queue_id ${queueId} and asset_id #${tokenIdMinted}`);
                     return Response.json({ message: "Received" })
                 }
             }
@@ -133,9 +134,9 @@ export async function POST( request: Request, response: Response ) {
                 { status: 200 },
             );   
         }
-        console.error(`Update asset_id FAILED for draft #${getData?.data?.id} queue_id ${queueId}`);
+        console.error(`Update asset_id FAILED for draft #${instrumentId} queue_id ${queueId}`);
         return Response.json(
-            { data: { message: `Update asset_id FAILED for draft #${getData?.data?.id} queue_id ${queueId}` } },
+            { data: { message: `Update asset_id FAILED for draft #${instrumentId} queue_id ${queueId}` } },
             { status: 400 }
         )
     } catch (err: any) {

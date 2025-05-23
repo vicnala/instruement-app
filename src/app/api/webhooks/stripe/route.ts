@@ -120,7 +120,10 @@ export async function POST(request: Request) {
                 const instrumentId = minter.instruments.find((id: number) => id === parseInt(data.metadata.id));
                 // console.log('instrumentId ok:', instrumentId);
                 if (!instrumentId) {
-                  throw new Error(`/api/webhooks/stripe wrong instrument id`);
+                  return NextResponse.json(
+                    { message: `/api/webhooks/stripe wrong instrument id` },
+                    { status: 400 },
+                  );
                 }
                 
                 result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${instrumentId}`, { cache: 'no-store', method: 'GET', headers })
@@ -146,7 +149,10 @@ export async function POST(request: Request) {
                       result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/file/${imageId}`, { headers });                     
 
                       if (result.status !== 200) {
-                        throw new Error(`/api/webhooks/stripe fetch file ${imageId} ERROR: ${result.statusText}`);
+                        return NextResponse.json(
+                          { message: `/api/webhooks/stripe fetch file ${imageId} ERROR: ${result.statusText}` },
+                          { status: 400 },
+                        );
                       }
                       
                       const { data: _image } = await result.json();
@@ -275,32 +281,54 @@ export async function POST(request: Request) {
 
                       const updateData = await result.json();
                       if (updateData?.code === 'success') {
+                        // console.log("queueId POST", updateData.data);
                         return NextResponse.json({ message: "Received" }, { status: 200 });
                       } else {
-                        throw new Error(`/api/webhooks/stripe ${message}`);
+                        return NextResponse.json(
+                          { message: `/api/webhooks/stripe ${message}` },
+                          { status: 400 },
+                        );
                       }
                     } else {
-                      throw new Error(`/api/webhooks/stripe NO COVER URI`);
+                      return NextResponse.json(
+                        { message: `/api/webhooks/stripe NO COVER URI` },
+                        { status: 400 },
+                      );
                     }
                   } else {
-                    throw new Error(`/api/webhooks/stripe NO COVER URI FILE`);
+                    return NextResponse.json(
+                      { message: `/api/webhooks/stripe NO COVER URI FILE` },
+                      { status: 400 },
+                    );
                   }
                 } else {
-                  throw new Error(`/api/webhooks/stripe 1 ${message}`);
+                  return NextResponse.json(
+                    { message: `/api/webhooks/stripe 1 ${message}` },
+                    { status: 400 },
+                  );
                 }
               } else {
-                throw new Error(`/api/webhooks/stripe 2 ${message}`);
+                return NextResponse.json(
+                  { message: `/api/webhooks/stripe 2 ${message}` },
+                  { status: 400 },
+                );
               }
             } catch (err: any) {
-              throw new Error(`/api/webhooks/stripe 3 ${err.message}`);
+              return NextResponse.json(
+                { message: `/api/webhooks/stripe 3 ${err.message}` },
+                { status: 400 },
+              );
             }
           }
           break;
         default:
-          throw new Error(`Unhandled event: ${event.type}`);
+          return NextResponse.json(
+            { message: `/api/webhooks/stripe Unhandled event: ${event.type}` },
+            { status: 400 },
+          );
       }
     } catch (error: any) {
-      console.error(`/api/webhooks/stripe:`, error)
+      // console.error(`/api/webhooks/stripe:`, error)
       return NextResponse.json(
         { message: error.message ? error.message : "Webhook handler failed" },
         { status: 400 },
