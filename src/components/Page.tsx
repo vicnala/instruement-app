@@ -1,6 +1,6 @@
 import { BottomNav } from "./BottomNav";
 import { Header } from "./Header";
-import { Footer } from "./Footer";
+// import { Footer } from "./Footer";
 import { useStateContext } from "@/app/context";
 
 interface Props {
@@ -18,7 +18,7 @@ const Page = ({ children }: Props) => {
 					<div className='px-3.5 py-6 sm:py-0'>{children}</div>
 				</main>
 			}
-			<Footer />
+			{/* <Footer /> */}
 			<BottomNav />
 		</>
 	)

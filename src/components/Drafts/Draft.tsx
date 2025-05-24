@@ -20,8 +20,6 @@ export default function Draft(
 
   useEffect(() => {
     const getInstrument = async () => {
-      if (!instrumentId || isLoading) return;
-      
       setIsLoading(true);
       try {
         const data = await InstrumentService.getInstrument(instrumentId, locale, api_key, true);
@@ -36,12 +34,10 @@ export default function Draft(
       } catch (error) {
         console.error(error);
       }
-      
       setIsLoading(false);
     }
 
     if (instrumentId && !isLoading && !instrument) {
-      setIsLoading(true);
       getInstrument();
     }
   }, [instrumentId, locale, api_key, isLoading, instrument]);
