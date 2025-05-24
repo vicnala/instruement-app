@@ -7,7 +7,7 @@ import { useStateContext } from "@/app/context";
 import NotConnected from "@/components/NotConnected";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
-import { FileText, Trash, ChevronDown } from 'lucide-react';
+import { Trash, ChevronDown, Lock } from 'lucide-react';
 
 import { Instrument, InstrumentFile, InstrumentImage } from "@/lib/definitions";
 import { useRouter } from "@/i18n/routing";
@@ -282,7 +282,7 @@ export default function DraftForm(
           <div>
             {
               instrument && (currentStep === 4) &&
-              <div className="text-right mt-6">
+              <div className="text-center mt-6">
                 <FormSaveButton
                   disabled={!canPreview}
                   onClick={() => router.push(`/preview/${instrument.id}`)}
@@ -299,9 +299,17 @@ export default function DraftForm(
         <form className="">
           <Section id="basic-info" className="pb-[0.1rem]">
             <div className="px-3 sm:px-6 pt-5 pb-6 sm:py-8 || bg-gray-25 rounded-lg">
-              <h2 className="text-xl font-semibold text-gray-1000 pb-8">
+              <h2 className="text-xl font-semibold text-gray-1000 pb-3">
                 {t('basic_info.title')}
               </h2>
+              <h3 className="text-lg text-me-600 pb-6">
+                    {minter && typeof minter !== 'boolean' && (
+                      <span className="flex items-center">
+                        <Lock className="w-4 h-4 mr-2 -mt-0.5" />
+                        {t('basic_info.made_by')} {minter.business_name}
+                      </span>
+                    )}
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-0 md:gap-6 sm:gap-6">
                 <div>
                   <label htmlFor="type" className="block text-base font-semibold text-gray-1000 pb-1">
@@ -310,7 +318,10 @@ export default function DraftForm(
                   <div className="relative">
                     <div
                       onClick={() => instrument?.type ? null : setOpen(!open)}
-                      className={`bg-white text-base p-2 flex border border-gray-200 items-center justify-between rounded-md ${!type && "text-gray-700"} ${!instrument?.type && "cursor-pointer"}`}
+                      className={`bg-white text-base p-2 flex border border-gray-200 items-center justify-between rounded-md 
+                        ${!type && "text-gray-700"} 
+                        ${!instrument?.type && "cursor-pointer"}
+                        ${instrument?.type ? "opacity-50 cursor-not-allowed bg-gray-50" : ""}`}
                     >
                       {type ? type : t('basic_info.type.placeholder')}
                       <ChevronDown className="h-5 w-5 text-gray-400" />
@@ -344,7 +355,7 @@ export default function DraftForm(
                       ))}
                     </ul>
                     <p className="text-sm text-gray-600 pt-2">
-                      {t('basic_info.type.description')} 
+                      {type ? t('basic_info.type.type_set_description') : t('basic_info.type.description')}
                     </p>
                   </div>
                 </div>
@@ -491,7 +502,7 @@ export default function DraftForm(
               {/* If description is saved and there are media uploads, show preview button */}
               {
                 instrument && (currentStep === 4) &&
-                <div className="mt-6 text-right">
+                <div className="mt-6 text-center">
                   <FormSaveButton
                     disabled={!canPreview}
                     onClick={() => router.push(`/preview/${instrument.id}`)}
@@ -508,10 +519,10 @@ export default function DraftForm(
 
         <Section id="delete">
           {instrument &&
-            <div className="mt-6 text-left">
+            <div className="my-6 text-center">
               <button
                 type="button"
-                className="inline-flex items-center px-2 py-2 text-xs font-semibold tracking-wide transition-colors duration-200 transform text-red-500 border-[0.1rem] border-red-500 bg-transparent rounded-md hover:bg-red-500 hover:text-white focus:outline-none focus:bg-red-700 disabled:opacity-25"
+                className="inline-flex items-center  text-xs font-semibold tracking-wide transition-colors duration-200 transform text-red-500 focus:outline-none focus:bg-red-700"
                 disabled={isLoadingMetadata}
                 onClick={() => handleInstrumentDelete()}
               >

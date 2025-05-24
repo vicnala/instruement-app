@@ -207,10 +207,14 @@
             },
             "basic_info": {
                 "title": "Información básica",
+                "button_save_and_continue": "Guardar y continuar",
+                "button_save": "Guardar",
+                "made_by": "Hecho por",
                 "type": {
                     "label": "Tipo de instrumento",
                     "placeholder": "Selecciona el tipo de instrumento",
                     "description": "Las opciones disponibles reflejan tus habilidades de construcción avaladas",
+                    "type_set_description": "Para establecer un tipo diferente, crea un nuevo borrador",
                     "description_modal": "Al registrar un instrumento, puedes elegir entre los tipos de instrumentos que corresponden a tus habilidades de construcción avaladas. Por ejemplo, si tienes el aval de \"Construcción de violín\", verás \"Violín\" como una opción disponible en el menú desplegable. Esto asegura que cada instrumento registrado refleje tu experiencia verificada como lutier.",
                     "input_placeholder": "Selecciona"
                 },
@@ -219,9 +223,7 @@
                     "placeholder": "Introduce el nombre del instrumento",
                     "description": "Elige un nombre significativo para tu instrumento",
                     "description_modal": "Elige un nombre significativo para tu instrumento. Este puede estar inspirado en sus características únicas, su futuro propietario, o una persona o lugar de importancia personal."
-                },
-                "button_save_and_continue": "Guardar y continuar",
-                "button_save": "Guardar"
+                }
             },
             "media": {
                 "cover": {
@@ -277,7 +279,8 @@
             "additional_images": "Imágenes adicionales",
             "documents": "Documentos",
             "description": "Descripción",
-            "back_to_draft": "Volver al borrador"
+            "back_to_draft": "Volver al borrador",
+            "made_by": "Instrumento hecho por"
         },
         "Instrument": {
             "current_owner": "Propietario actual",

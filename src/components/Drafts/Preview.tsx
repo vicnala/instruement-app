@@ -10,7 +10,7 @@ import NotConnected from "@/components/NotConnected";
 import Image from "next/image";
 import { useRouter } from "@/i18n/routing";
 import { Instrument } from "@/lib/definitions";
-import { Expand, Download, ArrowLeft } from "lucide-react";
+import { Expand, Download, ArrowLeft, ArrowRight } from "lucide-react";
 import InstrumentService from "@/services/InstrumentService";
 import { marked } from "marked";
 
@@ -61,13 +61,9 @@ export default function Preview(
     minter ?
     <Page>
         <Section>
-          <div className="flex justify-between items-start px-3 md:px-6 py-2 md:py-4 border border-it-100 bg-it-50 rounded-[15px]">
-            <div>
-              <h1 className="text-3xl font-bold text-it-1000">{instrument?.title}</h1>
-              <p className="text-lg text-it-900">{instrument?.type_name}</p>
-            </div>
-            {instrument?.updated_at && (
-              <p className="text-sm font-bold text-it-800">
+          <div className="px-3 md:px-6 py-4 md:py-6 border-[0.1rem] border border-gray-100 rounded-lg">
+          {instrument?.updated_at && (
+              <p className="text-sm text-it-1000 text-right">
                 {new Date(instrument.updated_at).toLocaleDateString(locale, {
                   year: 'numeric',
                   month: 'long',
@@ -75,6 +71,12 @@ export default function Preview(
                 })}
               </p>
             )}
+            <div>
+              <h1 className="text-3xl font-bold text-it-1000">{instrument?.title}</h1>
+              <h3 className="text-xl text-it-1000 mb-3">{instrument?.type_name}</h3>
+              <h4 className="text-sm text-it-1000">{minter?.business_name ? `${t('made_by')} ${minter.business_name}` : ''}</h4>
+            </div>
+
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4 md:mt-8">
@@ -82,7 +84,7 @@ export default function Preview(
             <div className="flex flex-col space-y-8 md:space-y-10">
               {instrument?.cover_image && (
                 <div>
-                  <div className="rounded-lg relative bg-it-100 border border-it-200 shadow-md overflow-hidden">
+                  <div className="rounded-[15px] relative bg-it-100 overflow-hidden">
                     <div className="absolute top-2 right-2 z-10 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-all cursor-pointer" 
                          onClick={() => window.open(instrument.cover_image.file_url, '_blank')}
                          onKeyDown={(e) => e.key === 'Enter' && window.open(instrument.cover_image.file_url, '_blank')}
@@ -94,7 +96,7 @@ export default function Preview(
                         className="text-white" 
                       />
                     </div>
-                    <div className="w-full aspect-square bg-white/[.04]"> 
+                    <div className="w-full bg-white/[.04]"> 
                       <Image 
                         src={instrument.cover_image.file_url}
                         alt={instrument.cover_image.description || t('no_description')}
@@ -111,7 +113,6 @@ export default function Preview(
               )}
               {instrument?.images && instrument.images.length > 0 && (
                 <div>
-                  <h2 className="text-xl font-semibold mb-4">{t('additional_images')}</h2>
                   <div className="grid grid-cols-2 gap-2">
                     {instrument.images.map((image, index) => (
                       <div key={index} className="relative bg-it-100 border border-it-200 rounded-lg overflow-hidden">
@@ -137,7 +138,7 @@ export default function Preview(
                             className="object-cover w-full h-full"
                           />
                         </div>
-                        <p className="text-it-1000 p-2 text-sm">
+                        <p className={`p-2 text-sm ${image.description ? 'text-it-1000' : 'text-gray-500'}`}>
                           {image.description || t('no_description')}
                         </p>
                       </div>
@@ -179,7 +180,7 @@ export default function Preview(
             <div>
               <h2 className="text-xl font-semibold mb-4">{t('description')}</h2>
               <div 
-                className="text-base text-it-1000"
+                className="text-base text-it-1000 flex flex-col gap-4"
                 dangerouslySetInnerHTML={{ __html: marked.parse(instrument?.description || '') as string }}
               />
             </div>
@@ -187,7 +188,7 @@ export default function Preview(
 
           {
             instrument && instrument.type && instrument.title && instrument.description && instrument.images?.length > 0 &&
-            <div className="flex justify-between items-center mt-6 px-3 md:px-6 py-2 md:py-4 text-center border border-it-100 bg-it-50 rounded-[15px]">
+            <div className="flex justify-between items-center my-8">
               {/* Button to go back to draft */}
               <button
                 type="button"
@@ -202,8 +203,8 @@ export default function Preview(
                 className="inline-flex items-center px-4 py-2 text-sm font-medium transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
                 onClick={() => router.push(`/pay/${instrument.id}${address && `?address=${address}`}`)}
               >
-                
                 {t('register_now')}
+                <ArrowRight className="w-4 h-4 ml-2" />                
               </button>
             </div>
           }
