@@ -8,6 +8,8 @@ import React, {
   ReactNode
 } from "react"
 import { getContract } from "thirdweb";
+import { getOwnedNFTs } from "thirdweb/extensions/erc721";
+import { mainnet, arbitrumSepolia } from "thirdweb/chains";
 import {
   useActiveAccount,
   useActiveWallet,
@@ -79,12 +81,26 @@ export const getWPUser = async (activeAccount: any, setIsLuthier: Function, setI
 }
 
 export const getUserTokens = async (activeAccount: any, setOwned: Function) => {
+  if (!process.env.NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS || !process.env.NEXT_PUBLIC_CHAIN_ID) {
+    return
+  }
+
   try {
-    const result = await fetch(`/api/tokens/${activeAccount.address}`, { cache: 'no-store' })
-    const data = await result.json();
-    setOwned(data);
-  } catch (error) {
-    setOwned([]);
+    const getOwned = await getOwnedNFTs({
+      contract: getContract({
+        client,
+        address: process.env.NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS,
+        chain: process.env.NEXT_PUBLIC_CHAIN_ID === '1' ? mainnet : arbitrumSepolia
+      }),
+      owner: activeAccount.address
+    });
+
+    if (getOwned) {
+      setOwned(getOwned)
+    }
+  } catch (err: any) {
+    console.error(`getOwnedNFTs for ${activeAccount.address} error ${err.message}`)
+    setOwned([])
   }
 }
 

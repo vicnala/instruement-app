@@ -71,10 +71,8 @@ export default function Instrument(
 	const router = useRouter();
 	const tInstrument = useTranslations('components.Instrument');
 	const [isLoadingInstrumentAsset, setIsLoadingInstrumentAsset] = useState(false)
-	const [isLoadingInstrument, setIsLoadingInstrument] = useState(false)
 	const [isLoadingMinter, setIsLoadingMinter] = useState(false)
 	const [instrumentAsset, setInstrumentAsset] = useState<any>()
-	const [instrument, setInstrument] = useState<any>()
 	const [images, setImages] = useState<any[]>([])
 	const [documents, setDocuments] = useState<any[]>([])
 	const [minter, setMinter] = useState<string>()
@@ -167,32 +165,6 @@ export default function Instrument(
 		}
 	}, [id, isLoadingInstrumentAsset, instrumentAsset])
 
-
-	useEffect(() => {
-		async function getInstrument() {
-			try {
-				const result = await fetch(`/api/instrument/asset/${id}?locale=${locale}`)
-				const data = await result.json();
-				const { data: instrumentData } = data;
-				// console.log("instrumentData ", instrumentData);
-				setInstrument(instrumentData);
-			} catch (error) {
-				console.error(`/api/instrument/asset/${id}`, error)
-			}
-			setIsLoadingInstrument(false);
-		}
-
-		if (!isLoadingInstrument && !instrument) {
-			if (id) {
-				setIsLoadingInstrument(true)
-				getInstrument().catch((e) => {
-					console.error(`/api/instrument/asset/${id}`, e.message);
-				})
-			}
-		}
-	}, [id, isLoadingInstrument, instrument, locale])
-
-
 	useEffect(() => {
 		async function getminter() {
 			try {
@@ -284,7 +256,7 @@ export default function Instrument(
 	};
 
 	
-	if (isLoading) return (
+	if (isLoading || isLoadingMinter || isLoadingInstrumentAsset) return (
 		<Page>
 		<div className="text-center">
 			<Loading />

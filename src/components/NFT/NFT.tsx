@@ -7,8 +7,8 @@ import { client } from "@/app/client";
 
 type Props = {
   nft: {
+    id: string,
     metadata: {
-      id: string,
       name: string,
       image: string
     }
@@ -29,7 +29,7 @@ export default function NFTComponent({
       className="cursor-pointer transition-all hover:shadow-lg || flex flex-col w-full bg-it-25 justify-stretch || overflow-hidden bg-it-25 border border-it-100 rounded-lg"
       onClick={() =>
         router.push(
-          `/instrument/${nft.metadata.id.toString()}`
+          `/instrument/${nft.id.toString()}`
         )
       }
     >
@@ -49,7 +49,7 @@ export default function NFTComponent({
             {nft.metadata.name || JSON.stringify(nft.metadata, null, 2)}
           </p>
           <p className="text-sm font-semibold">
-            #{nft.metadata.id.toString()}
+            #{nft.id.toString()}
           </p>
         </div>
       </div>

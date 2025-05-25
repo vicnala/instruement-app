@@ -5,8 +5,8 @@ import NFT, { LoadingNFTComponent } from "./NFT";
 
 type Props = {
   nftData: {
+    id: string,
     metadata: {
-      id: string,
       name: string,
       image: string
     }
@@ -30,7 +30,7 @@ export default function NFTGrid({ nftData }: Props) {
           </div>
           <div className="grid justify-start grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {nftData
-              .sort((a, b) => BigInt(a.metadata.id) < BigInt(b.metadata.id) ? 1 : -1)
+              .sort((a, b) => a.id < b.id ? 1 : -1)
               .map((nft: any, index: number) => (
                 <NFT
                   key={`${index}`}
