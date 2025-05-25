@@ -84,9 +84,9 @@ export default function PaymentResult(
               <button
                 type="button"
                 className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
-                onClick={() => router.push(`/`)}
+                onClick={() => router.push(`/instrument/${instrument.asset_id}`)}
               >
-                {t('components.PaymentResult.home')}
+                {t('components.PaymentResult.go_to_instrument')}
               </button>
             }
           </div>

@@ -323,7 +323,8 @@
             "success_message_loading": "Please wait for the registration process to complete...",
             "success_message_ready": "The registered instrument is available in your wallet!",
             "failed_message": "Something went wrong with the payment. Please contact us.",
-            "home": "Return to the home page"
+            "home": "Return to the home page",
+            "go_to_instrument": "View the new registered instrument"
         },
         "UI": {
             "ProgressBar": {
