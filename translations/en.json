@@ -204,10 +204,12 @@
                 "title": "Basic Info",
                 "button_save_and_continue": "Save & continue",
                 "button_save": "Save",
+                "made_by": "Made by",
                 "type": {
                     "label": "Instrument type",
                     "placeholder": "Select instrument type",
                     "description": "Available options reflect your endorsed construction skills",
+                    "type_set_description": "To set a different type create a new draft",
                     "description_modal": "When registering an instrument, you can choose from instrument types that correspond to your endorsed construction skills. For example, if you have the \"Violin construction\" endorsement, you'll see \"Violin\" as an available option in the dropdown menu. This ensures that each registered instrument reflects your verified expertise as a luthier.",
                     "input_placeholder": "Select"
                 },
@@ -271,7 +273,8 @@
             "additional_images": "Additional images",
             "documents": "Documents",
             "description": "Description",
-            "back_to_draft": "Back to draft"
+            "back_to_draft": "Back to draft",
+            "made_by": "Instrument made by"
         },
         "Instrument": {
             "current_owner": "Current owner",

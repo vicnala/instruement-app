@@ -31,10 +31,17 @@ const PlainTextCodeEditorDescriptor: CodeBlockEditorDescriptor = {
   }
 }
 
-const Editor = ({ markdown, updateDescription }: { markdown: string, updateDescription: (updateDescription: string) => void }) => {
+const Editor = ({ markdown, updateDescription, contentEditableClassName }: { 
+  markdown: string, 
+  updateDescription: (updateDescription: string) => void,
+  contentEditableClassName?: string 
+}) => {
   return <MDXEditor
-    onChange={(markdown) => updateDescription(markdown)}
+    onChange={(markdown) => {
+      updateDescription(markdown);
+    }}
     markdown={markdown}
+    contentEditableClassName={contentEditableClassName}
     plugins={[
       headingsPlugin(),
       listsPlugin(),
