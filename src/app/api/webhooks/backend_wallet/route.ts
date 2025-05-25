@@ -63,7 +63,7 @@ export async function POST( request: Request, response: Response ) {
         );
     }
     
-    console.log('/api/webhooks/backend_wallet', status, chainId, queueId);
+    // console.log('webhooks: backend_wallet', status, chainId, queueId);
 
     try {
         const getResult = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/queue/${queueId}`, {
@@ -95,7 +95,7 @@ export async function POST( request: Request, response: Response ) {
         
             const { result } = await engine.transaction.getTransactionLogs(NEXT_PUBLIC_CHAIN_ID, queueId);
             
-            console.log("getTransactionLogs", result);
+            // console.log("getTransactionLogs", result);
 
             const tokensMintedEvent = result.find(r => r.eventName === 'TokensMinted');
             const tokensTransferEvent = result.find(r => r.eventName === 'Transfer');
@@ -123,7 +123,8 @@ export async function POST( request: Request, response: Response ) {
                 const postData = await postResult.json()
                 
                 if (postData?.code === 'success') {
-                    console.log(`Update asset_id SUCCEED for draft #${instrumentId} queue_id ${queueId} and asset_id #${tokenIdMinted}`);
+                    // console.log('webhooks: backend_wallet postData', postData.data);
+                    console.log(`webhooks: backend_wallet update asset_id SUCCEED for draft #${instrumentId} queue_id ${queueId} and asset_id #${tokenIdMinted}`);
                     return Response.json({ message: "Received" })
                 }
             }

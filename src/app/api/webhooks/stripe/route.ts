@@ -271,7 +271,7 @@ export async function POST(request: Request) {
                       
                       const { queueId } = mintResult.result;
 
-                      console.log('queueId', queueId, 'for draft', instrumentId);
+                      // console.log('webhooks: stripe queueId', queueId, 'for draft', instrumentId);
 
                       result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${instrumentId}`, {
                         method: 'POST',
@@ -281,7 +281,7 @@ export async function POST(request: Request) {
 
                       const updateData = await result.json();
                       if (updateData?.code === 'success') {
-                        // console.log("queueId POST", updateData.data);
+                        // console.log("webhooks: stripe queueId POST", updateData.data);
                         return NextResponse.json({ message: "Received" }, { status: 200 });
                       } else {
                         return NextResponse.json(

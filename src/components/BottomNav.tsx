@@ -11,8 +11,6 @@ export const BottomNav = () => {
 	const { address, isMinter } = useStateContext()
 	const pathname = usePathname();
 
-	console.log("isMinter BottomNav", isMinter);
-
 	return (
 		<div className='sm:hidden'>
 			{
