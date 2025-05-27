@@ -424,7 +424,7 @@ export default function Instrument(
 					<div className="mt-6 space-y-4">
 						{/* Transfer Management Section */}
 						{isOwner && (
-							<div className="mb-6">
+							<div className="mb-12">
 								<div>
 									<h2 className="text-2xl font-semibold text-we-800 dark:text-it-50 mb-2">
 										{tInstrument('transfer_management')}
@@ -506,7 +506,7 @@ export default function Instrument(
 
 						{/* Transaction Button */}
 						{contract && address && isOwner && (to || scannedResult) && (
-							<div className="flex justify-center pb-12">
+							<Section>
 								<TransactionButton
 									transaction={() => {
 										setIsTransfering(true);
@@ -531,7 +531,7 @@ export default function Instrument(
 								>
 									{tInstrument('transfer')} #{id} {tInstrument('to')} {truncateEthAddress(to || scannedResult || '')}
 								</TransactionButton>
-							</div>
+							</Section>
 						)}
 					</div>
 				</>
