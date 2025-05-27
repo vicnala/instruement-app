@@ -14,13 +14,20 @@ import Section from "@/components/Section";
 import { client } from "@/app/client";
 import QRModal from "./QRModal";
 import Image from "next/image";
-import { Download, Copy } from "lucide-react";
+import { Download, Copy, QrCode, ChevronDown, Handshake, Link2 } from "lucide-react";
 import { usePathname, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import Divider from "@/components/UI/Divider";
-import Loading from "../Loading";
+import ButtonSpinner from '@/components/UI/ButtonSpinner';
 import NotConnected from "@/components/NotConnected";
 import { useRouter } from "@/i18n/routing";
+import { marked } from "marked";
+
+// Configure marked options
+marked.use({
+	breaks: true
+});
+
 
 // Add these utility functions at the top of the file, outside the component
 const generateKeyPair = async () => {
@@ -87,7 +94,7 @@ export default function Instrument(
 	const [isModalOpen, setModalOpen] = useState(false);
 
 	const [isTransfering, setIsTransfering] = useState(false);
-
+	const [showTransferOptions, setShowTransferOptions] = useState(false);
 
 	useEffect(() => {
 		async function getInstrumentAsset() {
@@ -255,60 +262,72 @@ export default function Instrument(
 		}
 	};
 
-	
-	if (isLoading || isLoadingMinter || isLoadingInstrumentAsset) return (
-		<Page>
-		<div className="text-center">
-			<Loading />
-		</div>
-		</Page>
-	)
+
+	if (isLoading || isLoadingMinter || isLoadingInstrumentAsset) {
+		return (
+			<Page>
+				<div className="flex justify-center items-center h-full">
+					<ButtonSpinner />
+				</div>
+			</Page>
+		);
+	}
+
+	if (!address) {
+		return <NotConnected locale={locale} />;
+	}
 
 	return (
-		address ? <Page>
-			{
-				instrumentAsset && instrumentAsset.metadata ?
-					<>
-						{instrumentAsset.owner !== address && (
-							<p className='bg-me-50 p-4 rounded-lg border border-me-200 mb-4'>
-								<b>{tInstrument('current_owner')}:</b> {truncateEthAddress(instrumentAsset.owner)} ({tInstrument('you_are_not_owner')})
-							</p>
-						)}
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-							<div className="flex flex-col space-y-8 md:space-y-10">
-
-								{/* Cover Image Section */}
-								<div className="rounded-[15px] relative bg-it-100 border border-it-200 shadow-md overflow-hidden">
-									<div className="w-full aspect-square bg-white/[.04]">
-										<Image
-											className="mx-auto"
-											src={instrumentAsset.metadata.image}
-											width={800}
-											height={800}
-											alt={`Instrument #${id}`}
-										/>
-									</div>
-									{/* <p className="text-it-1000 p-4">
-										{instrumentAsset.cover_image.description || t('no_description')}
-									</p> */}
+		<Page>
+			{instrumentAsset && instrumentAsset.metadata ? (
+				<>
+					{instrumentAsset.owner !== address && (
+						<p className='bg-me-50 p-4 rounded-lg border border-me-200 mb-4'>
+							<b>{tInstrument('current_owner')}:</b> {truncateEthAddress(instrumentAsset.owner)} ({tInstrument('you_are_not_owner')})
+						</p>
+					)}
+					{/* Copy URL Button for Non-Owner with Nonce */}
+					{contract && address && !isOwner && (
+						<Section>
+							<button
+								type="button"
+								onClick={() => handleCopyUrl(async () => generateResponseUrl())}
+								className="flex items-center gap-2 px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+								aria-label={tInstrument('copy_response_url')}
+								disabled={isTransfering}
+							>
+								<Copy className="w-4 h-4" />
+								{copySuccess ? tInstrument('copied') : tInstrument('copy_response_url')}
+							</button>
+						</Section>
+					)}
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+						<div className="flex flex-col space-y-8 md:space-y-10">
+							{/* Cover Image Section */}
+							<div className="rounded-[15px] relative bg-it-100 border border-it-200 shadow-md overflow-hidden">
+								<div className="w-full aspect-square bg-white/[.04]">
+									<Image
+										className="mx-auto"
+										src={instrumentAsset.metadata.image}
+										width={800}
+										height={800}
+										alt={`Instrument #${id}`}
+									/>
 								</div>
 							</div>
+						</div>
 
-							<div className="space-y-8 md:space-y-10">
-								{/* Instrument type and name */}
-								<div className="text-it-1000 dark:text-it-50 space-y-2">
-									<p className="text-md">
-										{/* Instrument type from instrument  */}
-										
-									</p>						
-									<h2 className='text-3xl font-semibold'>
-										{instrumentAsset.metadata.name}
-									</h2>
-								</div>
-								{/* Luthier info */}
-								<div className="text-it-1000 dark:text-it-50 space-y-2 border border-gray-200 p-4 rounded-lg">
-									<p>{tInstrument('registered_by')}</p>
-									<div className="flex flex-col gap-2">
+						<div className="space-y-8 md:space-y-10">
+							{/* Instrument type and name */}
+							<div className="text-it-1000 dark:text-it-50 space-y-2">
+								<h2 className='text-3xl font-semibold'>
+									{instrumentAsset.metadata.name}
+								</h2>
+							</div>
+							{/* Luthier info */}
+							<div className="text-it-1000 dark:text-it-50 space-y-2 border border-gray-200 p-4 rounded-lg">
+								<p>{tInstrument('registered_by')}</p>
+								<div className="flex flex-col gap-2">
 									{minterUser && minterUser.profile_photo && (
 										<div className="flex items-center gap-4">
 											<div className="w-20 h-20 rounded-full overflow-hidden">
@@ -325,203 +344,240 @@ export default function Instrument(
 											</p>
 										</div>
 									)}
-									</div>
-								</div>
-								{/* Description */}
-								<div className="text-it-1000 dark:text-it-50 space-y-4">
-									<h2 className='text-2xl font-semibold'>
-										{tInstrument('description')}
-									</h2>
-									<div className='text-lg'>
-										<p>{instrumentAsset.metadata.description}</p>
-									</div>
 								</div>
 							</div>
+							{/* Description */}
+							<div className="text-it-1000 dark:text-it-50 space-y-4">
+								<h2 className='text-2xl font-semibold'>
+									{tInstrument('description')}
+								</h2>
+								<div
+									className="text-base text-it-1000 flex flex-col gap-4"
+									dangerouslySetInnerHTML={{ __html: marked.parse(instrumentAsset.metadata.description || '') as string }}
+								/>
+							</div>
 						</div>
-						<Divider color="bg-gray-50" spacing="lg" />
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+					</div>
 
-								{/* Images Section */}
-								{
-									images && images.length &&
-									<div>
-										<h2 className='text-xl font-semibold text-it-1000 dark:text-it-50 mb-4'>{tInstrument('additional_images')}</h2>
-										<div className="grid grid-cols-2 gap-2">
-											{images.map((img: any, index: number) =>
-												<div key={index} className="relative bg-it-100 border border-it-200 rounded-lg overflow-hidden">
-													<div className="w-full aspect-square bg-white/[.04]">
-														<Image
-															src={img.uri}
-															alt={`Instrument #${id}`}
-															width={400}
-															height={400}
-															className="object-cover w-full h-full"
-														/>
+					<Divider color="bg-gray-50" spacing="lg" />
+
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+						{/* Images Section */}
+						{images && images.length > 0 && (
+							<div>
+								<h2 className='text-xl font-semibold text-it-1000 dark:text-it-50 mb-4'>{tInstrument('additional_images')}</h2>
+								<div className="grid grid-cols-2 gap-2">
+									{images.map((img: any, index: number) => (
+										<div key={index} className="relative bg-it-100 border border-it-200 rounded-lg overflow-hidden">
+											<div className="w-full aspect-square bg-white/[.04]">
+												<Image
+													src={img.uri}
+													alt={`Instrument #${id}`}
+													width={400}
+													height={400}
+													className="object-cover w-full h-full"
+												/>
+											</div>
+											<p className="text-it-1000 p-2 text-sm">
+												{img.description || tInstrument('no_description')}
+											</p>
+										</div>
+									))}
+								</div>
+							</div>
+						)}
+
+						{/* Documents Section */}
+						<div>
+							<h2 className='text-xl font-semibold text-it-1000 dark:text-it-50 mb-4'>
+								{tInstrument('documents')}
+							</h2>
+							{documents && documents.length > 0 ? (
+								<div className='flex flex-col gap-2'>
+									{documents.map((doc: any, index: number) => (
+										<a
+											key={`${index}`}
+											download={doc.description}
+											href={doc.uri}
+											target="_blank"
+											rel="noreferrer"
+											className="w-full flex items-center justify-between p-4 border border-gray-400 rounded-lg hover:bg-gray-50 transition-colors"
+										>
+											<div className="flex flex-col items-start">
+												<h3 className="text-lg font-medium">{doc.description}</h3>
+												<p className="text-sm text-gray-500">
+													{doc.description || tInstrument('no_description')}
+												</p>
+											</div>
+											<Download className="w-4 h-4" />
+										</a>
+									))}
+								</div>
+							) : (
+								<p className="text-gray-500">{tInstrument('no_documents_available')}</p>
+							)}
+						</div>
+					</div>
+
+					<Divider color="bg-gray-50" spacing="lg" />
+
+					<div className="mt-6 space-y-4">
+						{/* Transfer Management Section */}
+						{isOwner && (
+							<div className="mb-12">
+								<div>
+									<h2 className="text-2xl font-semibold text-we-800 dark:text-it-50 mb-2">
+										{tInstrument('transfer_management')}
+									</h2>
+									<p className="text-it-1000 dark:text-it-50 mb-6">
+										{tInstrument('transfer_management_description')}
+									</p>
+									{/* Show transfer options button, hide if showTransferOptions is true */}
+									{!showTransferOptions && (
+										<button
+											type="button"
+											className="inline-flex items-center px-4 py-2 text-sm text-we-1000 dark:text-we-50 bg-transparent border border-we-500 rounded-md hover:bg-we-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-we-500 disabled:opacity-50"
+											onClick={() => setShowTransferOptions(!showTransferOptions)}
+										>
+											{tInstrument('show_transfer_options')}
+											<ChevronDown className="w-4 h-4 ml-2" />
+										</button>
+									)}
+								</div>
+								{showTransferOptions && (
+									<div className="bg-we-50 dark:bg-we-950 rounded-lg p-6 mb-6">
+										<h3 className="text-xl font-semibold text-it-1000 dark:text-it-50 mb-4">
+											{tInstrument('transfer_options_title')}
+										</h3>
+										<div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-6">
+											<div className="flex gap-6">
+												<div className="flex flex-col gap-2">
+													<div className="flex items-center gap-2 ">
+														<Handshake className="w-5 h-5" />
+														<h3 className="text-lg font-semibold text-it-1000 dark:text-it-50">
+															{tInstrument('in_person_transfer')}
+														</h3>
 													</div>
-													<p className="text-it-1000 p-2 text-sm">
-														{img.description || tInstrument('no_description')}
+													<p className="text-it-1000 dark:text-it-50 mb-2">
+														{tInstrument('in_person_transfer_description')}
 													</p>
+													{!to && (
+														<button
+															type="button"
+															className="inline-flex items-center px-4 py-2 text-sm font-medium text-we-1000 dark:text-we-50 bg-transparent border-[0.1rem] border-we-400 rounded-md hover:bg-we-400 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-we-400 disabled:opacity-50 w-fit"
+															onClick={() => setModalOpen(true)}
+															disabled={isTransfering}
+															aria-label={tInstrument('scan_qr')}
+														>
+															<QrCode className="w-4 h-4 mr-2" />
+															{isModalOpen ? tInstrument('stop') : tInstrument('scan_qr')}
+														</button>
+													)}
 												</div>
-											)
-											}
-										</div>
-									</div>
-								}
-
-								{/* Documents Section */}
-								{
-									documents && documents.length ?
-									<div>
-										<h2 className='text-xl font-semibold text-it-1000 dark:text-it-50 mb-4'>
-											{tInstrument('documents')}
-										</h2>
-										<div className='flex flex-col gap-2'>
-											{
-												documents.map((doc: any, index: number) =>
-													<a
-														key={`${index}`}
-														download={doc.description}
-														href={doc.uri}
-														target="_blank"
-														rel="noreferrer"
-														className="w-full flex items-center justify-between p-4 border border-gray-400 rounded-lg hover:bg-gray-50 transition-colors"
+											</div>
+											<div className="flex gap-6">
+												<div className="flex flex-col gap-2">
+													<div className="flex items-center gap-2">
+														<Link2 className="w-5 h-5" />
+														<h3 className="text-lg font-semibold text-it-1000 dark:text-it-50">
+														{tInstrument('remote_transfer')}
+													</h3>
+													</div>
+													<p className="text-it-1000 dark:text-it-50 mb-2">
+														{tInstrument('remote_transfer_description')}
+													</p>
+													<button
+														type="button"
+														onClick={() => handleCopyUrl(generateShareableUrl)}
+														className="inline-flex items-center px-4 py-2 text-sm font-medium text-we-1000 dark:text-we-50 bg-transparent border-[0.1rem] border-we-400 rounded-md hover:bg-we-400 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-we-400 disabled:opacity-50 w-fit"
+														aria-label={tInstrument('copy_secure_link')}
+														disabled={isTransfering}
 													>
-														<div className="flex flex-col items-start">
-															<h3 className="text-lg font-medium">{doc.description}</h3>
-															<p className="text-sm text-gray-500">
-																{doc.description || tInstrument('no_description')}
-															</p>
-														</div>
-														<Download className="w-4 h-4" />
-													</a>
-												)
-											}
+														<Copy className="w-4 h-4 mr-2" />
+														{copySuccess ? tInstrument('copied') : `${tInstrument('copy_secure_link')} (${tInstrument('valid_for')} ${COOKIE_EXPIRY_DAYS} ${tInstrument('days')})`}
+													</button>
+												</div>
+											</div>
 										</div>
-									</div> :
-									<div>
-										<h2 className='text-xl font-semibold text-it-1000 dark:text-it-50 mb-4'>
-											{tInstrument('no_documents_available')}
-										</h2>
 									</div>
-								}
+								)}
+							</div>
+						)}
 
-						</div>
-
-						<div className="mt-6 text-center space-y-4">
-							{/* Copy URL Button for Owner */}
-							{contract && address && isOwner && (
-								<Section>
-									<button
-										type="button"
-										onClick={() => handleCopyUrl(generateShareableUrl)}
-										className="flex items-center gap-2 px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-										aria-label={tInstrument('copy_url')}
-										disabled={isTransfering}
-									>
-										<Copy className="w-4 h-4" />
-										{copySuccess ? tInstrument('copied') : `${tInstrument('copy_url')} (${tInstrument('valid_for')} ${COOKIE_EXPIRY_DAYS} ${tInstrument('days')})`}
-									</button>
-								</Section>
-							)}
-
-							{/* Copy URL Button for Non-Owner with Nonce */}
-							{contract && address && !isOwner && searchParams.get('nonce') && (
-								<Section>
-									<button
-										type="button"
-										onClick={() => handleCopyUrl(async () => generateResponseUrl())}
-										className="flex items-center gap-2 px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-										aria-label={tInstrument('copy_response_url')}
-										disabled={isTransfering}
-									>
-										<Copy className="w-4 h-4" />
-										{copySuccess ? tInstrument('copied') : tInstrument('copy_response_url')}
-									</button>
-								</Section>
-							)}
-
-							{/* Scan Button */}
-							{
-								contract && address && isOwner && !to &&
-								<Section>
-									<button
-										type="button"
-										className="items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
-										onClick={() => setModalOpen(true)}
-										disabled={isTransfering}
-									>
-										{isModalOpen ? tInstrument('stop') : tInstrument('scan')}
-									</button>
-								</Section>
-							}
-							{/* Transaction Button */}
-							{
-								contract && address && isOwner && (to || scannedResult) &&
-								<Section>
-									<TransactionButton
-										transaction={() => {
-											setIsTransfering(true);
-											return transferFrom({
-												contract: contract,
-												from: address,
-												to: to ? to : scannedResult ? scannedResult : '',
-												tokenId: BigInt(id)
-											});
-										}}
-										onTransactionConfirmed={() => {
-											alert(`${tInstrument("transfered_to")} ${to ? to : scannedResult ? scannedResult : ''}`);
-											setReloadUser(true);
-											router.replace('/');
-										}}
-										onError={(error) => {
-											setIsTransfering(false);
-											console.error("Transaction error", error);
-										}}
-										unstyled
-										className="items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
-									>
-										{tInstrument('transfer')} #{id} {tInstrument('to')} {truncateEthAddress(to || scannedResult || '')}
-									</TransactionButton>
-								</Section>
-							}
-						</div>
-						<QRModal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
-							<Scanner
-								onScan={(result) => {
-									if (result.length) {
-										const address = result[0].rawValue || '';
-										if (isAddress(address)) {
-											setScannedResult(address)
-											setModalOpen(false)
-										} else {
-											if (result[0].format === 'qr_code') {
-												const split1 = result[0].rawValue.split(':');
-												if (split1.length === 2) {
-													const type = split1[0];
-													if (type === 'ethereum') {
-														const split2 = split1[1].split('@');
-														if (split2.length === 2) {
-															const address = split2[0];
-															if (isAddress(address)) {
-																setScannedResult(address)
-																setModalOpen(false)
-															}
-														}
-													}
+						{/* Transaction Button */}
+						{contract && address && isOwner && (to || scannedResult) && (
+							<Section>
+								<TransactionButton
+									transaction={() => {
+										setIsTransfering(true);
+										return transferFrom({
+											contract: contract,
+											from: address,
+											to: to ? to : scannedResult ? scannedResult : '',
+											tokenId: BigInt(id)
+										});
+									}}
+									onTransactionConfirmed={() => {
+										alert(`${tInstrument("transfered_to")} ${to ? to : scannedResult ? scannedResult : ''}`);
+										setReloadUser(true);
+										router.replace('/');
+									}}
+									onError={(error) => {
+										setIsTransfering(false);
+										console.error("Transaction error", error);
+									}}
+									unstyled
+									className="items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+								>
+									{tInstrument('transfer')} #{id} {tInstrument('to')} {truncateEthAddress(to || scannedResult || '')}
+								</TransactionButton>
+							</Section>
+						)}
+					</div>
+				</>
+			) : null }
+			<QRModal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
+				<Scanner
+					onScan={(result) => {
+						if (result.length) {
+							const address = result[0].rawValue || '';
+							if (isAddress(address)) {
+								setScannedResult(address);
+								setModalOpen(false);
+							} else {
+								if (result[0].format === 'qr_code') {
+									const split1 = result[0].rawValue.split(':');
+									if (split1.length === 2) {
+										const type = split1[0];
+										if (type === 'ethereum') {
+											const split2 = split1[1].split('@');
+											if (split2.length === 2) {
+												const address = split2[0];
+												if (isAddress(address)) {
+													setScannedResult(address);
+													setModalOpen(false);
 												}
 											}
 										}
 									}
-								}}
-								classNames={{}}
-								styles={{}}
-							/>
-						</QRModal>
-					</>
-					:
-					<></>
-			}
-		</Page> :
-		<NotConnected locale={locale} />
+								}
+							}
+						}
+					}}
+					onError={(error) => {
+						console.error(error);
+					}}
+					classNames={{
+						container: "w-full h-full"
+					}}
+					styles={{
+						container: {
+							width: '100%',
+							height: '100%'
+						}
+					}}
+				/>
+			</QRModal>
+		</Page>
 	);
 }
