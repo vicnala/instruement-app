@@ -323,14 +323,13 @@
             "privacy_policy": "la política de privacidad"
         },
         "PaymentResult": {
-            "title": "El pago por el registro del borrador",
-            "succesful": "ha finalizado con éxito!",
-            "failed": "ha fallado!",
-            "success_message_loading": "Por favor espera a que finalice el proceso de registro...",
-            "success_message_ready": "El instrumento registrado ya está disponible en tu billetera!",
-            "failed_message": "Algo ha ido mal con el pago. Por favor, contacta con nosotros.",
-            "home": "Volver al inicio",
-            "go_to_instrument": "Ver el nuevo instrumento registrado"
+            "title_thank_you": "Gracias",
+            "success_message_received": "Tu pago por \"{title}\" ha sido recibido. Puedes esperar unos minutos o comprobar tu email para la confirmación.",
+            "success_message_loading": "Procesando el registro...",
+            "success_message_ready": "Listo. El instrumento registrado ya está disponible en tu cuenta",
+            "go_to_instrument": "Ver el instrumento",
+            "title_failed": "Pago fallido",
+            "failed_message": "Algo ha ido mal con el pago. Hemos sido notificados y te contactaremos pronto."
         },
         "UI": {
             "ProgressBar": {

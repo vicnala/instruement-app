@@ -15,7 +15,7 @@ import { Instrument } from "@/lib/definitions";
 export default function PaymentResult(
   { status, address, id }: { status: string; address: string, id: string }
 ) {
-  const t = useTranslations();
+  const t = useTranslations('components.PaymentResult');
   const router = useRouter();
   const locale = useLocale();
   const [instrument, setInstrument] = useState<Instrument>();
@@ -49,30 +49,48 @@ export default function PaymentResult(
   return (
     <Page>
       <Section>
-        <h2 className='text-xl font-semibold text-center'>
-            {t('components.PaymentResult.title')} #{id} {status === 'succeeded' ? t('components.PaymentResult.succesful') : t('components.PaymentResult.failed')}
-        </h2>
+        { status === 'succeeded' ? (
+          <>
+            <h1 className='text-4xl font-bold text-contrast dark:text-it-200 mb-2'>
+              {t('title_thank_you')}
+            </h1>
+            <p className="text-base">
+              {t('success_message_received', { title: instrument?.title })}
+            </p>
+          </>
+        ) : (
+          <>
+            <h1 className='text-4xl font-bold text-contrast dark:text-it-200 mb-2'>
+              {t('title_failed')}
+            </h1>
+            <p className="text-base">
+              {t('failed_message')}
+            </p>
+          </>
+        )}
+
         <div className='text-m text-center'>
           {
             status === 'succeeded' ?
-            <div className="flex flex-col items-center justify-center">
+            <>
               {
                 instrument ?
-                <p>
-                  {t('components.PaymentResult.success_message_ready')}
-                </p> : <>
-                  <p>
-                    {t('components.PaymentResult.success_message_loading')}
-                  </p>
+                <p className="text-lg">
+                  {t('success_message_ready')}
+                </p> 
+                : 
+                <p className="flex items-center justify-center gap-2 text-lg">
                   <Loading />
-                </>
+                  {t('success_message_loading')}
+                </p>
               }
-            </div> :
-            <div>
+            </> 
+            :
+            <>
               <p>
-                {t('components.PaymentResult.failed_message')}
+                {t('failed_message')}
               </p>
-            </div>
+            </>
           }
         </div>
       </Section>
@@ -83,10 +101,10 @@ export default function PaymentResult(
             {
               <button
                 type="button"
-                className="inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+                className="font-bold inline-flex items-center px-4 py-2 tracking-wide transition-colors duration-200 transform rounded-md focus:outline-none text-it-1000 dark:text-it-500 border-[0.1rem] border-it-500 hover:bg-it-500 hover:text-it-1000 dark:hover:text-it-1000 focus:bg-it-500 focus:text-it-600 dark:focus:text-it-800"
                 onClick={() => router.push(`/instrument/${instrument.asset_id}`)}
               >
-                {t('components.PaymentResult.go_to_instrument')}
+                {t('go_to_instrument')}
               </button>
             }
           </div>

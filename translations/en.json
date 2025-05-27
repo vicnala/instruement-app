@@ -317,14 +317,13 @@
             "privacy_policy": "the privacy policy"
         },
         "PaymentResult": {
-            "title": "Payment result for draft",
-            "succesful": "succesful!",
-            "failed": "failed!",
-            "success_message_loading": "Please wait for the registration process to complete...",
-            "success_message_ready": "The registered instrument is available in your wallet!",
-            "failed_message": "Something went wrong with the payment. Please contact us.",
-            "home": "Return to the home page",
-            "go_to_instrument": "View the new registered instrument"
+            "title_thank_you": "Thank you",
+            "success_message_received": "Your payment for \"{title}\" has been received. You can wait a few moments or check your email for the confirmation.",
+            "success_message_loading": "Registration in progress...",
+            "success_message_ready": "Ready. The registered instrument is now available in your account",
+            "go_to_instrument": "View the instrument",
+            "title_failed": "Payment failed",
+            "failed_message": "Something went wrong with the payment. We have been notified and will contact you shortly."
         },
         "UI": {
             "ProgressBar": {
