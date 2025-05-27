@@ -46,9 +46,9 @@ export default function DraftForm(
   const [hasImages, setHasImages] = useState(false)
   const [hasFiles, setHasFiles] = useState(false)
 
-  const [coverDescription, setCoverDescription] = useState<string>('')
-  const [imageDescriptions, setImageDescriptions] = useState<string[]>([])
-  const [documentDescriptions, setDocumentsDescriptions] = useState<string[]>([])
+  // const [coverDescription, setCoverDescription] = useState<string>('')
+  // const [imageDescriptions, setImageDescriptions] = useState<string[]>([])
+  // const [documentDescriptions, setDocumentsDescriptions] = useState<string[]>([])
 
   const [error, setError] = useState<string | null>(null)
 
@@ -240,10 +240,13 @@ export default function DraftForm(
     }
   };
 
+  if (isLoading) {
+    return <Loading />
+  }
+
   return (
     minter ?
       <Page>
-      { isLoading ? <Loading /> : <>
         <Section id="progress-bar">
           <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-it-50 rounded-[15px] border border-it-200 overflow-hidden">
             <div className="w-full mx-auto mb-4 sm:mb-8">
@@ -533,8 +536,6 @@ export default function DraftForm(
             </div>
           }
         </Section>
-        </>
-      }
       </Page> :
       <NotConnected locale={locale} />
   );

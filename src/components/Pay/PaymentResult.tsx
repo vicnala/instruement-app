@@ -5,8 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/routing";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
-import Loading from "@/components/Loading";
-import { useStateContext } from "@/app/context";
+// import Loading from "@/components/Loading";
 import DraftService from "@/services/DraftService";
 import { Instrument } from "@/lib/definitions";
 // import PrintObject from "@/components/Stripe/PrintObject";
@@ -80,7 +79,11 @@ export default function PaymentResult(
                 </p> 
                 : 
                 <p className="flex items-center justify-center gap-2 text-lg">
-                  <Loading />
+                  <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
+                      <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                          
+                      </span>
+                  </div>
                   {t('success_message_loading')}
                 </p>
               }
