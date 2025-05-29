@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import { TransactionButton } from "thirdweb/react";
 import { transferFrom, ownerOf } from "thirdweb/extensions/erc721";
 import { isAddress } from "thirdweb/utils";
@@ -14,7 +14,7 @@ import Section from "@/components/Section";
 import { client } from "@/app/client";
 import QRModal from "./QRModal";
 import Image from "next/image";
-import { Download, Copy, QrCode, ChevronDown, Handshake, Link2 } from "lucide-react";
+import { Download, Copy, QrCode, ChevronDown, Handshake, Telescope, MoveDown, ArrowDownWideNarrow, Hourglass, CheckCheck, Send } from "lucide-react";
 import { usePathname, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import Divider from "@/components/UI/Divider";
@@ -95,6 +95,8 @@ export default function Instrument(
 
 	const [isTransfering, setIsTransfering] = useState(false);
 	const [showTransferOptions, setShowTransferOptions] = useState(false);
+	const [showInPersonSteps, setShowInPersonSteps] = useState(false);
+	const transferSectionRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		async function getInstrumentAsset() {
@@ -262,6 +264,11 @@ export default function Instrument(
 		}
 	};
 
+	useEffect(() => {
+		if (showTransferOptions && transferSectionRef.current) {
+			transferSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+		}
+	}, [showTransferOptions]);
 
 	if (isLoading || isLoadingMinter || isLoadingInstrumentAsset) {
 		return (
@@ -421,12 +428,12 @@ export default function Instrument(
 
 					<Divider color="bg-gray-50" spacing="lg" />
 
-					<div className="mt-6 space-y-4">
+					<div className={`mt-6 space-y-4 ${showTransferOptions ? 'min-h-screen' : ''}`}>
 						{/* Transfer Management Section */}
 						{isOwner && (
-							<div className="mb-12">
+							<div className="mb-12" ref={transferSectionRef}>
 								<div>
-									<h2 className="text-2xl font-semibold text-we-800 dark:text-it-50 mb-2">
+									<h2 className="text-2xl font-semibold text-we-600 dark:text-it-50 mb-2">
 										{tInstrument('transfer_management')}
 									</h2>
 									<p className="text-it-1000 dark:text-it-50 mb-6">
@@ -445,93 +452,165 @@ export default function Instrument(
 									)}
 								</div>
 								{showTransferOptions && (
-									<div className="bg-we-50 dark:bg-we-950 rounded-lg p-6 mb-6">
-										<h3 className="text-xl font-semibold text-it-1000 dark:text-it-50 mb-4">
+									<div className="bg-we-50 dark:bg-we-950 rounded-lg p-6 mb-12 text-center">
+										<h3 className="text-2xl font-semibold text-we-600 dark:text-it-50 mt-4 mb-8">
 											{tInstrument('transfer_options_title')}
 										</h3>
 										<div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-6">
 											<div className="flex gap-6">
-												<div className="flex flex-col gap-2">
-													<div className="flex items-center gap-2 ">
-														<Handshake className="w-5 h-5" />
-														<h3 className="text-lg font-semibold text-it-1000 dark:text-it-50">
+												<div className="flex flex-col gap-2 text-center">
+													<div className="flex flex-col items-center">
+														<Handshake className="w-6 h-6" strokeWidth={1.5} />
+														<h3 className="text-xl font-semibold text-it-1000 dark:text-it-50">
 															{tInstrument('in_person_transfer')}
 														</h3>
 													</div>
 													<p className="text-it-1000 dark:text-it-50 mb-2">
 														{tInstrument('in_person_transfer_description')}
 													</p>
-													{!to && (
-														<button
-															type="button"
-															className="inline-flex items-center px-4 py-2 text-sm font-medium text-we-1000 dark:text-we-50 bg-transparent border-[0.1rem] border-we-400 rounded-md hover:bg-we-400 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-we-400 disabled:opacity-50 w-fit"
-															onClick={() => setModalOpen(true)}
-															disabled={isTransfering}
-															aria-label={tInstrument('scan_qr')}
-														>
-															<QrCode className="w-4 h-4 mr-2" />
-															{isModalOpen ? tInstrument('stop') : tInstrument('scan_qr')}
-														</button>
-													)}
+													<div className="flex flex-col gap-2">
+														{!to && (
+															<>
+																<button
+																	type="button"
+																	className="inline-flex flex-col items-center m-auto px-4 py-2 text-lg font-medium text-we-600 dark:text-we-50  disabled:opacity-50 w-fit"
+																	onClick={() => setShowInPersonSteps(true)}
+																	disabled={isTransfering}
+																	aria-label={tInstrument('transfer_in_person')}
+																>
+																	<span>{tInstrument('transfer_in_person')}</span>
+																	<ArrowDownWideNarrow className="w-6 h-6" strokeWidth={1.5}/>
+																</button>
+
+																{showInPersonSteps && (
+																	<div className="mt-4 space-y-6">
+																		{/* Step 1 */}
+																		<div className="text-center">
+																			<p className="text-it-1000 dark:text-it-50 mb-2">
+																				{tInstrument('step_1_description')}
+																			</p>
+																			<button
+																				type="button"
+																				onClick={() => handleCopyUrl(async () => 'https://app.instruement.com')}
+																				className="inline-flex items-center  px-4 py-2 text-xs font-medium text-we-1000 dark:text-we-50 bg-transparent border-[0.1rem] border-we-400 rounded-md hover:bg-we-400 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-we-400 disabled:opacity-50"
+																				aria-label={tInstrument('share_app')}
+																			>
+																				<Copy className="w-4 h-4 mr-2" />
+																				{tInstrument('share_app')}
+																			</button>
+																		</div>
+
+																		<MoveDown className="w-6 h-6 mx-auto text-we-500" strokeWidth={1.5}/>
+
+																		{/* Step 2 */}
+																		<div className="text-center">
+																			<p className="text-it-1000 dark:text-it-50 mb-2">
+																				{tInstrument('step_2_description')}
+																			</p>
+																			<button
+																				type="button"
+																				className="inline-flex items-center px-4 py-2 text-xs font-medium text-we-1000 dark:text-we-50 bg-transparent border-[0.1rem] border-we-400 rounded-md hover:bg-we-400 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-we-400 disabled:opacity-50"
+																				onClick={() => setModalOpen(true)}
+																				aria-label={tInstrument('scan_qr')}
+																			>
+																				<QrCode className="w-4 h-4 mr-2" />
+																				{tInstrument('scan_qr')}
+																			</button>
+																		</div>
+
+																		{!scannedResult && !to ? (
+																			<Hourglass className="w-6 h-6 mx-auto text-we-500" strokeWidth={1.5}/>
+																		) : (
+																			<MoveDown className="w-6 h-6 mx-auto text-we-500" strokeWidth={1.5}/>
+																		)}
+
+																		{/* Step 3 */}
+																		<div className="text-center">
+																			{!scannedResult && !to ? (
+																				<p className="text-we-1000 dark:text-we-50 text-sm">
+																					{tInstrument('step_3_waiting_for_scan')}
+																				</p>
+																			) : (
+																				<p className="text-we-1000 dark:text-we-50 mb-2">
+																					{tInstrument('recipient_account')} {truncateEthAddress(to || scannedResult || '')}
+																				</p>
+																			)}
+																		</div>
+																	</div>
+																)}
+															</>
+														)}
+													</div>
 												</div>
 											</div>
 											<div className="flex gap-6">
-												<div className="flex flex-col gap-2">
-													<div className="flex items-center gap-2">
-														<Link2 className="w-5 h-5" />
-														<h3 className="text-lg font-semibold text-it-1000 dark:text-it-50">
+												<div className="flex flex-col gap-2 text-center">
+													<div className="flex flex-col items-center">
+														<Telescope className="w-6 h-6" strokeWidth={1.5} />
+														<h3 className="text-xl font-semibold text-it-1000 dark:text-it-50">
 														{tInstrument('remote_transfer')}
 													</h3>
 													</div>
 													<p className="text-it-1000 dark:text-it-50 mb-2">
 														{tInstrument('remote_transfer_description')}
 													</p>
-													<button
-														type="button"
-														onClick={() => handleCopyUrl(generateShareableUrl)}
-														className="inline-flex items-center px-4 py-2 text-sm font-medium text-we-1000 dark:text-we-50 bg-transparent border-[0.1rem] border-we-400 rounded-md hover:bg-we-400 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-we-400 disabled:opacity-50 w-fit"
-														aria-label={tInstrument('copy_secure_link')}
-														disabled={isTransfering}
-													>
-														<Copy className="w-4 h-4 mr-2" />
-														{copySuccess ? tInstrument('copied') : `${tInstrument('copy_secure_link')} (${tInstrument('valid_for')} ${COOKIE_EXPIRY_DAYS} ${tInstrument('days')})`}
-													</button>
+													<div className="flex flex-col gap-2">
+														<button
+															type="button"
+															onClick={() => handleCopyUrl(generateShareableUrl)}
+															className="inline-flex items-center m-auto px-4 py-2 text-sm font-medium text-we-1000 dark:text-we-50 bg-transparent border-[0.1rem] border-we-400 rounded-md hover:bg-we-400 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-we-400 disabled:opacity-50 w-fit"
+															aria-label={tInstrument('copy_secure_link')}
+															disabled={isTransfering}
+														>
+															<Copy className="w-4 h-4 mr-2" />
+															{copySuccess ? tInstrument('copied') : `${tInstrument('copy_secure_link')}`}
+														</button>
+														<p className="text-we-1000 dark:text-we-50 mb-4 text-xs">
+															{tInstrument('valid_for')} {COOKIE_EXPIRY_DAYS} {tInstrument('days')}
+														</p>
+													</div>
 												</div>
 											</div>
 										</div>
+										{/* Transaction Button */}
+										{contract && address && isOwner && (to || scannedResult) && (
+										<div className="my-6 text-center">
+											<CheckCheck className="w-6 h-6 mx-auto text-we-500" strokeWidth={1.5}/>
+											<h3 className="text-lg font-semibold text-we-1000 dark:text-we-50 my-4">
+												{tInstrument('ready_for_transfer')}
+											</h3>
+											<TransactionButton
+												transaction={() => {
+													setIsTransfering(true);
+													return transferFrom({
+														contract: contract,
+														from: address,
+														to: to ? to : scannedResult ? scannedResult : '',
+														tokenId: BigInt(id)
+													});
+												}}
+												onTransactionConfirmed={() => {
+													alert(`${tInstrument("transfered_to_success")} ${to ? to : scannedResult ? scannedResult : ''}`);
+													setReloadUser(true);
+													router.replace('/');
+												}}
+												onError={(error) => {
+													setIsTransfering(false);
+													console.error("Transaction error", error);
+												}}
+												unstyled
+												className="px-4 py-2 text-base font-medium transition-colors duration-200 transform bg-transparent border-[0.1rem] border-we-400 rounded-md hover:bg-we-400 text-we-1000 dark:text-we-50 focus:outline-none"
+											>
+												<div className="flex items-center justify-center gap-2">
+													<Send className="w-4 h-4" />
+													{tInstrument('send')}
+												</div>
+											</TransactionButton>
+										</div>
+										)}
 									</div>
 								)}
 							</div>
-						)}
-
-						{/* Transaction Button */}
-						{contract && address && isOwner && (to || scannedResult) && (
-							<Section>
-								<TransactionButton
-									transaction={() => {
-										setIsTransfering(true);
-										return transferFrom({
-											contract: contract,
-											from: address,
-											to: to ? to : scannedResult ? scannedResult : '',
-											tokenId: BigInt(id)
-										});
-									}}
-									onTransactionConfirmed={() => {
-										alert(`${tInstrument("transfered_to")} ${to ? to : scannedResult ? scannedResult : ''}`);
-										setReloadUser(true);
-										router.replace('/');
-									}}
-									onError={(error) => {
-										setIsTransfering(false);
-										console.error("Transaction error", error);
-									}}
-									unstyled
-									className="items-center px-4 py-2 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
-								>
-									{tInstrument('transfer')} #{id} {tInstrument('to')} {truncateEthAddress(to || scannedResult || '')}
-								</TransactionButton>
-							</Section>
 						)}
 					</div>
 				</>
