@@ -96,6 +96,7 @@ export default function Instrument(
 	const [isTransfering, setIsTransfering] = useState(false);
 	const [showTransferOptions, setShowTransferOptions] = useState(false);
 	const [showInPersonSteps, setShowInPersonSteps] = useState(false);
+	const [showRemoteSteps, setShowRemoteSteps] = useState(false);
 	const transferSectionRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
@@ -548,26 +549,69 @@ export default function Instrument(
 													<div className="flex flex-col items-center">
 														<Telescope className="w-6 h-6" strokeWidth={1.5} />
 														<h3 className="text-xl font-semibold text-it-1000 dark:text-it-50">
-														{tInstrument('remote_transfer')}
-													</h3>
+															{tInstrument('remote_transfer')}
+														</h3>
 													</div>
 													<p className="text-it-1000 dark:text-it-50 mb-2">
 														{tInstrument('remote_transfer_description')}
 													</p>
 													<div className="flex flex-col gap-2">
-														<button
-															type="button"
-															onClick={() => handleCopyUrl(generateShareableUrl)}
-															className="inline-flex items-center m-auto px-4 py-2 text-sm font-medium text-we-1000 dark:text-we-50 bg-transparent border-[0.1rem] border-we-400 rounded-md hover:bg-we-400 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-we-400 disabled:opacity-50 w-fit"
-															aria-label={tInstrument('copy_secure_link')}
-															disabled={isTransfering}
-														>
-															<Copy className="w-4 h-4 mr-2" />
-															{copySuccess ? tInstrument('copied') : `${tInstrument('copy_secure_link')}`}
-														</button>
-														<p className="text-we-1000 dark:text-we-50 mb-4 text-xs">
-															{tInstrument('valid_for')} {COOKIE_EXPIRY_DAYS} {tInstrument('days')}
-														</p>
+														{!to && (
+															<>
+																<button
+																	type="button"
+																	className="inline-flex flex-col items-center m-auto px-4 py-2 text-lg font-medium text-we-600 dark:text-we-50 disabled:opacity-50 w-fit"
+																	onClick={() => setShowRemoteSteps(true)}
+																	disabled={isTransfering}
+																	aria-label={tInstrument('transfer_remotely')}
+																>
+																	<span>{tInstrument('transfer_remotely')}</span>
+																	<ArrowDownWideNarrow className="w-6 h-6" strokeWidth={1.5}/>
+																</button>
+
+																{showRemoteSteps && (
+																	<div className="mt-4 space-y-6">
+																		{/* Step 1 */}
+																		<div className="text-center">
+																			<p className="text-it-1000 dark:text-it-50 mb-2">
+																				{tInstrument('step_1_remote_description')}
+																			</p>
+																			<button
+																				type="button"
+																				onClick={() => handleCopyUrl(generateShareableUrl)}
+																				className="inline-flex items-center px-4 py-2 text-xs font-medium text-we-1000 dark:text-we-50 bg-transparent border-[0.1rem] border-we-400 rounded-md hover:bg-we-400 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-we-400 disabled:opacity-50"
+																				aria-label={tInstrument('copy_secure_link')}
+																				disabled={isTransfering}
+																			>
+																				<Copy className="w-4 h-4 mr-2" />
+																				{copySuccess ? tInstrument('copied') : `${tInstrument('copy_secure_link')}`}
+																			</button>
+																			<p className="text-we-1000 dark:text-we-50 mt-2 text-xs">
+																				{tInstrument('valid_for')} {COOKIE_EXPIRY_DAYS} {tInstrument('days')}
+																			</p>
+																		</div>
+
+																		<MoveDown className="w-6 h-6 mx-auto text-we-500" strokeWidth={1.5}/>
+
+																		{/* Step 2 */}
+																		<div className="text-center">
+																			<p className="text-it-1000 dark:text-it-50 mb-2">
+																				{tInstrument('step_2_remote_description')}
+																			</p>
+																		</div>
+
+																		<MoveDown className="w-6 h-6 mx-auto text-we-500" strokeWidth={1.5}/>
+
+																		{/* Step 3 */}
+																		<div className="text-center">
+																			<p className="text-it-1000 dark:text-it-50 mb-2">
+																				{tInstrument('step_3_remote_description')}
+																			</p>
+																		</div>
+																	</div>
+																)}
+															</>
+														)}
 													</div>
 												</div>
 											</div>

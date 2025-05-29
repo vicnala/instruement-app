@@ -319,7 +319,11 @@
             "share_app": "Copiar enlace",
             "step_2_description": "Escanea el código QR en la pantalla de inicio del destinatario.",
             "step_3_waiting_for_scan": "Esperando el resultado del escaneo. No hay prisa.",
-            "step_3_description": "Finalmente, transfiere el registro a la cuenta escaneada"
+            "step_3_description": "Finalmente, transfiere el registro a la cuenta escaneada",
+            "transfer_remotely": "Transferir a distancia",
+            "step_1_remote_description": "Copia y comparte un enlace seguro con el destinatario. Usa tu aplicación de mensajería preferida.",
+            "step_2_remote_description": "El destinatario abrirá el enlace y verá inmediatamente el botón para copiar el enlace de aceptación de la transferencia. Debe compartir ese enlace contigo.",
+            "step_3_remote_description": "Abre el enlace de aceptación para ver el botón final de envío."
         },
         "ElementsForm": {
             "title": "Registra tu instrumento ahora",
