@@ -23,29 +23,36 @@ import NotConnected from "@/components/NotConnected";
 import { useRouter } from "@/i18n/routing";
 import { marked } from "marked";
 
-// Configure marked options
 marked.use({
 	breaks: true
 });
 
-
-// Add these utility functions at the top of the file, outside the component
 const generateKeyPair = async () => {
-	const keyPair = await window.crypto.subtle.generateKey(
-		{
-			name: "ECDSA",
-			namedCurve: "P-256",
-		},
-		true,
-		["sign", "verify"]
-	);
+	try {
+		const keyPair = await window.crypto.subtle.generateKey(
+			{
+				name: "ECDSA",
+				namedCurve: "P-256",
+			},
+			true,
+			["sign", "verify"]
+		);
 
-	const privateKey = await window.crypto.subtle.exportKey(
-		"jwk",
-		keyPair.privateKey
-	);
+		const privateKey = await window.crypto.subtle.exportKey(
+			"jwk",
+			keyPair.privateKey
+		);
 
-	return { privateKey, publicKey: keyPair.publicKey };
+		const publicKey = await window.crypto.subtle.exportKey(
+			"jwk",
+			keyPair.publicKey
+		);
+
+		return { privateKey, publicKey };
+	} catch (error) {
+		console.error('Error generating key pair:', error);
+		throw error;
+	}
 };
 
 const signData = async (privateKeyJwk: JsonWebKey, data: string) => {
@@ -69,15 +76,78 @@ const signData = async (privateKeyJwk: JsonWebKey, data: string) => {
 	return Buffer.from(signature).toString('hex');
 };
 
-// Add this constant near the top of your component
+// Validate the nonce signature
+const validateNonceSignature = async (nonce: string) => {
+	try {
+		const [id, timestamp, signature] = nonce.split('.');
+		const privateKeyJwk = Cookies.get('instrument_private_key');
+		
+		if (!privateKeyJwk) {
+			return false;
+		}
+		
+		try {
+			const privateKey = JSON.parse(privateKeyJwk);
+			const dataToSign = `${id}-${timestamp}`;
+			
+			try {
+				// Create public key object from private key
+				const publicKeyData = {
+					kty: privateKey.kty,
+					crv: privateKey.crv,
+					x: privateKey.x,
+					y: privateKey.y
+				};
+
+				// Import the public key directly
+				const importedPublicKey = await window.crypto.subtle.importKey(
+					"jwk",
+					publicKeyData,
+					{
+						name: "ECDSA",
+						namedCurve: "P-256",
+					},
+					true,
+					["verify"]
+				);
+				
+				try {
+					// Verify the signature using the public key
+					const signatureBuffer = Buffer.from(signature, 'hex');
+					const isValid = await window.crypto.subtle.verify(
+						{ name: "ECDSA", hash: "SHA-256" },
+						importedPublicKey,
+						signatureBuffer,
+						new TextEncoder().encode(dataToSign)
+					);
+					
+					return isValid;
+				} catch (verifyError) {
+					console.error('Error during signature verification:', verifyError);
+					return false;
+				}
+			} catch (importError) {
+				console.error('Error importing public key:', importError);
+				return false;
+			}
+		} catch (parseError) {
+			console.error('Error parsing private key from cookie:', parseError);
+			return false;
+		}
+	} catch (error) {
+		console.error('Error in validateNonceSignature:', error);
+		return false;
+	}
+};
+
 const COOKIE_EXPIRY_DAYS = 3;
 
-// Add this function to check if there's an active validation attempt
+// Check if there's an active validation attempt
 const hasActiveValidationAttempt = (searchParams: URLSearchParams) => {
 	return searchParams.has('nonce');
 };
 
-// Add this function to validate the transfer confirmation URL for non-owners
+// Validate the transfer confirmation URL for non-owners
 const validateTransferConfirmationUrl = (nonce: string, instrumentId: string) => {
 	try {
 		const [id, timestamp] = nonce.split('.');
@@ -125,6 +195,9 @@ export default function Instrument(
 	const [showRemoteSteps, setShowRemoteSteps] = useState(false);
 	const transferSectionRef = useRef<HTMLDivElement>(null);
 	const [isTransferConfirmationValid, setIsTransferConfirmationValid] = useState<boolean>(false);
+
+	// Add this state for nonce validation
+	const [isNonceValid, setIsNonceValid] = useState<boolean>(false);
 
 	useEffect(() => {
 		async function getInstrumentAsset() {
@@ -265,11 +338,11 @@ export default function Instrument(
 		return `${baseUrl}${pathname}?nonce=${nonce}`;
 	};
 
-	// Function to generate response URL (for non-owners)
+	// Update the generateResponseUrl function preserving the nonce
 	const generateResponseUrl = () => {
 		// Create a new URLSearchParams object from the current search params
 		const params = new URLSearchParams(searchParams.toString());
-
+		
 		// Add the 'to' parameter
 		params.set('to', address || '');
 
@@ -308,6 +381,22 @@ export default function Instrument(
 		}
 	}, [searchParams, id]);
 
+	// Add this effect to validate the nonce when the component mounts or searchParams changes
+	useEffect(() => {
+		const validateNonce = async () => {
+			const nonce = searchParams.get('nonce');
+			if (nonce) {
+				const isUrlValid = validateTransferConfirmationUrl(nonce, id);
+				const isSignatureValid = await validateNonceSignature(nonce);
+				setIsNonceValid(isUrlValid && isSignatureValid);
+			} else {
+				setIsNonceValid(false);
+			}
+		};
+
+		validateNonce();
+	}, [searchParams, id]);
+
 	if (isLoading || isLoadingMinter || isLoadingInstrumentAsset) {
 		return (
 			<Page>
@@ -335,15 +424,15 @@ export default function Instrument(
 					{contract && address && !isOwner && hasActiveValidationAttempt(searchParams) && (
 						<Section>
 							<div className="bg-we-50 dark:bg-we-950 rounded-lg p-6 mb-3">
-								<h1 className="text-2xl font-semibold text-we-1000 dark:text-we-50 mb-2">
-									{tInstrument('remote_transfer_confirmation_title')}
-								</h1>
 								{isTransferConfirmationValid ? (
 									<>
 										<p className="flex items-center gap-2 text-we-600 font-bold mb-4">
 											<CheckCheck className="w-5 h-5" strokeWidth={1.5} />
 											{tInstrument('remote_transfer_link_valid')}
 										</p>
+										<h1 className="text-2xl font-semibold text-we-1000 dark:text-we-50 mb-2">
+											{tInstrument('remote_transfer_confirmation_title')}
+										</h1>
 										<p className="text-we-1000 dark:text-we-50 mb-6">
 											{tInstrument('remote_transfer_confirmation_valid_description')}
 										</p>
@@ -364,23 +453,80 @@ export default function Instrument(
 											<Ban className="w-5 h-5" strokeWidth={1.5} />
 											{tInstrument('remote_transfer_link_invalid')}
 										</p>
+										<h1 className="text-2xl font-semibold text-we-1000 dark:text-we-50 mb-2">
+											{tInstrument('remote_transfer_confirmation_title_invalid')}
+										</h1>
 										<p className="text-we-1000 dark:text-we-50 mb-6">
 											{tInstrument('remote_transfer_confirmation_invalid_description')}
 										</p>
-										<button
-											type="button"
-											className="flex items-center gap-2 px-4 py-2 text-white bg-red-500 rounded-md opacity-50 cursor-not-allowed"
-											aria-label={tInstrument('copy_response_url')}
-											disabled={true}
-										>
-											<Copy className="w-4 h-4" />
-											{tInstrument('copy_response_url')}
-										</button>
 									</>
 								)}
 							</div>
 						</Section>
 					)}
+
+					{/* Owner's Remote Transfer Interface */}
+					{contract && address && isOwner && hasActiveValidationAttempt(searchParams) && (
+						<Section>
+							<div className="bg-we-50 dark:bg-we-950 rounded-lg p-6 mb-3">
+								{isNonceValid ? (
+									<>
+										<p className="flex items-center gap-2 text-we-600 font-bold mb-4">
+											<CheckCheck className="w-5 h-5" strokeWidth={1.5} />
+											{tInstrument('remote_transfer_link_valid')}
+										</p>
+										<h1 className="text-2xl font-semibold text-we-1000 dark:text-we-50 mb-2">
+											{tInstrument('remote_transfer_step_3_title')}
+										</h1>
+										<p className="text-we-1000 dark:text-we-50 mb-6">
+											{tInstrument('remote_transfer_step_3_description')}
+										</p>
+										<TransactionButton
+											transaction={() => {
+												setIsTransfering(true);
+												return transferFrom({
+													contract: contract,
+													from: address,
+													to: to || '',
+													tokenId: BigInt(id)
+												});
+											}}
+											onTransactionConfirmed={() => {
+												alert(`${tInstrument("transfered_to_success")} ${to || ''}`);
+												setReloadUser(true);
+												router.replace('/');
+											}}
+											onError={(error) => {
+												setIsTransfering(false);
+												console.error("Transaction error", error);
+											}}
+											unstyled
+											className="px-4 py-2 text-base font-medium transition-colors duration-200 transform bg-transparent border-[0.1rem] border-we-400 rounded-md hover:bg-we-400 text-we-1000 dark:text-we-50 focus:outline-none"
+										>
+											<div className="flex items-center justify-center gap-2">
+												<Send className="w-4 h-4" />
+												{tInstrument('send')}
+											</div>
+										</TransactionButton>
+									</>
+								) : (
+									<>
+										<p className="flex items-center gap-2 text-red-600 font-bold mb-4">
+											<Ban className="w-5 h-5" strokeWidth={1.5} />
+											{tInstrument('remote_transfer_link_invalid')}
+										</p>
+										<h1 className="text-2xl font-semibold text-we-1000 dark:text-we-50 mb-2">
+											{tInstrument('remote_transfer_step_3_invalid_title')}
+										</h1>
+										<p className="text-we-1000 dark:text-we-50 mb-6">
+											{tInstrument('remote_transfer_step_3_invalid_description')}
+										</p>
+									</>
+								)}
+							</div>
+						</Section>
+					)}
+
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
 						<div className="flex flex-col space-y-8 md:space-y-10">
 							{/* Cover Image Section */}
@@ -689,7 +835,7 @@ export default function Instrument(
 											</div>
 										</div>
 										{/* Transaction Button */}
-										{contract && address && isOwner && (to || scannedResult) && (
+										{contract && address && isOwner && (to || scannedResult) && !hasActiveValidationAttempt(searchParams) && (
 										<div className="my-6 text-center">
 											<CheckCheck className="w-6 h-6 mx-auto text-we-500" strokeWidth={1.5}/>
 											<h3 className="text-lg font-semibold text-we-1000 dark:text-we-50 my-4">

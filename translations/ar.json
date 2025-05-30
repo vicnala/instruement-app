@@ -319,10 +319,15 @@
             "step_2_remote_description": "The recipient will open the link and immediately see the button to copy the transfer confirmation link. They must share that link with you.",
             "step_3_remote_description": "Open the acceptance link to see the final send button.",
             "remote_transfer_confirmation_title": "Transfer in progress",
+            "remote_transfer_confirmation_title_invalid": "Review the link",
             "remote_transfer_link_valid": "This transfer link is valid",
             "remote_transfer_link_invalid": "This transfer link is invalid",
             "remote_transfer_confirmation_valid_description": "To proceed, copy and share the transfer confirmation link with the owner of the instrument.",
-            "remote_transfer_confirmation_invalid_description": "Please contact the owner of the instrument to get a new link."
+            "remote_transfer_confirmation_invalid_description": "Please review the transfer link or contact the owner of the instrument to get a new link.",
+            "remote_transfer_step_3_title": "Transfer now",
+            "remote_transfer_step_3_description": "You can now transfer the instrument to the new owner.",
+            "remote_transfer_step_3_invalid_title": "Transfer is not possible",
+            "remote_transfer_step_3_invalid_description": "The transfer link is invalid. Check the received link and try again."
         },
         "ElementsForm": {
             "title": "Register Your Instrument Now",

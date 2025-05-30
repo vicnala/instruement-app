@@ -327,8 +327,13 @@
             "remote_transfer_link_valid": "Este enlace de transferencia es válido",
             "remote_transfer_link_invalid": "Este enlace de transferencia no es válido",
             "remote_transfer_confirmation_title": "Transferencia en progreso",
+            "remote_transfer_confirmation_title_invalid": "Revisa el enlace",
             "remote_transfer_confirmation_valid_description": "Para continuar, copia y comparte el enlace de confirmación de la transferencia con el propietario del instrumento.",
-            "remote_transfer_confirmation_invalid_description": "Por favor, contacta al propietario del instrumento para obtener un nuevo enlace."
+            "remote_transfer_confirmation_invalid_description": "Por favor, revisa el enlace de transferencia o contacta al propietario del instrumento para obtener un nuevo enlace.",
+            "remote_transfer_step_3_title": "Transferir ahora",
+            "remote_transfer_step_3_description": "Ahora puedes transferir el instrumento al nuevo propietario.",
+            "remote_transfer_step_3_invalid_title": "Transferencia no es posible",
+            "remote_transfer_step_3_invalid_description": "El enlace de transferencia no es válido. Comprueba el enlace recibido y vuelve a intentarlo."
         },
         "ElementsForm": {
             "title": "Registra tu instrumento ahora",
