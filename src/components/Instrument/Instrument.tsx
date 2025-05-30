@@ -293,8 +293,7 @@ export default function Instrument(
 				console.error(`/api/user/${minter}`, e.message);
 			})
 		}
-
-	}, [minter])
+	}, [minter, isLoadingMinter, minterUser])
 
 	useEffect(() => {
 		async function getOwner() {
@@ -311,7 +310,7 @@ export default function Instrument(
 				console.error(`getOwner`, e.message);
 			})
 		}
-	}, [address, contract])
+	}, [address, contract, id])
 
 	// Update the cookie functions
 	const getOrCreatePrivateKey = async () => {
