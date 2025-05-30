@@ -310,7 +310,7 @@
             "days": "días",
             "send": "Enviar",
             "copy_url": "Copiar enlace para el destinatario",
-            "copy_response_url": "Copiar enlace para el propietario",
+            "copy_response_url": "Copiar enlace",
             "ready_for_transfer": "Todo listo para transferir",
             "recipient_account": "Cuenta del destinatario",
             "transfered_to_success": "Instrumento transferido a",
@@ -322,8 +322,13 @@
             "step_3_description": "Finalmente, transfiere el registro a la cuenta escaneada",
             "transfer_remotely": "Transferir a distancia",
             "step_1_remote_description": "Copia y comparte un enlace seguro con el destinatario. Usa tu aplicación de mensajería preferida.",
-            "step_2_remote_description": "El destinatario abrirá el enlace y verá inmediatamente el botón para copiar el enlace de aceptación de la transferencia. Debe compartir ese enlace contigo.",
-            "step_3_remote_description": "Abre el enlace de aceptación para ver el botón final de envío."
+            "step_2_remote_description": "El destinatario abrirá el enlace y verá inmediatamente el botón para copiar el enlace de confirmación de la transferencia. Debe compartir ese enlace contigo.",
+            "step_3_remote_description": "Abre el enlace de aceptación para ver el botón final de envío.",
+            "remote_transfer_link_valid": "Este enlace de transferencia es válido",
+            "remote_transfer_link_invalid": "Este enlace de transferencia no es válido",
+            "remote_transfer_confirmation_title": "Transferencia en progreso",
+            "remote_transfer_confirmation_valid_description": "Para continuar, copia y comparte el enlace de confirmación de la transferencia con el propietario del instrumento.",
+            "remote_transfer_confirmation_invalid_description": "Por favor, contacta al propietario del instrumento para obtener un nuevo enlace."
         },
         "ElementsForm": {
             "title": "Registra tu instrumento ahora",

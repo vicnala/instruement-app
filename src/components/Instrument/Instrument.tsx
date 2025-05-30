@@ -14,7 +14,7 @@ import Section from "@/components/Section";
 import { client } from "@/app/client";
 import QRModal from "./QRModal";
 import Image from "next/image";
-import { Download, Copy, QrCode, ChevronDown, Handshake, Telescope, MoveDown, ArrowDownWideNarrow, Hourglass, CheckCheck, Send } from "lucide-react";
+import { Download, Copy, QrCode, ChevronDown, Handshake, Telescope, MoveDown, ArrowDownWideNarrow, Hourglass, CheckCheck, Send, Ban } from "lucide-react";
 import { usePathname, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import Divider from "@/components/UI/Divider";
@@ -72,6 +72,32 @@ const signData = async (privateKeyJwk: JsonWebKey, data: string) => {
 // Add this constant near the top of your component
 const COOKIE_EXPIRY_DAYS = 3;
 
+// Add this function to check if there's an active validation attempt
+const hasActiveValidationAttempt = (searchParams: URLSearchParams) => {
+	return searchParams.has('nonce');
+};
+
+// Add this function to validate the transfer confirmation URL for non-owners
+const validateTransferConfirmationUrl = (nonce: string, instrumentId: string) => {
+	try {
+		const [id, timestamp] = nonce.split('.');
+		
+		// Check if the ID matches the current instrument
+		if (id !== instrumentId) return false;
+		
+		// Check if the timestamp is within the valid period
+		const nonceDate = new Date(parseInt(timestamp));
+		const now = new Date();
+		const diffDays = (now.getTime() - nonceDate.getTime()) / (1000 * 60 * 60 * 24);
+		if (diffDays > COOKIE_EXPIRY_DAYS) return false;
+		
+		return true;
+	} catch (error) {
+		console.error('Error validating transfer confirmation URL:', error);
+		return false;
+	}
+};
+
 export default function Instrument(
 	{ locale, id, to }: Readonly<{ locale: string, id: string, to: string | undefined }>
 ) {
@@ -98,6 +124,7 @@ export default function Instrument(
 	const [showInPersonSteps, setShowInPersonSteps] = useState(false);
 	const [showRemoteSteps, setShowRemoteSteps] = useState(false);
 	const transferSectionRef = useRef<HTMLDivElement>(null);
+	const [isTransferConfirmationValid, setIsTransferConfirmationValid] = useState<boolean>(false);
 
 	useEffect(() => {
 		async function getInstrumentAsset() {
@@ -271,6 +298,16 @@ export default function Instrument(
 		}
 	}, [showTransferOptions]);
 
+	// Update the effect to validate the transfer confirmation URL
+	useEffect(() => {
+		const nonce = searchParams.get('nonce');
+		if (nonce) {
+			setIsTransferConfirmationValid(validateTransferConfirmationUrl(nonce, id));
+		} else {
+			setIsTransferConfirmationValid(false);
+		}
+	}, [searchParams, id]);
+
 	if (isLoading || isLoadingMinter || isLoadingInstrumentAsset) {
 		return (
 			<Page>
@@ -289,24 +326,59 @@ export default function Instrument(
 		<Page>
 			{instrumentAsset && instrumentAsset.metadata ? (
 				<>
-					{instrumentAsset.owner !== address && (
+					{instrumentAsset.owner !== address && !hasActiveValidationAttempt(searchParams) && (
 						<p className='bg-me-50 p-4 rounded-lg border border-me-200 mb-4'>
 							<b>{tInstrument('current_owner')}:</b> {truncateEthAddress(instrumentAsset.owner)} ({tInstrument('you_are_not_owner')})
 						</p>
 					)}
 					{/* Copy URL Button for Non-Owner with Nonce */}
-					{contract && address && !isOwner && (
+					{contract && address && !isOwner && hasActiveValidationAttempt(searchParams) && (
 						<Section>
-							<button
-								type="button"
-								onClick={() => handleCopyUrl(async () => generateResponseUrl())}
-								className="flex items-center gap-2 px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-								aria-label={tInstrument('copy_response_url')}
-								disabled={isTransfering}
-							>
-								<Copy className="w-4 h-4" />
-								{copySuccess ? tInstrument('copied') : tInstrument('copy_response_url')}
-							</button>
+							<div className="bg-we-50 dark:bg-we-950 rounded-lg p-6 mb-3">
+								<h1 className="text-2xl font-semibold text-we-1000 dark:text-we-50 mb-2">
+									{tInstrument('remote_transfer_confirmation_title')}
+								</h1>
+								{isTransferConfirmationValid ? (
+									<>
+										<p className="flex items-center gap-2 text-we-600 font-bold mb-4">
+											<CheckCheck className="w-5 h-5" strokeWidth={1.5} />
+											{tInstrument('remote_transfer_link_valid')}
+										</p>
+										<p className="text-we-1000 dark:text-we-50 mb-6">
+											{tInstrument('remote_transfer_confirmation_valid_description')}
+										</p>
+										<button
+											type="button"
+											onClick={() => handleCopyUrl(async () => generateResponseUrl())}
+											className="flex items-center gap-2 px-4 py-2 text-white bg-we-500 rounded-md hover:bg-we-600 focus:outline-none focus:ring-2 focus:ring-we-500 focus:ring-offset-2"
+											aria-label={tInstrument('copy_response_url')}
+											disabled={isTransfering}
+										>
+											<Copy className="w-4 h-4" />
+											{copySuccess ? tInstrument('copied') : tInstrument('copy_response_url')}
+										</button>
+									</>
+								) : (
+									<>
+										<p className="flex items-center gap-2 text-red-600 font-bold mb-4">
+											<Ban className="w-5 h-5" strokeWidth={1.5} />
+											{tInstrument('remote_transfer_link_invalid')}
+										</p>
+										<p className="text-we-1000 dark:text-we-50 mb-6">
+											{tInstrument('remote_transfer_confirmation_invalid_description')}
+										</p>
+										<button
+											type="button"
+											className="flex items-center gap-2 px-4 py-2 text-white bg-red-500 rounded-md opacity-50 cursor-not-allowed"
+											aria-label={tInstrument('copy_response_url')}
+											disabled={true}
+										>
+											<Copy className="w-4 h-4" />
+											{tInstrument('copy_response_url')}
+										</button>
+									</>
+								)}
+							</div>
 						</Section>
 					)}
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
