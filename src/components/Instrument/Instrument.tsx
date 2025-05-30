@@ -897,6 +897,12 @@ export default function Instrument(
 													setScannedResult(address);
 													setModalOpen(false);
 												}
+											} else {
+												const address = split1[1];
+												if (isAddress(address)) {
+													setScannedResult(address);
+													setModalOpen(false);
+												}
 											}
 										}
 									}
