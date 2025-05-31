@@ -33,6 +33,7 @@ export const BottomNav = () => {
 							</Link>
 							{
 								isMinter &&
+								(pathname === '/' || pathname === '/account' || pathname.startsWith('/instrument')) &&
 								<ButtonLink href="/drafts/new" size="md" colorSchema="it">
 									{bottomNavt('new_instrument')}
 							  	</ButtonLink>

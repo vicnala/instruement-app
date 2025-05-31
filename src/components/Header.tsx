@@ -47,6 +47,7 @@ export function Header() {
               }
               {
                 isMinter && 
+                (pathname === '/' || pathname === '/account' || pathname.startsWith('/instrument')) &&
                 <ButtonLink href="/drafts/new" size="md" colorSchema="it">
                   {t('new_instrument')}
                 </ButtonLink>
