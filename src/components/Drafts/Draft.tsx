@@ -6,14 +6,14 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Instrument, InstrumentImage } from "@/lib/definitions";
 import Skeleton from "@/components/Skeleton";
-import IconEdit from '../Icons/Edit';
+import { Loader2, Pencil } from "lucide-react";
 import InstrumentService from "@/services/InstrumentService";
 
 export default function Draft(
   { instrumentId, locale, api_key }: { instrumentId: string, locale: string, api_key: string }
 ) {
   const router = useRouter();
-  const t = useTranslations('components.Drfat');
+  const t = useTranslations('components.Draft');
   const [instrument, setInstrument] = useState<Instrument>()
   const [image, setImage] = useState<InstrumentImage>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -44,8 +44,8 @@ export default function Draft(
 
   return (
     <div
-      className="cursor-pointer transition-all hover:shadow-lg || flex flex-col w-full justify-stretch || overflow-hidden bg-it-25 border border-it-100 rounded-lg"
-      onClick={() => instrument && !instrument.queue_id && !instrument.asset_id ? router.push(`/drafts/${instrumentId}`) : null}
+      className={`${!instrument?.queue_id ? 'cursor-pointer transition-all hover:shadow-lg' : 'cursor-wait'} flex flex-col w-full justify-stretch overflow-hidden bg-it-25 border border-it-100 rounded-lg`}
+      onClick={() => instrument && !instrument.queue_id ? router.push(`/drafts/${instrumentId}`) : null}
     >
       <div className="relative w-full aspect-square bg-white/[.04]">
         {
@@ -53,19 +53,14 @@ export default function Draft(
           <Skeleton width="100%" height="100%" /> :
           <>
             {
-              instrument && instrument.queue_id && !instrument.asset_id ?
-              <div className="absolute top-2 left-2 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-all">
+              instrument && instrument.queue_id ?
+              <div className="absolute text-white top-2 left-2 right-2 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-all text-center flex items-center justify-center gap-1">
+                <Loader2 className="w-4 h-4 animate-spin" />
                 {t("registering")}
-              </div> : instrument && instrument.asset_id ?
-              <div className="absolute top-2 left-2 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-all">
-                #{instrument.asset_id}
-              </div> :
-              <div className="absolute top-2 right-2 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-all">
-                <IconEdit 
-                  width="20"
-                  height="20"
-                  className="text-white"
-                />
+              </div> 
+              :
+              <div className="absolute top-2 right-2 p-3 bg-black/50 rounded-full hover:bg-black/70 transition-all">
+                <Pencil className="w-4 h-4 text-it-400" />
               </div>
             }
             { image ? 
