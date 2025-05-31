@@ -49,13 +49,7 @@ export default function Preview(
 
   }, [id, locale, isLoadingInstrument, instrument, minter]);
 
-  if (isLoading || isLoadingInstrument) return (
-    <Page>
-      <div className="text-center">
-        <Loading />
-      </div>
-    </Page>
-  )
+  if (isLoading || isLoadingInstrument) return <Loading />
 
   return (
     minter ?

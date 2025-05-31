@@ -230,6 +230,8 @@ export default function Instrument(
 					const fileDescriptionsData = await result.json();
 
 					// console.log("fileDescriptionsData", fileDescriptionsData);
+					console.log(client.clientId);
+					
 
 					const images: any[] = [];
 					const documents: any[] = [];
@@ -893,6 +895,12 @@ export default function Instrument(
 											const split2 = split1[1].split('@');
 											if (split2.length === 2) {
 												const address = split2[0];
+												if (isAddress(address)) {
+													setScannedResult(address);
+													setModalOpen(false);
+												}
+											} else {
+												const address = split1[1];
 												if (isAddress(address)) {
 													setScannedResult(address);
 													setModalOpen(false);

@@ -11,15 +11,9 @@ export default function User(
     { locale }: Readonly<{ locale: string }>
 ) {
     const t = useTranslations();
-    const { address, isMinter, isLuthier, isVerified, isLoading, minter } = useStateContext()
+    const { isLoading } = useStateContext()
 
-    if (isLoading) return (
-        <Page>
-          <div className="text-center">
-            <Loading />
-          </div>
-        </Page>
-    )
+    if (isLoading) return <Loading />
 
     return (
         <Page>

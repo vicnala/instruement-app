@@ -2,7 +2,6 @@
 
 import { useTranslations } from "next-intl";
 import { useStateContext } from "@/app/context";
-import { useRouter } from "@/i18n/routing";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
 import { Instrument } from "@/lib/definitions";
@@ -14,7 +13,6 @@ export default function Pay(
 ) {
   const t = useTranslations();
   const { minter, isLoading } = useStateContext()
-  const router = useRouter();
 
   let intId: number, instrument: Instrument;
   try {
@@ -32,13 +30,7 @@ export default function Pay(
     );
   }
 
-  if (isLoading) return (
-    <Page>
-      <div className="text-center">
-        <Loading />
-      </div>
-    </Page>
-  )
+  if (isLoading) return <Loading />
 
   if (minter) {
     return (

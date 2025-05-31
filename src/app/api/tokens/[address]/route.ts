@@ -1,6 +1,6 @@
 'use server'
 
-import { Engine } from "@thirdweb-dev/engine";
+// import { Engine } from "@thirdweb-dev/engine";
 
 export async function GET(
   request: Request,
@@ -37,16 +37,22 @@ export async function GET(
   }
 
   try {
-    const engine = new Engine({
-      url: ENGINE_URL,
-      accessToken: ENGINE_ACCESS_TOKEN
-    });
+    // const engine = new Engine({
+    //   url: ENGINE_URL,
+    //   accessToken: ENGINE_ACCESS_TOKEN
+    // });
 
-    const { result } = await engine.erc721.getOwned(
-      address,
-      NEXT_PUBLIC_CHAIN_ID,
-      NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS
-    );
+    // const { result } = await engine.erc721.getOwned(
+    //   address,
+    //   NEXT_PUBLIC_CHAIN_ID,
+    //   NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS
+    // );
+
+    const fetchResult = await fetch(`${ENGINE_URL}/contract/${NEXT_PUBLIC_CHAIN_ID}/${NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS}/erc721/get-owned?walletAddress=${address}`, {
+      headers: { Authorization: `Bearer ${ENGINE_ACCESS_TOKEN}` },
+      cache: 'no-store'
+    })
+    const { result } = await fetchResult.json()
     
     if (result) {
        console.log(address, 'has', result?.length, 'tokens from', NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS, 'on chain', NEXT_PUBLIC_CHAIN_ID);
