@@ -230,6 +230,8 @@ export default function Instrument(
 					const fileDescriptionsData = await result.json();
 
 					// console.log("fileDescriptionsData", fileDescriptionsData);
+					console.log(client.clientId);
+					
 
 					const images: any[] = [];
 					const documents: any[] = [];
