@@ -299,6 +299,7 @@ export default function Instrument(
 
 	useEffect(() => {
 		async function getOwner() {
+			if (!address || !contract) return;
 			const owner = await ownerOf({ contract, tokenId: BigInt(id) });
 			if (owner === address) {
 				setIsOwner(true);
@@ -398,7 +399,7 @@ export default function Instrument(
 		validateNonce();
 	}, [searchParams, id]);
 
-	if (isLoading || isLoadingMinter || isLoadingInstrumentAsset) {
+	if (isLoadingInstrumentAsset) {
 		return (
 			<Page>
 				<div className="flex justify-center items-center h-full">
@@ -408,21 +409,18 @@ export default function Instrument(
 		);
 	}
 
-	if (!address) {
-		return <NotConnected locale={locale} />;
-	}
-
 	return (
 		<Page>
+			{!address && <NotConnected locale={locale} />}
 			{instrumentAsset && instrumentAsset.metadata ? (
 				<>
-					{instrumentAsset.owner !== address && !hasActiveValidationAttempt(searchParams) && (
+					{address && instrumentAsset.owner !== address && !hasActiveValidationAttempt(searchParams) && (
 						<p className='bg-me-50 p-4 rounded-lg border border-me-200 mb-4'>
 							<b>{tInstrument('current_owner')}:</b> {truncateEthAddress(instrumentAsset.owner)} ({tInstrument('you_are_not_owner')})
 						</p>
 					)}
 					{/* Copy URL Button for Non-Owner with Nonce */}
-					{contract && address && !isOwner && hasActiveValidationAttempt(searchParams) && (
+					{address && contract && !isOwner && hasActiveValidationAttempt(searchParams) && (
 						<Section>
 							<div className="bg-we-50 dark:bg-we-950 rounded-lg p-6 mb-3">
 								{isTransferConfirmationValid ? (
@@ -467,7 +465,7 @@ export default function Instrument(
 					)}
 
 					{/* Owner's Remote Transfer Interface */}
-					{contract && address && isOwner && hasActiveValidationAttempt(searchParams) && (
+					{address && contract && isOwner && hasActiveValidationAttempt(searchParams) && (
 						<Section>
 							<div className="bg-we-50 dark:bg-we-950 rounded-lg p-6 mb-3">
 								{isNonceValid ? (
@@ -650,7 +648,7 @@ export default function Instrument(
 
 					<div className={`mt-6 space-y-4 ${showTransferOptions ? 'min-h-screen' : ''}`}>
 						{/* Transfer Management Section */}
-						{isOwner && (
+						{address && isOwner && (
 							<div className="mb-12" ref={transferSectionRef}>
 								<div>
 									<h2 className="text-2xl font-semibold text-we-600 dark:text-it-50 mb-2">
