@@ -40,12 +40,6 @@ export function Header() {
             </Link>
             <nav className='flex items-center space-x-6'>
               {
-                address && 
-                <Link href="/" className={`${pathname === '/' ? 'text-it-400 dark:text-white' : 'text-gray-500 hover:text-it-400 dark:text-gray-600 dark:hover:text-it-100'}`}>
-                  <House className="w-5 h-5" />
-                </Link>
-              }
-              {
                 isMinter && 
                 (pathname === '/' || pathname === '/account' || pathname.startsWith('/instrument')) &&
                 <ButtonLink href="/drafts/new" size="md" colorSchema="it">
@@ -66,6 +60,12 @@ export function Header() {
                     </Link>
                   </div>
                 </div>
+              }
+              {
+                address && ( pathname === '/account' || pathname.startsWith('/instrument') || pathname.startsWith('/drafts')) &&
+                <Link href="/" className={`${pathname === '/' ? 'text-it-400 dark:text-white' : 'text-gray-500 hover:text-it-400 dark:text-gray-600 dark:hover:text-it-100'}`}>
+                  <House className="w-5 h-5" />
+                </Link>
               }
               {
                 process.env.NODE_ENV === 'development' && <ModeToggle />
