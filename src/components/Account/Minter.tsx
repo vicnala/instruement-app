@@ -3,8 +3,8 @@
 import { useTranslations } from "next-intl";
 import { useStateContext } from "@/app/context";
 import Page from "@/components/Page";
-import Loading from "@/components/Loading";
 import Section from "@/components/Section";
+import ButtonSpinner from '@/components/UI/ButtonSpinner';
 import { CustomConnectButton } from "../CustomConnectButton";
 import Image from "next/image";
 
@@ -21,8 +21,8 @@ export default function Minter(
 
     if (isLoading) return (
         <Page>
-            <div className="text-center">
-                <Loading />
+            <div className="flex justify-center items-center h-full">
+                <ButtonSpinner />
             </div>
         </Page>
     );
@@ -93,7 +93,7 @@ export default function Minter(
                         {minter?.instrument_types && minter.instrument_types.length > 0 && (
                             <div className="mb-6">
                                 <h3 className="text-lg font-semibold mb-2">{t('instrument_type_specialization')}</h3>
-                                <div className="flex flex-wrap gap-2">
+                                <div className="flex flex-wrap gap-1 gap-y-2">
                                     {minter.instrument_types.map((type: any, index: number) => (
                                         <span key={index} className="px-3 py-1 bg-it-100 text-it-950 rounded-md text-md">
                                             {type.name}
@@ -107,20 +107,19 @@ export default function Minter(
                         {minter?.skills && minter.skills.length > 0 && (
                             <div className="mb-6">
                                 <h3 className="text-lg font-semibold mb-2">{t('endorsed_skills')}</h3>
-                                <div className="flex flex-wrap gap-2">
+                                <div className="flex flex-wrap gap-1 gap-y-2">
                                     {minter.skills.map((skill: any, index: number) => (
-                                        <span key={index} className="px-3 py-1 bg-green-100 text-green-800 rounded-md text-md">
+                                        <span key={index} className="px-3 py-1 bg-gray-50 text-gray-800 rounded-md text-md">
                                             {skill.name}
                                         </span>
                                     ))}
                                 </div>
                                 {isMinter && minterConstructionSkills.length > 0 && (
-                                    <div className="mt-4">
+                                    <div className="mt-6">
                                         <h4 className="text-md font-semibold mb-2">{t('account.minter_account')}</h4>
-                                        <div className="flex flex-wrap gap-2">
+                                        <div className="flex flex-wrap gap-1 gap-y-2">
                                             {minterConstructionSkills.map((skill: any, idx: number) => (
                                                 <span key={idx} className="px-3 py-1 bg-it-100 text-it-950 rounded-md text-md">
-                                                    {idx > 0 && ", "}
                                                     {skill.name.split(' construction')[0]}
                                                 </span>
                                             ))}
@@ -162,7 +161,7 @@ export default function Minter(
 
                     </div>
                     <div className="flex flex-col justify-start items-end">
-                        <div className="w-full bg-gray-25 rounded-lg px-4 py-4">
+                        <div className="w-full bg-gray-25 rounded-lg px-4 py-4 mb-12">
                             {/* Address details: */}
                             <div className="mb-6">
                                 <h3 className="text-md font-semibold mb-2">{t('address')}</h3>
