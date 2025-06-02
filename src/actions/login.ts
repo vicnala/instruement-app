@@ -7,6 +7,7 @@ import { cookies } from "next/headers";
 import { client } from "@/app/client";
 import { redirect } from "@/i18n/routing";
 import { getLuthierPermissions } from "@/lib/luthierPermissions";
+import { locales } from "@/i18n/routing";
 
 const privateKey = process.env.AUTH_PRIVATE_KEY || "";
  
@@ -60,7 +61,7 @@ export async function login(payload: VerifyLoginPayloadParams, cb: string | unde
       context,
     });
     cookies().set("jwt", jwt);
-    redirect({ href: cb || '/', locale: userData?.data?.lang || locale });
+    redirect({ href: cb || '/', locale: locales.includes(userData?.data?.lang) ? userData?.data?.lang : locale });
   }
 }
  
