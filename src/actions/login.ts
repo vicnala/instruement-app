@@ -51,7 +51,6 @@ export async function login(payload: VerifyLoginPayloadParams, cb: string | unde
           }
         }
       }
-      
     } catch (error: any) {
       console.error("/user fetch error", error.message);
     }
@@ -61,7 +60,7 @@ export async function login(payload: VerifyLoginPayloadParams, cb: string | unde
       context,
     });
     cookies().set("jwt", jwt);
-    redirect({ href: cb || '/', locale });
+    redirect({ href: cb || '/', locale: userData?.data?.lang || locale });
   }
 }
  
