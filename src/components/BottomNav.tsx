@@ -15,12 +15,12 @@ export const BottomNav = () => {
 		<div className='sm:hidden'>
 			{
 				address &&
-				<nav className='sm:hidden fixed z-100 bottom-0 w-full bg-canvas pb-safe dark:bg-contrast dark:border-t dark:border-gray-900 shadow-[0_0px_10px_0px_rgba(0,0,0,0.2)]'>
+				<nav className='sm:hidden fixed z-100 bottom-0 w-full bg-canvas pb-safe dark:bg-contrast dark:border-t dark:border-gray-900 shadow-[0_0px_4px_0px_rgba(0,0,0,0.2)]'>
 					{
-						<div className={`mx-auto grid h-16 max-w-md items-center ${isMinter ? 'grid-cols-[1fr_auto_1fr]' : 'grid-cols-[1fr_1fr]'} gap-[3vw]`}>
+						<div className={`mx-auto grid h-[4rem] max-w-md pt-2 ${isMinter ? 'grid-cols-[1fr_auto_1fr]' : 'grid-cols-[1fr_1fr]'} gap-[3vw]`}>
 							<Link key="home" href="/">
 								<div className={
-									`flex flex-col items-center ${pathname === '/'
+									`flex flex-col items-center pt-1 ${pathname === '/'
 									? 'text-it-500 dark:text-it-400'
 									: 'text-gray-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50'
 									}`}
@@ -33,14 +33,15 @@ export const BottomNav = () => {
 							</Link>
 							{
 								isMinter &&
-								(pathname === '/' || pathname === '/account' || pathname.startsWith('/instrument')) &&
+								(pathname === '/' || pathname === '/account' || pathname.startsWith('/instrument')) ?
 								<ButtonLink href="/drafts/new" size="md" colorSchema="it">
 									{bottomNavt('new_instrument')}
 							  	</ButtonLink>
+								: <div className="w-0 h-10"></div>
 							}
 							<Link key="account" href="/account">
 								<div className={
-									`flex flex-col items-center ${pathname.includes('/account')
+									`flex flex-col items-center pt-1 ${pathname.includes('/account')
 									? 'text-it-500 dark:text-it-400'
 									: 'text-gray-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50'
 									}`}
