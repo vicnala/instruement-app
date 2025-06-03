@@ -19,7 +19,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import Divider from "@/components/UI/Divider";
 import ButtonSpinner from '@/components/UI/ButtonSpinner';
-import NotConnected from "@/components/NotConnected";
+// import NotConnected from "@/components/NotConnected";
 import { useRouter } from "@/i18n/routing";
 import { marked } from "marked";
 
@@ -204,9 +204,10 @@ export default function Instrument(
 			try {
 				const result = await fetch(`/api/token/${id}`)
 				const data = await result.json();
+				if (!data?.metadata) return;
+				
 				setInstrumentAsset(data);
 				// console.log("instrumentAsset.data", data);
-
 
 				const properties = data.metadata.properties || data.metadata.attributes || [];
 				const fileDirHashTrait = properties.find((prop: any) => prop.trait_type === 'Files');
@@ -228,10 +229,7 @@ export default function Instrument(
 
 					const result = await fetch(fileDescriptionsUrl)
 					const fileDescriptionsData = await result.json();
-
-					// console.log("fileDescriptionsData", fileDescriptionsData);
-					console.log(client.clientId);
-					
+					// console.log("fileDescriptionsData", fileDescriptionsData);					
 
 					const images: any[] = [];
 					const documents: any[] = [];
@@ -282,11 +280,12 @@ export default function Instrument(
 			try {
 				const result = await fetch(`/api/user/${minter}`)
 				const data = await result.json();
+				setIsLoadingMinter(false)
 				setMinterUser(data);
 			} catch (error) {
-				console.error(`/api/user/${minter}`, error)
+				setIsLoadingMinter(false)
+				throw error;
 			}
-			setIsLoadingMinter(false)
 		}
 
 		if (minter && !isLoadingMinter && !minterUser) {
@@ -299,8 +298,8 @@ export default function Instrument(
 
 	useEffect(() => {
 		async function getOwner() {
-			if (!address || !contract) return;
-			const owner = await ownerOf({ contract, tokenId: BigInt(id) });
+			if (!contract) return;
+			const owner = await ownerOf({ contract, tokenId: BigInt(id) });			
 			if (owner === address) {
 				setIsOwner(true);
 			} else {
@@ -308,7 +307,7 @@ export default function Instrument(
 			}
 		}
 
-		if (address && contract) {
+		if (contract) {
 			getOwner().catch((e) => {
 				console.error(`getOwner`, e.message);
 			})
@@ -399,7 +398,7 @@ export default function Instrument(
 		validateNonce();
 	}, [searchParams, id]);
 
-	if (isLoadingInstrumentAsset) {
+	if (isLoadingInstrumentAsset || isLoadingMinter || isLoading) {
 		return (
 			<Page>
 				<div className="flex justify-center items-center h-full">
@@ -411,7 +410,7 @@ export default function Instrument(
 
 	return (
 		<Page>
-			{!address && <NotConnected locale={locale} />}
+			{/* {!address && <NotConnected locale={locale} />} */}
 			{instrumentAsset && instrumentAsset.metadata ? (
 				<>
 					{address && instrumentAsset.owner !== address && !hasActiveValidationAttempt(searchParams) && (

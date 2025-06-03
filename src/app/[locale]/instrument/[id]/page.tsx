@@ -1,6 +1,5 @@
-import { authedOnly } from "@/actions/login";
 import Instrument from "@/components/Instrument/Instrument";
-import NotFound from "@/app/not-found";
+import { redirect } from "@/i18n/routing";
 
 export default async function InstrumentPage({
   searchParams,
@@ -9,9 +8,11 @@ export default async function InstrumentPage({
   searchParams?: { to?: string };
   params: { locale: string, id: string };
 }) {
-  const authResult: any = await authedOnly(`/instrument/${id}`); 
+  if (!locale) {
+    redirect({ href: `/instrument/${id}?to=${searchParams?.to}`, locale: locale || 'en' });
+  }
 
   return (
-    authResult.valid ? <Instrument id={id} locale={locale} to={searchParams?.to} /> : <NotFound />
+    <Instrument id={id} locale={locale} to={searchParams?.to} />
   );
 }

@@ -4,6 +4,6 @@ import { routing } from './i18n/routing';
 export default createMiddleware(routing);
 
 export const config = {
-  // Match only internationalized pathnames
-  matcher: ['/', '/(en|es|ar)/:path*']
+  // Match only internationalized/desired pathnames
+  matcher: ['/', '/(en|es|ar)/:path*', '/instrument/:path*']
 };
