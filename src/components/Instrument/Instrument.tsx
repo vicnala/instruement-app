@@ -601,6 +601,11 @@ export default function Instrument(
 													height={400}
 													className="object-cover w-full h-full"
 												/>
+												{/* <img
+													src={img.uri}
+													alt={`Instrument #${id}`}
+													className="w-full h-full object-cover"
+												/> */}
 											</div>
 											<p className="text-it-1000 p-2 text-sm">
 												{img.description || tInstrument('no_description')}
