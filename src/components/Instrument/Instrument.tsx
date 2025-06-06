@@ -596,19 +596,19 @@ export default function Instrument(
 									{images.map((img: any, index: number) => (
 										<div key={index} className="relative bg-it-100 border border-it-200 rounded-lg overflow-hidden">
 											<div className="w-full aspect-square bg-white/[.04]">
-												{/* <Image
-													src={img.uri}
-													alt={`Instrument #${id}`}
-													width={400}
-													height={400}
-													className="object-cover w-full h-full"
-												/> */}
 												<a href={img.uri} target="_blank" rel="noreferrer">	
-													<img
+													<Image
+														src={img.uri}
+														alt={`Instrument #${id}`}
+														width={400}
+														height={400}
+														className="object-cover w-full h-full"
+													/>
+													{/* <img
 														src={img.uri}
 														alt={`Instrument #${id}`}
 														className="w-full h-full object-cover"
-													/>
+													/> */}
 												</a>
 											</div>
 											{img.description && 
