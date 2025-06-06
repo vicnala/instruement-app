@@ -530,13 +530,15 @@ export default function Instrument(
 							{/* Cover Image Section */}
 							<div className="rounded-[15px] relative bg-it-100 border border-it-200 shadow-md overflow-hidden">
 								<div className="w-full aspect-square bg-white/[.04]">
-									<Image
-										className="mx-auto"
-										src={instrumentAsset.metadata.image}
-										width={800}
-										height={800}
-										alt={`Instrument #${id}`}
-									/>
+									<a href={instrumentAsset.metadata.image} target="_blank" rel="noreferrer">
+										<Image
+											className="mx-auto"
+											src={instrumentAsset.metadata.image}
+											width={800}
+											height={800}
+											alt={`Instrument #${id}`}
+										/>
+									</a>
 								</div>
 							</div>
 						</div>
@@ -601,15 +603,19 @@ export default function Instrument(
 													height={400}
 													className="object-cover w-full h-full"
 												/> */}
-												<img
-													src={img.uri}
-													alt={`Instrument #${id}`}
-													className="w-full h-full object-cover"
-												/>
+												<a href={img.uri} target="_blank" rel="noreferrer">	
+													<img
+														src={img.uri}
+														alt={`Instrument #${id}`}
+														className="w-full h-full object-cover"
+													/>
+												</a>
 											</div>
-											<p className="text-it-1000 p-2 text-sm">
-												{img.description || tInstrument('no_description')}
-											</p>
+											{img.description && 
+												<p className="text-it-1000 p-2 text-sm">
+													{img.description || tInstrument('no_description')}
+												</p>
+											}
 										</div>
 									))}
 								</div>
@@ -634,9 +640,11 @@ export default function Instrument(
 										>
 											<div className="flex flex-col items-start">
 												<h3 className="text-lg font-medium">{doc.description}</h3>
-												<p className="text-sm text-gray-500">
-													{doc.description || tInstrument('no_description')}
-												</p>
+												{ doc.description && 
+													<p className="text-sm text-gray-500">
+														{doc.description || tInstrument('no_description')}
+													</p>
+												}
 											</div>
 											<Download className="w-4 h-4" />
 										</a>
