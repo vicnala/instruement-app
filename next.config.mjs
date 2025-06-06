@@ -34,6 +34,13 @@ const nextConfig = {
           search: '',
         },
         {
+          protocol: 'https',
+          hostname: '*.instruement.com',
+          port: '',
+          pathname: '/_next/*',
+          search: '',
+        },
+        {
           protocol: 'http',
           hostname: 'localhost',
           port: '3000',
