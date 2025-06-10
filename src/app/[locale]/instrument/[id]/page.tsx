@@ -1,7 +1,7 @@
 import type { Metadata, ResolvingMetadata } from 'next';
 import Instrument from "@/components/Instrument/Instrument";
 import { redirect } from "@/i18n/routing";
-import TokenService from '@/services/TokenService';
+// import TokenService from '@/services/TokenService';
 
 type Props = {
   params: Promise<{ locale: string, id: string }>
