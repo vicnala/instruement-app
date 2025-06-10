@@ -1,15 +1,16 @@
 'use server'
 
+import { NextRequest } from "next/server";
 import { Engine } from "@thirdweb-dev/engine";
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
 
   if (!id) return Response.json(
-    { message: 'No address provided' },
+    { message: 'No id provided' },
     { status: 400 }
   )
 
