@@ -17,9 +17,13 @@ export async function generateMetadata(
   const metadata = {
     title: `Instrument ${id}`,
     description: ``,
-    images: [
-      { url: "" }
-    ]
+    openGraph: {
+      title: `Instrument ${id}`,
+      description: ``,
+      images: [
+        { url: "" }
+      ]
+    }
   }
 
   try {
@@ -29,7 +33,7 @@ export async function generateMetadata(
     if (data.code === "success") {  
       const instrument: any = data.data;
       metadata.title = instrument.title;
-      metadata.description = instrument.type_name;
+      // metadata.description = instrument.type_name;
       
       const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/file/${instrument.cover_image}`).then(res => res.json());
       if (result.code === "success") {
@@ -37,10 +41,14 @@ export async function generateMetadata(
         const { sizes } = coverImage;
         if (sizes.og) {
           const ogImage = `${result.data.data.base_url}${sizes.og.file}`;
-          metadata.images = [
+          metadata.openGraph.images = [
             { url: ogImage }
           ];
+          metadata.openGraph.title = instrument.title;
+          // metadata.openGraph.description = instrument.type_name;
         }
+
+        console.log("metadata", metadata);
 
         return metadata;
       }
@@ -49,7 +57,7 @@ export async function generateMetadata(
   }
 
   return metadata;
-  
+
   // try {
   //   const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/token/${id}?locale=${locale || "en"}`).then(res => res.json());
   //   const { metadata, owner } = result;
