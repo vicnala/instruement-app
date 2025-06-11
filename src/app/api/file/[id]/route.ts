@@ -65,16 +65,16 @@ export async function GET(
     { status: 400 }
   )
 
-  const authData: any = await userAuthData();
-  const authContext = authData.parsedJWT.ctx;
-  const isMinter = authContext.isMinter;
+  // const authData: any = await userAuthData();
+  // const authContext = authData.parsedJWT.ctx;
+  // const isMinter = authContext.isMinter;
 
-  if (!isMinter) {
-    return Response.json(
-      { data: { message: `Forbidden` } },
-      { status: 401 }
-    )
-  }
+  // if (!isMinter) {
+  //   return Response.json(
+  //     { data: { message: `Forbidden` } },
+  //     { status: 401 }
+  //   )
+  // }
 
   try {
     const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/file/${id}`, {

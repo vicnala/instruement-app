@@ -23,24 +23,52 @@ export async function generateMetadata(
   }
 
   try {
-    const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/token/${id}?locale=${locale || "en"}`).then(res => res.json());
-    const { metadata, owner } = result;
-  
-    return {
-      title: metadata?.name || `Instrument ${id}`,
-      description: metadata?.name || "",
-      openGraph: {
-        title: metadata?.name || `Instrument ${id}`,
-        description: ``,
-        images: [
-          { url: metadata?.image || "" }
-        ]
+    const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/instrument/asset/${id}?locale=${locale || "en"}`).then(res => res.json());
+    const { data } = result;
+
+    if (data.code === "success") {  
+      const instrument: any = data.data;
+      metadata.title = instrument.title;
+      metadata.description = instrument.type_name;
+      
+      const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/file/${instrument.cover_image}`).then(res => res.json());
+      if (result.code === "success") {
+        const coverImage = result.data.data;
+        const { sizes } = coverImage;
+        if (sizes.og) {
+          const ogImage = `${result.data.data.base_url}${sizes.og.file}`;
+          metadata.images = [
+            { url: ogImage }
+          ];
+        }
+
+        return metadata;
       }
-    };
-    
+    }
   } catch (error) {
-    return metadata;
   }
+
+  return metadata;
+  
+  // try {
+  //   const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/token/${id}?locale=${locale || "en"}`).then(res => res.json());
+  //   const { metadata, owner } = result;
+  
+  //   return {
+  //     title: metadata?.name || `Instrument ${id}`,
+  //     description: metadata?.name || "",
+  //     openGraph: {
+  //       title: metadata?.name || `Instrument ${id}`,
+  //       description: ``,
+  //       images: [
+  //         { url: metadata?.image || "" }
+  //       ]
+  //     }
+  //   };
+    
+  // } catch (error) {
+  //   return metadata;
+  // }
 }
 
 export default async function InstrumentPage({ searchParams, params }: Props) {
