@@ -48,12 +48,13 @@ export async function generateMetadata(
           // metadata.openGraph.description = instrument.type_name;
         }
 
-        console.log("metadata", metadata);
+        console.log("metadata", metadata.openGraph);
 
         return metadata;
       }
     }
   } catch (error) {
+    console.error("metadata error", error);
   }
 
   return metadata;
