@@ -47,9 +47,7 @@ export async function generateMetadata(
           metadata.openGraph.title = instrument.title;
           // metadata.openGraph.description = instrument.type_name;
         }
-
-        console.log("metadata", metadata.openGraph);
-
+        // console.log("metadata", metadata.openGraph);
         return metadata;
       }
     }
