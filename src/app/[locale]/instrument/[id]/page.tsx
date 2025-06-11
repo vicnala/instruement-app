@@ -1,7 +1,6 @@
 import type { Metadata, ResolvingMetadata } from 'next';
 import Instrument from "@/components/Instrument/Instrument";
 import { redirect } from "@/i18n/routing";
-// import TokenService from '@/services/TokenService';
 
 type Props = {
   params: Promise<{ locale: string, id: string }>
@@ -15,21 +14,33 @@ export async function generateMetadata(
   const { to } = await searchParams;
   const parentMetadata = await parent;
 
-  const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/token/${id}?locale=${locale || "en"}`).then(res => res.json());
-  
-  const { metadata, owner } = result;
+  const metadata = {
+    title: `Instrument ${id}`,
+    description: ``,
+    images: [
+      { url: "" }
+    ]
+  }
 
-  return {
-    title: metadata?.name || `Instrument ${id}`,
-    description: metadata?.name || "",
-    openGraph: {
+  try {
+    const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/token/${id}?locale=${locale || "en"}`).then(res => res.json());
+    const { metadata, owner } = result;
+  
+    return {
       title: metadata?.name || `Instrument ${id}`,
-      description: ``,
-      images: [
-        { url: metadata?.image || "" }
-      ]
-    }
-  };
+      description: metadata?.name || "",
+      openGraph: {
+        title: metadata?.name || `Instrument ${id}`,
+        description: ``,
+        images: [
+          { url: metadata?.image || "" }
+        ]
+      }
+    };
+    
+  } catch (error) {
+    return metadata;
+  }
 }
 
 export default async function InstrumentPage({ searchParams, params }: Props) {
