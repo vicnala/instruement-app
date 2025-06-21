@@ -583,14 +583,14 @@ export default function Instrument(
 								<div className="relative">
 									{/* Desktop: Always show full content */}
 									<div
-										className="hidden md:block text-base text-it-1000 flex flex-col gap-4"
+										className="hidden md:block text-base text-it-1000 dark:text-it-100 flex flex-col gap-4"
 										dangerouslySetInnerHTML={{ __html: marked.parse(instrumentAsset.metadata.description || '') as string }}
 									/>
 									
 									{/* Mobile: Collapsible content */}
 									<div className="md:hidden">
 										<div
-											className={`text-base text-it-1000 flex flex-col gap-4 overflow-hidden transition-all duration-300 ${
+											className={`text-base text-it-1000 dark:text-it-100 flex flex-col gap-4 overflow-hidden transition-all duration-300 ${
 												isDescriptionExpanded ? 'max-h-none' : 'max-h-32'
 											}`}
 											dangerouslySetInnerHTML={{ __html: marked.parse(instrumentAsset.metadata.description || '') as string }}
@@ -615,7 +615,7 @@ export default function Instrument(
 											) : (
 												<>
 													<ChevronDown className="w-4 h-4" />
-													{tInstrument('show_more')}
+													Show more
 												</>
 											)}
 										</button>
