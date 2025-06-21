@@ -24,13 +24,15 @@ export default function User(
             try {
                 const result = await fetch(`/api/tokens/${activeAccount?.address}`, { cache: 'no-store' });
                 const data = await result.json();
-                const { metadata: instrument } = data[data.length - 1];                
                 if (data.length > owned.length) {
+                    const newInstrument = data.find((instrument: any) => !owned.includes(instrument.id));
+                    const { metadata: instrument } = newInstrument;
                     clearTimeout(timeout);
                     clearInterval(interval);
                     alert(`${t("components.Instrument.instrument")} #${instrument.id} "${instrument.name}" ${t("components.Instrument.new_instrument_received")}`);
                     setReloadUser(true);
-                    router.replace(`/instrument/${instrument.id}`);
+                    document.location.replace(`/instrument/${instrument.id}`);
+                    // router.replace(`/instrument/${instrument.id}`);
                 }
             } catch (error) {
                 console.log('User.getUserTokens', error);
