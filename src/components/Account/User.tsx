@@ -30,7 +30,7 @@ export default function User(
                     clearInterval(interval);
                     alert(`${t("components.Instrument.instrument")} #${instrument.id} "${instrument.name}" ${t("components.Instrument.new_instrument_received")}`);
                     setReloadUser(true);
-                    router.push(`/instrument/${instrument.id}`);
+                    router.replace(`/instrument/${instrument.id}`);
                 }
             } catch (error) {
                 console.log('User.getUserTokens', error);
