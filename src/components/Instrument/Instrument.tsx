@@ -615,7 +615,7 @@ export default function Instrument(
 											) : (
 												<>
 													<ChevronDown className="w-4 h-4" />
-													Show more
+													{tInstrument('show_more')}
 												</>
 											)}
 										</button>
