@@ -23,6 +23,8 @@ import ButtonSpinner from '@/components/UI/ButtonSpinner';
 import { useRouter } from "@/i18n/routing";
 import { marked } from "marked";
 import { contract } from "@/app/contracts";
+import Loading from "@/components/Loading";
+import NotConnected from "@/components/NotConnected";
 
 marked.use({
 	breaks: true
@@ -400,18 +402,15 @@ export default function Instrument(
 	}, [searchParams, id]);
 
 	if (isLoadingInstrumentAsset || isLoadingMinter || isLoading) {
-		return (
-			<Page>
-				<div className="flex justify-center items-center h-full">
-					<ButtonSpinner />
-				</div>
-			</Page>
-		);
+		return <Loading />;
+	}
+
+	if (!address) {
+		return <NotConnected locale={locale} />;
 	}
 
 	return (
 		<Page>
-			{/* {!address && <NotConnected locale={locale} />} */}
 			{instrumentAsset && instrumentAsset.metadata ? (
 				<>
 					{address && instrumentAsset.owner !== address && !hasActiveValidationAttempt(searchParams) && (
