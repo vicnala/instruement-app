@@ -14,7 +14,7 @@ import Section from "@/components/Section";
 import { client } from "@/app/client";
 import QRModal from "./QRModal";
 import Image from "next/image";
-import { Download, Copy, QrCode, ChevronDown, Handshake, Telescope, MoveDown, ArrowDownWideNarrow, Hourglass, CheckCheck, Send, Ban } from "lucide-react";
+import { Download, Copy, QrCode, ChevronDown, Handshake, Telescope, MoveDown, ArrowDownWideNarrow, Hourglass, CheckCheck, Send, Ban, ChevronUp } from "lucide-react";
 import { usePathname, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import Divider from "@/components/UI/Divider";
@@ -198,6 +198,9 @@ export default function Instrument(
 
 	// Add this state for nonce validation
 	const [isNonceValid, setIsNonceValid] = useState<boolean>(false);
+
+	// Add state for description collapse/expand
+	const [isDescriptionExpanded, setIsDescriptionExpanded] = useState<boolean>(false);
 
 	useEffect(() => {
 		async function getInstrumentAsset() {
@@ -577,10 +580,47 @@ export default function Instrument(
 								<h2 className='text-2xl font-semibold'>
 									{tInstrument('description')}
 								</h2>
-								<div
-									className="text-base text-it-1000 flex flex-col gap-4"
-									dangerouslySetInnerHTML={{ __html: marked.parse(instrumentAsset.metadata.description || '') as string }}
-								/>
+								<div className="relative">
+									{/* Desktop: Always show full content */}
+									<div
+										className="hidden md:block text-base text-it-1000 flex flex-col gap-4"
+										dangerouslySetInnerHTML={{ __html: marked.parse(instrumentAsset.metadata.description || '') as string }}
+									/>
+									
+									{/* Mobile: Collapsible content */}
+									<div className="md:hidden">
+										<div
+											className={`text-base text-it-1000 flex flex-col gap-4 overflow-hidden transition-all duration-300 ${
+												isDescriptionExpanded ? 'max-h-none' : 'max-h-32'
+											}`}
+											dangerouslySetInnerHTML={{ __html: marked.parse(instrumentAsset.metadata.description || '') as string }}
+										/>
+										
+										{/* Gradient overlay when collapsed */}
+										{!isDescriptionExpanded && (
+											<div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white dark:from-gray-900 to-transparent pointer-events-none" />
+										)}
+										
+										{/* Expand/Collapse button */}
+										<button
+											type="button"
+											onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+											className="mt-2 flex items-center gap-1 text-sm font-medium text-it-600 dark:text-it-400 hover:text-it-800 dark:hover:text-it-200 transition-colors"
+										>
+											{isDescriptionExpanded ? (
+												<>
+													<ChevronUp className="w-4 h-4" />
+													{tInstrument('show_less')}
+												</>
+											) : (
+												<>
+													<ChevronDown className="w-4 h-4" />
+													{tInstrument('show_more')}
+												</>
+											)}
+										</button>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

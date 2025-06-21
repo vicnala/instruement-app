@@ -333,7 +333,9 @@
             "remote_transfer_step_3_title": "Transferir ahora",
             "remote_transfer_step_3_description": "Ahora puedes transferir el instrumento al nuevo propietario.",
             "remote_transfer_step_3_invalid_title": "Transferencia no es posible",
-            "remote_transfer_step_3_invalid_description": "El enlace de transferencia no es válido. Comprueba el enlace recibido y vuelve a intentarlo."
+            "remote_transfer_step_3_invalid_description": "El enlace de transferencia no es válido. Comprueba el enlace recibido y vuelve a intentarlo.",
+            "show_less": "Mostrar menos",
+            "show_more": "Mostrar más"
         },
         "ElementsForm": {
             "title": "Registra tu instrumento ahora",
