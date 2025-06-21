@@ -22,6 +22,7 @@ import ButtonSpinner from '@/components/UI/ButtonSpinner';
 // import NotConnected from "@/components/NotConnected";
 import { useRouter } from "@/i18n/routing";
 import { marked } from "marked";
+import { contract } from "@/app/contracts";
 
 marked.use({
 	breaks: true
@@ -180,7 +181,7 @@ export default function Instrument(
 	const [documents, setDocuments] = useState<any[]>([])
 	const [minter, setMinter] = useState<string>()
 	const [minterUser, setMinterUser] = useState<any>()
-	const { address, contract, isLoading, setReloadUser } = useStateContext()
+	const { address, isLoading, setReloadUser } = useStateContext()
 	const [isOwner, setIsOwner] = useState<boolean>(false)
 	const [copySuccess, setCopySuccess] = useState(false);
 	const pathname = usePathname();
@@ -301,7 +302,6 @@ export default function Instrument(
 
 	useEffect(() => {
 		async function getOwner() {
-			if (!contract) return;
 			const owner = await ownerOf({ contract, tokenId: BigInt(id) });			
 			if (owner === address) {
 				setIsOwner(true);
@@ -310,12 +310,10 @@ export default function Instrument(
 			}
 		}
 
-		if (contract) {
-			getOwner().catch((e) => {
-				console.error(`getOwner`, e.message);
-			})
-		}
-	}, [address, contract, id])
+		getOwner().catch((e) => {
+			console.error(`getOwner`, e.message);
+		})
+	}, [address, id])
 
 	// Update the cookie functions
 	const getOrCreatePrivateKey = async () => {
@@ -422,7 +420,7 @@ export default function Instrument(
 						</p>
 					)}
 					{/* Copy URL Button for Non-Owner with Nonce */}
-					{address && contract && !isOwner && hasActiveValidationAttempt(searchParams) && (
+					{address && !isOwner && hasActiveValidationAttempt(searchParams) && (
 						<Section>
 							<div className="bg-we-50 dark:bg-we-950 rounded-lg p-6 mb-3">
 								{isTransferConfirmationValid ? (
@@ -467,7 +465,7 @@ export default function Instrument(
 					)}
 
 					{/* Owner's Remote Transfer Interface */}
-					{address && contract && isOwner && hasActiveValidationAttempt(searchParams) && (
+					{address && isOwner && hasActiveValidationAttempt(searchParams) && (
 						<Section>
 							<div className="bg-we-50 dark:bg-we-950 rounded-lg p-6 mb-3">
 								{isNonceValid ? (

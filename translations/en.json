@@ -277,6 +277,7 @@
             "made_by": "Instrument made by"
         },
         "Instrument": {
+            "instrument": "Instrument",
             "current_owner": "Current owner",
             "you_are_not_owner": "You are not the owner",
             "additional_images": "Additional images",
@@ -308,6 +309,7 @@
             "ready_for_transfer": "All set for transfer",
             "recipient_account": "Recipient account",
             "transfered_to_success": "Instrument has been transferred to",
+            "new_instrument_received": "received",
             "transfer_in_person": "Transfer in person",
             "step_1_description": "Ask the recipient to open the Instruement app on their phone. If they don't have it yet, share a direct link.",
             "share_app": "Copy link",

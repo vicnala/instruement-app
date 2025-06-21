@@ -7,16 +7,18 @@ import React, {
   createContext,
   ReactNode
 } from "react"
-import { getContract } from "thirdweb";
 import {
   useActiveAccount,
   useActiveWallet,
   useSwitchActiveWalletChain,
-  useActiveWalletChain
+  useActiveWalletChain,
+  useContractEvents
 } from "thirdweb/react";
-import { client } from "./client";
+import { contract } from "./contracts";
+import { transferEvent } from "thirdweb/extensions/erc721";
 import { getLuthierPermissions } from "@/lib/luthierPermissions";
 import chain from "@/lib/chain";
+
 
 type Props = {
   children: ReactNode
@@ -24,26 +26,30 @@ type Props = {
 
 type StateContextType = {
   address: string | undefined,
-  contract: any,
   isMinter: boolean,
   isLuthier: boolean,
   isVerified: boolean,
   isLoading: boolean
   minter: any,
   setReloadUser: Function,
-  owned: any[]
+  owned: any[],
+  setOwned: Function,
+  events: any[],
+  setEventsWatch: Function
 }
 
 const stateContextDefaultValues: StateContextType = {
   address: undefined,
-  contract: undefined,
   isMinter: false,
   isLoading: true,
   minter: false,
   isLuthier: false,
   isVerified: false,
   setReloadUser: () => { },
-  owned: []
+  owned: [],
+  setOwned: () => { },
+  events: [],
+  setEventsWatch: () => { }
 }
 
 const StateContext = createContext<StateContextType>(stateContextDefaultValues)
@@ -104,26 +110,28 @@ export const StateContextProvider = ({ children }: Props) => {
   const [minter, setMinter] = useState(false)
   const [address, setAddress] = useState<string | undefined>()
   const [isLoading, setIsLoading] = useState(false)
-  const [contract, setContract] = useState<any>()
   const [reloadUser, setReloadUser] = useState(false)
   const [owned, setOwned] = useState<any[]>([])
+  const [eventsWatch, setEventsWatch] = useState<boolean>(false)
 
-  if (!contract) {
-    if (process.env.NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS) {
-      const _contract = getContract({
-        address: process.env.NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS,
-        client,
-        chain,
-      });
-      setContract(_contract);
+  const contractEvents = useContractEvents({
+    contract,
+    events: [transferEvent({ to: activeAccount?.address })],
+    watch: eventsWatch,
+  });
+
+  useEffect(() => {
+    if (eventsWatch) {
+      const timer = setTimeout(() => setEventsWatch(false), 10000);
+      return () => clearTimeout(timer);
     }
-  }
+  }, [eventsWatch]);
 
-    useEffect(() => {
-        if (activeWallet && activeChain?.id !== chain.id) {
-            switchActiveWalletChain(chain);
-        }
-    }, [activeWallet, activeChain, switchActiveWalletChain]);
+  useEffect(() => {
+      if (activeWallet && activeChain?.id !== chain.id) {
+          switchActiveWalletChain(chain);
+      }
+  }, [activeWallet, activeChain, switchActiveWalletChain]);
 
   useEffect(() => {
     async function getUser() {
@@ -162,14 +170,16 @@ export const StateContextProvider = ({ children }: Props) => {
     <StateContext.Provider
       value={{
         address,
-        contract,
         isMinter,
         minter,
         isLuthier,
         isVerified,
         isLoading: isLoading && (contract ? true : false),
         setReloadUser,
-        owned
+        owned,
+        setOwned,
+        events: contractEvents.data ? contractEvents.data : [],
+        setEventsWatch
       }}
     >
       {children}

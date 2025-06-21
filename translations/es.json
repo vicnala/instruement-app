@@ -49,6 +49,7 @@
         "invite_your_luthier" : { "title": "Invite your luthier to join Instruement", "description": "A brief description about sending inviting to the instruement platform." }
     },
     "instrument": {
+        "instrument": "Instrumento",
         "owner": "Propietario",
         "minter": "Minter",
         "type": "Tipo de instrumento",
@@ -283,6 +284,7 @@
             "made_by": "Instrumento hecho por"
         },
         "Instrument": {
+            "instrument": "Instrumento",
             "current_owner": "Propietario actual",
             "you_are_not_owner": "No eres el propietario",
             "additional_images": "Imágenes adicionales",
@@ -314,6 +316,7 @@
             "ready_for_transfer": "Todo listo para transferir",
             "recipient_account": "Cuenta del destinatario",
             "transfered_to_success": "Instrumento transferido a",
+            "new_instrument_received": "recibido",
             "transfer_in_person": "Transferir en persona",
             "step_1_description": "Pide al destinatario que abra la aplicación Instruement en su teléfono. Si no la tiene, comparte un enlace directo.",
             "share_app": "Copiar enlace",
