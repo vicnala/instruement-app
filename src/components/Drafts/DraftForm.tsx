@@ -240,9 +240,7 @@ export default function DraftForm(
     }
   };
 
-  if (isLoading) {
-    return <Loading />
-  }
+  if (isLoading) return <Loading />
 
   return (
     minter ?

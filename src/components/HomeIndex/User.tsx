@@ -15,6 +15,7 @@ import FormSaveButton from '@/components/UI/FormSaveButton';
 import { OTPForm } from "@/components/UI/OtpInput";
 import { CircleCheck, Expand, Shrink, Copy, Info } from 'lucide-react';
 import { logout } from '@/actions/login';
+import Loading from '../Loading';
 
 
 export default function User(
@@ -160,6 +161,8 @@ export default function User(
   const copyToClipboard = (address: string) => {
     navigator.clipboard.writeText(address)
   }
+
+  if (isLoading) return <Loading />
 
   return (
     <Page>
