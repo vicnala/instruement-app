@@ -12,10 +12,10 @@ import {
   useActiveWallet,
   useSwitchActiveWalletChain,
   useActiveWalletChain,
-  useContractEvents
+  // useContractEvents
 } from "thirdweb/react";
 import { contract } from "./contracts";
-import { transferEvent } from "thirdweb/extensions/erc721";
+// import { transferEvent } from "thirdweb/extensions/erc721";
 import { getLuthierPermissions } from "@/lib/luthierPermissions";
 import chain from "@/lib/chain";
 
@@ -33,9 +33,9 @@ type StateContextType = {
   minter: any,
   setReloadUser: Function,
   owned: any[],
-  setOwned: Function,
-  events: any[],
-  setEventsWatch: Function
+  // setOwned: Function,
+  // events: any[],
+  // setEventsWatch: Function
 }
 
 const stateContextDefaultValues: StateContextType = {
@@ -47,9 +47,9 @@ const stateContextDefaultValues: StateContextType = {
   isVerified: false,
   setReloadUser: () => { },
   owned: [],
-  setOwned: () => { },
-  events: [],
-  setEventsWatch: () => { }
+  // setOwned: () => { },
+  // events: [],
+  // setEventsWatch: () => { }
 }
 
 const StateContext = createContext<StateContextType>(stateContextDefaultValues)
@@ -114,11 +114,11 @@ export const StateContextProvider = ({ children }: Props) => {
   const [owned, setOwned] = useState<any[]>([])
   const [eventsWatch, setEventsWatch] = useState<boolean>(false)
 
-  const contractEvents = useContractEvents({
-    contract,
-    events: [transferEvent({ to: activeAccount?.address })],
-    watch: eventsWatch,
-  });
+  // const contractEvents = useContractEvents({
+  //   contract,
+  //   events: [transferEvent({ to: activeAccount?.address })],
+  //   watch: eventsWatch,
+  // });
 
   useEffect(() => {
     if (eventsWatch) {
@@ -177,9 +177,9 @@ export const StateContextProvider = ({ children }: Props) => {
         isLoading: isLoading && (contract ? true : false),
         setReloadUser,
         owned,
-        setOwned,
-        events: contractEvents.data ? contractEvents.data : [],
-        setEventsWatch
+        // setOwned,
+        // events: contractEvents.data ? contractEvents.data : [],
+        // setEventsWatch
       }}
     >
       {children}
