@@ -8,6 +8,7 @@ import Section from "@/components/Section";
 import { CustomConnectButton } from "../CustomConnectButton";
 import { useEffect, useState } from "react";
 import { useActiveAccount } from "thirdweb/react";
+import NotConnected from "@/components/NotConnected";
 // import { useRouter } from "@/i18n/routing";
 
 export default function User(
@@ -34,9 +35,7 @@ export default function User(
                     document.location.replace(`/instrument/${instrument.id}`);
                     // router.replace(`/instrument/${instrument.id}`);
                 }
-            } catch (error) {
-                console.log('User.getUserTokens', error);
-            }
+            } catch (error) { console.log('User.getUserTokens', error); }
         }
 
         const interval = setInterval(() => {
@@ -44,12 +43,8 @@ export default function User(
             if (svg?.length > 0) {
                 for (let i = 0; i < svg.length; i++) {
                     if (svg[i].getAttribute('width') === '310' && svg[i].getAttribute('height') === '310') {
-                        if (!timeout) {
-                            _setTimeout(setTimeout(() => clearInterval(interval), 600000));
-                        }
-                        if (activeAccount) {
-                            getUserTokens();
-                        }
+                        if (!timeout) _setTimeout(setTimeout(() => clearInterval(interval), 600000));
+                        if (activeAccount) getUserTokens();
                     }
                 }
             }
@@ -62,6 +57,8 @@ export default function User(
     }, []);
 
     if (isLoading) return <Loading />
+
+    if (!activeAccount) return <NotConnected locale={locale} />
 
     return (
         <div id='target-element-id'>

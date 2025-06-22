@@ -7,25 +7,65 @@ import Section from "@/components/Section";
 import ButtonSpinner from '@/components/UI/ButtonSpinner';
 import { CustomConnectButton } from "../CustomConnectButton";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import Loading from "@/components/Loading";
+import NotConnected from "@/components/NotConnected";
+import { useActiveAccount } from "thirdweb/react";
 
 export default function Minter(
     { locale }: Readonly<{ locale: string }>
 ) {
     const t = useTranslations('components.Account.Minter');
-    const { address, isMinter, isLuthier, isVerified, isLoading, minter } = useStateContext();
+    const tInstrument = useTranslations('components.Instrument');
+    const { isMinter, isLuthier, isVerified, isLoading, minter, owned, setReloadUser } = useStateContext();
+    const activeAccount = useActiveAccount();
+    const [timeout, _setTimeout] = useState<any>(null);
 
     let minterConstructionSkills = [];
     if (minter && minter.skills && minter.skills.length) {
         minterConstructionSkills = minter.skills.filter((skill: any) => skill.slug.includes('construction'));
     }
 
-    if (isLoading) return (
-        <Page>
-            <div className="flex justify-center items-center h-full">
-                <ButtonSpinner />
-            </div>
-        </Page>
-    );
+
+    useEffect(() => {
+        const getUserTokens = async () => {
+            try {
+                const result = await fetch(`/api/tokens/${activeAccount?.address}`, { cache: 'no-store' });
+                const data = await result.json();
+                if (data.length > owned.length) {
+                    const newInstrument = data.find((instrument: any) => !owned.includes(instrument.id));
+                    const { metadata: instrument } = newInstrument;
+                    clearTimeout(timeout);
+                    clearInterval(interval);
+                    alert(`${tInstrument("instrument")} #${instrument.id} "${instrument.name}" ${tInstrument("new_instrument_received")}`);
+                    setReloadUser(true);
+                    document.location.replace(`/instrument/${instrument.id}`);
+                    // router.replace(`/instrument/${instrument.id}`);
+                }
+            } catch (error) { console.log('User.getUserTokens', error); }
+        }
+
+        const interval = setInterval(() => {
+            const svg = document.getElementsByTagName('svg');
+            if (svg?.length > 0) {
+                for (let i = 0; i < svg.length; i++) {
+                    if (svg[i].getAttribute('width') === '310' && svg[i].getAttribute('height') === '310') {
+                        if (!timeout) _setTimeout(setTimeout(() => clearInterval(interval), 600000));
+                        if (activeAccount) getUserTokens();
+                    }
+                }
+            }
+        }, 5000);
+
+        return () => {
+            clearTimeout(timeout);
+            clearInterval(interval);
+        };
+    }, []);
+
+    if (isLoading) return <Loading />
+    
+    if (!activeAccount) return <NotConnected locale={locale} />
 
     return (
         <Page>
@@ -169,15 +209,15 @@ export default function Minter(
                                     <div className="flex items-center gap-2">
                                         <input
                                             type="text"
-                                            value={address || "No wallet address available"}
+                                            value={activeAccount?.address || "No wallet address available"}
                                             disabled
                                             className="bg-gray-100 text-gray-600 p-2 rounded-md w-full"
                                             aria-label="Wallet address"
                                         />
                                         <button
                                             onClick={() => {
-                                                if (address) {
-                                                    navigator.clipboard.writeText(address);
+                                                if (activeAccount?.address) {
+                                                    navigator.clipboard.writeText(activeAccount?.address);
                                                     const icon = document.querySelector('#copy-icon');
                                                     if (icon) {
                                                         icon.classList.remove('text-gray-600');
@@ -190,7 +230,7 @@ export default function Minter(
                                                 }
                                             }}
                                             className="p-2 text-gray-600 hover:text-gray-800 disabled:opacity-50"
-                                            disabled={!address}
+                                            disabled={!activeAccount?.address}
                                             aria-label="Copy wallet address"
                                         >
                                             <svg id="copy-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
