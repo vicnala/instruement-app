@@ -8,7 +8,7 @@ import Section from "@/components/Section";
 import { CustomConnectButton } from "../CustomConnectButton";
 import { useEffect, useState } from "react";
 import { useActiveAccount } from "thirdweb/react";
-import { useRouter } from "@/i18n/routing";
+// import { useRouter } from "@/i18n/routing";
 
 export default function User(
     { locale }: Readonly<{ locale: string }>
@@ -17,7 +17,7 @@ export default function User(
     const { isLoading, owned, setReloadUser } = useStateContext()
     const activeAccount = useActiveAccount();
     const [timeout, _setTimeout] = useState<any>(null);
-    const router = useRouter();
+    // const router = useRouter();
 
     useEffect(() => {
         const getUserTokens = async () => {

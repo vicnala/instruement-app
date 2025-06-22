@@ -405,9 +405,9 @@ export default function Instrument(
 		return <Loading />;
 	}
 
-	if (!address) {
-		return <NotConnected locale={locale} />;
-	}
+	// if (!address) {
+	// 	return <NotConnected locale={locale} />;
+	// }
 
 	return (
 		<Page>
