@@ -724,6 +724,7 @@ export default function Instrument(
 											{tInstrument('transfer_options_title')}
 										</h3>
 										<div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-6">
+											{ !showRemoteSteps &&
 											<div className="flex gap-6">
 												<div className="flex flex-col gap-2 text-center">
 													<div className="flex flex-col items-center">
@@ -810,6 +811,8 @@ export default function Instrument(
 													</div>
 												</div>
 											</div>
+											}
+											{ !showInPersonSteps &&
 											<div className="flex gap-6">
 												<div className="flex flex-col gap-2 text-center">
 													<div className="flex flex-col items-center">
@@ -881,6 +884,7 @@ export default function Instrument(
 													</div>
 												</div>
 											</div>
+											}
 										</div>
 										{/* Transaction Button */}
 										{contract && address && isOwner && (to || scannedResult) && !hasActiveValidationAttempt(searchParams) && (
