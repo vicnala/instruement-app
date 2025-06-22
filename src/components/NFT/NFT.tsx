@@ -4,6 +4,7 @@ import { MediaRenderer } from "thirdweb/react";
 import Skeleton from "@/components/Skeleton";
 import { useRouter } from "@/i18n/routing";
 import { client } from "@/app/client";
+import { Eye } from "lucide-react";
 
 type Props = {
   nft: {
@@ -42,6 +43,9 @@ export default function NFTComponent({
             className="w-full h-full"
           />
         )}
+        <div className="sm:hidden absolute top-2 right-2 p-3 bg-black/50 rounded-full hover:bg-black/70 transition-all">
+          <Eye className="w-4 h-4 text-white" />
+        </div>
       </div>
       <div className="flex items-center justify-between flex-1 w-full px-3">
         <div className="flex flex-col justify-center py-3">
