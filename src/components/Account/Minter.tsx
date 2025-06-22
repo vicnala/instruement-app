@@ -4,7 +4,6 @@ import { useTranslations } from "next-intl";
 import { useStateContext } from "@/app/context";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
-import ButtonSpinner from '@/components/UI/ButtonSpinner';
 import { CustomConnectButton } from "../CustomConnectButton";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -32,15 +31,30 @@ export default function Minter(
             try {
                 const result = await fetch(`/api/tokens/${activeAccount?.address}`, { cache: 'no-store' });
                 const data = await result.json();
+                
                 if (data.length > owned.length) {
-                    const newInstrument = data.find((instrument: any) => !owned.includes(instrument.id));
-                    const { metadata: instrument } = newInstrument;
-                    clearTimeout(timeout);
-                    clearInterval(interval);
-                    alert(`${tInstrument("instrument")} #${instrument.id} "${instrument.name}" ${tInstrument("new_instrument_received")}`);
-                    setReloadUser(true);
-                    document.location.replace(`/instrument/${instrument.id}`);
-                    // router.replace(`/instrument/${instrument.id}`);
+                    const newInstrument = data.find((instrument: any) => {
+                        // Check if this instrument's metadata.id is not in the owned array
+                        return !owned.some((ownedId: any) => {
+                            // Handle both cases: owned might be an array of strings (ids) or objects with metadata.id
+                            if (typeof ownedId === 'string') {
+                                return ownedId === instrument.metadata.id;
+                            } else if (ownedId && typeof ownedId === 'object' && ownedId.metadata) {
+                                return ownedId.metadata.id === instrument.metadata.id;
+                            }
+                            return false;
+                        });
+                    });
+                    
+                    if (newInstrument) {
+                        const { metadata: instrument } = newInstrument;
+                        clearTimeout(timeout);
+                        clearInterval(interval);
+                        alert(`${tInstrument("instrument")} #${instrument.id} "${instrument.name}" ${tInstrument("new_instrument_received")}`);
+                        setReloadUser(true);
+                        document.location.replace(`/instrument/${instrument.id}`);
+                        // router.replace(`/instrument/${instrument.id}`);
+                    }
                 }
             } catch (error) { console.log('User.getUserTokens', error); }
         }
