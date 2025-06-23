@@ -8,15 +8,18 @@ import { ModeToggle } from "./ModeToggle";
 import { useStateContext } from "@/app/context";
 import { ButtonLink } from "@/components/UI/ButtonLink";
 import { House, User } from "lucide-react";
+import { CustomConnectButton } from "./CustomConnectButton";
+import { useActiveAccount } from "thirdweb/react";
 
 
 export function Header() {
   const t = useTranslations('components.Header');
-  const { address, isMinter } = useStateContext()
-  const pathname = usePathname();
+  const { isMinter } = useStateContext();
+  const activeAccount = useActiveAccount();
+  const pathname = usePathname();  
 
   return (
-    <div className={`z-50 ${address ? 'hidden sm:block' : ''}`}>
+    <div className={`z-50 ${activeAccount?.address ? 'hidden sm:block' : ''}`}>
       <div className='w-full'>
         <header className='bg-canvas px-safe dark:bg-contrast'>
           <div className='mx-auto flex flex-row min-h-[10vh] max-w-screen-lg items-center justify-between px-3.5'>
@@ -47,7 +50,7 @@ export function Header() {
                 </ButtonLink>
               }
               {
-                address &&
+                activeAccount?.address &&
                 <div className='hidden sm:block'>
                   <div className='flex items-center space-x-6'>
                     <Link key="my-instruments" href="/account">
@@ -62,10 +65,14 @@ export function Header() {
                 </div>
               }
               {
-                address && ( pathname === '/account' || pathname.startsWith('/instrument') || pathname.startsWith('/drafts')) &&
+                activeAccount?.address && ( pathname === '/account' || pathname.startsWith('/instrument') || pathname.startsWith('/drafts')) &&
                 <Link href="/" className={`${pathname === '/' ? 'text-it-400 dark:text-white' : 'text-gray-500 hover:text-it-400 dark:text-gray-600 dark:hover:text-it-100'}`}>
                   <House className="w-5 h-5" />
                 </Link>
+              }
+              {
+                !activeAccount?.address && pathname.startsWith('/instrument') &&
+                <div className="hidden"> <CustomConnectButton /> </div>
               }
               {
                 process.env.NODE_ENV === 'development' && <ModeToggle />
