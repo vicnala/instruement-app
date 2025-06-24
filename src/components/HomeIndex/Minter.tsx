@@ -34,39 +34,37 @@ export default function Minter(
   // Main content when user is connected
   return (
     <Page>
-      <Section>
-        <DraftGrid locale={locale} />
-      </Section>
-      <Section>
-        {
-          !owned?.length &&
-          <div className="flex flex-row flex-wrap gap-6">
-            <div className="flex object-cover aspect-3/2 flex-[2] min-w-[300px] rounded-[15px] overflow-hidden">
-              <iframe 
-                className="w-full h-full aspect-video object-contain" 
-                src={videoUrl}
-                title={t('hello')} 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowFullScreen
-              />
+      <DraftGrid locale={locale} />
+      {
+        !owned?.length ?
+        <Section>
+          {
+            !owned?.length &&
+            <div className="flex flex-row flex-wrap gap-6">
+              <div className="flex object-cover aspect-3/2 flex-[2] min-w-[300px] rounded-[15px] overflow-hidden">
+                <iframe 
+                  className="w-full h-full aspect-video object-contain" 
+                  src={videoUrl}
+                  title={t('hello')} 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowFullScreen
+                />
+              </div>
+              <div className="flex flex-col gap-2 justify-center flex-[1] min-w-[30ch]">
+                <h2 className="text-3xl font-semibold text-gray-900 dark:text-gray-100">
+                  {minter.first_name},
+                </h2>
+                <p className="mb-4 text-lg">
+                  {t('hello_sub')}
+                </p>
+              </div>
             </div>
-            <div className="flex flex-col gap-2 justify-center flex-[1] min-w-[30ch]">
-              <h2 className="text-3xl font-semibold text-gray-900 dark:text-gray-100">
-                {minter.first_name},
-              </h2>
-              <p className="mb-4 text-lg">
-                {t('hello_sub')}
-              </p>
-            </div>
-          </div>
-        }
-      </Section>
-      <Section>
-        {
-          owned?.length > 0 &&
-            <NFTGrid nftData={owned} />
-        }
-      </Section>
+          }
+        </Section> : 
+        <Section>
+          <NFTGrid nftData={owned} />
+        </Section>
+      }
     </Page>
   );
 }

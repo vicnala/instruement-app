@@ -693,7 +693,10 @@ export default function Instrument(
 						</div>
 					</div>
 
-					<Divider color="bg-gray-50" spacing="lg" />
+					{
+						isOwner &&
+						<Divider color="bg-gray-50" spacing="lg" />
+					}
 
 					<div className={`mt-6 space-y-4 ${showTransferOptions ? 'min-h-screen' : ''}`}>
 						{/* Transfer Management Section */}
