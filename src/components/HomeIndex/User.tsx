@@ -2,19 +2,17 @@
 
 import { useRef, useState, useEffect } from 'react'
 import { useTranslations } from "next-intl";
-import { QRCodeCanvas } from 'qrcode.react'
 import Page from "@/components/Page";
 import Section from "@/components/Section";
-import Modal from "@/components/Modal/Modal";
-import { useModal } from "@/components/Modal/useModal";
 import { useStateContext } from '@/app/context';
 import NFTGrid from '@/components/NFT/NFTGrid';
 import NotConnected from '../NotConnected';
 import FormSaveButton from '@/components/UI/FormSaveButton';
 import { OTPForm } from "@/components/UI/OtpInput";
-import { CircleCheck, Expand, Shrink, Copy, Info } from 'lucide-react';
+import { CircleCheck } from 'lucide-react';
 import { logout } from '@/actions/login';
 import Loading from '../Loading';
+import ButtonQrTransfer from "../UI/ButtonQrTransfer";
 
 
 export default function User(
@@ -22,7 +20,6 @@ export default function User(
 ) {
   const t = useTranslations('components.HomeIndex.User');
   const { address, owned, isLoading, setReloadUser } = useStateContext()
-  const { isModalOpen, modalContent, openModal, closeModal } = useModal()
   const [showForm, setShowForm] = useState(false)
   const [email, setEmail] = useState<string>('')
   const [isValidEmail, setIsValidEmail] = useState(false)
@@ -36,7 +33,7 @@ export default function User(
   const otpRef = useRef<HTMLInputElement>(null)
   const emailButtonRef = useRef<HTMLButtonElement>(null)
   const otpButtonRef = useRef<HTMLButtonElement>(null)
-  const [isExpanded, setIsExpanded] = useState(false)
+
   // Focus on OTP input when otpOk becomes true
   useEffect(() => {
     // No need for manual focus as we're using autoFocus prop
@@ -64,13 +61,6 @@ export default function User(
     setEmail(newEmail)
     setIsValidEmail(validateEmail(newEmail))
   }
-
-  // // Handle OTP change
-  // const handleOTPChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const newOTP = e.target.value
-  //   setOTP(newOTP)
-  //   setIsValidOTP(validateOTP(newOTP))
-  // }
 
   // Handle OTP change
   const handleOTPChange = (value: string) => {
@@ -145,22 +135,6 @@ export default function User(
     }
   }
 
-  const openShareScreen = (address: String) => {
-    try {
-      navigator.share({
-        title: 'Instruement',
-        text: `mailto:?subject=send_registration_request&body=${address}`,
-        url: 'https://app.instruement.com'
-      })
-    } catch (error) {
-      console.error('Error sharing:', error)
-    }
-  }
-
-  const copyToClipboard = (address: string) => {
-    navigator.clipboard.writeText(address)
-  }
-
   if (isLoading) return <Loading />
 
   if (!address) return <NotConnected locale={locale} />
@@ -175,79 +149,19 @@ export default function User(
                 <NFTGrid nftData={owned} />
               </div> :
               <>
-                <div className='p-6 rounded-[15px] mb-4 md:mb-6 border border-it-100 dark:border-it-800 bg-it-50 dark:bg-gray-950'>
+                <div className='p-6 rounded-[15px] mb-4 md:mb-6 border border-it-100 dark:border-gray-900 bg-it-50 dark:bg-gray-950'>
                   <div className="grid grid-cols-1 items-center md:grid-cols-2 gap-6">
                     <div>
                       <h2 className='text-4xl font-bold text-contrast dark:text-it-200 mb-2'>
                         {t('no_instruments')}
                       </h2>
                       <p className="text-md mb-4 text-base text-gray-900 dark:text-gray-300">
-                        {t('no_instruments_sub.qr')}
+                        {t('no_instruments_sub')}
                       </p>
                     </div>
                     <div>
                       <div className="flex items-center justify-center">
-                        <div>
-                          <div className="p-4 rounded-xl bg-white border border-gray-50">
-                            <div className={`flex justify-between items-center ${isExpanded ? 'flex-col gap-4' : 'gap-2'}`}>
-                              <button
-                                className={`grow bg-transparent transition-all duration-300 ease-in-out leading-[1.5]`}
-                              >
-                                <QRCodeCanvas
-                                  value={address || ''}
-                                  size={isExpanded ? 250 : 60}
-                                  bgColor="#ffffff"
-                                  fgColor="#070605"
-                                />
-                              </button>
-                              <div className="flex gap-2">
-                                <div className="leading-none">
-                                    <button 
-                                      onClick={() => setIsExpanded(!isExpanded)}
-                                      className="p-1"
-                                      title={t('qr.press_to_expand_shrink')}
-                                    >
-                                      {isExpanded ? <Shrink className="text-gray-500 h-6 w-6" /> : <Expand className="text-gray-500 h-6 w-6" />}
-                                    </button>
-                                </div>
-                                <div className="leading-none">
-                                    <button 
-                                      onClick={() => copyToClipboard(address || '')}
-                                      className="p-1"
-                                      title={t('share.copy_to_clipboard')}
-                                    >
-                                      <Copy className="text-gray-500 h-6 w-6" />
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex justify-left mt-4">
-                            <div className="flex flex-col space-y-2">
-                              <button
-                                onClick={() => openModal({
-                                  title: t('modals.share_account_what.title'),
-                                  description: t('modals.share_account_what.description')
-                                })}
-                                className="text-it-400 hover:text-contrast dark:text-it-400 text-sm flex items-center"
-                              >
-                                <Info className="h-5 w-5 mr-1" />
-                                {t('modals.share_account_what.preview')}
-                              </button>
-                              
-                              <button
-                                onClick={() => openModal({
-                                  title: t('modals.share_account_how.title'),
-                                  description: t('modals.share_account_how.description')
-                                })}
-                                className="text-it-400 hover:text-contrast dark:text-it-400 text-sm flex items-center"
-                              >
-                                <Info className="h-5 w-5 mr-1" />
-                                {t('modals.share_account_how.preview')}
-                              </button>
-                            </div>
-                          </div>
-                        </div>
+                        <ButtonQrTransfer address={address} locale={locale} />
                       </div>
                     </div>
                   </div>
@@ -269,7 +183,7 @@ export default function User(
                           <div className="px-1 mt-2 sm:mt-0 flex justify-center">
                             <button
                               onClick={toggleFormVisibility}
-                              className="inline-flex items-center text-me-1000 hover:text-me-1000 dark:text-me-200 dark:hover:text-me-1000   bg-transparent hover:bg-me-400 border-2 border-me-400 font-bold py-2 px-4 rounded-md text-base"
+                              className="inline-flex items-center text-me-1000 hover:text-me-1000 dark:text-me-200 dark:hover:text-me-1000   bg-transparent hover:bg-me-400 border-[0.1rem] border-me-400 font-bold py-2 px-4 rounded-md text-base"
                             >
                               {t('luthier.confirm_invitation_do')}
                             </button>
@@ -370,7 +284,6 @@ export default function User(
                     </div>
                   </div>
                 </div>
-                <Modal isOpen={isModalOpen} content={modalContent} onClose={closeModal} />
               </>
           }
         </div>

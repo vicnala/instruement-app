@@ -1,109 +1,4 @@
 {
-    "connect_wallet": "Por favor, conecta tu wallet",
-    "switch_network": "Cambiar de red",
-    "wrong": "Algo ha ido mal",
-    "loading": "Cargando",
-    "what_will_happen": "¿Qué ocurrirá?",
-    "more_info": "Más información",
-    "or": "o",
-    "to": "a",
-    "find_luthier": "Encuentra un luthier ➡️",
-    "invite_luthier": "Invite your luthier ➡️",
-    "luthier_verification_request": "Enviar solicitud",
-    "transfer_property": "Transferir el Instrumento",
-    "qr_scan": "Escanear dirección QR",
-    "copy_to_clipboard": "Copiar al portapapeles",
-    "user" : {
-        "address": "Wallet del usuario",
-        "not_minter": "No dispones del rol requerido"
-    },
-    "account": {
-        "minter_account": "Luthier verificado para registrar:",
-        "verified_luthier": "Luthier verificado",
-        "not_verified_luthier": "Luthier no verificado"
-    },
-    "modals" : {
-        "add_to_home_screen" : {
-            "preview": "",
-            "title" : "Añade Instruement a tu pantalla de inicio",
-            "description": "Toca el icono de compartir del navegador web y selecciona la opción de “Añadir a la pantalla de inicio”."
-        },
-        "request_to_luthier" : {
-            "title" : "Sobre enviar una solicitud a tu luthier",
-            "description": "When you send a request, the share screen will open for you to send a message through your prefered messaging app."
-        },
-        "share_account_what": {
-            "preview": "¿Que es mi número de cuenta?",
-            "title": "Número de cuenta",
-            "description": "El número de cuenta es un identificador único que se creó automáticamente cuando abriste tu cuenta. Este número te permite recibir registros de instrumentos de manera segura, ya que solo sirve para transferencias entrantes. Puedes compartirlo con luthiers y otros usuarios para recibir registros de instrumentos en tu cuenta. Una vez que un registro se transfiere a tu cuenta usando este número, serás la única persona propietaria de ese registro."
-        },
-        "share_account_how": {
-            "preview": "¿Cómo puedes compartirlo?",
-            "title": "Como puedes compartes tu número de cuenta",
-            "description": "Idealmente, usarás el canal de mensajería que ya estableciste con la otra parte. Puede ser, por ejemplo, email o cualquier aplicación de chat o red social. Si usas tu teléfono móvil, tienes la opción de mostrar un código QR que el o la luthier escaneará para obtener tu número de cuenta."
-        },
-        "membership" : { "title": "About your membership", "description": "A brief description about your membership." },
-        "register_instrument" : { "title": "About Registering an instrument", "description": "A brief description about registering an instrument." },
-        "invite_to_instrument" : { "title": "Invite to join Instruement", "description": "A brief description about sending inviting to the instruement platform." },
-        "apply_for_verification" : { "title": "About applying for verification", "description": "You can apply for being a verified Luthier by filling out a form." },
-        "invite_your_luthier" : { "title": "Invite your luthier to join Instruement", "description": "A brief description about sending inviting to the instruement platform." }
-    },
-    "instrument": {
-        "instrument": "Instrumento",
-        "owner": "Propietario",
-        "minter": "Minter",
-        "type": "Tipo de instrumento",
-        "type_helper": "Contacta con nosotros si no encuentras el tipo de instrumento en la lista",
-        "type_error": "Por favor, selecciona el tipo de instrumento",
-        "type_placeholder": "Tipo de instrumento",
-        "date": "Año de fabricación",
-        "date_helper": "El año de fabricación del instrumento",
-        "date_error": "Por favor introduce el año de fabricación",
-        "name": "Denominación del instrumento",
-        "name_helper": "Un nombre personalizado para el instrumento",
-        "name_error": "Por favor, introduce la denominación del instrumento",
-        "description": "Descripción del instrumento",
-        "description_helper": "Una descripción del instrumento con todos los detalles contra la falsificación",
-        "description_error": "Por favor, introduce la descripción del instrumento",
-        "image": "Imagen principal",
-        "image_helper": "Selecciona la imagen principal",
-        "images": "Imágenes en formato",
-        "images_helper": "Añade 2-10 imágenes adicionales que detallen el instrumento.",
-        "images_error": "Por favor, añade al menos dos y no más de diez imágenes",
-        "image_error": "Una imagen es requerida",
-        "images_description_placeholder": "Añade una descripción para esta imagen",
-        "select_detail_image": "Añade imágenes",
-        "document": "Documento",
-        "files": "Archivos en formato",
-        "files_description_placeholder": "Añade una descripción para este documento",
-        "select_detail_files": "Añade documentos",
-        "traits": {
-            "Description": "Descripción",
-            "Certificates": "Certificados",
-            "Registration": "Registro",
-            "Creator": "Creador",
-            "Type": "Tipo",
-            "Category": "Categoría",
-            "Date": "Fecha",
-            "Image": "Imágenes",
-            "Certificates404": "Los certificados no están disponibles aún."
-        }
-    },
-    "navbar": {
-        "account": "Mi cuenta",
-        "title": "Instruement",
-        "home": "Inicio",
-        "my_instruments": "Instrumentos",
-        "request": "Solicitar",
-        "registration": "Registro",
-        "certification": "Certificado",
-        "register": "Registrar",
-        "certify": "Certificar",
-        "connect": "Inicia sesión",
-        "my_subscription": "Suscripción",
-        "drafts": "Borradores",
-        "new_draft": "Nuevo Borrador"
-    },
     "request": {
         "send": "Envía una solicitud",
         "registration": {
@@ -180,6 +75,10 @@
     "common": {},
     "pages": {},
     "components": {
+        "Loading": "Cargando",
+        "CustomConnectButton": {
+            "switch_network": "Cambiar de red"
+        },
         "Header": {
             "new_instrument": "Registrar instrumento",
             "account": "Cuenta"
@@ -385,34 +284,23 @@
                     "title": "Previsualizar",
                     "description": "Revisar y registrar"
                 }
+            },
+            "ButtonQrTransfer": {
+                "show_qr": "Mostrar código QR",
+                "awaiting_transfer": "Esperando transferencia",
+                "modals": {
+                    "share_account_what": {
+                        "title": "Número de cuenta",
+                        "preview": "Más información",
+                        "description": "El código QR contiene tu número de cuenta. Este número te permite recibir registros de instrumentos de manera segura, ya que solo sirve para transferencias entrantes. Puedes compartirlo con luthiers y otros usuarios para recibir instrumentos registrados en tu cuenta. Una vez que un registro se transfiere a tu cuenta, serás la única persona propietaria de ese registro."
+                    }
+                }
             }
         },
         "HomeIndex": {
             "User": {
-                "no_instruments": "Obtén tu primer instrumento registrado",
-                "no_instruments_sub": {
-                    "qr": "Presenta el código QR a tu luthier en persona, o copia y comparte la dirección de tu cuenta.",
-                    "mailto": "Comparte tu número de cuenta con tu luthier."
-                },
-                "qr": {
-                    "press_to_share": "Pulsa para compartir",
-                    "press_to_expand_shrink": "Pulsa para expandir/contraer"
-                },
-                "share": {
-                    "copy_to_clipboard": "Copiar al portapapeles"
-                },
-                "modals": {
-                    "share_account_what": {
-                        "title": "Tu número de cuenta",
-                        "preview": "¿Qué es mi número de cuenta?",
-                        "description": "El número de cuenta es un identificador único que se creó automáticamente cuando abriste tu cuenta. Este número te permite recibir registros de instrumentos de manera segura, ya que solo sirve para transferencias entrantes. Puedes compartirlo con luthiers y otros usuarios para recibir instrumentos registrados en tu cuenta. Una vez que un registro se transfiere a tu cuenta usando este número, serás la única persona propietaria de ese registro."
-                    },
-                    "share_account_how": {
-                        "title": "Cómo puedes compartir tu número de cuenta",
-                        "preview": "¿Cómo puedo compartirlo?",
-                        "description": "Idealmente usarás el canal de mensajería que ya tienes establecido con la otra parte. Puede ser, por ejemplo, email o cualquier aplicación de chat o red social. Si usas tu teléfono móvil, tienes la opción de mostrar un código QR que el o la luthier escaneará para obtener tu número de cuenta."
-                    }
-                },
+                "no_instruments": "Recibe tu instrumento registrado",
+                "no_instruments_sub": "Presenta el código QR a tu luthier.",
                 "luthier": {
                     "title": "¿Eres luthier?",
                     "description": "Estamos incorporando nuevos luthiers por invitación. Procede a confirmar el email donde recibiste tu invitación.",
@@ -457,6 +345,10 @@
             "account": "Cuenta"
         },
         "Account": {
+            "User": {
+                "title": "Tu cuenta",
+                "received_instrument": "\"{name}\" ha sido recibido."
+            },
             "Minter": {
                 "verfied_since": "Verificado desde",
                 "instrument_type_specialization": "Especialización",

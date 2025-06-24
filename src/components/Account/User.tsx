@@ -13,7 +13,7 @@ import NotConnected from "@/components/NotConnected";
 export default function User(
     { locale }: Readonly<{ locale: string }>
 ) {
-    const t = useTranslations();
+    const t = useTranslations('components.Account.User');
     const { isLoading, owned, setReloadUser } = useStateContext()
     const activeAccount = useActiveAccount();
     const [timeout, _setTimeout] = useState<any>(null);
@@ -42,7 +42,7 @@ export default function User(
                         const { metadata: instrument } = newInstrument;
                         clearTimeout(timeout);
                         clearInterval(interval);
-                        alert(`${t("components.Instrument.instrument")} #${instrument.id} "${instrument.name}" ${t("components.Instrument.new_instrument_received")}`);
+                        alert(t("received_instrument", { name: instrument.name }));
                         setReloadUser(true);
                         document.location.replace(`/instrument/${instrument.id}`);
                         // router.replace(`/instrument/${instrument.id}`);
@@ -78,7 +78,7 @@ export default function User(
             <Page>
                 <Section>
                     <h2 className='text-2xl text-center font-bold text-black dark:text-white'>
-                        {t('navbar.account')}
+                        {t('title')}
                     </h2>
                 </Section>
                 <Section>

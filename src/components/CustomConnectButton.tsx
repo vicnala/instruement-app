@@ -27,7 +27,7 @@ export const CustomConnectButton = (
       locale={locale.includes('en') ? 'en_US' : locale.includes('es') ? 'es_ES' : 'en_US'}
       chain={chain}
       switchButton={{
-        label: t('switch_network')
+        label: t('components.CustomConnectButton.switch_network')
       }}
       autoConnect={true}
       accountAbstraction={{ chain: chain, sponsorGas: true }}
