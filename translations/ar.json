@@ -1,110 +1,4 @@
 {
-    "connect_wallet": "Please, connect your wallet",
-    "switch_network": "Switch network",
-    "wrong": "Something went wrong",
-    "loading": "Loading",
-    "what_will_happen": "What will happen?",
-    "more_info": "More info",
-    "or": "or",
-    "to": "to",
-    "find_luthier": "Find a luthier ➡️",
-    "invite_luthier": "Invite your luthier ➡️",
-    "luthier_verification_request": "Apply for verification",
-    "transfer_property": "Transfer Instrument Ownership",
-    "qr_scan": "Scan QR Address",
-    "copy_to_clipboard": "Copy to clipboard",
-    "user" : {
-        "address": "User address",
-        "not_minter": "You do not have the required role"
-    },
-    "account": {
-        "minter_account": "Verified luthier for registraton of:",
-        "verified_luthier": "Verified luthier",
-        "not_verified_luthier": "Not verified luthier"
-    },
-    "modals" : {
-        "add_to_home_screen" : {
-            "preview": "",
-            "title" : "Add Instruement to your home screen",
-            "description": "Tap the share icon of your web browser and select the \"Add to home screen\" option."
-        },
-        "request_to_luthier" : {
-            "preview": "",
-            "title" : "About your account and sharing it with a luthier",
-            "description": "Your account is represented by a number starting with \"0x\" and you can share it openly without any risk. For you to receive the registration of an instrument the sender – in this case your luthier –  needs your account number. Share it through your prefered communication channel like mail or chat."
-        },
-        "share_account_what": {
-            "preview": "What is my account number?",
-            "title": "Your Account Number",
-            "description": "The account number is a unique identifier that was automatically created when you opened your account. This number allows you to receive instrument registrations securely, as it only works for incoming transfers. You can share it with luthiers and other users to receive instrument registrations in your account. Once a registration is transferred to your account using this number, you will be the sole owner of that registration."
-        },
-        "share_account_how": {
-            "preview": "How can I share it?",
-            "title": "How to share your account number",
-            "description": "Ideally you will use the messaging channel your already established with the other party. It can be f.e. email or any chat app or social network. If you use your mobile phone, you have the option to show a QR code which the Luthier will scan to obtain your account number."
-        },
-        "membership" : { "title": "About your membership", "description": "A brief description about your membership." },
-        "register_instrument" : { "title": "About Registering an instrument", "description": "A brief description about registering an instrument." },
-        "invite_to_instrument" : { "title": "Invite to join Instruement", "description": "A brief description about sending inviting to the instruement platform." },
-        "apply_for_verification" : { "title": "About applying for verification", "description": "You can apply for being a verified Luthier by filling out a form." },
-        "invite_your_luthier" : { "title": "Invite your luthier to join Instruement", "description": "A brief description about sending inviting to the instruement platform." }
-    },
-    "instrument": {
-        "instrument": "Instrument",
-        "owner": "Owner",
-        "minter": "Minter",
-        "type": "Instrument type",
-        "type_helper": "Contact us if you can't find your instrument in the list",
-        "type_error": "Please enter one type",
-        "type_placeholder": "Instrument type",
-        "date": "Year of manufacture",
-        "date_helper": "Manufacture yer of the instrument",
-        "date_error": "Please enter the instrument fabrication year",
-        "name": "Instrument name",
-        "name_helper": "A descriptive, personal honey name of the instrument",
-        "name_error": "Please enter the instrument demomination",
-        "description": "Instrument description",
-        "description_helper": "A description of the instrument with all the anti-counterfeiting details",
-        "description_error": "Please enter the instrument description",
-        "image": "Primary image",
-        "image_helper": "Select the primary image",
-        "images": "Images with format",
-        "images_helper": "Add 2-10 additional images detailing the instrument",
-        "images_error": "Please add at least two and no more that ten images",
-        "image_error": "Please upload an image of the instrument",
-        "images_description_placeholder": "Add a description for this image",
-        "select_detail_image": "Add images",
-        "document": "Document",
-        "files": "Files with format",
-        "files_description_placeholder": "Add a description for this file",
-        "select_detail_files": "Add documents",
-        "traits": {
-            "Description": "Description",
-            "Certificates": "Certificates",
-            "Registration": "Registration",
-            "Creator": "Creator",
-            "Type": "Type",
-            "Category": "Category",
-            "Date": "Date",
-            "Image": "Images",
-            "Certificates404": "Cetificates are not available yet."
-        }
-    },
-    "navbar": {
-        "account": "Account",
-        "title": "Instruement",
-        "home": "Home",
-        "my_instruments": "Instruments",
-        "request": "Request",
-        "registration": "Registration",
-        "certification": "Certification",
-        "register": "Register",
-        "certify": "Certify",
-        "connect": "Login now",
-        "my_subscription": "Subscription",
-        "drafts": "Drafts",
-        "new_draft": "New Draft"
-    },
     "request": {
         "send": "Send a request now",
         "registration": {
@@ -175,6 +69,10 @@
     "common": {},
     "pages": {},
     "components": {
+        "Loading": "Loading",
+        "CustomConnectButton": {
+            "switch_network": "witch network"
+        },
         "Header": {
             "new_instrument": "Register Instrument",
             "account": "Account"
@@ -379,34 +277,23 @@
                     "title": "Preview",
                     "description": "Review and register"
                 }
+            },
+            "ButtonQrTransfer": {
+                "show_qr": "Show QR code",
+                "awaiting_transfer": "Awaiting transfer",
+                "modals": {
+                    "share_account_what": {
+                        "preview": "More info",
+                        "title": "Account Number",
+                        "description": "The QR code contains your account number. This number allows you to receive instrument registrations securely, as it only works for incoming transfers. You can share it with luthiers and other users to receive registered instruments in your account. Once a registration is transferred to your account, you will be the sole owner of that registration."
+                    }
+                }
             }
         },
         "HomeIndex": {
             "User": {
-                "no_instruments": "Get your first registered instrument",
-                "no_instruments_sub": {
-                    "qr": "Present the QR code to your luthier in person, or copy and share the account address.",
-                    "mailto": "Share your account number with your luthier."
-                },
-                "qr": {
-                    "press_to_share": "Press to share",
-                    "press_to_expand_shrink": "Press to expand/shrink"
-                },
-                "share": {
-                    "copy_to_clipboard": "Copy to clipboard"
-                },
-                "modals": {
-                    "share_account_what": {
-                        "title": "Account Number",
-                        "preview": "What is my account number?",
-                        "description": "The account number is a unique identifier that was automatically created when you opened your account. This number allows you to receive instrument registrations securely, as it only works for incoming transfers. You can share it with luthiers and other users to receive registered instruments in your account. Once a registration is transferred to your account using this number, you will be the sole owner of that registration."
-                    },
-                    "share_account_how": {
-                        "title": "How to share your account number",
-                        "preview": "How can you share it?",
-                        "description": "Ideally you will use the messaging channel your already established with the other party. It can be f.e. email or any chat app or social network. If you use your mobile phone, you have the option to show a QR code which the Luthier will scan to obtain your account number."
-                    }
-                },
+                "no_instruments": "Receive your registered instrument",
+                "no_instruments_sub": "Present the QR code to your luthier.",
                 "luthier": {
                     "title": "Are you a luthier?",
                     "description": "We are onboarding new luthiers by invitation. Proceed to confirm the email where you received your invitation.",
@@ -451,6 +338,14 @@
             "account": "Account"
         },
         "Account": {
+            "User": {
+                "title": "Your account",
+                "anonymous": "Anonymous account type",
+                "instrument": "Instrument",
+                "received_instrument": "\"{name}\" has been received.",
+                "connect_button_title": "Advanced actions",
+                "connect_button_description": "Access all core and advanced account functions here. If you haven’t already exported and saved your private key, you should do it now!"
+            },
             "Minter": {
                 "verfied_since": "Verified since",
                 "instrument_type_specialization": "Specialization",

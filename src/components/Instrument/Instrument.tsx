@@ -18,13 +18,10 @@ import { Download, Copy, QrCode, ChevronDown, Handshake, Telescope, MoveDown, Ar
 import { usePathname, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import Divider from "@/components/UI/Divider";
-import ButtonSpinner from '@/components/UI/ButtonSpinner';
-// import NotConnected from "@/components/NotConnected";
 import { useRouter } from "@/i18n/routing";
 import { marked } from "marked";
 import { contract } from "@/app/contracts";
 import Loading from "@/components/Loading";
-import NotConnected from "@/components/NotConnected";
 
 marked.use({
 	breaks: true
