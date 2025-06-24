@@ -6,10 +6,10 @@ import Page from "@/components/Page";
 import Section from "@/components/Section";
 import { CustomConnectButton } from "../CustomConnectButton";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import Loading from "@/components/Loading";
 import NotConnected from "@/components/NotConnected";
 import { useActiveAccount } from "thirdweb/react";
+import ButtonQrTransfer from "../UI/ButtonQrTransfer";
 
 export default function Minter(
     { locale }: Readonly<{ locale: string }>
@@ -18,64 +18,11 @@ export default function Minter(
     const tInstrument = useTranslations('components.Instrument');
     const { isMinter, isLuthier, isVerified, isLoading, minter, owned, setReloadUser } = useStateContext();
     const activeAccount = useActiveAccount();
-    const [timeout, _setTimeout] = useState<any>(null);
 
     let minterConstructionSkills = [];
     if (minter && minter.skills && minter.skills.length) {
         minterConstructionSkills = minter.skills.filter((skill: any) => skill.slug.includes('construction'));
     }
-
-
-    useEffect(() => {
-        const getUserTokens = async () => {
-            try {
-                const result = await fetch(`/api/tokens/${activeAccount?.address}`, { cache: 'no-store' });
-                const data = await result.json();
-                
-                if (data.length > owned.length) {
-                    const newInstrument = data.find((instrument: any) => {
-                        // Check if this instrument's metadata.id is not in the owned array
-                        return !owned.some((ownedId: any) => {
-                            // Handle both cases: owned might be an array of strings (ids) or objects with metadata.id
-                            if (typeof ownedId === 'string') {
-                                return ownedId === instrument.metadata.id;
-                            } else if (ownedId && typeof ownedId === 'object' && ownedId.metadata) {
-                                return ownedId.metadata.id === instrument.metadata.id;
-                            }
-                            return false;
-                        });
-                    });
-                    
-                    if (newInstrument) {
-                        const { metadata: instrument } = newInstrument;
-                        clearTimeout(timeout);
-                        clearInterval(interval);
-                        alert(`${tInstrument("instrument")} #${instrument.id} "${instrument.name}" ${tInstrument("new_instrument_received")}`);
-                        setReloadUser(true);
-                        document.location.replace(`/instrument/${instrument.id}`);
-                        // router.replace(`/instrument/${instrument.id}`);
-                    }
-                }
-            } catch (error) { console.log('User.getUserTokens', error); }
-        }
-
-        const interval = setInterval(() => {
-            const svg = document.getElementsByTagName('svg');
-            if (svg?.length > 0) {
-                for (let i = 0; i < svg.length; i++) {
-                    if (svg[i].getAttribute('width') === '310' && svg[i].getAttribute('height') === '310') {
-                        if (!timeout) _setTimeout(setTimeout(() => clearInterval(interval), 600000));
-                        if (activeAccount) getUserTokens();
-                    }
-                }
-            }
-        }, 5000);
-
-        return () => {
-            clearTimeout(timeout);
-            clearInterval(interval);
-        };
-    }, []);
 
     if (isLoading) return <Loading />
     
@@ -212,7 +159,6 @@ export default function Minter(
                                 <p className="text-gray-600">{t('no_content_available')}</p>
                             )}
                         </div>
-
                     </div>
                     <div className="flex flex-col justify-start items-end">
                         <div className="w-full bg-gray-25 rounded-lg px-4 py-4 mb-12">
@@ -253,6 +199,9 @@ export default function Minter(
                                         </button>
                                     </div>
                                 </div>
+                            </div>
+                            <div className="mb-6">
+                                <ButtonQrTransfer address={activeAccount?.address} locale={locale} />
                             </div>
                             <h3 className="text-md font-semibold mb-2">{t('wallet_actions_title')}</h3>
                             {/* Connect Button */}
