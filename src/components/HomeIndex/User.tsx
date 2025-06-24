@@ -141,137 +141,136 @@ export default function User(
 
   return (
     <Page>
-      <Section>
-        <div>
-          {
-            owned && owned.length ?
-              <div className="flex flex-col pt-4">
-                <NFTGrid nftData={owned} />
-              </div> :
-              <>
-                <ReceiveInstrumentCard address={address} locale={locale} />
-
-                <div className="p-6 rounded-[15px] mb-3.5 border border-me-100 dark:border-me-800 bg-me-25 dark:bg-gray-950">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <h3 className="mb-2 text-3xl text-me-1000 dark:text-me-200 font-bold">
-                        {t('luthier.title')}
-                      </h3>
-                      <p className="mb-4 text-base text-gray-900 dark:text-gray-300 ">
-                        {t('luthier.description')}
-                      </p>
+      {
+        !owned.length ?
+        <Section>
+          <div>
+            <ReceiveInstrumentCard address={address} locale={locale} />
+            <div className="p-6 rounded-[15px] mb-3.5 border border-me-100 dark:border-me-800 bg-me-25 dark:bg-gray-950">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h3 className="mb-2 text-3xl text-me-1000 dark:text-me-200 font-bold">
+                    {t('luthier.title')}
+                  </h3>
+                  <p className="mb-4 text-base text-gray-900 dark:text-gray-300 ">
+                    {t('luthier.description')}
+                  </p>
+                </div>
+                <div className='flex items-center justify-center'>
+                  {!showForm ? (
+                    <div className="flex flex-col sm:flex-row justify-left items-center">
+                      <div className="px-1 mt-2 sm:mt-0 flex justify-center">
+                        <button
+                          onClick={toggleFormVisibility}
+                          className="inline-flex items-center text-me-1000 hover:text-me-1000 dark:text-me-200 dark:hover:text-me-1000   bg-transparent hover:bg-me-400 border-[0.1rem] border-me-400 font-bold py-2 px-4 rounded-md text-base"
+                        >
+                          {t('luthier.confirm_invitation_do')}
+                        </button>
+                      </div>
                     </div>
-                    <div className='flex items-center justify-center'>
-                      {!showForm ? (
-                        <div className="flex flex-col sm:flex-row justify-left items-center">
-                          <div className="px-1 mt-2 sm:mt-0 flex justify-center">
-                            <button
-                              onClick={toggleFormVisibility}
-                              className="inline-flex items-center text-me-1000 hover:text-me-1000 dark:text-me-200 dark:hover:text-me-1000   bg-transparent hover:bg-me-400 border-[0.1rem] border-me-400 font-bold py-2 px-4 rounded-md text-base"
-                            >
-                              {t('luthier.confirm_invitation_do')}
-                            </button>
-                          </div>
+                  ) : !otpOk ? (
+                    <div className="flex flex-col w-full">
+                      <label htmlFor="business-email" className="block text-md font-bold text-me-1000 dark:text-me-200 mb-1">
+                        {t('luthier.confirm_invitation_email_label')}
+                      </label>
+                      <div className="relative">
+                        <input
+                          ref={emailRef}
+                          type="email"
+                          id="business-email"
+                          placeholder={t('luthier.confirm_invitation_email_placeholder')}
+                          className="border border-me-600 p-2 rounded-md w-full pr-10"
+                          onChange={handleEmailChange}
+                        />
+                        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                          <CircleCheck 
+                            className={`h-6 w-6 ${email ? (isValidEmail ? 'text-green-500' : 'text-gray-100') : 'hidden'}`} 
+                          />
                         </div>
-                      ) : !otpOk ? (
-                        <div className="flex flex-col w-full">
-                          <label htmlFor="business-email" className="block text-md font-bold text-me-1000 dark:text-me-200 mb-1">
-                            {t('luthier.confirm_invitation_email_label')}
-                          </label>
-                          <div className="relative">
-                            <input
-                              ref={emailRef}
-                              type="email"
-                              id="business-email"
-                              placeholder={t('luthier.confirm_invitation_email_placeholder')}
-                              className="border border-me-600 p-2 rounded-md w-full pr-10"
-                              onChange={handleEmailChange}
-                            />
-                            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                              <CircleCheck 
-                                className={`h-6 w-6 ${email ? (isValidEmail ? 'text-green-500' : 'text-gray-100') : 'hidden'}`} 
-                              />
-                            </div>
-                          </div>
-                          <p className="text-md text-gray-700 dark:text-gray-300 pt-2 mb-2 text-pretty">
-                            {t('luthier.confirm_invitation_email_description')}
-                          </p>
-                          <div className="">
-                            <div className="flex sm:flex-1 flex-wrap justify-between items-center gap-2">
-                              {otpError && (
-                                <p className="text-red-500 text-sm text-pretty">{otpError}</p>
-                              )}
-                              <FormSaveButton
-                                ref={emailButtonRef}
-                                disabled={!isValidEmail}
-                                onClick={() => sendUserConfirmationOTP()}
-                                theme="me"
-                                isLoading={isSendingOTP}
-                              >
-                                {t('luthier.confirm_invitation_confirm_email')}
-                              </FormSaveButton>
-                            </div>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="flex flex-col w-full">
-                          <label htmlFor="business-email" className="block text-md font-bold text-gray-700 dark:text-gray-300 mb-1">
-                            {t('luthier.confirm_invitation_otp_label')}
-                          </label>
-                          <div className="relative">
-                            <OTPForm
-                              maxLength={6}
-                              value={otp}
-                              onChange={(value) => handleOTPChange(value)}
-                              containerClassName="otpform-container"
-                              autoFocus={otpOk}
-                            />
-                          </div>
-                          <div className="grid grid-cols-[3fr_minmax(130px,_1fr)] gap-2 pt-4 pb-2">
-                            <div className="flex items-center">
-                              <input
-                                type="checkbox"
-                                id="privacy-policy"
-                                className="mr-2 h-4 w-4 text-me-600 focus:ring-me-500 border-gray-300 rounded"
-                                onChange={(e) => setPrivacyPolicyAccepted(e.target.checked)}
-                              />
-                              <label htmlFor="privacy-policy" className="text-sm text-gray-700 dark:text-gray-300">
-                                {t('luthier.privacy_policy')}{' '}
-                                <a 
-                                  href="https://instruement.com/privacy-policy/" 
-                                  target="_blank" 
-                                  rel="noopener noreferrer"
-                                  className="text-me-600 hover:text-me-800 underline"
-                                >
-                                  {t('luthier.privacy_policy_link')}
-                                </a>
-                              </label>
-                            </div>
-                            <div className="flex items-center justify-end">
-                              <FormSaveButton
-                                ref={otpButtonRef}
-                                disabled={!isValidOTP || !privacyPolicyAccepted}
-                                onClick={() => sendUserOTPVerification()}
-                                theme="me"
-                              >
-                                {t('luthier.confirm_invitation_confirm_otp')}
-                              </FormSaveButton>
-                            </div>
-                          </div>
-                          {isValidOTP && privacyPolicyAccepted && (
-                            <p className="text-md text-me-600 italic mt-2 border-l-2 border-me-600 pl-2 text-pretty">
-                              {t('luthier.reload_notice')}
-                            </p>
+                      </div>
+                      <p className="text-md text-gray-700 dark:text-gray-300 pt-2 mb-2 text-pretty">
+                        {t('luthier.confirm_invitation_email_description')}
+                      </p>
+                      <div className="">
+                        <div className="flex sm:flex-1 flex-wrap justify-between items-center gap-2">
+                          {otpError && (
+                            <p className="text-red-500 text-sm text-pretty">{otpError}</p>
                           )}
+                          <FormSaveButton
+                            ref={emailButtonRef}
+                            disabled={!isValidEmail}
+                            onClick={() => sendUserConfirmationOTP()}
+                            theme="me"
+                            isLoading={isSendingOTP}
+                          >
+                            {t('luthier.confirm_invitation_confirm_email')}
+                          </FormSaveButton>
                         </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col w-full">
+                      <label htmlFor="business-email" className="block text-md font-bold text-gray-700 dark:text-gray-300 mb-1">
+                        {t('luthier.confirm_invitation_otp_label')}
+                      </label>
+                      <div className="relative">
+                        <OTPForm
+                          maxLength={6}
+                          value={otp}
+                          onChange={(value) => handleOTPChange(value)}
+                          containerClassName="otpform-container"
+                          autoFocus={otpOk}
+                        />
+                      </div>
+                      <div className="grid grid-cols-[3fr_minmax(130px,_1fr)] gap-2 pt-4 pb-2">
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            id="privacy-policy"
+                            className="mr-2 h-4 w-4 text-me-600 focus:ring-me-500 border-gray-300 rounded"
+                            onChange={(e) => setPrivacyPolicyAccepted(e.target.checked)}
+                          />
+                          <label htmlFor="privacy-policy" className="text-sm text-gray-700 dark:text-gray-300">
+                            {t('luthier.privacy_policy')}{' '}
+                            <a 
+                              href="https://instruement.com/privacy-policy/" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-me-600 hover:text-me-800 underline"
+                            >
+                              {t('luthier.privacy_policy_link')}
+                            </a>
+                          </label>
+                        </div>
+                        <div className="flex items-center justify-end">
+                          <FormSaveButton
+                            ref={otpButtonRef}
+                            disabled={!isValidOTP || !privacyPolicyAccepted}
+                            onClick={() => sendUserOTPVerification()}
+                            theme="me"
+                          >
+                            {t('luthier.confirm_invitation_confirm_otp')}
+                          </FormSaveButton>
+                        </div>
+                      </div>
+                      {isValidOTP && privacyPolicyAccepted && (
+                        <p className="text-md text-me-600 italic mt-2 border-l-2 border-me-600 pl-2 text-pretty">
+                          {t('luthier.reload_notice')}
+                        </p>
                       )}
                     </div>
-                  </div>
+                  )}
                 </div>
-              </>
-          }
-        </div>
-      </Section>
+              </div>
+            </div>
+          </div>
+        </Section> :
+        <Section>
+          <div className="flex flex-col pt-4">
+            <NFTGrid nftData={owned} />
+          </div>
+        </Section>
+      }
     </Page>
   );
 }
