@@ -340,8 +340,11 @@
         "Account": {
             "User": {
                 "title": "Your account",
+                "anonymous": "Anonymous account type",
                 "instrument": "Instrument",
-                "received_instrument": "\"{name}\" has been received."
+                "received_instrument": "\"{name}\" has been received.",
+                "connect_button_title": "Advanced actions",
+                "connect_button_description": "Access all core and advanced account functions here. If you haven’t already exported and saved your private key, you should do it now!"
             },
             "Minter": {
                 "verfied_since": "Verified since",

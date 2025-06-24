@@ -347,7 +347,10 @@
         "Account": {
             "User": {
                 "title": "Tu cuenta",
-                "received_instrument": "\"{name}\" ha sido recibido."
+                "received_instrument": "\"{name}\" ha sido recibido.",
+                "anonymous": "Cuenta de tipo anónimo",
+                "connect_button_title": "Acciones avanzadas",
+                "connect_button_description": "Accede a todas las funciones de la cuenta aquí. Si aún no has exportado y guardado tu clave privada, deberías hacerlo ahora!"
             },
             "Minter": {
                 "verfied_since": "Verificado desde",

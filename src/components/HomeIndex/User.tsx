@@ -12,7 +12,7 @@ import { OTPForm } from "@/components/UI/OtpInput";
 import { CircleCheck } from 'lucide-react';
 import { logout } from '@/actions/login';
 import Loading from '../Loading';
-import ButtonQrTransfer from "../UI/ButtonQrTransfer";
+import ReceiveInstrumentCard from "@/components/ReceiveInstrumentCard";
 
 
 export default function User(
@@ -149,23 +149,7 @@ export default function User(
                 <NFTGrid nftData={owned} />
               </div> :
               <>
-                <div className='p-6 rounded-[15px] mb-4 md:mb-6 border border-it-100 dark:border-gray-900 bg-it-50 dark:bg-gray-950'>
-                  <div className="grid grid-cols-1 items-center md:grid-cols-2 gap-6">
-                    <div>
-                      <h2 className='text-4xl font-bold text-contrast dark:text-it-200 mb-2'>
-                        {t('no_instruments')}
-                      </h2>
-                      <p className="text-md mb-4 text-base text-gray-900 dark:text-gray-300">
-                        {t('no_instruments_sub')}
-                      </p>
-                    </div>
-                    <div>
-                      <div className="flex items-center justify-center">
-                        <ButtonQrTransfer address={address} locale={locale} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <ReceiveInstrumentCard address={address} locale={locale} />
 
                 <div className="p-6 rounded-[15px] mb-3.5 border border-me-100 dark:border-me-800 bg-me-25 dark:bg-gray-950">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
