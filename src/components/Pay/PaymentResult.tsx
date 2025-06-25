@@ -5,10 +5,9 @@ import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/routing";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
-// import Loading from "@/components/Loading";
 import DraftService from "@/services/DraftService";
 import { Instrument } from "@/lib/definitions";
-// import PrintObject from "@/components/Stripe/PrintObject";
+import { useStateContext } from "@/app/context";
 
 
 export default function PaymentResult(
@@ -18,6 +17,7 @@ export default function PaymentResult(
   const router = useRouter();
   const locale = useLocale();
   const [instrument, setInstrument] = useState<Instrument>();
+  const { setReloadUser } = useStateContext();
 
   useEffect(() => {
     const getInstrument = async () => {
@@ -78,22 +78,20 @@ export default function PaymentResult(
                   {t('success_message_ready')}
                 </p> 
                 : 
-                <p className="flex items-center justify-center gap-2 text-lg">
+                <div className="flex items-center justify-center gap-2 text-lg">
                   <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
                       <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
                           
                       </span>
                   </div>
                   {t('success_message_loading')}
-                </p>
+                </div>
               }
             </> 
             :
-            <>
-              <p>
-                {t('failed_message')}
-              </p>
-            </>
+            <p>
+              {t('failed_message')}
+            </p>
           }
         </div>
       </Section>
@@ -105,7 +103,10 @@ export default function PaymentResult(
               <button
                 type="button"
                 className="font-bold inline-flex items-center px-4 py-2 tracking-wide transition-colors duration-200 transform rounded-md focus:outline-none text-it-1000 dark:text-it-500 border-[0.1rem] border-it-500 hover:bg-it-500 hover:text-it-1000 dark:hover:text-it-1000 focus:bg-it-500 focus:text-it-600 dark:focus:text-it-800"
-                onClick={() => router.push(`/instrument/${instrument.asset_id}`)}
+                onClick={() => {
+                  setReloadUser(true);
+                  router.push(`/instrument/${instrument.asset_id}`);
+                }}
               >
                 {t('go_to_instrument')}
               </button>
