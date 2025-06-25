@@ -34,9 +34,12 @@ export default function User(
   const emailButtonRef = useRef<HTMLButtonElement>(null)
   const otpButtonRef = useRef<HTMLButtonElement>(null)
 
+  console.log("invite User component:", invite);
+
+
   // Focus on OTP input when otpOk becomes true
   useEffect(() => {
-    // No need for manual focus as we're using autoFocus prop
+    // No need for manual focus as we're using autoFocus propz
   }, [otpOk]);
 
   const toggleFormVisibility = () => {
@@ -137,7 +140,7 @@ export default function User(
 
   if (isLoading) return <Loading />
 
-  if (!address) return <NotConnected locale={locale} />
+  // if (!address) return <NotConnected locale={locale} />
 
   return (
     <Page>
@@ -145,7 +148,7 @@ export default function User(
         !owned.length ?
         <Section>
           <div>
-            <ReceiveInstrumentCard address={address} locale={locale} />
+            {address && <ReceiveInstrumentCard address={address} locale={locale} />}
             {invite && (
               <div className="p-6 rounded-[15px] mb-3.5 border border-me-100 dark:border-me-800 bg-me-25 dark:bg-gray-950">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -71,7 +71,7 @@ export function Header() {
                   </Link>
                 }
                 {
-                  !activeAccount?.address && pathname.startsWith('/instrument') &&
+                  !activeAccount?.address &&
                   <div className="hidden"> <CustomConnectButton /> </div>
                 }
                 {
