@@ -35,6 +35,7 @@ export async function login(payload: VerifyLoginPayloadParams, cb: string | unde
       userId: undefined
     };
 
+    let userLang = '';
     try {
       result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/user/${verifiedPayload.payload.address}`, {
         headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` },
@@ -49,6 +50,7 @@ export async function login(payload: VerifyLoginPayloadParams, cb: string | unde
             context.isVerified = isVerified;
             context.isMinter = isMinter;
             context.userId = userData.data.user_id;
+            userLang = userData.data.lang;
           }
         }
       }
@@ -61,7 +63,7 @@ export async function login(payload: VerifyLoginPayloadParams, cb: string | unde
       context,
     });
     cookies().set("jwt", jwt);
-    redirect({ href: cb || '/', locale: locales.includes(userData?.data?.lang) ? userData?.data?.lang : locale });
+    redirect({ href: cb || '/', locale: locales.includes(userLang) ? userLang : locale });
   }
 }
  
