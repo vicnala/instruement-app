@@ -8,18 +8,15 @@ import Section from "@/components/Section";
 import ReceiveInstrumentCard from "@/components/ReceiveInstrumentCard";
 import { CustomConnectButton } from "../CustomConnectButton";
 import { useActiveAccount } from "thirdweb/react";
-import NotConnected from "@/components/NotConnected";
 
 export default function User(
     { locale }: Readonly<{ locale: string }>
 ) {
     const t = useTranslations('components.Account.User');
-    const { isLoading, owned, setReloadUser } = useStateContext()
+    const { isLoading } = useStateContext()
     const activeAccount = useActiveAccount();
 
-    if (isLoading) return <Loading />
-
-    if (!activeAccount) return <NotConnected locale={locale} />
+    if (isLoading || !activeAccount?.address) return <Loading />
 
     return (
         <Page>

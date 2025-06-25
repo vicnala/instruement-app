@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import dynamic from "next/dynamic"
 import { useTranslations } from "next-intl";
 import { useStateContext } from "@/app/context";
-import NotConnected from "@/components/NotConnected";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
 import { Trash, ChevronDown, Lock } from 'lucide-react';
@@ -19,6 +18,7 @@ import Divider from "../UI/Divider"
 import MediaManager from "@/components/MediaManager";
 import DraftService from "@/services/DraftService";
 import InstrumentService from "@/services/InstrumentService";
+import { useActiveAccount } from "thirdweb/react";
 
 const Editor = dynamic(() => import("@/components/Editor"), { ssr: false })
 
@@ -33,6 +33,7 @@ export default function DraftForm(
   const t = useTranslations('components.DraftForm');
   const router = useRouter();
   const { minter, setReloadUser } = useStateContext()
+  const activeAccount = useActiveAccount();
 
   const [open, setOpen] = useState(false)
   const [type, setType] = useState<string>("")
@@ -240,11 +241,12 @@ export default function DraftForm(
     }
   };
 
-  if (isLoading) return <Loading />
+  if (isLoading || !activeAccount?.address) return <Loading />
 
   return (
-    minter ?
       <Page>
+        {
+          minter && <>
         <Section id="progress-bar">
           <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-it-50 rounded-[15px] border border-it-200 overflow-hidden">
             <div className="w-full mx-auto mb-4 sm:mb-8">
@@ -533,8 +535,9 @@ export default function DraftForm(
               </button>
             </div>
           }
-        </Section>
-      </Page> :
-      <NotConnected locale={locale} />
+        </Section>  
+        </>
+        }
+      </Page>
   );
 }

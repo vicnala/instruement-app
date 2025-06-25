@@ -6,20 +6,20 @@ import Page from "@/components/Page";
 import Section from "@/components/Section";
 import { useStateContext } from '@/app/context';
 import NFTGrid from '@/components/NFT/NFTGrid';
-import NotConnected from '../NotConnected';
 import FormSaveButton from '@/components/UI/FormSaveButton';
 import { OTPForm } from "@/components/UI/OtpInput";
 import { CircleCheck } from 'lucide-react';
 import { logout } from '@/actions/login';
 import Loading from '../Loading';
 import ReceiveInstrumentCard from "@/components/ReceiveInstrumentCard";
+import { useActiveAccount } from "thirdweb/react";
 
 
 export default function User(
   { locale, invite }: Readonly<{ locale: string, invite?: string }>
 ) {
   const t = useTranslations('components.HomeIndex.User');
-  const { address, owned, isLoading, setReloadUser } = useStateContext()
+  const { owned, isLoading, setReloadUser } = useStateContext()
   const [showForm, setShowForm] = useState(false)
   const [email, setEmail] = useState<string>('')
   const [isValidEmail, setIsValidEmail] = useState(false)
@@ -33,9 +33,7 @@ export default function User(
   const otpRef = useRef<HTMLInputElement>(null)
   const emailButtonRef = useRef<HTMLButtonElement>(null)
   const otpButtonRef = useRef<HTMLButtonElement>(null)
-
-  console.log("invite User component:", invite);
-
+  const activeAccount = useActiveAccount();
 
   // Focus on OTP input when otpOk becomes true
   useEffect(() => {
@@ -119,7 +117,7 @@ export default function User(
         body: JSON.stringify({
           email,
           otp,
-          address,
+          address: activeAccount?.address,
           accepted_terms: privacyPolicyAccepted
         }),
       })
@@ -140,15 +138,13 @@ export default function User(
 
   if (isLoading) return <Loading />
 
-  // if (!address) return <NotConnected locale={locale} />
-
   return (
     <Page>
       {
         !owned.length ?
         <Section>
           <div>
-            {address && <ReceiveInstrumentCard address={address} locale={locale} />}
+            {activeAccount?.address && <ReceiveInstrumentCard address={activeAccount.address} locale={locale} />}
             {invite && (
               <div className="p-6 rounded-[15px] mb-3.5 border border-me-100 dark:border-me-800 bg-me-25 dark:bg-gray-950">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

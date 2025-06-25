@@ -1,10 +1,11 @@
 "use client";
 
 import { useLocale } from "next-intl";
-import { useStateContext } from "@/app/context";
+// import { useStateContext } from "@/app/context";
 import ElementsForm from "@/components/Stripe/ElementsForm";
-import Loading from "@/components/Loading";
-import NotConnected from "@/components/NotConnected";
+// import Loading from "@/components/Loading";
+// import NotConnected from "@/components/NotConnected";
+// import { useActiveAccount } from "thirdweb/react";
 
 export default function PayPage({
   searchParams,
@@ -14,13 +15,10 @@ export default function PayPage({
   params: { locale: string, id: string };
 }) {
   const locale = useLocale();
-  const { address, isLoading } = useStateContext()
+  // const { isLoading } = useStateContext()
+  // const activeAccount = useActiveAccount()
 
-  if (isLoading) return <Loading />
+  // if (isLoading || !activeAccount?.address) return <Loading />
 
-  return (
-    address ?
-      <ElementsForm locale={locale} id={id} address={searchParams?.address} /> :
-      <NotConnected locale={locale} />
-  )
+  return <ElementsForm locale={locale} id={id} address={searchParams?.address} />
 }
