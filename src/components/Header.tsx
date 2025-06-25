@@ -70,13 +70,8 @@ export function Header() {
                     <House className="w-5 h-5" />
                   </Link>
                 }
-                {
-                  !activeAccount?.address && pathname.startsWith('/instrument') &&
-                  <div className="hidden"> <CustomConnectButton /> </div>
-                }
-                {
-                  process.env.NODE_ENV === 'development' && <ModeToggle />
-                }
+                { !activeAccount?.address && <div className="hidden"> <CustomConnectButton /> </div> }
+                { process.env.NODE_ENV === 'development' && <ModeToggle /> }
               </nav>
             }
           </div>

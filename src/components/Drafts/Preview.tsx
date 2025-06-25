@@ -5,14 +5,14 @@ import { useTranslations } from "next-intl";
 import { useStateContext } from "@/app/context";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
-import Loading from "@/components/Loading";
-import NotConnected from "@/components/NotConnected";
+import Loading from "@/components/Loading"
 import Image from "next/image";
 import { useRouter } from "@/i18n/routing";
 import { Instrument } from "@/lib/definitions";
 import { Expand, Download, ArrowLeft, ArrowRight } from "lucide-react";
 import InstrumentService from "@/services/InstrumentService";
 import { marked } from "marked";
+import { useActiveAccount } from "thirdweb/react";
 
 // Configure marked options
 marked.use({
@@ -27,6 +27,7 @@ export default function Preview(
   const [instrument, setInstrument] = useState<Instrument>()
   const [isLoadingInstrument, setIsLoadingInstrument] = useState<boolean>(false)
   const router = useRouter()
+  const activeAccount = useActiveAccount();
 
   useEffect(() => {
     const getInstrument = async () => {
@@ -49,11 +50,11 @@ export default function Preview(
 
   }, [id, locale, isLoadingInstrument, instrument, minter]);
 
-  if (isLoading || isLoadingInstrument) return <Loading />
+  if (isLoading || isLoadingInstrument || !activeAccount?.address) return <Loading />
 
   return (
-    minter ?
     <Page>
+      { minter && <>
         <Section>
           <div className="px-3 md:px-6 py-4 md:py-6 border-[0.1rem] border border-gray-100 rounded-lg">
           {instrument?.updated_at && (
@@ -203,7 +204,7 @@ export default function Preview(
             </div>
           }
         </Section>
-    </Page> :
-    <NotConnected locale={locale} />
+      </> }
+    </Page>
   );
 }

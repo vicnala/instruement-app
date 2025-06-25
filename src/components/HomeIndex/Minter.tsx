@@ -6,8 +6,8 @@ import Section from "@/components/Section";
 import { useStateContext } from "@/app/context";
 import NFTGrid from "@/components/NFT/NFTGrid";
 import DraftGrid from "@/components/Drafts/DraftGrid";
-import NotConnected from "../NotConnected";
 import Loading from "../Loading";
+import { useActiveAccount } from "thirdweb/react";
 
 const VIDEO_URLS: Record<string, string> = {
   en: "https://www.youtube.com/embed/PbbHg0uxc60", 
@@ -18,18 +18,14 @@ export default function Minter(
   { locale }: Readonly<{ locale: string }>
 ) {
   const t = useTranslations('components.HomeIndex.Minter');
+  const activeAccount = useActiveAccount();
   const { minter, owned, isLoading } = useStateContext()
 
   // Get the appropriate video URL based on locale
   const videoUrl = VIDEO_URLS[locale] || VIDEO_URLS.en; // Fallback to English if locale not found
 
   // Show loading spinner
-  if (isLoading) return <Loading />
-
-  // Show NotConnected when user has no minter and no owned NFTs
-  if (!minter && (!owned || owned.length === 0)) {
-    return <NotConnected locale={locale} />;
-  }
+  if (isLoading || !activeAccount?.address) return <Loading />
 
   // Main content when user is connected
   return (

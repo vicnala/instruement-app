@@ -7,7 +7,6 @@ import Section from "@/components/Section";
 import { CustomConnectButton } from "../CustomConnectButton";
 import Image from "next/image";
 import Loading from "@/components/Loading";
-import NotConnected from "@/components/NotConnected";
 import { useActiveAccount } from "thirdweb/react";
 import ButtonQrTransfer from "../UI/ButtonQrTransfer";
 
@@ -15,8 +14,7 @@ export default function Minter(
     { locale }: Readonly<{ locale: string }>
 ) {
     const t = useTranslations('components.Account.Minter');
-    const tInstrument = useTranslations('components.Instrument');
-    const { isMinter, isLuthier, isVerified, isLoading, minter, owned, setReloadUser } = useStateContext();
+    const { isMinter, isLuthier, isVerified, isLoading, minter } = useStateContext();
     const activeAccount = useActiveAccount();
 
     let minterConstructionSkills = [];
@@ -24,9 +22,7 @@ export default function Minter(
         minterConstructionSkills = minter.skills.filter((skill: any) => skill.slug.includes('construction'));
     }
 
-    if (isLoading) return <Loading />
-    
-    if (!activeAccount) return <NotConnected locale={locale} />
+    if (isLoading || !activeAccount?.address) return <Loading />
 
     return (
         <Page>
@@ -200,9 +196,13 @@ export default function Minter(
                                     </div>
                                 </div>
                             </div>
-                            <div className="mb-6">
-                                <ButtonQrTransfer address={activeAccount?.address} locale={locale} />
-                            </div>
+                            {
+                                activeAccount?.address && (
+                                    <div className="mb-6">
+                                        <ButtonQrTransfer address={activeAccount?.address} locale={locale} />
+                                    </div>
+                                )
+                            }
                             <h3 className="text-md font-semibold mb-2">{t('wallet_actions_title')}</h3>
                             {/* Connect Button */}
                             <CustomConnectButton />
