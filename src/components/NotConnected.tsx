@@ -32,14 +32,14 @@ export default function NotConnected(
                             </div>
                         </div>
                     </div>
-                    <div className="mt-4 md:mt-8">
+                    {/* <div className="mt-4 md:mt-8">
                         <p className="text-xs md:text-sm text-center text-gray-900 dark:text-gray-400 mb-2">
                             {t('auth_disclaimer')}
                         </p>
                         <div className="flex justify-center items-center">
                             <Image src="/images/thirdweb-wordmark-dark.svg" alt="thirdweb" width={100} height={100} />
                         </div>
-                    </div>
+                    </div> */}
                 </Section>
             </div>
 

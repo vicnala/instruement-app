@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { ConnectButton } from "thirdweb/react";
+import { inAppWallet, createWallet } from "thirdweb/wallets";
 import { useTheme } from "next-themes";
 import { useLocale } from "next-intl";
 import { client } from "@/app/client";
@@ -13,6 +14,16 @@ import {
 } from "@/actions/login";
 import chain from "@/lib/chain";
 import { useTranslations } from "next-intl";
+
+const wallets = [
+  inAppWallet({
+    auth: {
+      options: ["google", "email", "phone", "apple", "facebook"],
+    },
+  }),
+  createWallet("io.metamask"),
+  createWallet("walletConnect"),
+];
 
 export const CustomConnectButton = (
   { cb }: Readonly<{ cb?: string | undefined }>
@@ -31,6 +42,13 @@ export const CustomConnectButton = (
       }}
       autoConnect={true}
       accountAbstraction={{ chain: chain, sponsorGas: true }}
+      wallets={wallets}
+      connectModal={{
+        privacyPolicyUrl: "https://instruement.com/privacy-policy",
+        size: "compact",
+        termsOfServiceUrl: "https://instruement.com/terms-of-use",
+        titleIcon: "https://instruement.com/wp-content/uploads/2023/09/favicon-96x96-1.png",
+      }}
       auth={{
         isLoggedIn: async (address) => {
           // console.log("checking if logged in!", { address });
