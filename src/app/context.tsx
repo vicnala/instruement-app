@@ -174,7 +174,7 @@ export const StateContextProvider = ({ children }: Props) => {
         minter,
         isLuthier,
         isVerified,
-        isLoading: isLoading && (contract ? true : false),
+        isLoading: isLoading,
         setReloadUser,
         owned,
         // setOwned,

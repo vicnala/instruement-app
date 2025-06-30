@@ -6,14 +6,24 @@ import Page from "@/components/Page";
 import Loading from "@/components/Loading";
 import Section from "@/components/Section";
 import ReceiveInstrumentCard from "@/components/ReceiveInstrumentCard";
-import { CustomConnectButton } from "../CustomConnectButton";
+import OnboardMinterCard from "@/components/UI/OnboardMinterCard";
+import { CustomConnectButton } from "@/components/CustomConnectButton";
 import { useActiveAccount } from "thirdweb/react";
 
 export default function User(
-    { locale }: Readonly<{ locale: string }>
+    { locale, invite }: Readonly<{ locale: string, invite?: string }>
 ) {
     const t = useTranslations('components.Account.User');
-    const { isLoading } = useStateContext()
+    
+    let contextData;
+    try {
+        contextData = useStateContext();
+    } catch (error) {
+        console.error('Context error:', error);
+        return <Loading />;
+    }
+    
+    const { isLoading, setReloadUser } = contextData;
     const activeAccount = useActiveAccount();
 
     if (isLoading || !activeAccount?.address) return <Loading />
@@ -27,6 +37,11 @@ export default function User(
                 <p className='text-gray-500 dark:text-gray-400'>
                     {t('anonymous')}
                 </p>
+                <OnboardMinterCard 
+                    locale={locale} 
+                    invite={invite}
+                    onReloadUser={() => setReloadUser(true)} 
+                />
             </Section>
             <Section>
                 <ReceiveInstrumentCard address={activeAccount.address} locale={locale} />
