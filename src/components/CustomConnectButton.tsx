@@ -18,7 +18,7 @@ import { useTranslations } from "next-intl";
 const wallets = [
   inAppWallet({
     auth: {
-      options: ["google", "email", "phone", "apple", "facebook"],
+      options: ["google", "email", "phone", "apple", "facebook", "guest"],
     },
   }),
   createWallet("io.metamask"),
