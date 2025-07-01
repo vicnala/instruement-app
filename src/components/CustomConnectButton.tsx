@@ -18,7 +18,7 @@ import { useTranslations } from "next-intl";
 const wallets = [
   inAppWallet({
     auth: {
-      options: ["google", "email", "phone", "apple", "facebook", "guest"],
+      options: ["google", "email", "phone", "apple", "facebook"/*, "guest"*/],
     },
   }),
   createWallet("io.metamask"),
@@ -44,9 +44,9 @@ export const CustomConnectButton = (
       accountAbstraction={{ chain: chain, sponsorGas: true }}
       wallets={wallets}
       connectModal={{
-        privacyPolicyUrl: "https://instruement.com/privacy-policy",
-        size: "compact",
-        termsOfServiceUrl: "https://instruement.com/terms-of-use",
+        // privacyPolicyUrl: "https://instruement.com/privacy-policy",
+        // size: "compact",
+        // termsOfServiceUrl: "https://instruement.com/terms-of-use",
         titleIcon: "https://instruement.com/wp-content/uploads/2023/09/favicon-96x96-1.png",
       }}
       auth={{
