@@ -37,15 +37,21 @@ export default function User(
                 <p className='text-gray-500 dark:text-gray-400'>
                     {t('anonymous')}
                 </p>
-                <OnboardMinterCard 
-                    locale={locale} 
-                    invite={invite}
-                    onReloadUser={() => setReloadUser(true)} 
-                />
             </Section>
-            <Section>
-                <ReceiveInstrumentCard address={activeAccount.address} locale={locale} />
-            </Section>
+            {invite && (
+                <Section>
+                    <OnboardMinterCard 
+                        locale={locale} 
+                        invite={invite}
+                        onReloadUser={() => setReloadUser(true)} 
+                    />
+                </Section>
+            )}
+            { !invite && (
+                <Section>
+                    <ReceiveInstrumentCard address={activeAccount.address} locale={locale} />
+                </Section>
+            )}
             <Section>
                 <div className='mb-16'>
                     <h3 className='text-lg font-bold text-black dark:text-white mb-2'>

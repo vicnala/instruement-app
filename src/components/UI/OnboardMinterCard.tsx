@@ -15,7 +15,7 @@ interface OnboardMinterCardProps {
 }
 
 export default function OnboardMinterCard({ locale, invite, onReloadUser }: OnboardMinterCardProps) {
-  const t = useTranslations('components.HomeIndex.User.luthier');
+  const t = useTranslations('components.UI.OnboardMinterCard');
   const [showForm, setShowForm] = useState(false)
   const [email, setEmail] = useState<string>('')
   const [isValidEmail, setIsValidEmail] = useState(false)
@@ -35,6 +35,14 @@ export default function OnboardMinterCard({ locale, invite, onReloadUser }: Onbo
   useEffect(() => {
     // No need for manual focus as we're using autoFocus prop
   }, [otpOk]);
+
+  // Set email from invite prop when available
+  useEffect(() => {
+    if (invite && !email) {
+      setEmail(invite)
+      setIsValidEmail(validateEmail(invite))
+    }
+  }, [invite, email])
 
   const toggleFormVisibility = () => {
     setShowForm(prevState => !prevState)
@@ -132,13 +140,13 @@ export default function OnboardMinterCard({ locale, invite, onReloadUser }: Onbo
   }
 
   return (
-    <div className="p-6 rounded-[15px] mb-3.5 border border-me-100 dark:border-me-800 bg-me-25 dark:bg-gray-950">
+    <div className="p-6 rounded-[15px] bg-it-50 dark:bg-gray-900 border border-it-100 dark:border-gray-900">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <h3 className="mb-2 text-3xl text-me-1000 dark:text-me-200 font-bold">
+          <h3 className="mb-2 text-4xl text-contrast dark:text-it-200 font-bold">
             {t('title')}
           </h3>
-          <p className="mb-4 text-base text-gray-900 dark:text-gray-300 ">
+          <p className="mb-4 text-base text-gray-900 dark:text-gray-200 ">
             {t('description')}
           </p>
         </div>
@@ -148,7 +156,7 @@ export default function OnboardMinterCard({ locale, invite, onReloadUser }: Onbo
               <div className="px-1 mt-2 sm:mt-0 flex justify-center">
                 <button
                   onClick={toggleFormVisibility}
-                  className="inline-flex items-center text-me-1000 hover:text-me-1000 dark:text-me-200 dark:hover:text-me-1000   bg-transparent hover:bg-me-400 border-[0.1rem] border-me-400 font-bold py-2 px-4 rounded-md text-base"
+                  className="inline-flex items-center text-gray-800 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-800 bg-transparent hover:bg-it-400 border-[0.1rem] border-it-400 font-bold py-2 px-4 rounded-md text-base"
                 >
                   {t('confirm_invitation_do')}
                 </button>
@@ -156,7 +164,7 @@ export default function OnboardMinterCard({ locale, invite, onReloadUser }: Onbo
             </div>
           ) : !otpOk ? (
             <div className="flex flex-col w-full">
-              <label htmlFor="business-email" className="block text-md font-bold text-me-1000 dark:text-me-200 mb-1">
+              <label htmlFor="business-email" className="block text-md font-bold text-gray-800 dark:text-gray-100 mb-1">
                 {t('confirm_invitation_email_label')}
               </label>
               <div className="relative">
@@ -164,8 +172,9 @@ export default function OnboardMinterCard({ locale, invite, onReloadUser }: Onbo
                   ref={emailRef}
                   type="email"
                   id="business-email"
+                  value={email}
                   placeholder={t('confirm_invitation_email_placeholder')}
-                  className="border border-me-600 p-2 rounded-md w-full pr-10"
+                  className="border-[0.1rem] text-lg border-gray-200 dark:border-gray-700 p-2 rounded-md w-full pr-10"
                   onChange={handleEmailChange}
                 />
                 <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -186,7 +195,7 @@ export default function OnboardMinterCard({ locale, invite, onReloadUser }: Onbo
                     ref={emailButtonRef}
                     disabled={!isValidEmail}
                     onClick={() => sendUserConfirmationOTP()}
-                    theme="me"
+                    theme="it"
                     isLoading={isSendingOTP}
                   >
                     {t('confirm_invitation_confirm_email')}

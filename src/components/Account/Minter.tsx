@@ -62,14 +62,14 @@ export default function Minter(
                     <div className="flex flex-col">
                         {/* Business Name */}
                         {minter?.business_name && (
-                            <h1 className="text-3xl font-bold mb-1">
+                            <h1 className="text-3xl text-contrast dark:text-gray-25 font-bold mb-1">
                                 {minter.business_name}
                             </h1>
                         )}
 
                         {/* Full Name */}
                         {(minter?.first_name || minter?.last_name) && (
-                            <h2 className="text-2xl text-gray-700 mb-4">
+                            <h2 className="text-2xl text-gray-700 dark:text-gray-300 mb-4">
                                 {minter.first_name} {minter.last_name}
                             </h2>
                         )}
@@ -77,10 +77,10 @@ export default function Minter(
                         {/* Verified Since */}
                         {minter?.is_verified && minter?.is_verified_since && (
                             <div className="mb-6">
-                                <span className="text-sm font-medium text-gray-500">
+                                <span className="text-sm font-medium text-gray-300 dark:text-gray-500">
                                     {t('verfied_since')}:
                                 </span>
-                                <span className="ml-2 text-sm">
+                                <span className="ml-2 text-sm text-gray-300 dark:text-gray-500">
                                     {minter.is_verified_since}
                                 </span>
                             </div>
@@ -160,7 +160,7 @@ export default function Minter(
                         <div className="w-full bg-gray-25 rounded-lg px-4 py-4 mb-12">
                             {/* Address details: */}
                             <div className="mb-6">
-                                <h3 className="text-md font-semibold mb-2">{t('address')}</h3>
+                                <h3 className="text-md font-semibold mb-2 text-gray-1000 dark:text-gray-800">{t('address')}</h3>
                                 <div className="text-gray-600">
                                     <div className="flex items-center gap-2">
                                         <input
@@ -203,7 +203,7 @@ export default function Minter(
                                     </div>
                                 )
                             }
-                            <h3 className="text-md font-semibold mb-2">{t('wallet_actions_title')}</h3>
+                            <h3 className="text-md font-semibold mb-2 text-gray-1000 dark:text-gray-800">{t('wallet_actions_title')}</h3>
                             {/* Connect Button */}
                             <CustomConnectButton />
                         </div>
