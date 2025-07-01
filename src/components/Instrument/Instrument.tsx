@@ -14,7 +14,7 @@ import Section from "@/components/Section";
 import { client } from "@/app/client";
 import QRModal from "./QRModal";
 import Image from "next/image";
-import { Download, Copy, QrCode, ChevronDown, Handshake, Telescope, MoveDown, ArrowDownWideNarrow, Hourglass, CheckCheck, Send, Ban, ChevronUp } from "lucide-react";
+import { Download, Copy, QrCode, ChevronDown, Handshake, Telescope, MoveDown, ArrowDownWideNarrow, Hourglass, CheckCheck, Send, Ban, ChevronUp, CircleX } from "lucide-react";
 import { usePathname, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import Divider from "@/components/UI/Divider";
@@ -173,6 +173,9 @@ export default function Instrument(
 ) {
 	const router = useRouter();
 	const tInstrument = useTranslations('components.Instrument');
+	
+	const IMAGES_THRESHOLD_FOR_MORE_COLUMNS = 4;
+	
 	const [isLoadingInstrumentAsset, setIsLoadingInstrumentAsset] = useState(false)
 	const [isLoadingMinter, setIsLoadingMinter] = useState(false)
 	const [instrumentAsset, setInstrumentAsset] = useState<any>()
@@ -191,9 +194,11 @@ export default function Instrument(
 
 	const [isTransfering, setIsTransfering] = useState(false);
 	const [showTransferOptions, setShowTransferOptions] = useState(false);
-	const [showInPersonSteps, setShowInPersonSteps] = useState(false);
-	const [showRemoteSteps, setShowRemoteSteps] = useState(false);
+	const [showInPersonSteps, setShowInPersonSteps] = useState<boolean>(false);
+	const [showRemoteSteps, setShowRemoteSteps] = useState<boolean>(false);
 	const transferSectionRef = useRef<HTMLDivElement>(null);
+	const stepsSectionRef = useRef<HTMLDivElement>(null);
+	const sendSectionRef = useRef<HTMLDivElement>(null);
 	const [isTransferConfirmationValid, setIsTransferConfirmationValid] = useState<boolean>(false);
 
 	// Add this state for nonce validation
@@ -201,6 +206,7 @@ export default function Instrument(
 
 	// Add state for description collapse/expand
 	const [isDescriptionExpanded, setIsDescriptionExpanded] = useState<boolean>(false);
+	const [isImagesExpanded, setIsImagesExpanded] = useState<boolean>(false);
 
 	useEffect(() => {
 		async function getInstrumentAsset() {
@@ -366,11 +372,26 @@ export default function Instrument(
 		}
 	};
 
+	// Scroll to the transfer options section when the showTransferOptions state changes
 	useEffect(() => {
 		if (showTransferOptions && transferSectionRef.current) {
 			transferSectionRef.current.scrollIntoView({ behavior: 'smooth' });
 		}
 	}, [showTransferOptions]);
+
+	// Scroll to the showInPersonSteps or showRemoteSteps section when the state changes
+	useEffect(() => {
+		if ((showInPersonSteps || showRemoteSteps) && stepsSectionRef.current) {
+			stepsSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+		}
+	}, [showInPersonSteps, showRemoteSteps]);
+
+	// Scroll to the send section when it becomes visible
+	useEffect(() => {
+		if ((to || scannedResult) && !hasActiveValidationAttempt(searchParams) && sendSectionRef.current) {
+			sendSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+		}
+	}, [to, scannedResult, searchParams]);
 
 	// Update the effect to validate the transfer confirmation URL
 	useEffect(() => {
@@ -521,7 +542,7 @@ export default function Instrument(
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
 						<div className="flex flex-col space-y-8 md:space-y-10">
 							{/* Cover Image Section */}
-							<div className="rounded-[15px] relative bg-it-100 border border-it-200 shadow-md overflow-hidden">
+							<div className="rounded-[15px] relative bg-it-100 dark:bg-it-900 shadow-md overflow-hidden">
 								<div className="w-full aspect-square bg-white/[.04]">
 									<a href={instrumentAsset.metadata.image} target="_blank" rel="noreferrer">
 										<Image
@@ -544,120 +565,193 @@ export default function Instrument(
 								</h2>
 							</div>
 							{/* Luthier info */}
-							<div className="text-it-1000 dark:text-it-50 space-y-2 border border-gray-200 p-4 rounded-lg">
-								<p>{tInstrument('registered_by')}</p>
-								<div className="flex flex-col gap-2">
-									{minterUser && minterUser.profile_photo && (
-										<div className="flex items-center gap-4">
-											<div className="w-20 h-20 rounded-full overflow-hidden">
-												<Image
-													src={minterUser.profile_photo.sizes.thumbnail}
-													alt={minterUser.business_name}
-													width={100}
-													height={100}
-													className="w-full h-full object-cover"
-												/>
+							<div className="text-it-1000 dark:text-it-50 border-[0.1rem] border-gray-200 dark:border-gray-700 p-4 rounded-lg relative overflow-hidden">
+								{/* Background watermark */}
+								<div 
+									className="absolute inset-0 pointer-events-none dark:opacity-10"
+									style={{
+										backgroundImage: 'url(/images/instruement-watermark.svg)',
+										backgroundSize: '130%',
+										backgroundPosition: '200% 20%',
+										backgroundRepeat: 'no-repeat'
+									}}
+								/>
+								{/* Content */}
+								<div className="relative z-10">
+									<p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{tInstrument('registered_by')}</p>
+									<div className="flex flex-col gap-2">
+										{minterUser && minterUser.profile_photo && (
+											<div className="flex items-center gap-4">
+												<div className="w-20 h-20 rounded-full overflow-hidden">
+													<Image
+														src={minterUser.profile_photo.sizes.thumbnail}
+														alt={minterUser.business_name}
+														width={100}
+														height={100}
+														className="w-full h-full object-cover"
+													/>
+												</div>
+												<p className="font-bold text-lg">
+													{minterUser.business_name}
+												</p>
 											</div>
-											<p className="font-bold text-lg">
-												{minterUser.business_name}
-											</p>
-										</div>
-									)}
+										)}
+									</div>
 								</div>
 							</div>
 							{/* Description */}
-							<div className="text-it-1000 dark:text-it-50 space-y-4">
-								<h2 className='text-2xl font-semibold'>
-									{tInstrument('description')}
-								</h2>
+							<div className="text-contrast dark:text-it-50 p-4 mb-4 sm:mb-0 rounded-lg bg-gray-25 dark:bg-gray-900 sm:bg-transparent sm:p-0 sm:dark:bg-transparent">
+								<div
+									role="button"
+									tabIndex={0}
+									aria-label="Toggle description"
+									aria-expanded={isDescriptionExpanded}
+									onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+									className="flex items-center justify-between cursor-default outline-none dark:hover:text-it-100 transition-colors"
+								>
+									<h2 className='text-xl font-semibold'>
+										{tInstrument('description')}
+									</h2>
+									<span className="flex items-center gap-1 text-sm font-medium text-gray-400 dark:text-gray-400 sm:hidden">
+										{isDescriptionExpanded ? <ChevronUp className="w-6 h-6" /> : <ChevronDown className="w-6 h-6" />}
+									</span>
+								</div>
 								<div className="relative">
 									{/* Desktop: Always show full content */}
 									<div
-										className="hidden md:block text-base text-it-1000 dark:text-it-100 flex flex-col gap-4"
+										className="hidden md:flex text-base text-it-1000 dark:text-gray-300 flex-col gap-4 pt-6"
 										dangerouslySetInnerHTML={{ __html: marked.parse(instrumentAsset.metadata.description || '') as string }}
 									/>
 									
 									{/* Mobile: Collapsible content */}
 									<div className="md:hidden">
 										<div
-											className={`text-base text-it-1000 dark:text-it-100 flex flex-col gap-4 overflow-hidden transition-all duration-300 ${
-												isDescriptionExpanded ? 'max-h-none' : 'max-h-32'
+											className={`text-base text-gray-800 dark:text-it-100 flex flex-col gap-4 overflow-hidden transition-all duration-300 ${
+												isDescriptionExpanded ? 'pt-6 max-h-none' : 'h-0'
 											}`}
 											dangerouslySetInnerHTML={{ __html: marked.parse(instrumentAsset.metadata.description || '') as string }}
 										/>
 										
-										{/* Gradient overlay when collapsed */}
-										{!isDescriptionExpanded && (
-											<div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white dark:from-gray-900 to-transparent pointer-events-none" />
-										)}
-										
-										{/* Expand/Collapse button */}
-										<button
-											type="button"
-											onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
-											className="mt-2 flex items-center gap-1 text-sm font-medium text-it-600 dark:text-it-400 hover:text-it-800 dark:hover:text-it-200 transition-colors"
-										>
-											{isDescriptionExpanded ? (
-												<>
-													<ChevronUp className="w-4 h-4" />
-													{tInstrument('show_less')}
-												</>
-											) : (
-												<>
-													<ChevronDown className="w-4 h-4" />
-													{tInstrument('show_more')}
-												</>
-											)}
-										</button>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 
-					<Divider color="bg-gray-50" spacing="lg" />
+					<Divider color="bg-transparent" spacing="lg" className="h-1 max-h-0 my-0 sm:my-4 sm:h-[4px]"/>
 
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
 						{/* Images Section */}
 						{images && images.length > 0 && (
-							<div>
-								<h2 className='text-xl font-semibold text-it-1000 dark:text-it-50 mb-4'>{tInstrument('additional_images')}</h2>
-								<div className="grid grid-cols-2 gap-2">
-									{images.map((img: any, index: number) => (
-										<div key={index} className="relative bg-it-100 border border-it-200 rounded-lg overflow-hidden">
-											<div className="w-full aspect-square bg-white/[.04]">
-												<a href={img.uri} target="_blank" rel="noreferrer">	
-													<Image
-														src={img.uri}
-														alt={`Instrument #${id}`}
-														width={400}
-														height={400}
-														className="object-cover w-full h-full"
-													/>
-													{/* <img
-														src={img.uri}
-														alt={`Instrument #${id}`}
-														className="w-full h-full object-cover"
-													/> */}
-												</a>
-											</div>
-											{img.description && 
-												<p className="text-it-1000 p-2 text-sm">
-													{img.description || tInstrument('no_description')}
-												</p>
-											}
-										</div>
-									))}
+							<div className="p-4 sm:p-0 bg-gray-25 dark:bg-gray-900 sm:bg-transparent sm:dark:bg-transparent rounded-lg">
+								<div
+									role="button"
+									tabIndex={0}
+									aria-label={tInstrument('toggle_additional_images')}
+									aria-expanded={isImagesExpanded}
+									onClick={() => setIsImagesExpanded(!isImagesExpanded)}
+									className="flex items-center justify-between cursor-default outline-none dark:hover:text-it-100 transition-colors"
+								>
+									<h2 className='text-xl font-semibold text-it-1000 dark:text-it-50'>{tInstrument('additional_images')}</h2>
 								</div>
+								{(() => {
+									const imagesCount = images.length;
+									const shouldShowOverlay = imagesCount > IMAGES_THRESHOLD_FOR_MORE_COLUMNS && !isImagesExpanded;
+									const visibleImagesCount = shouldShowOverlay ? IMAGES_THRESHOLD_FOR_MORE_COLUMNS - 1 : imagesCount;
+									const hiddenImagesCount = shouldShowOverlay ? imagesCount - (IMAGES_THRESHOLD_FOR_MORE_COLUMNS - 1) : 0;
+									
+									return (
+										<div className={`grid ${isImagesExpanded ? 'grid-cols-2' : imagesCount > IMAGES_THRESHOLD_FOR_MORE_COLUMNS ? 'grid-cols-4' : 'grid-cols-2'} gap-2 mt-4`}>
+											{/* Show visible images normally */}
+											{images.slice(0, visibleImagesCount).map((img: any, index: number) => (
+												<div key={index} className="relative bg-it-100 border border-it-200 rounded-lg overflow-hidden">
+													<div className="w-full aspect-square bg-white/[.04]">
+														<a href={img.uri} target="_blank" rel="noreferrer">	
+															<Image
+																src={img.uri}
+																alt={`Instrument #${id}`}
+																width={400}
+																height={400}
+																className="object-cover w-full h-full"
+															/>
+														</a>
+													</div>
+													{img.description && 
+														<p className="text-it-1000 p-2 text-sm">
+															{img.description || tInstrument('no_description')}
+														</p>
+													}
+												</div>
+											))}
+											
+											{/* Show overlay with counter for remaining images */}
+											{shouldShowOverlay && (
+												<div
+													className="relative bg-it-100 border border-it-200 rounded-lg overflow-hidden cursor-pointer"
+													onClick={() => setIsImagesExpanded(true)}
+													tabIndex={0}
+													role="button"
+													aria-label={tInstrument('show_all_images')}
+													onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setIsImagesExpanded(true); }}
+												>
+													<div className="w-full aspect-square bg-white/[.04] relative">
+														<Image
+															src={images[IMAGES_THRESHOLD_FOR_MORE_COLUMNS - 1].uri}
+															alt={`Instrument #${id}`}
+															width={400}
+															height={400}
+															className="object-cover w-full h-full"
+														/>
+														{/* Overlay */}
+														<div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+															<div className="text-center">
+																<div className="text-it-200 text-3xl mb-1">
+																	+{hiddenImagesCount}
+																</div>
+															</div>
+														</div>
+													</div>
+													{images[IMAGES_THRESHOLD_FOR_MORE_COLUMNS - 1].description && 
+														<p className="text-it-1000 p-2 text-sm">
+															{images[IMAGES_THRESHOLD_FOR_MORE_COLUMNS - 1].description || tInstrument('no_description')}
+														</p>
+													}
+												</div>
+											)}
+
+											{/* When expanded, show all images (no overlay) */}
+											{isImagesExpanded && images.slice(visibleImagesCount).map((img: any, index: number) => (
+												<div key={visibleImagesCount + index} className="relative bg-it-100 border border-it-200 rounded-lg overflow-hidden">
+													<div className="w-full aspect-square bg-white/[.04]">
+														<a href={img.uri} target="_blank" rel="noreferrer">	
+															<Image
+																src={img.uri}
+																alt={`Instrument #${id}`}
+																width={400}
+																height={400}
+																className="object-cover w-full h-full"
+															/>
+														</a>
+													</div>
+													{img.description && 
+														<p className="text-it-1000 p-2 text-sm">
+															{img.description || tInstrument('no_description')}
+														</p>
+													}
+												</div>
+											))}
+										</div>
+									);
+								})()}
 							</div>
 						)}
 
 						{/* Documents Section */}
-						<div>
-							<h2 className='text-xl font-semibold text-it-1000 dark:text-it-50 mb-4'>
-								{tInstrument('documents')}
-							</h2>
-							{documents && documents.length > 0 ? (
+						{documents && documents.length > 0 && (
+							<div className="p-4 sm:p-0 bg-gray-25 dark:bg-gray-900 sm:bg-transparent rounded-lg">
+								<h2 className='text-xl font-semibold text-it-1000 dark:text-it-50 mb-4'>
+									{tInstrument('documents')}
+								</h2>
 								<div className='flex flex-col gap-2'>
 									{documents.map((doc: any, index: number) => (
 										<a
@@ -680,23 +774,18 @@ export default function Instrument(
 										</a>
 									))}
 								</div>
-							) : (
-								<p className="text-gray-500">{tInstrument('no_documents_available')}</p>
-							)}
-						</div>
+							</div>
+						)}
 					</div>
 
-					{
-						isOwner &&
-						<Divider color="bg-gray-50" spacing="lg" />
-					}
+					{ isOwner && !hasActiveValidationAttempt(searchParams) && <Divider color="bg-we-500" spacing="lg" className="mt-12" /> }
 
 					<div className={`mt-6 space-y-4 ${showTransferOptions ? 'min-h-screen' : ''}`}>
 						{/* Transfer Management Section */}
-						{address && isOwner && (
+						{address && isOwner && !hasActiveValidationAttempt(searchParams) && (
 							<div className="mb-12" ref={transferSectionRef}>
 								<div>
-									<h2 className="text-2xl font-semibold text-we-600 dark:text-it-50 mb-2">
+									<h2 className="text-2xl font-semibold text-we-600 dark:text-we-500 mb-2">
 										{tInstrument('transfer_management')}
 									</h2>
 									<p className="text-it-1000 dark:text-it-50 mb-6">
@@ -706,7 +795,7 @@ export default function Instrument(
 									{!showTransferOptions && (
 										<button
 											type="button"
-											className="inline-flex items-center px-4 py-2 text-sm text-we-1000 dark:text-we-50 bg-transparent border border-we-500 rounded-md hover:bg-we-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-we-500 disabled:opacity-50"
+											className="inline-flex items-center px-4 py-2 text-sm text-we-1000 dark:text-we-50 bg-transparent border-[0.1rem] border-we-500 rounded-md hover:bg-we-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-we-500 disabled:opacity-50"
 											onClick={() => setShowTransferOptions(!showTransferOptions)}
 										>
 											{tInstrument('show_transfer_options')}
@@ -715,17 +804,17 @@ export default function Instrument(
 									)}
 								</div>
 								{showTransferOptions && (
-									<div className="bg-we-50 dark:bg-we-950 rounded-lg p-6 mb-12 text-center">
-										<h3 className="text-2xl font-semibold text-we-600 dark:text-it-50 mt-4 mb-8">
+								<>
+									<div className="bg-we-50 dark:bg-we-1000 rounded-lg p-6 mb-2 text-center">
+										<h3 className="text-xl font-semibold text-we-600 dark:text-we-500 mt-4 mb-12 sm:mb-8">
 											{tInstrument('transfer_options_title')}
 										</h3>
-										<div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-6">
-											{ !showRemoteSteps &&
+										<div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-x-6 gap-y-16">
 											<div className="flex gap-6">
 												<div className="flex flex-col gap-2 text-center">
-													<div className="flex flex-col items-center">
-														<Handshake className="w-6 h-6" strokeWidth={1.5} />
-														<h3 className="text-xl font-semibold text-it-1000 dark:text-it-50">
+													<div className="flex flex-col items-center text-we-500">
+														<Handshake className="w-8 h-8" strokeWidth={1.5} />
+														<h3 className="text-2xl font-semibold text-it-1000 dark:text-it-50">
 															{tInstrument('in_person_transfer')}
 														</h3>
 													</div>
@@ -734,86 +823,28 @@ export default function Instrument(
 													</p>
 													<div className="flex flex-col gap-2">
 														{!to && (
-															<>
-																<button
-																	type="button"
-																	className="inline-flex flex-col items-center m-auto px-4 py-2 text-lg font-medium text-we-600 dark:text-we-50  disabled:opacity-50 w-fit"
-																	onClick={() => setShowInPersonSteps(true)}
-																	disabled={isTransfering}
-																	aria-label={tInstrument('transfer_in_person')}
-																>
-																	<span>{tInstrument('transfer_in_person')}</span>
-																	<ArrowDownWideNarrow className="w-6 h-6" strokeWidth={1.5}/>
-																</button>
-
-																{showInPersonSteps && (
-																	<div className="mt-4 space-y-6">
-																		{/* Step 1 */}
-																		<div className="text-center">
-																			<p className="text-it-1000 dark:text-it-50 mb-2">
-																				{tInstrument('step_1_description')}
-																			</p>
-																			<button
-																				type="button"
-																				onClick={() => handleCopyUrl(async () => 'https://app.instruement.com')}
-																				className="inline-flex items-center  px-4 py-2 text-xs font-medium text-we-1000 dark:text-we-50 bg-transparent border-[0.1rem] border-we-400 rounded-md hover:bg-we-400 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-we-400 disabled:opacity-50"
-																				aria-label={tInstrument('share_app')}
-																			>
-																				<Copy className="w-4 h-4 mr-2" />
-																				{tInstrument('share_app')}
-																			</button>
-																		</div>
-
-																		<MoveDown className="w-6 h-6 mx-auto text-we-500" strokeWidth={1.5}/>
-
-																		{/* Step 2 */}
-																		<div className="text-center">
-																			<p className="text-it-1000 dark:text-it-50 mb-2">
-																				{tInstrument('step_2_description')}
-																			</p>
-																			<button
-																				type="button"
-																				className="inline-flex items-center px-4 py-2 text-xs font-medium text-we-1000 dark:text-we-50 bg-transparent border-[0.1rem] border-we-400 rounded-md hover:bg-we-400 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-we-400 disabled:opacity-50"
-																				onClick={() => setModalOpen(true)}
-																				aria-label={tInstrument('scan_qr')}
-																			>
-																				<QrCode className="w-4 h-4 mr-2" />
-																				{tInstrument('scan_qr')}
-																			</button>
-																		</div>
-
-																		{!scannedResult && !to ? (
-																			<Hourglass className="w-6 h-6 mx-auto text-we-500" strokeWidth={1.5}/>
-																		) : (
-																			<MoveDown className="w-6 h-6 mx-auto text-we-500" strokeWidth={1.5}/>
-																		)}
-
-																		{/* Step 3 */}
-																		<div className="text-center">
-																			{!scannedResult && !to ? (
-																				<p className="text-we-1000 dark:text-we-50 text-sm">
-																					{tInstrument('step_3_waiting_for_scan')}
-																				</p>
-																			) : (
-																				<p className="text-we-1000 dark:text-we-50 mb-2">
-																					{tInstrument('recipient_account')} {truncateEthAddress(to || scannedResult || '')}
-																				</p>
-																			)}
-																		</div>
-																	</div>
-																)}
-															</>
+															<button
+																type="button"
+																className="inline-flex flex-col items-center m-auto px-4 py-2 text-lg font-medium text-we-600 dark:text-we-50  disabled:opacity-50 w-fit border-[0.1rem] border-we-500 rounded-md"
+																onClick={() => {
+																	setShowInPersonSteps(true);
+																	setShowRemoteSteps(false);
+																}}
+																disabled={isTransfering}
+																aria-label={tInstrument('transfer_in_person')}
+															>
+																<span className="text-we-1000 dark:text-we-50">{tInstrument('transfer_in_person')}</span>
+																<ArrowDownWideNarrow className="w-6 h-6" strokeWidth={1.5}/>
+															</button>
 														)}
 													</div>
 												</div>
 											</div>
-											}
-											{ !showInPersonSteps &&
 											<div className="flex gap-6">
 												<div className="flex flex-col gap-2 text-center">
-													<div className="flex flex-col items-center">
-														<Telescope className="w-6 h-6" strokeWidth={1.5} />
-														<h3 className="text-xl font-semibold text-it-1000 dark:text-it-50">
+													<div className="flex flex-col items-center text-we-500">
+														<Telescope className="w-8 h-8" strokeWidth={1.5} />
+														<h3 className="text-2xl font-semibold text-it-1000 dark:text-it-50">
 															{tInstrument('remote_transfer')}
 														</h3>
 													</div>
@@ -822,105 +853,193 @@ export default function Instrument(
 													</p>
 													<div className="flex flex-col gap-2">
 														{!to && (
-															<>
-																<button
-																	type="button"
-																	className="inline-flex flex-col items-center m-auto px-4 py-2 text-lg font-medium text-we-600 dark:text-we-50 disabled:opacity-50 w-fit"
-																	onClick={() => setShowRemoteSteps(true)}
-																	disabled={isTransfering}
-																	aria-label={tInstrument('transfer_remotely')}
-																>
-																	<span>{tInstrument('transfer_remotely')}</span>
-																	<ArrowDownWideNarrow className="w-6 h-6" strokeWidth={1.5}/>
-																</button>
-
-																{showRemoteSteps && (
-																	<div className="mt-4 space-y-6">
-																		{/* Step 1 */}
-																		<div className="text-center">
-																			<p className="text-it-1000 dark:text-it-50 mb-2">
-																				{tInstrument('step_1_remote_description')}
-																			</p>
-																			<button
-																				type="button"
-																				onClick={() => handleCopyUrl(generateShareableUrl)}
-																				className="inline-flex items-center px-4 py-2 text-xs font-medium text-we-1000 dark:text-we-50 bg-transparent border-[0.1rem] border-we-400 rounded-md hover:bg-we-400 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-we-400 disabled:opacity-50"
-																				aria-label={tInstrument('copy_secure_link')}
-																				disabled={isTransfering}
-																			>
-																				<Copy className="w-4 h-4 mr-2" />
-																				{copySuccess ? tInstrument('copied') : `${tInstrument('copy_secure_link')}`}
-																			</button>
-																			<p className="text-we-1000 dark:text-we-50 mt-2 text-xs">
-																				{tInstrument('valid_for')} {COOKIE_EXPIRY_DAYS} {tInstrument('days')}
-																			</p>
-																		</div>
-
-																		<MoveDown className="w-6 h-6 mx-auto text-we-500" strokeWidth={1.5}/>
-
-																		{/* Step 2 */}
-																		<div className="text-center">
-																			<p className="text-it-1000 dark:text-it-50 mb-2">
-																				{tInstrument('step_2_remote_description')}
-																			</p>
-																		</div>
-
-																		<MoveDown className="w-6 h-6 mx-auto text-we-500" strokeWidth={1.5}/>
-
-																		{/* Step 3 */}
-																		<div className="text-center">
-																			<p className="text-it-1000 dark:text-it-50 mb-2">
-																				{tInstrument('step_3_remote_description')}
-																			</p>
-																		</div>
-																	</div>
-																)}
-															</>
+															<button
+																type="button"
+																className="inline-flex flex-col items-center m-auto px-4 py-2 text-lg font-medium text-we-600 dark:text-we-50 disabled:opacity-50 border-[0.1rem] border-we-500 rounded-md w-fit"
+																onClick={() => {
+																	setShowRemoteSteps(true);
+																	setShowInPersonSteps(false);
+																}}
+																disabled={isTransfering}
+																aria-label={tInstrument('transfer_remotely')}
+															>
+																<span className="text-we-1000 dark:text-we-50">{tInstrument('transfer_remotely')}</span>
+																<ArrowDownWideNarrow className="w-6 h-6" strokeWidth={1.5}/>
+															</button>
 														)}
 													</div>
 												</div>
 											</div>
-											}
 										</div>
-										{/* Transaction Button */}
-										{contract && address && isOwner && (to || scannedResult) && !hasActiveValidationAttempt(searchParams) && (
-										<div className="my-6 text-center">
-											<CheckCheck className="w-6 h-6 mx-auto text-we-500" strokeWidth={1.5}/>
-											<h3 className="text-lg font-semibold text-we-1000 dark:text-we-50 my-4">
-												{tInstrument('ready_for_transfer')}
-											</h3>
-											<TransactionButton
-												transaction={() => {
-													setIsTransfering(true);
-													return transferFrom({
-														contract: contract,
-														from: address,
-														to: to ? to : scannedResult ? scannedResult : '',
-														tokenId: BigInt(id)
-													});
-												}}
-												onTransactionConfirmed={() => {
-													alert(`${tInstrument("transfered_to_success")} ${to ? to : scannedResult ? scannedResult : ''}`);
-													setReloadUser(true);
-													router.replace('/');
-												}}
-												onError={(error) => {
-													setIsTransfering(false);
-													console.error("Transaction error", error);
-												}}
-												unstyled
-												className="px-4 py-2 text-base font-medium transition-colors duration-200 transform bg-transparent border-[0.1rem] border-we-400 rounded-md hover:bg-we-400 text-we-1000 dark:text-we-50 focus:outline-none"
-											>
-												<div className="flex items-center justify-center gap-2">
-													<Send className="w-4 h-4" />
-													{tInstrument('send')}
-												</div>
-											</TransactionButton>
-										</div>
-										)}
 									</div>
-								)}
-							</div>
+									{/* Show if in person or remote steps selected */}
+									{(showInPersonSteps || showRemoteSteps) && (
+										<>
+											<div className="bg-we-100 dark:bg-we-950 rounded-lg p-6 mb-2 text-center relative animate-slide-up" ref={stepsSectionRef}>
+												{/* Close/Back button */}
+												<button
+													type="button"
+													className="absolute top-4 right-4 text-xs font-medium text-we-400 dark:text-we-500 bg-transparent"
+													onClick={() => {
+														setShowInPersonSteps(false);
+														setShowRemoteSteps(false);
+														setScannedResult("");
+													}}
+													aria-label={tInstrument('close_steps')}
+												>
+													<CircleX className="w-6 h-6" strokeWidth={1.5}/>
+												</button>
+												{/* Content for in-person steps */}
+												{showInPersonSteps && (
+													<>
+														<div className="flex flex-col items-center justify-center text-we-500 pt-6">
+															<Handshake className="w-8 h-8" strokeWidth={1.5} />
+															<h3 className="text-2xl font-semibold text-we-1000 dark:text-we-50 mb-12 sm:mb-8">
+																{tInstrument('transfer_in_person')}
+															</h3>
+														</div>
+														<div className="mt-4 space-y-6 max-w-sm mx-auto">
+															{/* Step 1 */}
+															<div className="text-center">
+																<p className="text-we-1000 dark:text-we-50 mb-2">
+																	{tInstrument('step_1_description')}
+																</p>
+																<button
+																	type="button"
+																	onClick={() => handleCopyUrl(async () => 'https://app.instruement.com')}
+																	className="inline-flex items-center  px-4 py-2 text-xs font-medium text-we-1000 dark:text-we-50 bg-transparent border-[0.1rem] border-we-400 rounded-md hover:bg-we-400 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-we-400 disabled:opacity-50"
+																	aria-label={tInstrument('share_app')}
+																>
+																	<Copy className="w-4 h-4 mr-2" />
+																	{tInstrument('share_app')}
+																</button>
+															</div>
+															<MoveDown className="w-6 h-6 mx-auto text-we-500" strokeWidth={1.5} />
+															{/* Step 2 */}
+															<div className="text-center">
+																<p className="text-lg text-we-1000 dark:text-we-50 mb-2">
+																	{tInstrument('step_2_description')}
+																</p>
+																<button
+																	type="button"
+																	className="inline-flex items-center px-4 py-2 text-basic font-medium text-we-1000 dark:text-we-50 bg-transparent border-[0.1rem] border-we-400 rounded-md hover:bg-we-400 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-we-400 disabled:opacity-50"
+																	onClick={() => setModalOpen(true)}
+																	aria-label={tInstrument('scan_qr')}
+																>
+																	<QrCode className="w-4 h-4 mr-2" />
+																	{tInstrument('scan_qr')}
+																</button>
+															</div>
+															{!scannedResult && !to ? (
+																<Hourglass className="w-6 h-6 mx-auto text-we-500 animate-pulse" strokeWidth={1.5} />
+															) : (
+																<MoveDown className="w-6 h-6 mx-auto text-we-500" strokeWidth={1.5} />
+															)}
+															{/* Step 3 */}
+															<div className="text-center">
+																{!scannedResult && !to ? (
+																	<p className="text-we-500 dark:text-we-50 text-sm animate-pulse">
+																		{tInstrument('step_3_waiting_for_scan')}
+																	</p>
+																) : (
+																	<p className="bg-we-200 dark:bg-we-900 text-we-900 font-medium dark:text-we-50 mb-2 p-2 rounded-full">
+																		{tInstrument('recipient_account')} {truncateEthAddress(to || scannedResult || '')}
+																	</p>
+																)}
+															</div>
+														</div>
+													</>
+												)}
+												{/* Content for remote steps */}
+												{showRemoteSteps && (
+													<>
+														<div className="flex flex-col items-center justify-center text-we-500 pt-6">
+															<Telescope className="w-8 h-8" strokeWidth={1.5} />
+															<h3 className="text-2xl font-semibold text-we-1000 dark:text-we-50 mb-12 sm:mb-8">
+																{tInstrument('transfer_remotely')}
+															</h3>
+														</div>
+														<div className="mt-4 space-y-6 max-w-md mx-auto">
+															{/* Step 1 */}
+															<div className="text-center">
+																<p className="text-we-1000 text-lg dark:text-it-50 mb-2">
+																	{tInstrument('step_1_remote_description')}
+																</p>
+																<button
+																	type="button"
+																	onClick={() => handleCopyUrl(generateShareableUrl)}
+																	className="inline-flex items-center px-4 py-2 text-xs font-medium text-we-1000 dark:text-we-50 bg-transparent border-[0.1rem] border-we-400 rounded-md hover:bg-we-400 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-we-400 disabled:opacity-50"
+																	aria-label={tInstrument('copy_secure_link')}
+																	disabled={isTransfering}
+																>
+																	<Copy className="w-4 h-4 mr-2" />
+																	{copySuccess ? tInstrument('copied') : `${tInstrument('copy_secure_link')}`}
+																</button>
+																<p className="text-we-1000 dark:text-we-50 mt-2 text-xs">
+																	{tInstrument('valid_for')} {COOKIE_EXPIRY_DAYS} {tInstrument('days')}
+																</p>
+															</div>
+															<MoveDown className="w-6 h-6 mx-auto text-we-500" strokeWidth={1.5}/>
+															{/* Step 2 */}
+															<div className="text-center">
+																<p className="text-we-1000 dark:text-it-50 mb-2">
+																	{tInstrument('step_2_remote_description')}
+																</p>
+															</div>
+															<MoveDown className="w-6 h-6 mx-auto text-we-500" strokeWidth={1.5}/>
+															{/* Step 3 */}
+															<div className="text-center">
+																<p className="text-we-1000 dark:text-it-50 mb-2">
+																	{tInstrument('step_3_remote_description')}
+																</p>
+															</div>
+														</div>
+													</>
+												)}
+											</div>
+											{/* Transaction Button */}
+											{contract && address && isOwner && (to || scannedResult) && !hasActiveValidationAttempt(searchParams) && (
+												<div className="bg-we-200 dark:bg-we-900 rounded-lg p-6 mb-12 text-center relative animate-slide-up" ref={sendSectionRef}>
+													<div className="my-6 text-center">
+														<CheckCheck className="w-8 h-8 mx-auto text-we-500" strokeWidth={1.5}/>
+														<h3 className="text-2xl font-semibold text-we-1000 dark:text-we-50 mt-2 mb-4">
+															{tInstrument('ready_for_transfer')}
+														</h3>
+														<TransactionButton
+															transaction={() => {
+																setIsTransfering(true);
+																return transferFrom({
+																	contract: contract,
+																	from: address,
+																	to: to ? to : scannedResult ? scannedResult : '',
+																	tokenId: BigInt(id)
+																});
+															}}
+															onTransactionConfirmed={() => {
+																alert(`${tInstrument("transfered_to_success")} ${to ? to : scannedResult ? scannedResult : ''}`);
+																setReloadUser(true);
+																router.replace('/');
+															}}
+															onError={(error) => {
+																setIsTransfering(false);
+																console.error("Transaction error", error);
+															}}
+															unstyled
+															className="px-4 py-2 text-base font-medium transition-colors duration-200 transform bg-transparent border-[0.1rem] border-we-500 rounded-md hover:bg-we-400 text-we-1000 dark:text-we-50 focus:outline-none"
+														>
+															<div className="flex items-center justify-center gap-2">
+																<Send className="w-4 h-4" />
+																{tInstrument('send')}
+															</div>
+														</TransactionButton>
+													</div>
+												</div>
+											)}
+										</>
+									)}
+								</>
+						)}
+						</div>
 						)}
 					</div>
 				</>

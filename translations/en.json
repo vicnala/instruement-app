@@ -212,12 +212,12 @@
             "transfer_in_person": "Transfer in person",
             "step_1_description": "Ask the recipient to open the Instruement app on their phone. If they don't have it yet, share a direct link.",
             "share_app": "Copy link",
-            "step_2_description": "Scan the QR code on the recipient's home screen.",
+            "step_2_description": "Scan the QR code on the recipient's home or account screen.",
             "step_3_waiting_for_scan": "Waiting for QR scan result. No rush.",
             "step_3_description": "Finally, transfer the record to the scanned account",
             "transfer_remotely": "Transfer remotely",
             "step_1_remote_description": "Copy and share a secure link with the recipient. Use your preferred messaging app.",
-            "step_2_remote_description": "The recipient will open the link and immediately see the button to copy the transfer confirmation link. They must share that link with you.",
+            "step_2_remote_description": "The recipient will open the link and immediately see the button to copy the transfer acceptance link. They must share that link with you.",
             "step_3_remote_description": "Open the acceptance link to see the final send button.",
             "remote_transfer_confirmation_title": "Transfer in progress",
             "remote_transfer_confirmation_title_invalid": "Review the link",
@@ -230,7 +230,10 @@
             "remote_transfer_step_3_invalid_title": "Transfer is not possible",
             "remote_transfer_step_3_invalid_description": "The transfer link is invalid. Check the received link and try again.",
             "show_less": "Show less",
-            "show_more": "Show more"
+            "show_more": "Show more",
+            "toggle_additional_images": "Toggle additional images",
+            "show_all_images": "Show all images",
+            "close_steps": "Close step"
         },
         "ElementsForm": {
             "title": "Register Your Instrument Now",
@@ -284,37 +287,37 @@
                 "modals": {
                     "share_account_what": {
                         "preview": "More info",
-                        "title": "Account Number",
-                        "description": "The QR code contains your account number. This number allows you to receive instrument registrations securely, as it only works for incoming transfers. You can share it with luthiers and other users to receive registered instruments in your account. Once a registration is transferred to your account, you will be the sole owner of that registration."
+                        "title": "Your account address",
+                        "description": "The QR code contains your account address. This address allows you to receive instrument registrations securely, as it only works for incoming transfers. You can share it with luthiers and other users to receive registered instruments in your account. Once a registration is transferred to your account, you will be the sole owner of that registration."
                     }
+                }
+            },
+            "OnboardMinterCard": {
+                "title": "Activate your luthier account now",
+                "description": "Proceed to confirm the email where you received your invitation.",
+                "confirm_invitation_do": "Confirm your invitation",
+                "confirm_invitation_email_label": "Business email",
+                "confirm_invitation_email_placeholder": "Enter your email",
+                "confirm_invitation_email_description": "We will send you a verification code to this email",
+                "confirm_invitation_confirm_email": "Send code",
+                "confirm_invitation_cancel_email": "Cancel",
+                "confirm_invitation_otp_label": "Verification code",
+                "confirm_invitation_otp": "Enter the code",
+                "confirm_invitation_confirm_otp": "Send code",
+                "confirm_invitation_cancel_otp": "Cancel",
+                "privacy_policy": "I have read and agree to the",
+                "privacy_policy_link": "Privacy Policy",
+                "reload_notice": "Note: on successful validation, the page will reload and you will need to sign-in again.",
+                "errors": {
+                    "no_valid_email": "The email is not valid",
+                    "otp_failed": "Something went wrong with this step. Please try again."
                 }
             }
         },
         "HomeIndex": {
             "User": {
                 "no_instruments": "Receive your registered instrument",
-                "no_instruments_sub": "Present the QR code to your luthier.",
-                "luthier": {
-                    "title": "Are you a luthier?",
-                    "description": "We are onboarding new luthiers by invitation. Proceed to confirm the email where you received your invitation.",
-                    "confirm_invitation_do": "Confirm your invitaion",
-                    "confirm_invitation_email_label": "Business email",
-                    "confirm_invitation_email_placeholder": "Enter your email",
-                    "confirm_invitation_email_description": "We will send you a verification code to this email",
-                    "confirm_invitation_confirm_email": "Send code",
-                    "confirm_invitation_cancel_email": "Cancel",
-                    "confirm_invitation_otp_label": "Verification code",
-                    "confirm_invitation_otp": "Enter the code",
-                    "confirm_invitation_confirm_otp": "Send code",
-                    "confirm_invitation_cancel_otp": "Cancel",
-                    "privacy_policy": "I have read and agree to the",
-                    "privacy_policy_link": "Privacy Policy",
-                    "reload_notice": "Note: on successful validation, the page will reload and you will need to sign-in again.",
-                    "errors": {
-                        "no_valid_email": "The email is not valid",
-                        "otp_failed": "Something went wrong with this step. Please try again."
-                    }
-                }
+                "no_instruments_sub": "Present the QR code to your luthier."
             },
             "Minter": {
                 "hello": "Welcome",
