@@ -217,14 +217,14 @@
             "transfered_to_success": "Instrumento transferido a",
             "new_instrument_received": "recibido",
             "transfer_in_person": "Transferir en persona",
-            "step_1_description": "Pide al destinatario que abra la aplicación Instruement en su teléfono. Si no la tiene, comparte un enlace directo.",
+            "step_1_description": "Pide al destinatario que abra la aplicación Instruement en su teléfono. Si aún no la tiene, comparte un enlace directo.",
             "share_app": "Copiar enlace",
-            "step_2_description": "Escanea el código QR en la pantalla de inicio del destinatario.",
+            "step_2_description": "Escanea el código QR en la pantalla de inicio o de la cuenta del destinatario.",
             "step_3_waiting_for_scan": "Esperando el resultado del escaneo. No hay prisa.",
             "step_3_description": "Finalmente, transfiere el registro a la cuenta escaneada",
             "transfer_remotely": "Transferir a distancia",
             "step_1_remote_description": "Copia y comparte un enlace seguro con el destinatario. Usa tu aplicación de mensajería preferida.",
-            "step_2_remote_description": "El destinatario abrirá el enlace y verá inmediatamente el botón para copiar el enlace de confirmación de la transferencia. Debe compartir ese enlace contigo.",
+            "step_2_remote_description": "El destinatario abrirá el enlace y verá inmediatamente el botón para copiar el enlace de aceptación de la transferencia. Debe compartir ese enlace contigo.",
             "step_3_remote_description": "Abre el enlace de aceptación para ver el botón final de envío.",
             "remote_transfer_link_valid": "Este enlace de transferencia es válido",
             "remote_transfer_link_invalid": "Este enlace de transferencia no es válido",
@@ -237,7 +237,10 @@
             "remote_transfer_step_3_invalid_title": "Transferencia no es posible",
             "remote_transfer_step_3_invalid_description": "El enlace de transferencia no es válido. Comprueba el enlace recibido y vuelve a intentarlo.",
             "show_less": "Mostrar menos",
-            "show_more": "Mostrar más"
+            "show_more": "Mostrar más",
+            "toggle_additional_images": "Alternar imágenes adicionales",
+            "show_all_images": "Mostrar todas las imágenes",
+            "close_steps": "Cerrar paso"
         },
         "ElementsForm": {
             "title": "Registra tu instrumento ahora",
@@ -290,38 +293,38 @@
                 "awaiting_transfer": "Esperando transferencia",
                 "modals": {
                     "share_account_what": {
-                        "title": "Número de cuenta",
+                        "title": "Dirección de tu cuenta",
                         "preview": "Más información",
-                        "description": "El código QR contiene tu número de cuenta. Este número te permite recibir registros de instrumentos de manera segura, ya que solo sirve para transferencias entrantes. Puedes compartirlo con luthiers y otros usuarios para recibir instrumentos registrados en tu cuenta. Una vez que un registro se transfiere a tu cuenta, serás la única persona propietaria de ese registro."
+                        "description": "El código QR contiene la dirección de tu cuenta. Esta dirección te permite recibir registros de instrumentos de manera segura, ya que solo sirve para transferencias entrantes. Puedes compartirlo con luthiers y otros usuarios para recibir instrumentos registrados en tu cuenta. Una vez que un registro se transfiere a tu cuenta, serás la única persona propietaria de ese registro."
                     }
+                }
+            },
+            "OnboardMinterCard": {
+                "title": "Activa tu cuenta de luthier ahora",
+                "description": "Procede a confirmar el email donde recibiste tu invitación.",
+                "confirm_invitation_do": "Confirma tu invitación",
+                "confirm_invitation_email_label": "Email de negocio",
+                "confirm_invitation_email_placeholder": "Introduce tu email",
+                "confirm_invitation_email_description": "Te enviaremos un código de verificación a este email",
+                "confirm_invitation_confirm_email": "Enviar código",
+                "confirm_invitation_cancel_email": "Cancelar",
+                "confirm_invitation_otp_label": "Código de verificación",
+                "confirm_invitation_otp": "Introduce el código",
+                "confirm_invitation_confirm_otp": "Enviar",
+                "confirm_invitation_cancel_otp": "Cancelar",
+                "privacy_policy": "He leído y acepto la",
+                "privacy_policy_link": "Política de privacidad",
+                "reload_notice": "Nota: en caso de una validación exitosa, la página se recargará y necesitarás iniciar sesión de nuevo.",
+                "errors": {
+                    "no_valid_email": "El email no es válido",
+                    "otp_failed": "Algo ha ido mal con este paso. Por favor, inténtalo de nuevo."
                 }
             }
         },
         "HomeIndex": {
             "User": {
                 "no_instruments": "Recibe tu instrumento registrado",
-                "no_instruments_sub": "Presenta el código QR a tu luthier.",
-                "luthier": {
-                    "title": "¿Eres luthier?",
-                    "description": "Estamos incorporando nuevos luthiers por invitación. Procede a confirmar el email donde recibiste tu invitación.",
-                    "confirm_invitation_do": "Confirma tu invitación",
-                    "confirm_invitation_email_label": "Email de negocio",
-                    "confirm_invitation_email_placeholder": "Introduce tu email",
-                    "confirm_invitation_email_description": "Te enviaremos un código de verificación a este email",
-                    "confirm_invitation_confirm_email": "Enviar código",
-                    "confirm_invitation_cancel_email": "Cancelar",
-                    "confirm_invitation_otp_label": "Código de verificación",
-                    "confirm_invitation_otp": "Introduce el código",
-                    "confirm_invitation_confirm_otp": "Enviar",
-                    "confirm_invitation_cancel_otp": "Cancelar",
-                    "privacy_policy": "He leído y acepto la",
-                    "privacy_policy_link": "Política de privacidad",
-                    "reload_notice": "Nota: en caso de una validación exitosa, la página se recargará y necesitarás iniciar sesión de nuevo.",
-                    "errors": {
-                        "no_valid_email": "El email no es válido",
-                        "otp_failed": "Algo ha ido mal con este paso. Por favor, inténtalo de nuevo."
-                    }
-                }
+                "no_instruments_sub": "Presenta el código QR a tu luthier."
             },
             "Minter": {
                 "hello": "Te damos la bienvenida",

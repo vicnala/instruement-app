@@ -11,7 +11,7 @@ const Page = ({ children }: Props) => {
 		<>
 			<Header />
 				<main className={`mx-auto max-w-screen-lg px-safe`}>
-					<div className='px-3.5 py-6 sm:py-0'>{children}</div>
+					<div className='px-3.5 pt-6 pb-[4rem] sm:px-0 sm:pt-0'>{children}</div>
 				</main>
 			<BottomNav />
 		</>

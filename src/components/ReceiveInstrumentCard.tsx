@@ -11,7 +11,7 @@ const ReceiveInstrumentCard: React.FC<ReceiveInstrumentCardProps> = ({ address, 
   const t = useTranslations('components.HomeIndex.User');
 
   return (
-    <div className='p-6 rounded-[15px] mb-4 md:mb-6 border border-it-100 dark:border-gray-900 bg-it-50 dark:bg-gray-950'>
+    <div className='p-6 rounded-[15px] md:mb-6 border border-it-100 dark:border-gray-900 bg-it-50 dark:bg-gray-900'>
       <div className="grid grid-cols-1 items-center md:grid-cols-2 gap-6">
         <div>
           <h2 className='text-4xl font-bold text-contrast dark:text-it-200 mb-2'>

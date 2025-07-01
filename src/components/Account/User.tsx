@@ -6,14 +6,24 @@ import Page from "@/components/Page";
 import Loading from "@/components/Loading";
 import Section from "@/components/Section";
 import ReceiveInstrumentCard from "@/components/ReceiveInstrumentCard";
-import { CustomConnectButton } from "../CustomConnectButton";
+import OnboardMinterCard from "@/components/UI/OnboardMinterCard";
+import { CustomConnectButton } from "@/components/CustomConnectButton";
 import { useActiveAccount } from "thirdweb/react";
 
 export default function User(
-    { locale }: Readonly<{ locale: string }>
+    { locale, invite }: Readonly<{ locale: string, invite?: string }>
 ) {
     const t = useTranslations('components.Account.User');
-    const { isLoading } = useStateContext()
+    
+    let contextData;
+    try {
+        contextData = useStateContext();
+    } catch (error) {
+        console.error('Context error:', error);
+        return <Loading />;
+    }
+    
+    const { isLoading, setReloadUser } = contextData;
     const activeAccount = useActiveAccount();
 
     if (isLoading || !activeAccount?.address) return <Loading />
@@ -28,9 +38,20 @@ export default function User(
                     {t('anonymous')}
                 </p>
             </Section>
-            <Section>
-                <ReceiveInstrumentCard address={activeAccount.address} locale={locale} />
-            </Section>
+            {invite && (
+                <Section>
+                    <OnboardMinterCard 
+                        locale={locale} 
+                        invite={invite}
+                        onReloadUser={() => setReloadUser(true)} 
+                    />
+                </Section>
+            )}
+            { !invite && (
+                <Section>
+                    <ReceiveInstrumentCard address={activeAccount.address} locale={locale} />
+                </Section>
+            )}
             <Section>
                 <div className='mb-16'>
                     <h3 className='text-lg font-bold text-black dark:text-white mb-2'>
