@@ -3,18 +3,12 @@ import User from "@/components/HomeIndex/User";
 import { getLocale } from "next-intl/server";
 import { authedOnly } from "@/actions/login";
 
-type Props = {
-  searchParams: Promise<{ invite?: string }>
-}
-
-export default async function Home({ searchParams }: Props) {
+export default async function Home() {
   const locale = await getLocale();
-  const authResult: any = await authedOnly("/");
+  const authResult: any = await authedOnly("/", "");
   const authContext = authResult.parsedJWT.ctx;
-  const isMinter = authContext.isMinter;
-  const { invite } = await searchParams;
 
-  return isMinter
+  return authContext?.isMinter
     ? <Minter locale={locale} />
-    : <User locale={locale} invite={invite} />;
+    : <User locale={locale} />;
 }

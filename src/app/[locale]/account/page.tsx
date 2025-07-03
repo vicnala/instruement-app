@@ -9,10 +9,12 @@ type Props = {
 
 export default async function AccountPage({ searchParams }: Props) {
   const locale = await getLocale();
-  const authResult: any = await authedOnly("/account");
+  const { invite } = await searchParams;
+  const authResult: any = await authedOnly("/account", invite || undefined);
   const authContext = authResult.parsedJWT.ctx;
   const isMinter = authContext.isMinter;
-  const { invite } = await searchParams;
+
+  console.log("invite", invite);
 
   return isMinter ? <Minter locale={locale} /> : <User locale={locale} invite={invite} />
 }

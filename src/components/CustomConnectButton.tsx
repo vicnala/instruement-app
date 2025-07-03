@@ -26,7 +26,7 @@ const wallets = [
 ];
 
 export const CustomConnectButton = (
-  { cb }: Readonly<{ cb?: string | undefined }>
+  { cb, invite }: Readonly<{ cb?: string | undefined, invite?: string | undefined }>
 ) => {
   const { theme } = useTheme();
   const locale = useLocale();
@@ -56,7 +56,7 @@ export const CustomConnectButton = (
         },
         doLogin: async (params) => {
           // console.log("logging in!");
-          await login(params, cb);
+          await login(params, cb, invite);
         },
         getLoginPayload: async ({ address }) =>
           await generatePayload({ address, chainId: chain.id }),
