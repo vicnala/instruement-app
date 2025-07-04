@@ -14,17 +14,8 @@ export default function User(
     { locale, invite }: Readonly<{ locale: string, invite?: string }>
 ) {
     const t = useTranslations('components.Account.User');
-    
-    let contextData;
-    try {
-        contextData = useStateContext();
-    } catch (error) {
-        console.error('Context error:', error);
-        return <Loading />;
-    }
-    
-    const { isLoading, setReloadUser } = contextData;
     const activeAccount = useActiveAccount();
+    const { isLoading, setReloadUser } = useStateContext();
 
     if (isLoading || !activeAccount?.address) return <Loading />
 
