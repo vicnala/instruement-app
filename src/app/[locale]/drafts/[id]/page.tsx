@@ -7,7 +7,7 @@ export default async function DraftEditPage({
 }: {
   params: { locale: string, id: string };
 }) {
-  const authResult: any = await authedOnly(`/drafts/${id}`);
+  const authResult: any = await authedOnly(`/drafts/${id}`, "");
   const authContext = authResult.parsedJWT.ctx;
   const isMinter = authContext.isMinter;
 
