@@ -8,6 +8,7 @@ import Section from "@/components/Section";
 import NFTGrid from '@/components/NFT/NFTGrid';
 import ReceiveInstrumentCard from "@/components/ReceiveInstrumentCard";
 import { useActiveAccount } from "thirdweb/react";
+import NotConnected from "../NotConnected";
 
 
 export default function User(
@@ -18,6 +19,7 @@ export default function User(
   const activeAccount = useActiveAccount();
 
   if (isLoading) return <Loading />
+  if (!activeAccount?.address) return <NotConnected locale={locale} />
 
   return (
     <Page>

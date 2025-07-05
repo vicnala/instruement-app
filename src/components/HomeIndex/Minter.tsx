@@ -8,6 +8,7 @@ import NFTGrid from "@/components/NFT/NFTGrid";
 import DraftGrid from "@/components/Drafts/DraftGrid";
 import Loading from "../Loading";
 import { useActiveAccount } from "thirdweb/react";
+import NotConnected from "../NotConnected";
 
 const VIDEO_URLS: Record<string, string> = {
   en: "https://www.youtube.com/embed/PbbHg0uxc60", 
@@ -25,7 +26,8 @@ export default function Minter(
   const videoUrl = VIDEO_URLS[locale] || VIDEO_URLS.en; // Fallback to English if locale not found
 
   // Show loading spinner
-  if (isLoading || !activeAccount?.address) return <Loading />
+  if (isLoading) return <Loading />
+  if (!activeAccount?.address) return <NotConnected locale={locale} />
 
   // Main content when user is connected
   return (
