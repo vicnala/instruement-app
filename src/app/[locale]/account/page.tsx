@@ -14,7 +14,5 @@ export default async function AccountPage({ searchParams }: Props) {
   const authContext = authResult.parsedJWT.ctx;
   const isMinter = authContext.isMinter;
 
-  console.log("invite", invite);
-
   return isMinter ? <Minter locale={locale} /> : <User locale={locale} invite={invite} />
 }
