@@ -165,7 +165,7 @@ export default function Minter(
                         </div>
                     </div>
                     <div className="flex flex-col justify-start items-end">
-                        <div className="w-full bg-gray-25 rounded-lg px-4 py-4 mb-12">
+                        <div className="w-full bg-gray-25 rounded-lg px-4 py-4 mb-3">
                             {/* Address details: */}
                             <div className="mb-6">
                                 <h3 className="text-lg font-semibold mb-2 text-gray-1000 dark:text-gray-800">{t('address')}</h3>
@@ -211,6 +211,8 @@ export default function Minter(
                                     </div>
                                 )
                             }
+                        </div>
+                        <div className="w-full bg-gray-25 rounded-lg px-4 py-4 mb-12">
                             <h3 className="text-lg font-semibold mb-2 text-gray-1000 dark:text-gray-800">{t('wallet_actions_title')}</h3>
                             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{t('wallet_actions_description')}</p>
                             {/* Connect Button */}
