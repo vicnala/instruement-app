@@ -5,16 +5,17 @@ interface ButtonLinkProps {
   href: string;
   children: React.ReactNode;
   className?: string;
+  external?: boolean;
 }
 
-export const ButtonLink = ({ href, children, className = "", size = "md", colorSchema = "it" }: ButtonLinkProps & {
+export const ButtonLink = ({ href, children, className = "", size = "md", colorSchema = "it", external = false }: ButtonLinkProps & {
   size?: "sm" | "md" | "lg";
   colorSchema?: "it" | "me" | "we" | "gray"
 }) => {
   const sizeClasses = {
-    sm: "px-3 py-1.5 text-xs",
-    md: "px-4 py-2 text-sm", 
-    lg: "px-5 py-3 text-base"
+    sm: "px-3 py-1.5 text-xs gap-1",
+    md: "px-4 py-2 text-sm gap-2", 
+    lg: "px-5 py-3 text-base gap-3"
   };
 
   const colorClasses = {
@@ -25,7 +26,7 @@ export const ButtonLink = ({ href, children, className = "", size = "md", colorS
   };
 
   return (
-    <Link href={href}>
+    <Link href={href} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined}>
       <button
         type="button"
         className={`focus:outline-none disabled:opacity-25 inline-flex items-center tracking-wide transition-colors duration-200 transform rounded-md border-[0.1rem] font-bold ${sizeClasses[size]} ${colorClasses[colorSchema]} ${className}`}

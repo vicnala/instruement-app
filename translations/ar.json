@@ -362,7 +362,9 @@
                     "not_verified_luthier": "Not verified luthier"
                 },
                 "address": "Account address",
-                "wallet_actions_title": "Account actions"
+                "wallet_actions_title": "Advanced account actions",
+                "wallet_actions_description": "Access all account functions here. If you haven’t already exported and saved your private key, you should do it now!",
+                "view_complete_profile": "View complete public profile"
             }
         }
     }

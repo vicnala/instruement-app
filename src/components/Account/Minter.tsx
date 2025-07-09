@@ -9,6 +9,8 @@ import Image from "next/image";
 import Loading from "@/components/Loading";
 import { useActiveAccount } from "thirdweb/react";
 import ButtonQrTransfer from "../UI/ButtonQrTransfer";
+import { ButtonLink } from "../UI/ButtonLink";
+import { ExternalLink } from 'lucide-react';
 
 export default function Minter(
     { locale }: Readonly<{ locale: string }>
@@ -41,7 +43,7 @@ export default function Minter(
 
                 {/* Profile Photo floating on cover image */}
                 {minter?.profile_photo && (
-                    <div className="absolute -bottom-16 left-24 transform -translate-x-1/2">
+                    <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
                         <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg">
                             <Image
                                 src={minter.profile_photo.url}
@@ -87,7 +89,7 @@ export default function Minter(
                         )}
 
                         {/* Instrument Types */}
-                        {minter?.instrument_types && minter.instrument_types.length > 0 && (
+                        {/* {minter?.instrument_types && minter.instrument_types.length > 0 && (
                             <div className="mb-6">
                                 <h3 className="text-lg font-semibold mb-2">{t('instrument_type_specialization')}</h3>
                                 <div className="flex flex-wrap gap-1 gap-y-2">
@@ -98,22 +100,22 @@ export default function Minter(
                                     ))}
                                 </div>
                             </div>
-                        )}
+                        )} */}
 
                         {/* Endorsed Skills */}
                         {minter?.skills && minter.skills.length > 0 && (
                             <div className="mb-6">
-                                <h3 className="text-lg font-semibold mb-2">{t('endorsed_skills')}</h3>
+                                {/* <h3 className="text-lg font-semibold mb-2">{t('endorsed_skills')}</h3>
                                 <div className="flex flex-wrap gap-1 gap-y-2">
                                     {minter.skills.map((skill: any, index: number) => (
                                         <span key={index} className="px-3 py-1 bg-gray-50 text-gray-800 rounded-md text-md">
                                             {skill.name}
                                         </span>
                                     ))}
-                                </div>
+                                </div> */}
                                 {isMinter && minterConstructionSkills.length > 0 && (
-                                    <div className="mt-6">
-                                        <h4 className="text-md font-semibold mb-2">{t('account.minter_account')}</h4>
+                                    <div className="">
+                                        <h3 className="text-lg font-semibold mb-2">{t('account.minter_account')}</h3>
                                         <div className="flex flex-wrap gap-1 gap-y-2">
                                             {minterConstructionSkills.map((skill: any, idx: number) => (
                                                 <span key={idx} className="px-3 py-1 bg-it-100 text-it-950 rounded-md text-md">
@@ -137,7 +139,7 @@ export default function Minter(
                         )}
 
                         {/* Products & Services Section */}
-                        <div className="mb-6 max-w-md">
+                        {/* <div className="mb-6 max-w-md">
                             {minter?.products_services && minter.products_services.length > 0 ? (
                                 minter.products_services
                                 .filter((item: any) => item.lang === locale)
@@ -154,13 +156,19 @@ export default function Minter(
                             ) : (
                                 <p className="text-gray-600">{t('no_content_available')}</p>
                             )}
+                        </div> */}
+                        {/* View complete profile on instruement.com/?author=[minter.user_id] */}
+                        <div className="mb-6 pt-6">
+                            <ButtonLink href={`https://www.instruement.com/?author=${minter?.user_id}`} colorSchema="gray" external={true}>
+                                {t('view_complete_profile')} <ExternalLink className="w-4 h-4" />
+                            </ButtonLink>
                         </div>
                     </div>
                     <div className="flex flex-col justify-start items-end">
                         <div className="w-full bg-gray-25 rounded-lg px-4 py-4 mb-12">
                             {/* Address details: */}
                             <div className="mb-6">
-                                <h3 className="text-md font-semibold mb-2 text-gray-1000 dark:text-gray-800">{t('address')}</h3>
+                                <h3 className="text-lg font-semibold mb-2 text-gray-1000 dark:text-gray-800">{t('address')}</h3>
                                 <div className="text-gray-600">
                                     <div className="flex items-center gap-2">
                                         <input
@@ -203,7 +211,8 @@ export default function Minter(
                                     </div>
                                 )
                             }
-                            <h3 className="text-md font-semibold mb-2 text-gray-1000 dark:text-gray-800">{t('wallet_actions_title')}</h3>
+                            <h3 className="text-lg font-semibold mb-2 text-gray-1000 dark:text-gray-800">{t('wallet_actions_title')}</h3>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{t('wallet_actions_description')}</p>
                             {/* Connect Button */}
                             <CustomConnectButton />
                         </div>

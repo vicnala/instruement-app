@@ -368,7 +368,9 @@
                     "not_verified_luthier": "Luthier no verificado"
                 },
                 "address": "Dirección de la cuenta",
-                "wallet_actions_title": "Acciones de cuenta"
+                "wallet_actions_title": "Acciones de cuenta avanzadas",
+                "wallet_actions_description": "Accede a todas las funciones de la cuenta aquí. Si aún no has exportado y guardado tu clave privada, deberías hacerlo ahora!",
+                "view_complete_profile": "Ver perfil público completo"
             }
         }
     }
