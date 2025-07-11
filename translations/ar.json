@@ -187,6 +187,7 @@
             "close": "Close",
             "minter": "Minter",
             "registered_by": "Registered by",
+            "view_profile": "View profile",
             "description": "Description",
             "no_documents_available": "No documents available",
             "transfer_management": "Transfer Management",

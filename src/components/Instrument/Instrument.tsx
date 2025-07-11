@@ -14,10 +14,11 @@ import Section from "@/components/Section";
 import { client } from "@/app/client";
 import QRModal from "./QRModal";
 import Image from "next/image";
-import { Download, Copy, QrCode, ChevronDown, Handshake, Telescope, MoveDown, ArrowDownWideNarrow, Hourglass, CheckCheck, Send, Ban, ChevronUp, CircleX } from "lucide-react";
+import { Download, Copy, QrCode, ChevronDown, Handshake, Telescope, MoveDown, ArrowDownWideNarrow, Hourglass, CheckCheck, Send, Ban, ChevronUp, CircleX, ExternalLink } from "lucide-react";
 import { usePathname, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import Divider from "@/components/UI/Divider";
+import { ButtonLink } from "@/components/UI/ButtonLink";
 import { useRouter } from "@/i18n/routing";
 import { marked } from "marked";
 import { contract } from "@/app/contracts";
@@ -578,7 +579,7 @@ export default function Instrument(
 								/>
 								{/* Content */}
 								<div className="relative z-10">
-									<p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{tInstrument('registered_by')}</p>
+									<p className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2">{tInstrument('registered_by')}</p>
 									<div className="flex flex-col gap-2">
 										{minterUser && minterUser.profile_photo && (
 											<div className="flex items-center gap-4">
@@ -591,9 +592,16 @@ export default function Instrument(
 														className="w-full h-full object-cover"
 													/>
 												</div>
-												<p className="font-bold text-lg">
-													{minterUser.business_name}
-												</p>
+												<div>
+													<p className="font-bold text-lg mb-2">
+														{minterUser.business_name}
+													</p>
+													<p>
+														<ButtonLink href={`https://www.instruement.com/?author=${minterUser.user_id}`} size="sm" colorSchema="gray" external={true}>
+															{tInstrument('view_profile')} <ExternalLink className="w-3 h-3" />
+														</ButtonLink>
+													</p>
+												</div>
 											</div>
 										)}
 									</div>
