@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import Image from 'next/image'
+import Link from "next/link";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
 import { CustomConnectButton } from "./CustomConnectButton";
@@ -31,6 +32,11 @@ export default function NotConnected(
                                 </p>
                             </div>
                         </div>
+                    </div>
+                    <div className="flex justify-center items-center mt-6">
+                        <Link href="https://www.instruement.com" className="text-xs text-gray-600 dark:text-gray-700 hover:text-it-500 dark:hover:text-it-300">
+                            {t('visit_instruement')}
+                        </Link>
                     </div>
                     {/* <div className="mt-4 md:mt-8">
                         <p className="text-xs md:text-sm text-center text-gray-900 dark:text-gray-400 mb-2">

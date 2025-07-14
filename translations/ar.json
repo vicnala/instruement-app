@@ -64,7 +64,7 @@
     },
     "Metadata": {
       "title": "Instruement",
-      "description": "Manage your valuable musical instruments with self-custody blockchain technology."
+      "description": "Secure your musical instrument with a digital identity. Keep absolute control of your certificates and ownership."
     },
     "common": {},
     "pages": {},
@@ -334,7 +334,8 @@
             "heading": "Secure your musical instrument with a digital identity",
             "sub_heading": "Keep absolute control of your certificates and ownership",
             "button_description": "No registration required - connect anonymously",
-            "auth_disclaimer": "Authentication powered by"
+            "auth_disclaimer": "Authentication powered by",
+            "visit_instruement": "Visit instruement.com"
         },
         "BottomNav": {
             "home": "Home",
