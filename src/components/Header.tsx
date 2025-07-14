@@ -19,7 +19,7 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <div className={`z-50 hidden sm:block`}>
+    <div className={`${activeAccount?.address ? 'hidden sm:block' : ''}`}>
       <div className='w-full'>
         <header className='bg-canvas px-safe dark:bg-contrast'>
           <div className='mx-auto flex flex-row min-h-[10vh] max-w-screen-lg items-center justify-between px-3.5'>

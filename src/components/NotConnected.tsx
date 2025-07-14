@@ -14,12 +14,12 @@ export default function NotConnected(
         <Page>
             <div className='flex flex-col'>
                 <Section>
-                    <div className="min-h-[70vh] md:min-h-[60vh] flex items-center justify-center bg-it-50 dark:bg-gray-950 px-3.5 md:px-24 rounded-[15px] border border-it-100 dark:border-gray-900">
+                    <div className="min-h-[70vh] md:min-h-[60vh] flex items-center justify-center bg-it-50 dark:bg-gray-950 px-3.5 md:px-24 rounded-[15px] dark:border-gray-900">
                         <div className="text-center text-gray-1000">
-                            <h2 className='text-3xl md:text-6xl font-semibold text-gray-900 dark:text-it-50 mb-2'>
+                            <h2 className='text-4xl md:text-5xl font-semibold text-gray-900 dark:text-it-50 mb-2 text-balance'>
                                 {t('heading')}
                             </h2>
-                            <p className="text-sm md:text-lg text-gray-900 dark:text-gray-200 pb-12 md:pb-16 max-w-[450px] mx-auto">
+                            <p className="text-md md:text-lg text-gray-900 dark:text-gray-200 pb-12 md:pb-16 max-w-[400px] text-balance mx-auto">
                                 {t('sub_heading')}
                             </p>
                             <div className="">
