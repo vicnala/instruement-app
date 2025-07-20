@@ -70,9 +70,9 @@ export default function Minter(
                         )}
 
                         {/* Full Name */}
-                        {(minter?.first_name || minter?.last_name) && (
+                        {(minter?.alt_luthier_name || minter?.first_name || minter?.last_name) && (
                             <h2 className="text-2xl text-gray-700 dark:text-gray-300 mb-4">
-                                {minter.first_name} {minter.last_name}
+                                {minter.alt_luthier_name || `${minter.first_name} ${minter.last_name}`}
                             </h2>
                         )}
 
