@@ -2,7 +2,7 @@ type DividerProps = {
   orientation?: 'horizontal' | 'vertical';
   className?: string;
   color?: string;
-  spacing?: 'sm' | 'md' | 'lg';
+  spacing?: '0' | 'sm' | 'md' | 'lg';
 }
 
 export default function Divider({ 
@@ -13,15 +13,17 @@ export default function Divider({
 }: DividerProps) {
   const spacingClasses = {
     horizontal: {
+      '0': 'my-0',
       sm: 'my-4',
       md: 'my-6',
       lg: 'my-8'
-    },
+    } as const,
     vertical: {
+      '0': 'mx-0',
       sm: 'mx-4',
       md: 'mx-6',
       lg: 'mx-8'
-    }
+    } as const
   };
 
   const baseClasses = orientation === 'horizontal'

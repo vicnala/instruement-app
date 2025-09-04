@@ -22,7 +22,7 @@ export function Header() {
     <div className={`${activeAccount?.address ? 'hidden sm:block' : ''}`}>
       <div className='w-full'>
         <header className='bg-canvas px-safe dark:bg-contrast'>
-          <div className='mx-auto flex flex-row min-h-[10vh] max-w-screen-lg items-center justify-between px-3.5'>
+          <div className='mx-auto flex flex-row min-h-[max(10vh,85px)] max-w-screen-lg items-center justify-between px-3.5'>
             <Link href="/">
               <div className="relative">
                 <Image

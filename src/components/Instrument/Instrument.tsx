@@ -646,7 +646,7 @@ export default function Instrument(
 						</div>
 					</div>
 
-					<Divider color="bg-transparent" spacing="lg" className="h-1 max-h-0 my-0 sm:my-4 sm:h-[4px]"/>
+					<Divider color="bg-transparent" spacing="0" className="h-1 max-h-0 my-0 sm:my-4 sm:h-[4px] mx-0 md:mx-4"/>
 
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
 						{/* Images Section */}
