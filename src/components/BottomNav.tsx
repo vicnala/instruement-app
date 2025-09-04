@@ -14,7 +14,7 @@ export const BottomNav = () => {
 	const pathname = usePathname();
 
 	return (
-		<nav className='sm:hidden fixed z-100 bottom-0 w-full bg-canvas pb-safe dark:bg-contrast dark:border-t dark:border-gray-900 shadow-[0_0px_4px_0px_rgba(0,0,0,0.2)]'>
+		<nav className='sm:hidden fixed z-50 bottom-0 w-full bg-canvas pb-safe dark:bg-contrast dark:border-t dark:border-gray-900 shadow-[0_0px_4px_0px_rgba(0,0,0,0.2)]'>
 			<div className={`mx-auto grid h-[4rem] max-w-md pt-2 ${isMinter ? 'grid-cols-[1fr_auto_1fr] gap-[3vw]' : !activeAccount?.address ? '' : 'grid-cols-[1fr_1fr] gap-[3vw]'}`}>
 				<Link key="home" href="/">
 					<div className={
