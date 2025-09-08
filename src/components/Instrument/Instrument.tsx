@@ -172,6 +172,7 @@ const validateTransferConfirmationUrl = (nonce: string, instrumentId: string) =>
 export default function Instrument({
 	id,
 	instrumentAsset,
+	minter,
 	images,
 	documents,
 	locale,
@@ -180,6 +181,7 @@ export default function Instrument({
 	id: string,
 	instrumentAsset: any,
 	images: any[],
+	minter: string,
 	documents: any[],
 	locale: string,
 	to: string | undefined }>
@@ -194,7 +196,7 @@ export default function Instrument({
 	// const [instrumentAsset, setInstrumentAsset] = useState<any>()
 	// const [images, setImages] = useState<any[]>([])
 	// const [documents, setDocuments] = useState<any[]>([])
-	const [minter, setMinter] = useState<string>()
+	// const [minter, setMinter] = useState<string>()
 	const [minterUser, setMinterUser] = useState<any>()
 	const { address, isLoading, setReloadUser } = useStateContext()
 	const [isOwner, setIsOwner] = useState<boolean>(false)

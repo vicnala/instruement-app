@@ -138,6 +138,6 @@ export default async function InstrumentPage({ searchParams, params }: Props) {
   }
 
   return (
-    <Instrument id={id} instrumentAsset={data} images={images} documents={documents} locale={locale} to={to} />
+    <Instrument id={id} instrumentAsset={data} minter={minter} images={images} documents={documents} locale={locale} to={to} />
   );
 }
