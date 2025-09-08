@@ -56,7 +56,6 @@ export async function POST(
 
   try {
     const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${id}`, {
-      cache: 'no-store',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
