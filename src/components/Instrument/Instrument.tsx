@@ -6,12 +6,12 @@ import { transferFrom, ownerOf } from "thirdweb/extensions/erc721";
 import { isAddress } from "thirdweb/utils";
 import truncateEthAddress from 'truncate-eth-address'
 import { useTranslations } from "next-intl";
-import { resolveScheme } from "thirdweb/storage";
+// import { resolveScheme } from "thirdweb/storage";
 import { Scanner } from '@yudiel/react-qr-scanner';
 import { useStateContext } from "@/app/context";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
-import { client } from "@/app/client";
+// import { client } from "@/app/client";
 import QRModal from "./QRModal";
 import Image from "next/image";
 import { Download, Copy, QrCode, ChevronDown, Handshake, Telescope, MoveDown, ArrowDownWideNarrow, Hourglass, CheckCheck, Send, Ban, ChevronUp, CircleX, ExternalLink } from "lucide-react";
@@ -169,8 +169,20 @@ const validateTransferConfirmationUrl = (nonce: string, instrumentId: string) =>
 	}
 };
 
-export default function Instrument(
-	{ locale, id, to }: Readonly<{ locale: string, id: string, to: string | undefined }>
+export default function Instrument({
+	id,
+	instrumentAsset,
+	images,
+	documents,
+	locale,
+	to
+}: Readonly<{
+	id: string,
+	instrumentAsset: any,
+	images: any[],
+	documents: any[],
+	locale: string,
+	to: string | undefined }>
 ) {
 	const router = useRouter();
 	const tInstrument = useTranslations('components.Instrument');
@@ -179,9 +191,9 @@ export default function Instrument(
 	
 	const [isLoadingInstrumentAsset, setIsLoadingInstrumentAsset] = useState(false)
 	const [isLoadingMinter, setIsLoadingMinter] = useState(false)
-	const [instrumentAsset, setInstrumentAsset] = useState<any>()
-	const [images, setImages] = useState<any[]>([])
-	const [documents, setDocuments] = useState<any[]>([])
+	// const [instrumentAsset, setInstrumentAsset] = useState<any>()
+	// const [images, setImages] = useState<any[]>([])
+	// const [documents, setDocuments] = useState<any[]>([])
 	const [minter, setMinter] = useState<string>()
 	const [minterUser, setMinterUser] = useState<any>()
 	const { address, isLoading, setReloadUser } = useStateContext()
@@ -209,81 +221,81 @@ export default function Instrument(
 	const [isDescriptionExpanded, setIsDescriptionExpanded] = useState<boolean>(false);
 	const [isImagesExpanded, setIsImagesExpanded] = useState<boolean>(false);
 
-	useEffect(() => {
-		async function getInstrumentAsset() {
-			try {
-				const result = await fetch(`/api/token/${id}`)
-				const data = await result.json();
-				if (!data?.metadata) return;
+	// useEffect(() => {
+	// 	async function getInstrumentAsset() {
+	// 		try {
+	// 			const result = await fetch(`/api/token/${id}`)
+	// 			const data = await result.json();
+	// 			if (!data?.metadata) return;
 				
-				setInstrumentAsset(data);
-				// console.log("instrumentAsset.data", data);
+	// 			setInstrumentAsset(data);
+	// 			// console.log("instrumentAsset.data", data);
 
-				const properties = data.metadata.properties || data.metadata.attributes || [];
-				const fileDirHashTrait = properties.find((prop: any) => prop.trait_type === 'Files');
-				const registrarTrait = properties.find((prop: any) => prop.trait_type === 'Registrar');
+	// 			const properties = instrumentAsset.metadata.properties || instrumentAsset.metadata.attributes || [];
+	// 			const fileDirHashTrait = properties.find((prop: any) => prop.trait_type === 'Files');
+	// 			const registrarTrait = properties.find((prop: any) => prop.trait_type === 'Registrar');
 
-				if (registrarTrait) {
-					setMinter(registrarTrait.value);
-				}
+	// 			if (registrarTrait) {
+	// 				setMinter(registrarTrait.value);
+	// 			}
 
-				if (fileDirHashTrait) {
-					const fileDirHash = fileDirHashTrait.value;
-					// console.log("fileDirHash", fileDirHash);
+	// 			if (fileDirHashTrait) {
+	// 				const fileDirHash = fileDirHashTrait.value;
+	// 				// console.log("fileDirHash", fileDirHash);
 
-					const fileDescriptionsUrl = await resolveScheme({
-						client,
-						uri: `ipfs://${fileDirHash}/descriptions`
-					});
-					// console.log("fileDescriptionsUrl", fileDescriptionsUrl);
+	// 				const fileDescriptionsUrl = await resolveScheme({
+	// 					client,
+	// 					uri: `ipfs://${fileDirHash}/descriptions`
+	// 				});
+	// 				// console.log("fileDescriptionsUrl", fileDescriptionsUrl);
 
-					const result = await fetch(fileDescriptionsUrl)
-					const fileDescriptionsData = await result.json();
-					// console.log("fileDescriptionsData", fileDescriptionsData);					
+	// 				const result = await fetch(fileDescriptionsUrl)
+	// 				const fileDescriptionsData = await result.json();
+	// 				// console.log("fileDescriptionsData", fileDescriptionsData);					
 
-					const images: any[] = [];
-					const documents: any[] = [];
+	// 				const images: any[] = [];
+	// 				const documents: any[] = [];
 
-					for (const fileDescription of fileDescriptionsData) {
-						if (fileDescription.cover) continue;
+	// 				for (const fileDescription of fileDescriptionsData) {
+	// 					if (fileDescription.cover) continue;
 
-						if (fileDescription.name.includes('image')) {
-							const uri = await resolveScheme({
-								client,
-								uri: `ipfs://${fileDirHash}/${fileDescription.name}`
-							});
-							if (uri) images.push({ uri, description: fileDescription.description });
-						} else if (fileDescription.name.includes('document')) {
-							const uri = await resolveScheme({
-								client,
-								uri: `ipfs://${fileDirHash}/${fileDescription.name}`
-							});
-							if (uri) documents.push({ uri, description: fileDescription.description });
-						}
-					}
+	// 					if (fileDescription.name.includes('image')) {
+	// 						const uri = await resolveScheme({
+	// 							client,
+	// 							uri: `ipfs://${fileDirHash}/${fileDescription.name}`
+	// 						});
+	// 						if (uri) images.push({ uri, description: fileDescription.description });
+	// 					} else if (fileDescription.name.includes('document')) {
+	// 						const uri = await resolveScheme({
+	// 							client,
+	// 							uri: `ipfs://${fileDirHash}/${fileDescription.name}`
+	// 						});
+	// 						if (uri) documents.push({ uri, description: fileDescription.description });
+	// 					}
+	// 				}
 
-					// console.log("images", images);
-					// console.log("documents", documents);
+	// 				// console.log("images", images);
+	// 				// console.log("documents", documents);
 
-					setImages(images);
-					setDocuments(documents);
-				}
+	// 				setImages(images);
+	// 				setDocuments(documents);
+	// 			}
 
-			} catch (error) {
-				console.error(`/api/token/${id}`, error)
-			}
-			setIsLoadingInstrumentAsset(false)
-		}
+	// 		} catch (error) {
+	// 			console.error(`/api/token/${id}`, error)
+	// 		}
+	// 		setIsLoadingInstrumentAsset(false)
+	// 	}
 
-		if (!isLoadingInstrumentAsset && !instrumentAsset) {
-			if (id) {
-				setIsLoadingInstrumentAsset(true)
-				getInstrumentAsset().catch((e) => {
-					console.error(`/api/token/${id}`, e.message);
-				})
-			}
-		}
-	}, [id, isLoadingInstrumentAsset, instrumentAsset])
+	// 	if (!isLoadingInstrumentAsset && !instrumentAsset) {
+	// 		if (id) {
+	// 			setIsLoadingInstrumentAsset(true)
+	// 			getInstrumentAsset().catch((e) => {
+	// 				console.error(`/api/token/${id}`, e.message);
+	// 			})
+	// 		}
+	// 	}
+	// }, [id, isLoadingInstrumentAsset, instrumentAsset])
 
 	useEffect(() => {
 		async function getminter() {

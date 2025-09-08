@@ -1,6 +1,9 @@
 import type { Metadata, ResolvingMetadata } from 'next';
 import Instrument from "@/components/Instrument/Instrument";
 import { redirect } from "@/i18n/routing";
+import NotFound from "@/app/not-found";
+import { client } from "@/app/client";
+import { resolveScheme } from "thirdweb/storage";
 
 type Props = {
   params: Promise<{ locale: string, id: string }>
@@ -86,7 +89,55 @@ export default async function InstrumentPage({ searchParams, params }: Props) {
     redirect({ href: `/instrument/${id}?to=${to}`, locale: locale || 'en' });
   }
 
+  const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/token/${id}`)
+  const data = await result.json();
+
+  if (!data?.metadata) return <NotFound />;
+
+  let minter = "";
+  let images = [];
+  let documents = [];
+  const properties = data.metadata.properties || data.metadata.attributes || [];
+  const fileDirHashTrait = properties.find((prop: any) => prop.trait_type === 'Files');
+  const registrarTrait = properties.find((prop: any) => prop.trait_type === 'Registrar');
+  if (registrarTrait) {
+    minter = registrarTrait.value;
+  }
+
+  if (fileDirHashTrait) {
+    const fileDirHash = fileDirHashTrait.value;
+    // console.log("fileDirHash", fileDirHash);
+
+    const fileDescriptionsUrl = await resolveScheme({
+      client,
+      uri: `ipfs://${fileDirHash}/descriptions`
+    });
+    // console.log("fileDescriptionsUrl", fileDescriptionsUrl);
+
+    const result = await fetch(fileDescriptionsUrl)
+    const fileDescriptionsData = await result.json();
+    // console.log("fileDescriptionsData", fileDescriptionsData);					
+
+    for (const fileDescription of fileDescriptionsData) {
+      if (fileDescription.cover) continue;
+
+      if (fileDescription.name.includes('image')) {
+        const uri = await resolveScheme({
+          client,
+          uri: `ipfs://${fileDirHash}/${fileDescription.name}`
+        });
+        if (uri) images.push({ uri, description: fileDescription.description });
+      } else if (fileDescription.name.includes('document')) {
+        const uri = await resolveScheme({
+          client,
+          uri: `ipfs://${fileDirHash}/${fileDescription.name}`
+        });
+        if (uri) documents.push({ uri, description: fileDescription.description });
+      }
+    }
+  }
+
   return (
-    <Instrument id={id} locale={locale} to={to} />
+    <Instrument id={id} instrumentAsset={data} images={images} documents={documents} locale={locale} to={to} />
   );
 }
