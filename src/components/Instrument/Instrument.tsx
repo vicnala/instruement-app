@@ -22,7 +22,7 @@ import { ButtonLink } from "@/components/UI/ButtonLink";
 import { useRouter } from "@/i18n/routing";
 import { marked } from "marked";
 import { contract } from "@/app/contracts";
-import Loading from "@/components/Loading";
+// import Loading from "@/components/Loading";
 
 marked.use({
 	breaks: true
@@ -434,9 +434,9 @@ export default function Instrument({
 		validateNonce();
 	}, [searchParams, id]);
 
-	if (isLoadingInstrumentAsset || isLoadingMinter || isLoading) {
-		return <Loading />;
-	}
+	// if (isLoadingInstrumentAsset || isLoadingMinter || isLoading) {
+	// 	return <Loading />;
+	// }
 
 	return (
 		<Page>
