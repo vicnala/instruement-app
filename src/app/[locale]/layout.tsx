@@ -40,8 +40,8 @@ export default async function RootLayout({
           {...jsonLdScriptProps<WebSite>({
             "@context": "https://schema.org",
             "@type": "WebSite",
-            name: "Instruement",
-            description: "Manage your valuable musical instruments with self-custody blockchain technology.",
+            name: "Instruement App",
+            description: "Manage your musical instruments with self-custody blockchain technology.",
             url: process.env.NEXT_PUBLIC_SERVER_URL || `https://app.instruement.com`,
           })}
         />

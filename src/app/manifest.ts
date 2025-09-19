@@ -2,8 +2,8 @@ import type { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Instruement',
-    short_name: 'Instruement',
+    name: 'Instruement App',
+    short_name: 'Instruement App',
     description: 'Secure your musical instrument\'s digital identity',
     start_url: '/',
     display: 'standalone',
