@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { FileText, ArrowUpFromLine, X, LoaderCircle } from 'lucide-react';
+import { FileText, ArrowUpFromLine, Trash, LoaderCircle } from 'lucide-react';
 import UploadService from "../services/FileUploadService";
 import FileResizeService from "@/services/FileResizeService";
 import { InstrumentImage, InstrumentFile, Instrument } from "@/lib/definitions";
@@ -328,14 +328,16 @@ const MediaManager: React.FC<FilesUploadProps> = ({
                   )}
                   <button
                     type="button"
-                    className="absolute top-2 right-2 bg-red-500 hover:bg-red-700 text-white font-bold p-1 rounded-full aspect-square"
+                    className="absolute top-2 right-2 p-2 hover:bg-red-600 text-white font-bold p-1 rounded-full aspect-square bg-black bg-opacity-30"
                     onClick={() => handleDelete(index, accept)}
                     disabled={deletingFileId === file.id.toString()}
+                    title={t('images.delete_image')}
+                    aria-label={t('images.delete_image')}
                   >
                     {deletingFileId === file.id.toString() ? (
                       <LoaderCircle className="w-4 h-4 animate-spin" />
                     ) : (
-                      <X className="w-4 h-4" />
+                      <Trash className="w-4 h-4" />
                     )}
                   </button>
                 </div>

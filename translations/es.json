@@ -159,7 +159,8 @@
                 "button_upload": "Subir imágenes",
                 "add_description": "Añadir descripción",
                 "save_description": "Guardar descripción",
-                "text_area_placeholder": "Añade una descripción para esta imagen"
+                "text_area_placeholder": "Añade una descripción para esta imagen",
+                "delete_image": "Eliminar imagen"
             },
             "files": {
                 "button_upload": "Subir documentos",

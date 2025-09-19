@@ -59,8 +59,8 @@ export default function Draft(
                 {t("registering")}
               </div> 
               :
-              <div className="absolute top-2 right-2 p-3 bg-black/50 rounded-full hover:bg-black/70 transition-all">
-                <Pencil className="w-4 h-4 text-it-400" />
+              <div className="absolute top-2 right-2 p-2 bg-black/30 rounded-full hover:bg-it-400 transition-all">
+                <Pencil className="w-4 h-4 text-white" />
               </div>
             }
             { image ? 

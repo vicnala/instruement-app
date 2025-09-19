@@ -522,12 +522,14 @@ export default function DraftForm(
 
         <Section id="delete">
           {instrument &&
-            <div className="my-6 text-center">
+            <div className="my-6 text-left">
               <button
                 type="button"
-                className="inline-flex items-center  text-xs font-semibold tracking-wide transition-colors duration-200 transform text-red-500 focus:outline-none focus:bg-red-700"
+                className="inline-flex items-center py-2 px-4 rounded-full text-xs border border-red-200 hover:border-red-500 hover:bg-red-500 hover:text-white font-semibold tracking-wide transition-colors duration-200 transform text-red-500 focus:outline-none focus:bg-red-700"
                 disabled={isLoadingMetadata}
                 onClick={() => handleInstrumentDelete()}
+                aria-label={t('delete')}
+                title={t('delete')}
               >
                 <Trash className="inline-block w-4 h-4 mr-2 -mt-0.5" />
                 {isLoadingMetadata && <ButtonSpinner />}

@@ -152,7 +152,8 @@
                 "button_upload": "Upload images",
                 "add_description": "Add description",
                 "save_description": "Save description",
-                "text_area_placeholder": "Add a description for this image"
+                "text_area_placeholder": "Add a description for this image",
+                "delete_image": "Delete image"
             },
             "files": {
                 "button_upload": "Upload documents",
