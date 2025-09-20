@@ -40,5 +40,5 @@ export default async function Home() {
  
   return authContext?.isMinter
     ? <Minter locale={locale} minted={minted} />
-    : <User locale={locale} />;
+    : <User locale={locale} minted={minted}/>;
 }
