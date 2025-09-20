@@ -8,7 +8,37 @@ export default async function Home() {
   const authResult: any = await authedOnly("/", "");
   const authContext = authResult.parsedJWT.ctx;
 
+  const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instruments?user_id=${authContext.userId}&locale=${locale || "en"}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`,
+    }
+  });
+  const data = await result.json()
+
+  const minted = [];
+  if (data?.code === 'success') {
+    for (const id of data.data.ids) {
+      const instrumentResult = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${id}?locale=${locale || "en"}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`,
+        }
+      });
+      const instrumentData = await instrumentResult.json();
+      if (instrumentData?.code === 'success') {
+        if (instrumentData.data.asset_id) {
+          const token = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/token/${instrumentData.data.asset_id}`)
+          const tokenData = await token.json();
+          minted.push(tokenData);
+        }
+      }
+    }
+  }
+ 
   return authContext?.isMinter
-    ? <Minter locale={locale} />
+    ? <Minter locale={locale} minted={minted} />
     : <User locale={locale} />;
 }
