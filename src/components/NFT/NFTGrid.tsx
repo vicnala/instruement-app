@@ -37,6 +37,9 @@ export default function NFTGrid({ nftData, minted }: Props) {
 
   const allNftData = [...nftData, ...minted];
 
+  console.log('owned', nftData);
+  console.log('minted', minted);
+
   const myNftData: any = [];
 
   for (const nft of allNftData) {
