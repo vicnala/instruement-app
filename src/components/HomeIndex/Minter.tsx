@@ -9,6 +9,7 @@ import DraftGrid from "@/components/Drafts/DraftGrid";
 import Loading from "../Loading";
 import { useActiveAccount } from "thirdweb/react";
 import NotConnected from "../NotConnected";
+import { Instrument } from "@/lib/definitions";
 
 const VIDEO_URLS: Record<string, string> = {
   en: "https://www.youtube.com/embed/PbbHg0uxc60", 
@@ -16,7 +17,7 @@ const VIDEO_URLS: Record<string, string> = {
 };
 
 export default function Minter(
-  { locale }: Readonly<{ locale: string }>
+  { locale, minted }: Readonly<{ locale: string, minted: any[] }>
 ) {
   const t = useTranslations('components.HomeIndex.Minter');
   const activeAccount = useActiveAccount();
@@ -60,7 +61,7 @@ export default function Minter(
           }
         </Section> : 
         <Section>
-          <NFTGrid nftData={owned} />
+          <NFTGrid nftData={owned} minted={minted} />
         </Section>
       }
     </Page>

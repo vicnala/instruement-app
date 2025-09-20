@@ -76,6 +76,11 @@
     "pages": {},
     "components": {
         "Loading": "Cargando",
+        "NFT": {
+            "owner": "Propietario",
+            "minter": "Creador",
+            "and": "y"
+        },
         "CustomConnectButton": {
             "switch_network": "Cambiar de red"
         },

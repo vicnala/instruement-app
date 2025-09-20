@@ -5,13 +5,17 @@ import Skeleton from "@/components/Skeleton";
 import { useRouter } from "@/i18n/routing";
 import { client } from "@/app/client";
 import { Eye } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type Props = {
   nft: {
     metadata: {
       id: string,
       name: string,
-      image: string
+      image: string,
+      isMinted: boolean,
+      iAmTheOwner: boolean,
+      iAmTheMinter: boolean
     }
   };
 };
@@ -20,7 +24,7 @@ export default function NFTComponent({
   nft,
 }: Props) {
   const router = useRouter();
-
+  const t = useTranslations();
   if (!nft) {
     return <LoadingNFTComponent />;
   }
@@ -54,6 +58,27 @@ export default function NFTComponent({
           </p>
           <p className="text-sm font-semibold">
             #{nft.metadata.id.toString()}
+            <span className="text-sm font-semibold">
+              {nft.metadata.iAmTheOwner && (
+                <span className="text-xs font-semibold">
+                  {" "} {t('components.NFT.owner')}
+                </span>
+              )}
+            </span>
+            {
+              nft.metadata.iAmTheOwner && nft.metadata.iAmTheMinter && (
+                <span className="text-xs font-semibold">
+                  {" "} {t('components.NFT.and')}
+                </span>
+              )
+            }
+            <span className="text-sm font-semibold">
+              {nft.metadata.iAmTheMinter && (
+                <span className="text-xs font-semibold">
+                  {" "} {t('components.NFT.minter')}
+                </span>
+              )}
+            </span>
           </p>
         </div>
       </div>

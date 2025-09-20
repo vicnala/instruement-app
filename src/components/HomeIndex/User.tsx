@@ -10,9 +10,9 @@ import ReceiveInstrumentCard from "@/components/ReceiveInstrumentCard";
 import { useActiveAccount } from "thirdweb/react";
 import NotConnected from "../NotConnected";
 
-
+  
 export default function User(
-  { locale, invite }: Readonly<{ locale: string, invite?: string }>
+  { locale, invite, minted }: Readonly<{ locale: string, invite?: string, minted: any[] }>
 ) {
   const t = useTranslations('components.HomeIndex.User');
   const { owned, isLoading } = useStateContext()
@@ -32,7 +32,7 @@ export default function User(
         </Section> :
         <Section>
           <div className="flex flex-col pt-4">
-            <NFTGrid nftData={owned} />
+            <NFTGrid nftData={owned} minted={minted} />
           </div>
         </Section>
       }
