@@ -69,7 +69,7 @@ export default function Draft(
                 width={500}
                 height={500}
                 alt={image.description}
-                className="object-cover w-full"
+                className="object-cover aspect-square w-full"
               /> :
               <div className="w-full h-full rounded-lg">
               </div>

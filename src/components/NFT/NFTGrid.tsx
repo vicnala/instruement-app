@@ -65,7 +65,7 @@ export default function NFTGrid({ nftData, minted }: Props) {
               {myNftData.length > 1 ? t('components.NFTGrid.title_plural') : t('components.NFTGrid.title_single')}
             </h2>
             <p className="text-md text-gray-500 pb-4">
-              {t('components.NFTGrid.description')}
+              {myNftData.length > 1 ? t('components.NFTGrid.description_plural') : t('components.NFTGrid.description_single')}
             </p>
           </div>
           <div className="grid justify-start grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
