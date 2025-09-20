@@ -30,10 +30,13 @@ export const BottomNav = () => {
 					</div>
 				</Link>
 				{
-					isMinter && (pathname === '/' || pathname === '/account' || pathname.startsWith('/instrument')) &&
-					<ButtonLink href="/drafts/new" size="md" colorSchema="it">
-						{bottomNavt('new_instrument')}
-					</ButtonLink>
+					isMinter && (pathname === '/' || pathname === '/account' || pathname.startsWith('/instrument')) ? (
+						<ButtonLink href="/drafts/new" size="md" colorSchema="it">
+							{bottomNavt('new_instrument')}
+						</ButtonLink>
+					) : (
+						<div></div>
+					)
 				}
 				{
 				activeAccount?.address &&
