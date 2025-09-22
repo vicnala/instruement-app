@@ -29,8 +29,9 @@ export default async function Home() {
       });
       const instrumentData = await instrumentResult.json();
       if (instrumentData?.code === 'success') {
-        if (instrumentData.data.asset_id) {
-          const token = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/token/${instrumentData.data.asset_id}`)
+        const assetId = Number(instrumentData?.data?.asset_id);
+        if (Number.isInteger(assetId) && assetId >= 0) {
+          const token = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/token/${assetId}`)
           const tokenData = await token.json();
           minted.push(tokenData);
         }
