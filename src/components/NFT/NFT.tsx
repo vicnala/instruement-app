@@ -2,7 +2,7 @@
 
 import { MediaRenderer } from "thirdweb/react";
 import Skeleton from "@/components/Skeleton";
-import { useRouter } from "@/i18n/routing";
+import { Link } from "@/i18n/routing";
 import { client } from "@/app/client";
 import { Send } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -23,20 +23,16 @@ type Props = {
 export default function NFTComponent({
   nft,
 }: Props) {
-  const router = useRouter();
-  const t = useTranslations();
+  const t = useTranslations('components.NFT');
   if (!nft) {
     return <LoadingNFTComponent />;
   }
 
   return (
-    <div
-      className={`cursor-pointer transition-all hover:shadow-lg flex flex-col w-full justify-stretch overflow-hidden rounded-lg ${nft.metadata.iAmTheOwner ? 'bg-we-25 border border-we-100' : 'bg-it-25 border border-it-100'}`}
-      onClick={() =>
-        router.push(
-          `/instrument/${nft.metadata.id.toString()}`
-        )
-      }
+    <Link
+      href={`/instrument/${nft.metadata.id.toString()}`}
+      className={`group cursor-pointer transition-all hover:shadow-lg flex flex-col w-full justify-stretch overflow-hidden rounded-lg ${nft.metadata.iAmTheOwner ? 'bg-we-25 border border-we-100' : 'bg-it-25 border border-it-100'}`}
+      aria-label={`${nft.metadata.name || nft.metadata.id.toString()}`}
     >
       <div className="relative w-full aspect-square bg-it-50">
         {nft.metadata.image && (
@@ -48,8 +44,8 @@ export default function NFTComponent({
           />
         )}
         { 
-          nft.metadata.iAmTheOwner && (
-            <div className="absolute top-2 right-2 p-3 text-white bg-black/30 rounded-full hover:bg-we-400 transition-all">
+          nft.metadata.iAmTheOwner && nft.metadata.iAmTheMinter && (
+            <div className="absolute top-2 right-2 p-3 text-white bg-black/30 rounded-full group-hover:bg-we-400 transition-all">
               <Send className="w-4 h-4 text-white" />
             </div>
           )
@@ -87,7 +83,7 @@ export default function NFTComponent({
           </p> */}
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
