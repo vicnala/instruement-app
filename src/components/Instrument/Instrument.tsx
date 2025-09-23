@@ -22,6 +22,7 @@ import { ButtonLink } from "@/components/UI/ButtonLink";
 import { useRouter } from "@/i18n/routing";
 import { marked } from "marked";
 import { contract } from "@/app/contracts";
+import Skeleton from "@/components/Skeleton";
 // import Loading from "@/components/Loading";
 
 marked.use({
@@ -588,16 +589,29 @@ export default function Instrument({
 										backgroundImage: 'url(/images/instruement-watermark.svg)',
 										backgroundSize: '130%',
 										backgroundPosition: '200% 20%',
-										backgroundRepeat: 'no-repeat'
+										backgroundRepeat: 'no-repeat',
+										backgroundColor: 'rgba(116, 102, 90, 0.03)'
 									}}
 								/>
 								{/* Content */}
 								<div className="relative z-10">
-									<p className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2">{tInstrument('registered_by')}</p>
+									<p className="text-sm font-semibold text-gray-700 dark:text-gray-400 mb-3">{tInstrument('registered_by')}</p>
 									<div className="flex flex-col gap-2">
-										{minterUser && minterUser.profile_photo && (
+										{isLoadingMinter ? (
 											<div className="flex items-center gap-4">
-												<div className="w-20 h-20 rounded-full overflow-hidden">
+												<div className="w-30 h-30 rounded-full border border-gray-25 border-[3px] dark:border-gray-700 overflow-hidden flex-shrink-0">
+													<Skeleton width="75px" height="75px" />
+												</div>
+												<div className="flex-1">
+													<Skeleton width="60%" height="24px" />
+													<div className="mt-2">
+														<Skeleton width="40%" height="16px" />
+													</div>
+												</div>
+											</div>
+										) : minterUser && minterUser.profile_photo ? (
+											<div className="flex items-center gap-4">
+												<div className="w-[6rem] h-[6rem] rounded-full border border-gray-100 border-[4px] dark:border-gray-700 overflow-hidden">
 													<Image
 														src={minterUser.profile_photo.sizes.thumbnail}
 														alt={minterUser.business_name}
@@ -617,7 +631,7 @@ export default function Instrument({
 													</p>
 												</div>
 											</div>
-										)}
+										) : null}
 									</div>
 								</div>
 							</div>
@@ -662,7 +676,7 @@ export default function Instrument({
 
 					<Divider color="bg-transparent" spacing="0" className="h-1 max-h-0 my-0 sm:my-4 sm:h-[4px] mx-0 md:mx-4"/>
 
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-6">
 						{/* Images Section */}
 						{images && images.length > 0 && (
 							<div className="p-4 sm:p-0 bg-gray-25 dark:bg-gray-900 sm:bg-transparent sm:dark:bg-transparent rounded-lg">
@@ -770,7 +784,7 @@ export default function Instrument({
 
 						{/* Documents Section */}
 						{documents && documents.length > 0 && (
-							<div className="p-4 sm:p-0 bg-gray-25 dark:bg-gray-900 sm:bg-transparent rounded-lg">
+							<div className="p-4 sm:p-0 bg-gray-25 dark:bg-gray-900 sm:dark:bg-transparent sm:bg-transparent rounded-lg">
 								<h2 className='text-xl font-semibold text-it-1000 dark:text-it-50 mb-4'>
 									{tInstrument('documents')}
 								</h2>
