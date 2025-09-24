@@ -10,8 +10,8 @@ const Page = ({ children }: Props) => {
 	return (
 		<>
 			<Header />
-				<main className={`mx-auto max-w-screen-lg px-safe`}>
-					<div className='px-3.5 pt-6 pb-[4rem] sm:px-0 sm:pt-0'>{children}</div>
+				<main className={`px-3.5`}>
+					<div className='pt-6 pb-[4rem] sm:px-0 sm:pt-0 mx-auto max-w-screen-lg'>{children}</div>
 				</main>
 			<BottomNav />
 		</>
