@@ -99,10 +99,10 @@ export default function NFTGrid({ nftData, mintedIds }: Props) {
       <div className="pb-2">
         <div className="pb-2">
           <h2 className='text-2xl text-left font-bold text-black dark:text-white pb-2'>
-            {allNftData.length > 1 ? t('components.NFTGrid.title_plural') : t('components.NFTGrid.title_single')}
+            {allNftData.length > 1 || isLoading ? t('components.NFTGrid.title_plural') : t('components.NFTGrid.title_single')}
           </h2>
           <p className="text-md text-gray-500 pb-4">
-            {allNftData.length > 1 ? t('components.NFTGrid.description_plural') : t('components.NFTGrid.description_single')}
+            {allNftData.length > 1 || isLoading ? t('components.NFTGrid.description_plural') : t('components.NFTGrid.description_single')}
           </p>
         </div>
         {
