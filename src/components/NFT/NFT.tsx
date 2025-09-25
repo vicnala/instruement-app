@@ -56,31 +56,6 @@ export default function NFTComponent({
           <h3 className="max-w-full overflow-hidden text-xl font-bold text-ellipsis">
             {nft.metadata.name || JSON.stringify(nft.metadata, null, 2)}
           </h3>
-          
-          {/* <p className="text-sm font-semibold">
-            #{nft.metadata.id.toString()}
-            <span className="text-sm font-semibold">
-              {nft.metadata.iAmTheOwner && (
-                <span className="text-xs font-semibold">
-                  {" "} {t('components.NFT.owner')}
-                </span>
-              )}
-            </span>
-            {
-              nft.metadata.iAmTheOwner && nft.metadata.iAmTheMinter && (
-                <span className="text-xs font-semibold">
-                  {" "} {t('components.NFT.and')}
-                </span>
-              )
-            }
-            <span className="text-sm font-semibold">
-              {nft.metadata.iAmTheMinter && (
-                <span className="text-xs font-semibold">
-                  {" "} {t('components.NFT.minter')}
-                </span>
-              )}
-            </span>
-          </p> */}
         </div>
       </div>
     </Link>

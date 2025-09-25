@@ -9,7 +9,6 @@ import DraftGrid from "@/components/Drafts/DraftGrid";
 import Loading from "../Loading";
 import { useActiveAccount } from "thirdweb/react";
 import NotConnected from "../NotConnected";
-import { Instrument } from "@/lib/definitions";
 
 const VIDEO_URLS: Record<string, string> = {
   en: "https://www.youtube.com/embed/PbbHg0uxc60", 
@@ -17,11 +16,11 @@ const VIDEO_URLS: Record<string, string> = {
 };
 
 export default function Minter(
-  { locale, minted }: Readonly<{ locale: string, minted: any[] }>
+  { locale }: Readonly<{ locale: string }>
 ) {
   const t = useTranslations('components.HomeIndex.Minter');
   const activeAccount = useActiveAccount();
-  const { minter, owned, isLoading } = useStateContext()
+  const { minter, owned, isLoading, mintedIds } = useStateContext()
 
   // Get the appropriate video URL based on locale
   const videoUrl = VIDEO_URLS[locale] || VIDEO_URLS.en; // Fallback to English if locale not found
@@ -61,7 +60,8 @@ export default function Minter(
           }
         </Section> : 
         <Section>
-          <NFTGrid nftData={owned} minted={minted} />
+          <NFTGrid nftData={owned} mintedIds={mintedIds} />
+          <></>
         </Section>
       }
     </Page>

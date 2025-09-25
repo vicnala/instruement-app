@@ -12,7 +12,7 @@ import NotConnected from "../NotConnected";
 
   
 export default function User(
-  { locale, invite, minted }: Readonly<{ locale: string, invite?: string, minted: any[] }>
+  { locale, invite }: Readonly<{ locale: string, invite?: string }>
 ) {
   const t = useTranslations('components.HomeIndex.User');
   const { owned, isLoading } = useStateContext()
@@ -32,7 +32,7 @@ export default function User(
         </Section> :
         <Section>
           <div className="flex flex-col pt-4">
-            <NFTGrid nftData={owned} minted={minted} />
+            <NFTGrid nftData={owned} mintedIds={[]} />
           </div>
         </Section>
       }

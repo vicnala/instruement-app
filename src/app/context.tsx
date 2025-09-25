@@ -11,11 +11,8 @@ import {
   useActiveAccount,
   useActiveWallet,
   useSwitchActiveWalletChain,
-  useActiveWalletChain,
-  // useContractEvents
+  useActiveWalletChain
 } from "thirdweb/react";
-import { contract } from "./contracts";
-// import { transferEvent } from "thirdweb/extensions/erc721";
 import { getLuthierPermissions } from "@/lib/luthierPermissions";
 import chain from "@/lib/chain";
 
@@ -33,9 +30,7 @@ type StateContextType = {
   minter: any,
   setReloadUser: Function,
   owned: any[],
-  // setOwned: Function,
-  // events: any[],
-  // setEventsWatch: Function
+  mintedIds: number[];
 }
 
 const stateContextDefaultValues: StateContextType = {
@@ -47,9 +42,7 @@ const stateContextDefaultValues: StateContextType = {
   isVerified: false,
   setReloadUser: () => { },
   owned: [],
-  // setOwned: () => { },
-  // events: [],
-  // setEventsWatch: () => { }
+  mintedIds: [],
 }
 
 const StateContext = createContext<StateContextType>(stateContextDefaultValues)
@@ -58,7 +51,6 @@ export const getWPUser = async (activeAccount: any, setIsLuthier: Function, setI
   try {
     const result = await fetch(`/api/user/${activeAccount.address}`, { cache: 'no-store' })
     const data = await result.json();
-    // data is the "data", there is NO { code: 'xx', ... }
     // console.log(`/api/user/${address}`, data);
 
     const { isLuthier, isVerified, isMinter } = getLuthierPermissions(data);
@@ -98,6 +90,16 @@ export const getUserTokens = async (activeAccount: any, setOwned: Function) => {
   }
 }
 
+export const getUserInstruments = async (setMintedIds: Function) => {
+  try {
+    const result = await fetch(`/api/user/instruments`, { cache: 'no-store' })
+    const data = await result.json();
+    setMintedIds(data.data.ids);
+  } catch (error) {
+    setMintedIds({ids: []});
+  }
+}
+
 export const StateContextProvider = ({ children }: Props) => {
   const activeAccount = useActiveAccount();
   const activeWallet = useActiveWallet();
@@ -112,20 +114,7 @@ export const StateContextProvider = ({ children }: Props) => {
   const [isLoading, setIsLoading] = useState(false)
   const [reloadUser, setReloadUser] = useState(false)
   const [owned, setOwned] = useState<any[]>([])
-  const [eventsWatch, setEventsWatch] = useState<boolean>(false)
-
-  // const contractEvents = useContractEvents({
-  //   contract,
-  //   events: [transferEvent({ to: activeAccount?.address })],
-  //   watch: eventsWatch,
-  // });
-
-  useEffect(() => {
-    if (eventsWatch) {
-      const timer = setTimeout(() => setEventsWatch(false), 10000);
-      return () => clearTimeout(timer);
-    }
-  }, [eventsWatch]);
+  const [mintedIds, setMintedIds] = useState<number[]>([])
 
   useEffect(() => {
       if (activeWallet && activeChain?.id !== chain.id) {
@@ -142,6 +131,7 @@ export const StateContextProvider = ({ children }: Props) => {
         setAddress(activeAccount.address);
         await getWPUser(activeAccount, setIsLuthier, setIsVerified, setIsMinter, setMinter);
         await getUserTokens(activeAccount, setOwned);
+        await getUserInstruments(setMintedIds);
       }
       setIsLoading(false)
     }
@@ -177,9 +167,7 @@ export const StateContextProvider = ({ children }: Props) => {
         isLoading: isLoading,
         setReloadUser,
         owned,
-        // setOwned,
-        // events: contractEvents.data ? contractEvents.data : [],
-        // setEventsWatch
+        mintedIds
       }}
     >
       {children}
