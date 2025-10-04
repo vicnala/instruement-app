@@ -49,7 +49,8 @@ export async function GET(
     // );
 
     const fetchResult = await fetch(`${ENGINE_URL}/contract/${NEXT_PUBLIC_CHAIN_ID}/${NEXT_PUBLIC_INSTRUEMENT_COLLECTION_ADDRESS}/erc721/get-owned?walletAddress=${address}`, {
-      headers: { Authorization: `Bearer ${ENGINE_ACCESS_TOKEN}` }
+      headers: { Authorization: `Bearer ${ENGINE_ACCESS_TOKEN}` },
+      cache: 'no-store'
     })
     const { result } = await fetchResult.json()
     
