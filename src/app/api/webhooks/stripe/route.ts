@@ -112,7 +112,7 @@ export async function POST(request: Request) {
           if (data.metadata.minterAddress && data.metadata.id) {
             let result, blob;
             try {
-              result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/user/${data.metadata.minterAddress}`)
+              result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/user/${data.metadata.minterAddress}`, { method: 'GET', headers })
               const { code, message, data: minter } = await result.json()
 
               if (code === 'success') {
@@ -145,7 +145,7 @@ export async function POST(request: Request) {
                   let imageIndex: number = 0;
                   for (const imageId of imagesIds) {
                     try {
-                      result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/file/${imageId}`, { headers });                     
+                      result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/file/${imageId}`, { method: 'GET', headers });                     
 
                       if (result.status !== 200) {
                         return NextResponse.json(
@@ -179,7 +179,7 @@ export async function POST(request: Request) {
                   let documentIndex: number = 0;
                   for (const fileId of filesIds) {
                     try {
-                      result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/file/${fileId}`, { headers });
+                      result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/file/${fileId}`, { method: 'GET', headers });
                       const { data: _file } = await result.json();
                       // console.log("_file", _file);
                       blob = await fetchAndStreamFile(_file.file_url);
