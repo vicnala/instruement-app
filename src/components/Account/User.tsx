@@ -1,7 +1,6 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useStateContext } from "@/app/context";
 import Page from "@/components/Page";
 import Loading from "@/components/Loading";
 import Section from "@/components/Section";
@@ -11,16 +10,15 @@ import { CustomConnectButton } from "@/components/CustomConnectButton";
 import { useActiveAccount } from "thirdweb/react";
 
 export default function User(
-    { locale, invite }: Readonly<{ locale: string, invite?: string }>
+    { locale, invite, context }: Readonly<{ locale: string, invite?: string, context: any }>
 ) {
     const t = useTranslations('components.Account.User');
-    const activeAccount = useActiveAccount();
-    const { isLoading, setReloadUser } = useStateContext();
+    const address = context.sub;
 
-    if (isLoading || !activeAccount?.address) return <Loading />
+    if (!address) return <Loading />
 
     return (
-        <Page>
+        <Page context={context}>
             <Section>
                 <h2 className='text-2xl font-bold text-black dark:text-white'>
                     {t('title')}
@@ -34,13 +32,12 @@ export default function User(
                     <OnboardMinterCard 
                         locale={locale} 
                         invite={invite}
-                        onReloadUser={() => setReloadUser(true)} 
                     />
                 </Section>
             )}
             { !invite && (
                 <Section>
-                    <ReceiveInstrumentCard address={activeAccount.address} locale={locale} />
+                    <ReceiveInstrumentCard address={address} locale={locale} context={context} />
                 </Section>
             )}
             <Section>
@@ -51,7 +48,7 @@ export default function User(
                     <p className='text-gray-500 dark:text-gray-400 mb-4'>
                         {t('connect_button_description')}
                     </p>
-                    <CustomConnectButton />
+                    <CustomConnectButton cb={`/account`} />
                 </div>
             </Section>
         </Page>

@@ -1,13 +1,13 @@
 'use server'
 
 import { userAuthData } from "@/actions/login";
-import { NextRequest } from "next/server";
+import { getLocale } from "next-intl/server";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
+  const locale = await getLocale();
   const authData: any = await userAuthData();
   const authContext = authData.parsedJWT.ctx;
   const isMinter = authContext.isMinter;
-  const locale = request.nextUrl.searchParams.get('locale') || 'en';
 
   if (!isMinter) {
     return Response.json(

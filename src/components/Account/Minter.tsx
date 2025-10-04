@@ -1,33 +1,31 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useStateContext } from "@/app/context";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
 import { CustomConnectButton } from "../CustomConnectButton";
 import Image from "next/image";
-import Loading from "@/components/Loading";
-import { useActiveAccount } from "thirdweb/react";
 import ButtonQrTransfer from "../UI/ButtonQrTransfer";
 import { ButtonLink } from "../UI/ButtonLink";
 import { ExternalLink } from 'lucide-react';
 
 export default function Minter(
-    { locale }: Readonly<{ locale: string }>
+    { locale, context, minter }: Readonly<{ locale: string, context: any, minter: any }>
 ) {
     const t = useTranslations('components.Account.Minter');
-    const { isMinter, isLuthier, isVerified, isLoading, minter } = useStateContext();
-    const activeAccount = useActiveAccount();
+    const address = context.sub;
 
+    const isMinter = context.ctx.isMinter;
+    const isLuthier = context.ctx.isLuthier;
+    const isVerified = context.ctx.isVerified;
+    
     let minterConstructionSkills = [];
     if (minter && minter.skills && minter.skills.length) {
         minterConstructionSkills = minter.skills.filter((skill: any) => skill.slug.includes('construction'));
     }
 
-    if (isLoading || !activeAccount?.address) return <Loading />
-
     return (
-        <Page>
+        <Page context={context}>
             {/* Cover Image Section */}
             <div className="relative w-full h-60 mb-16">
                 <div className="w-full h-full overflow-hidden rounded-[15px]">
@@ -173,15 +171,15 @@ export default function Minter(
                                     <div className="flex items-center gap-2">
                                         <input
                                             type="text"
-                                            value={activeAccount?.address || "No wallet address available"}
+                                            value={address || "No wallet address available"}
                                             disabled
                                             className="bg-gray-100 text-gray-600 p-2 rounded-md w-full"
                                             aria-label="Wallet address"
                                         />
                                         <button
                                             onClick={() => {
-                                                if (activeAccount?.address) {
-                                                    navigator.clipboard.writeText(activeAccount?.address);
+                                                if (address) {
+                                                    navigator.clipboard.writeText(address);
                                                     const icon = document.querySelector('#copy-icon');
                                                     if (icon) {
                                                         icon.classList.remove('text-gray-600');
@@ -194,7 +192,7 @@ export default function Minter(
                                                 }
                                             }}
                                             className="p-2 text-gray-600 hover:text-gray-800 disabled:opacity-50"
-                                            disabled={!activeAccount?.address}
+                                            disabled={!address}
                                             aria-label="Copy wallet address"
                                         >
                                             <svg id="copy-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -205,9 +203,9 @@ export default function Minter(
                                 </div>
                             </div>
                             {
-                                activeAccount?.address && (
+                                address && (
                                     <div className="mb-6">
-                                        <ButtonQrTransfer address={activeAccount?.address} locale={locale} />
+                                        <ButtonQrTransfer address={address} locale={locale} context={context} />
                                     </div>
                                 )
                             }
@@ -216,7 +214,7 @@ export default function Minter(
                             <h3 className="text-lg font-semibold mb-2 text-gray-1000 dark:text-gray-800">{t('wallet_actions_title')}</h3>
                             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{t('wallet_actions_description')}</p>
                             {/* Connect Button */}
-                            <CustomConnectButton />
+                            <CustomConnectButton cb={`/account`} />
                         </div>
                     </div>
                 </div>

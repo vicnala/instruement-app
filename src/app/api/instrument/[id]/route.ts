@@ -130,7 +130,6 @@ export async function GET(
 
   try {
     const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${id}?locale=${locale}`, {
-      cache: 'no-store',
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

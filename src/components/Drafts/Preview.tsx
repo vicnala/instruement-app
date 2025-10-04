@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import { useTranslations } from "next-intl";
-import { useStateContext } from "@/app/context";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
 import Loading from "@/components/Loading"
@@ -12,7 +11,6 @@ import { Instrument } from "@/lib/definitions";
 import { Expand, Download, ArrowLeft, ArrowRight } from "lucide-react";
 import InstrumentService from "@/services/InstrumentService";
 import { marked } from "marked";
-import { useActiveAccount } from "thirdweb/react";
 
 // Configure marked options
 marked.use({
@@ -20,14 +18,15 @@ marked.use({
 });
 
 export default function Preview(
-  { locale, id }: Readonly<{ locale: string, id?: string }>
+  { locale, id, context }: Readonly<{ locale: string, id?: string, context: any }>
 ) {
   const t = useTranslations('components.Preview');
-  const { minter, isLoading, address } = useStateContext()
+  const minter = context.ctx.minter;
+  const isLoading = context.ctx.isLoading;
+  const address = context.sub;
   const [instrument, setInstrument] = useState<Instrument>()
   const [isLoadingInstrument, setIsLoadingInstrument] = useState<boolean>(false)
   const router = useRouter()
-  const activeAccount = useActiveAccount();
 
   useEffect(() => {
     const getInstrument = async () => {
@@ -50,10 +49,10 @@ export default function Preview(
 
   }, [id, locale, isLoadingInstrument, instrument, minter]);
 
-  if (isLoading || isLoadingInstrument || !activeAccount?.address) return <Loading />
+  if (isLoading || isLoadingInstrument || !address) return <Loading />
 
   return (
-    <Page>
+    <Page context={context}>
       { minter && <>
         <Section>
           <div className="px-3 md:px-6 py-4 md:py-6 border-[0.1rem] border border-gray-100 rounded-lg">

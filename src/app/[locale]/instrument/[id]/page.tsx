@@ -1,9 +1,11 @@
 import type { Metadata, ResolvingMetadata } from 'next';
 import Instrument from "@/components/Instrument/Instrument";
-import { redirect } from "@/i18n/routing";
 import NotFound from "@/app/not-found";
 import { client } from "@/app/client";
 import { resolveScheme } from "thirdweb/storage";
+import { getInstrument, getInstrumentFile } from "@/services/instrumentsService";
+import { getToken } from "@/services/TokensService";
+import { userAuthData } from "@/actions/login";
 
 type Props = {
   params: Promise<{ locale: string, id: string }>
@@ -30,67 +32,73 @@ export async function generateMetadata(
   }
 
   try {
-    const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/instrument/asset/${id}?locale=${locale || "en"}`).then(res => res.json());
-    const { data } = result;
+    const result = await getInstrument(id, locale || "en");
+    const data = result as any;
 
-    if (data.code === "success") {  
+    if (data.code === "success") {
       const instrument: any = data.data;
       metadata.title = instrument.title;
       // metadata.description = instrument.type_name;
-      
-      const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/file/${instrument.cover_image}`).then(res => res.json());
-      if (result.code === "success") {
-        const coverImage = result.data.data;
-        const { sizes } = coverImage;
-        if (sizes.og) {
-          const ogImage = `${result.data.data.base_url}${sizes.og.file}`;
-          metadata.openGraph.images = [
-            { url: ogImage }
-          ];
-          metadata.openGraph.title = instrument.title;
-          // metadata.openGraph.description = instrument.type_name;
+    
+        const result = await getInstrumentFile(instrument.cover_image);
+        const coverImageResult = result as any;
+
+        if (coverImageResult.code === "success") {
+          const coverImage = coverImageResult.data;
+          const { sizes } = coverImage;
+          if (sizes.og) {
+            const ogImage = `${coverImage.base_url}${sizes.og.file}`;
+            metadata.openGraph.images = [
+              { url: ogImage }
+            ];
+            metadata.openGraph.title = instrument.title;
+            // metadata.openGraph.description = instrument.type_name;
+          }
         }
+
         // console.log("metadata", metadata.openGraph);
         return metadata;
-      }
+
     }
   } catch (error) {
     console.error("metadata error", error);
   }
 
   return metadata;
-
-  // try {
-  //   const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/token/${id}?locale=${locale || "en"}`).then(res => res.json());
-  //   const { metadata, owner } = result;
-  
-  //   return {
-  //     title: metadata?.name || `Instrument ${id}`,
-  //     description: metadata?.name || "",
-  //     openGraph: {
-  //       title: metadata?.name || `Instrument ${id}`,
-  //       description: ``,
-  //       images: [
-  //         { url: metadata?.image || "" }
-  //       ]
-  //     }
-  //   };
-    
-  // } catch (error) {
-  //   return metadata;
-  // }
 }
 
 export default async function InstrumentPage({ searchParams, params }: Props) {
   const { id, locale } = await params;
   const { to } = await searchParams;
+  let authResult: any;
+  let authContext: any;
+  let data: any;
 
-  if (!locale) {
-    redirect({ href: `/instrument/${id}?to=${to}`, locale: locale || 'en' });
+  try {
+    authResult = await userAuthData();
+    authContext = authResult.parsedJWT;
+  } catch (error) {
+    console.error("authResult error", error);
   }
 
-  const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/token/${id}`)
-  const data = await result.json();
+  if (!authResult) {
+    authContext = {
+      sub: undefined,
+      ctx: {
+        isMinter: false,
+        isLuthier: false,
+        isVerified: false,
+        userId: undefined,
+        firstName: ""
+      }
+    };
+  }
+
+  try {
+    data = await getToken(id);
+  } catch (error) {
+    console.error("data error", error);
+  }
 
   if (!data?.metadata) return <NotFound />;
 
@@ -137,7 +145,18 @@ export default async function InstrumentPage({ searchParams, params }: Props) {
     }
   }
 
+  if (!minter || !images || !documents) return <NotFound />;
+
   return (
-    <Instrument id={id} instrumentAsset={data} minter={minter} images={images} documents={documents} locale={locale} to={to} />
+    <Instrument
+      id={id}
+      instrumentAsset={data}
+      minter={minter}
+      images={images}
+      documents={documents}
+      locale={locale}
+      to={to}
+      context={authContext}
+    />
   );
 }

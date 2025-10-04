@@ -10,7 +10,6 @@ import {
   Elements,
 } from "@stripe/react-stripe-js";
 
-import { useStateContext } from "@/app/context";
 import { createPaymentIntent } from "@/actions/stripe";
 import getStripe from "@/lib/get-stripejs";
 import { formatAmountForDisplay } from "@/lib/stripe-helpers";
@@ -243,10 +242,10 @@ function CheckoutForm({ amount, address, id, minterAddress, instrument }: { amou
 }
 
 export default function ElementsForm(
-  { locale, id, address }: Readonly<{ locale: string, id: string, address?: string }>
+  { locale, id, address, context }: Readonly<{ locale: string, id: string, address?: string, context: any }>
 ): JSX.Element | null {
   const t = useTranslations();
-  const { address: minterAddress, minter, isLoading } = useStateContext()
+  const { address: minterAddress, minter, isLoading } = context.ctx;
   const [instrument, setInstrument] = React.useState<Instrument>()
   const [amount, setAmount] = React.useState<number>(0)
 

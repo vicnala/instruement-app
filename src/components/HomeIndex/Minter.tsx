@@ -3,11 +3,8 @@
 import { useTranslations } from "next-intl";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
-import { useStateContext } from "@/app/context";
 import NFTGrid from "@/components/NFT/NFTGrid";
 import DraftGrid from "@/components/Drafts/DraftGrid";
-import Loading from "../Loading";
-import { useActiveAccount } from "thirdweb/react";
 import NotConnected from "../NotConnected";
 
 const VIDEO_URLS: Record<string, string> = {
@@ -16,25 +13,31 @@ const VIDEO_URLS: Record<string, string> = {
 };
 
 export default function Minter(
-  { locale }: Readonly<{ locale: string }>
+  { locale,
+    owned,
+    mintedIds,
+    context
+  }: Readonly<{
+    locale: string,
+    owned: any[],
+    mintedIds: number[],
+    context: any
+  }>
 ) {
   const t = useTranslations('components.HomeIndex.Minter');
-  const activeAccount = useActiveAccount();
-  const { minter, owned, isLoading, mintedIds } = useStateContext()
 
   // Get the appropriate video URL based on locale
   const videoUrl = VIDEO_URLS[locale] || VIDEO_URLS.en; // Fallback to English if locale not found
 
-  // Show loading spinner
-  if (isLoading) return <Loading />
-  if (!activeAccount?.address) return <NotConnected locale={locale} />
+  // Go to NotConnected page if user is not connected
+  if (!context.sub) return <NotConnected locale={locale} />
 
   // Main content when user is connected
   return (
-    <Page>
-      <DraftGrid locale={locale} />
+    <Page context={context}>
+      <DraftGrid locale={locale} context={context} />
       {
-        !owned?.length ?
+        !owned?.length && !mintedIds.length ?
         <Section>
           {
             !owned?.length &&
@@ -50,7 +53,7 @@ export default function Minter(
               </div>
               <div className="flex flex-col gap-2 justify-center flex-[1] min-w-[30ch]">
                 <h2 className="text-3xl font-semibold text-gray-900 dark:text-gray-100">
-                  {minter.first_name},
+                  {context.ctx.firstName},
                 </h2>
                 <p className="mb-4 text-lg">
                   {t('hello_sub')}
@@ -60,7 +63,11 @@ export default function Minter(
           }
         </Section> : 
         <Section>
-          <NFTGrid nftData={owned} mintedIds={mintedIds} />
+          <NFTGrid
+            nftData={owned}
+            mintedIds={mintedIds || []}
+            address={context.sub}
+          />
           <></>
         </Section>
       }

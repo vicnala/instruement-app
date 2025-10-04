@@ -12,7 +12,6 @@ import { jsonLdScriptProps } from "react-schemaorg";
 import { WebSite } from "schema-dts";
 import { ThirdwebProvider } from "thirdweb/react";
 import { locales } from "@/i18n/routing";
-import { StateContextProvider } from "@/app/context";
 
 const catamaran = Catamaran({ subsets: ["latin"] });
 
@@ -55,9 +54,7 @@ export default async function RootLayout({
         >
           <NextIntlClientProvider messages={messages}>
             <ThirdwebProvider>
-              <StateContextProvider>
                 {children}
-              </StateContextProvider>
             </ThirdwebProvider>
           </NextIntlClientProvider>
         </ThemeProvider>

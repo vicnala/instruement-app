@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import NFT, { LoadingNFTComponent } from "./NFT";
-import { useStateContext } from "@/app/context";
 
 type Props = {
   nftData: {
@@ -18,14 +17,14 @@ type Props = {
   }[];
   emptyText?: string;
   mintedIds: number[];
+  address: string;
 };
 
-export default function NFTGrid({ nftData, mintedIds }: Props) {
+export default function NFTGrid({ nftData, mintedIds, address }: Props) {
   const t = useTranslations();
   const locale = useLocale();
-  const { address } = useStateContext();
   const [isLoading, setIsLoading] = useState(true);
-  const [allNftData, setAllNftData] = useState([]);
+  const [allNftData, setAllNftData] = useState<any[]>([]);
 
   useEffect(() => {
     const getInstrument = async (id: number) => {     
@@ -49,36 +48,38 @@ export default function NFTGrid({ nftData, mintedIds }: Props) {
       } 
     }
 
-    const getToken = async (id: number) => {
-      const result = await fetch(`/api/token/${id}`)
-      return await result.json();
+    const getToken = async (id: string) => {
+      const result = await fetch(`/api/token/${id}`);
+      const resultJson = await result.json();
+      let iAmTheMinter = false;
+      if (resultJson?.metadata?.properties?.some((property: any) => property?.trait_type?.Registrar === address)) {
+        iAmTheMinter = true;
+      }
+      resultJson.metadata.iAmTheOwner = resultJson.owner === address;
+      resultJson.metadata.iAmTheMinter = iAmTheMinter;
+      return resultJson;
     }
-    
+
     Promise.all(mintedIds.map(getInstrument))
       .then((mintedInstruments) => {
-        // console.log("mintedInstruments", mintedInstruments.map((result: any) => result.asset_id));
-        Promise.all(mintedInstruments.map(instrument => instrument.asset_id).map(getToken))
+        for (const token of nftData) {
+          token.metadata.iAmTheOwner = token.owner === address;
+        }
+        
+        const myMintedTokensIds: any = [];
+        for (const instrument of mintedInstruments) {
+          const exists = nftData.find((nft: any) => nft.metadata.id === instrument.asset_id.toString());
+          if (exists) {
+            exists.metadata.iAmTheOwner = exists.owner === address;
+            exists.metadata.iAmTheMinter = true;
+          } else {
+            myMintedTokensIds.push(instrument.asset_id.toString());
+          }
+        }        
+        
+        Promise.all(myMintedTokensIds.map((id: string) => getToken(id)))
           .then((mintedTokens) => {
-            // console.log("minted tokens", mintedTokens);
-            const allTokens = [...nftData, ...mintedTokens];
-            const myNftData: any = [];
-            for (const nft of allTokens) {
-              if (!myNftData.some((myNft: any) => myNft.metadata.id === nft.metadata.id)) {
-                if (nft.owner === address) {
-                  nft.metadata.iAmTheOwner = true;
-                } else {
-                  nft.metadata.iAmTheOwner = false;
-                }
-                const iAmTheMinter = mintedTokens.find((mintedNft: any) => mintedNft.metadata.id === nft.metadata.id);
-                if (iAmTheMinter) {
-                  nft.metadata.iAmTheMinter = true;
-                } else {
-                  nft.metadata.iAmTheMinter = false;
-                }
-                myNftData.push(nft);
-              }
-            }
-            setAllNftData(myNftData);
+            setAllNftData([...nftData, ...mintedTokens]);
             setIsLoading(false);
           })
           .catch((error: any) => {

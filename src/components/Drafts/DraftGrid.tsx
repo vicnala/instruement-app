@@ -1,14 +1,23 @@
 "use client";
-import React from "react";
-import Draft from "./Draft";
-import { useStateContext } from "@/app/context";
-import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/routing";
-import Section from "@/components/Section";
 
-export default function DraftGrid({ locale }: { locale: string }) {
-  const { minter } = useStateContext();
+import React, { useState, useEffect } from "react";
+import Draft from "./Draft";
+import { useTranslations } from "next-intl";
+import Section from "@/components/Section";
+import { getUser } from "@/services/UsersService";
+
+export default function DraftGrid({ locale, context }: { locale: string, context: any }) {
   const t = useTranslations();
+  const [minter, setMinter] = useState<any>(null);
+
+  useEffect(() => {
+    const getMinter = async () => {
+      const minter = await getUser(context.sub);
+      setMinter(minter);
+    }
+    getMinter();
+  }, []);
+  
 
   if (minter && minter.instruments && minter.instruments.length > 0) {
     return (

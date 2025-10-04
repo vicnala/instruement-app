@@ -8,7 +8,6 @@ import truncateEthAddress from 'truncate-eth-address'
 import { useTranslations } from "next-intl";
 // import { resolveScheme } from "thirdweb/storage";
 import { Scanner } from '@yudiel/react-qr-scanner';
-import { useStateContext } from "@/app/context";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
 // import { client } from "@/app/client";
@@ -23,7 +22,6 @@ import { useRouter } from "@/i18n/routing";
 import { marked } from "marked";
 import { contract } from "@/app/contracts";
 import Skeleton from "@/components/Skeleton";
-// import Loading from "@/components/Loading";
 
 marked.use({
 	breaks: true
@@ -177,7 +175,8 @@ export default function Instrument({
 	images,
 	documents,
 	locale,
-	to
+	to,
+	context
 }: Readonly<{
 	id: string,
 	instrumentAsset: any,
@@ -185,21 +184,17 @@ export default function Instrument({
 	minter: string,
 	documents: any[],
 	locale: string,
-	to: string | undefined }>
+	to: string | undefined,
+	context: any
+}>
 ) {
 	const router = useRouter();
 	const tInstrument = useTranslations('components.Instrument');
 	
 	const IMAGES_THRESHOLD_FOR_MORE_COLUMNS = 4;
 	
-	const [isLoadingInstrumentAsset, setIsLoadingInstrumentAsset] = useState(false)
 	const [isLoadingMinter, setIsLoadingMinter] = useState(false)
-	// const [instrumentAsset, setInstrumentAsset] = useState<any>()
-	// const [images, setImages] = useState<any[]>([])
-	// const [documents, setDocuments] = useState<any[]>([])
-	// const [minter, setMinter] = useState<string>()
 	const [minterUser, setMinterUser] = useState<any>()
-	const { address, isLoading, setReloadUser } = useStateContext()
 	const [isOwner, setIsOwner] = useState<boolean>(false)
 	const [copySuccess, setCopySuccess] = useState(false);
 	const pathname = usePathname();
@@ -217,88 +212,14 @@ export default function Instrument({
 	const sendSectionRef = useRef<HTMLDivElement>(null);
 	const [isTransferConfirmationValid, setIsTransferConfirmationValid] = useState<boolean>(false);
 
+	const address = context.sub;
+	const isMinter = instrumentAsset.metadata.properties?.some((property: any) => property?.trait_type === "Registrar" && property?.value === address);
 	// Add this state for nonce validation
 	const [isNonceValid, setIsNonceValid] = useState<boolean>(false);
 
 	// Add state for description collapse/expand
 	const [isDescriptionExpanded, setIsDescriptionExpanded] = useState<boolean>(false);
 	const [isImagesExpanded, setIsImagesExpanded] = useState<boolean>(false);
-
-	// useEffect(() => {
-	// 	async function getInstrumentAsset() {
-	// 		try {
-	// 			const result = await fetch(`/api/token/${id}`)
-	// 			const data = await result.json();
-	// 			if (!data?.metadata) return;
-				
-	// 			setInstrumentAsset(data);
-	// 			// console.log("instrumentAsset.data", data);
-
-	// 			const properties = instrumentAsset.metadata.properties || instrumentAsset.metadata.attributes || [];
-	// 			const fileDirHashTrait = properties.find((prop: any) => prop.trait_type === 'Files');
-	// 			const registrarTrait = properties.find((prop: any) => prop.trait_type === 'Registrar');
-
-	// 			if (registrarTrait) {
-	// 				setMinter(registrarTrait.value);
-	// 			}
-
-	// 			if (fileDirHashTrait) {
-	// 				const fileDirHash = fileDirHashTrait.value;
-	// 				// console.log("fileDirHash", fileDirHash);
-
-	// 				const fileDescriptionsUrl = await resolveScheme({
-	// 					client,
-	// 					uri: `ipfs://${fileDirHash}/descriptions`
-	// 				});
-	// 				// console.log("fileDescriptionsUrl", fileDescriptionsUrl);
-
-	// 				const result = await fetch(fileDescriptionsUrl)
-	// 				const fileDescriptionsData = await result.json();
-	// 				// console.log("fileDescriptionsData", fileDescriptionsData);					
-
-	// 				const images: any[] = [];
-	// 				const documents: any[] = [];
-
-	// 				for (const fileDescription of fileDescriptionsData) {
-	// 					if (fileDescription.cover) continue;
-
-	// 					if (fileDescription.name.includes('image')) {
-	// 						const uri = await resolveScheme({
-	// 							client,
-	// 							uri: `ipfs://${fileDirHash}/${fileDescription.name}`
-	// 						});
-	// 						if (uri) images.push({ uri, description: fileDescription.description });
-	// 					} else if (fileDescription.name.includes('document')) {
-	// 						const uri = await resolveScheme({
-	// 							client,
-	// 							uri: `ipfs://${fileDirHash}/${fileDescription.name}`
-	// 						});
-	// 						if (uri) documents.push({ uri, description: fileDescription.description });
-	// 					}
-	// 				}
-
-	// 				// console.log("images", images);
-	// 				// console.log("documents", documents);
-
-	// 				setImages(images);
-	// 				setDocuments(documents);
-	// 			}
-
-	// 		} catch (error) {
-	// 			console.error(`/api/token/${id}`, error)
-	// 		}
-	// 		setIsLoadingInstrumentAsset(false)
-	// 	}
-
-	// 	if (!isLoadingInstrumentAsset && !instrumentAsset) {
-	// 		if (id) {
-	// 			setIsLoadingInstrumentAsset(true)
-	// 			getInstrumentAsset().catch((e) => {
-	// 				console.error(`/api/token/${id}`, e.message);
-	// 			})
-	// 		}
-	// 	}
-	// }, [id, isLoadingInstrumentAsset, instrumentAsset])
 
 	useEffect(() => {
 		async function getminter() {
@@ -435,19 +356,18 @@ export default function Instrument({
 		validateNonce();
 	}, [searchParams, id]);
 
-	// if (isLoadingInstrumentAsset || isLoadingMinter || isLoading) {
-	// 	return <Loading />;
-	// }
-
 	return (
-		<Page>
+		<Page context={context}>
 			{instrumentAsset && instrumentAsset.metadata ? (
 				<>
-					{address && instrumentAsset.owner !== address && !hasActiveValidationAttempt(searchParams) && (
+					{address && instrumentAsset.owner !== address && !hasActiveValidationAttempt(searchParams) ? 
 						<p className='bg-me-50 p-4 rounded-lg border border-me-200 mb-4'>
 							<b>{tInstrument('current_owner')}:</b> {truncateEthAddress(instrumentAsset.owner)} ({tInstrument('you_are_not_owner')})
+						</p> : address &&
+						<p className='bg-me-50 p-4 rounded-lg border border-me-200 mb-4'>
+							{tInstrument('you_are_owner')}
 						</p>
-					)}
+					}
 					{/* Copy URL Button for Non-Owner with Nonce */}
 					{address && !isOwner && hasActiveValidationAttempt(searchParams) && (
 						<Section>
@@ -521,7 +441,6 @@ export default function Instrument({
 											}}
 											onTransactionConfirmed={() => {
 												alert(`${tInstrument("transfered_to_success")} ${to || ''}`);
-												setReloadUser(true);
 												router.replace('/');
 											}}
 											onError={(error) => {
@@ -814,11 +733,12 @@ export default function Instrument({
 						)}
 					</div>
 
-					{ isOwner && !hasActiveValidationAttempt(searchParams) && <Divider color="bg-we-500" spacing="lg" className="mt-12" /> }
-
+					{ isOwner && isMinter &&
+					<>
+						{ !hasActiveValidationAttempt(searchParams) && <Divider color="bg-we-500" spacing="lg" className="mt-12" /> }
 					<div className={`mt-6 space-y-4 ${showTransferOptions ? 'min-h-screen' : ''}`}>
 						{/* Transfer Management Section */}
-						{address && isOwner && !hasActiveValidationAttempt(searchParams) && (
+						{!hasActiveValidationAttempt(searchParams) && (
 							<div className="mb-12" ref={transferSectionRef}>
 								<div>
 									<h2 className="text-2xl font-semibold text-we-600 dark:text-we-500 mb-2">
@@ -1034,7 +954,7 @@ export default function Instrument({
 												)}
 											</div>
 											{/* Transaction Button */}
-											{contract && address && isOwner && (to || scannedResult) && !hasActiveValidationAttempt(searchParams) && (
+											{contract && address && (to || scannedResult) && !hasActiveValidationAttempt(searchParams) && (
 												<div className="bg-we-200 dark:bg-we-900 rounded-lg p-6 mb-12 text-center relative animate-slide-up" ref={sendSectionRef}>
 													<div className="my-6 text-center">
 														<CheckCheck className="w-8 h-8 mx-auto text-we-500" strokeWidth={1.5}/>
@@ -1053,7 +973,6 @@ export default function Instrument({
 															}}
 															onTransactionConfirmed={() => {
 																alert(`${tInstrument("transfered_to_success")} ${to ? to : scannedResult ? scannedResult : ''}`);
-																setReloadUser(true);
 																router.replace('/');
 															}}
 															onError={(error) => {
@@ -1074,10 +993,12 @@ export default function Instrument({
 										</>
 									)}
 								</>
-						)}
+							)}
 						</div>
 						)}
 					</div>
+					</>
+					}
 				</>
 			) : null }
 			<QRModal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>

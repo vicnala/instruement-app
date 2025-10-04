@@ -22,7 +22,6 @@ type ImageDescription = {
 
 async function fetchAndStreamFile(url: string) {
   const response = await fetch(url, {
-    cache: 'no-store',
     headers: {'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`} 
   });
   if (response.body) {
@@ -113,7 +112,7 @@ export async function POST(request: Request) {
           if (data.metadata.minterAddress && data.metadata.id) {
             let result, blob;
             try {
-              result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/user/${data.metadata.minterAddress}`, {  cache: 'no-store', headers })
+              result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/user/${data.metadata.minterAddress}`)
               const { code, message, data: minter } = await result.json()
 
               if (code === 'success') {
@@ -126,7 +125,7 @@ export async function POST(request: Request) {
                   );
                 }
                 
-                result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${instrumentId}`, { cache: 'no-store', method: 'GET', headers })
+                result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${instrumentId}`, { method: 'GET', headers })
                 const { code, message, data: instrument }  = await result.json()
 
                 if (code === 'success') {

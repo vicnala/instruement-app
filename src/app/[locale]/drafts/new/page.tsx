@@ -12,6 +12,6 @@ export default async function NewDraftPage({
   const isMinter = authContext.isMinter;
   
   return (
-    isMinter ? <DraftForm locale={locale} /> : <NotFound />
+    isMinter ? <DraftForm locale={locale} context={authResult.parsedJWT} /> : <NotFound />
   );
 }

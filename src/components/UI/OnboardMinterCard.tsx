@@ -11,7 +11,7 @@ import { useActiveAccount } from "thirdweb/react";
 interface OnboardMinterCardProps {
   locale: string;
   invite?: string;
-  onReloadUser: () => void;
+  onReloadUser?: () => void;
 }
 
 export default function OnboardMinterCard({ locale, invite, onReloadUser }: OnboardMinterCardProps) {
@@ -125,7 +125,7 @@ export default function OnboardMinterCard({ locale, invite, onReloadUser }: Onbo
         alert('OTP verification failed');
       }
       if (otpRef && otpRef.current) otpRef.current.value = '';
-      onReloadUser();
+      // onReloadUser();
       await logout();
     } catch (error) {
       console.log('sendUserOTPVerification', error)

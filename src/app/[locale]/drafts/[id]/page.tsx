@@ -12,6 +12,6 @@ export default async function DraftEditPage({
   const isMinter = authContext.isMinter;
 
   return (
-    isMinter ? <DraftForm locale={locale} instrumentId={id} /> : <NotFound />
+    isMinter ? <DraftForm locale={locale} instrumentId={id} context={authResult.parsedJWT} /> : <NotFound />
   );
 }

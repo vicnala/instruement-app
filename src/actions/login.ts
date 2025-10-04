@@ -24,6 +24,10 @@ const thirdwebAuth = createAuth({
 export const generatePayload = thirdwebAuth.generatePayload;
  
 export async function login(payload: VerifyLoginPayloadParams, cb: string | undefined, invite: string | undefined) {
+  if (await isLoggedIn()) {
+    return;
+  }
+  
   const locale = await getLocale();
   const verifiedPayload = await thirdwebAuth.verifyPayload(payload);
   if (verifiedPayload.valid) {
@@ -32,14 +36,14 @@ export async function login(payload: VerifyLoginPayloadParams, cb: string | unde
       isMinter: false,
       isLuthier: false,
       isVerified: false,
-      userId: undefined
+      userId: undefined,
+      firstName: ""
     };
 
     let userLang = '';
     try {
       result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/user/${verifiedPayload.payload.address}`, {
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` },
-        cache: 'no-store'
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` }
       })
       userData = await result.json()
       if (userData) {
@@ -51,6 +55,7 @@ export async function login(payload: VerifyLoginPayloadParams, cb: string | unde
             context.isMinter = isMinter;
             context.userId = userData.data.user_id;
             userLang = userData.data.lang;
+            context.firstName = userData.data.first_name;
           }
         }
       }
@@ -107,4 +112,6 @@ export async function userAuthData() {
 
 export async function logout() {
   cookies().delete("jwt");
+  const locale = await getLocale();
+  redirect({ href: `/`, locale });
 }

@@ -193,6 +193,7 @@
             "instrument": "Instrumento",
             "current_owner": "Propietario actual",
             "you_are_not_owner": "No eres el propietario",
+            "you_are_owner": "Eres el propietario de este instrumento",
             "additional_images": "Imágenes adicionales",
             "documents": "Documentos",
             "no_description": "Sin descripción",

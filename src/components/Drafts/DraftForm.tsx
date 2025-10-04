@@ -3,14 +3,12 @@
 import { useState, useEffect } from "react"
 import dynamic from "next/dynamic"
 import { useTranslations } from "next-intl";
-import { useStateContext } from "@/app/context";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
 import { Trash, ChevronDown, Lock } from 'lucide-react';
 
 import { Instrument, InstrumentFile, InstrumentImage } from "@/lib/definitions";
 import { useRouter } from "@/i18n/routing";
-import Loading from "../Loading";
 import ProgressBar from "../UI/ProgressBar"
 import ButtonSpinner from "../UI/ButtonSpinner"
 import FormSaveButton from "../UI/FormSaveButton"
@@ -18,7 +16,7 @@ import Divider from "../UI/Divider"
 import MediaManager from "@/components/MediaManager";
 import DraftService from "@/services/DraftService";
 import InstrumentService from "@/services/InstrumentService";
-import { useActiveAccount } from "thirdweb/react";
+import { getUser } from "@/services/UsersService";
 
 const Editor = dynamic(() => import("@/components/Editor"), { ssr: false })
 
@@ -28,13 +26,13 @@ type ProgressStep = 1 | 2 | 3 | 4;
 const MIN_DESCRIPTION_LENGTH = 140;
 
 export default function DraftForm(
-  { locale, instrumentId }: Readonly<{ locale: string, instrumentId?: string }>
+  { locale, instrumentId, context }: Readonly<{ locale: string, instrumentId?: string, context: any }>
 ) {
   const t = useTranslations('components.DraftForm');
   const router = useRouter();
-  const { minter, setReloadUser } = useStateContext()
-  const activeAccount = useActiveAccount();
+  const setReloadUser = context.ctx.setReloadUser;
 
+  const [minter, setMinter] = useState<any>(null);
   const [open, setOpen] = useState(false)
   const [type, setType] = useState<string>("")
   const [instrumentTypes, setInstrumentTypes] = useState<any[]>([])
@@ -59,6 +57,14 @@ export default function DraftForm(
   const [currentStep, setCurrentStep] = useState<ProgressStep>(1);
   const [completed, setCompleted] = useState(false);
   const [canPreview, setCanPreview] = useState<Boolean>(false);
+
+  useEffect(() => {
+    const getMinter = async () => {
+      const minter = await getUser(context.sub);
+      setMinter(minter);
+    }
+    getMinter();
+  }, []);
 
   useEffect(() => {
     // handle preview button    
@@ -103,7 +109,7 @@ export default function DraftForm(
     if (instrumentId && !instrument) {
       getInstrument();
     }
-  }, [instrumentId, instrument, minter, locale]);
+  }, [minter, instrumentId]);
 
   // Update instrument types based on minter skills and instrument type
   useEffect(() => {
@@ -241,10 +247,8 @@ export default function DraftForm(
     }
   };
 
-  if (isLoading || !activeAccount?.address) return <Loading />
-
   return (
-      <Page>
+      <Page context={context}>
         {
           minter && <>
         <Section id="progress-bar">

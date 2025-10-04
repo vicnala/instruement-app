@@ -5,9 +5,10 @@ import React from "react";
 interface ReceiveInstrumentCardProps {
   address: string;
   locale: string;
+  context: any;
 }
 
-const ReceiveInstrumentCard: React.FC<ReceiveInstrumentCardProps> = ({ address, locale }) => {
+const ReceiveInstrumentCard: React.FC<ReceiveInstrumentCardProps> = ({ address, locale, context }) => {
   const t = useTranslations('components.HomeIndex.User');
 
   return (
@@ -23,7 +24,7 @@ const ReceiveInstrumentCard: React.FC<ReceiveInstrumentCardProps> = ({ address, 
         </div>
         <div>
           <div className="flex items-center justify-center">
-            <ButtonQrTransfer address={address} locale={locale} />
+            <ButtonQrTransfer address={address} locale={locale} context={context} />
           </div>
         </div>
       </div>

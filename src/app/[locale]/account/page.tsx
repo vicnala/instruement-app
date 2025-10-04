@@ -2,6 +2,8 @@ import Minter from "@/components/Account/Minter";
 import User from "@/components/Account/User";
 import { getLocale } from "next-intl/server";
 import { authedOnly } from "@/actions/login";
+import { getUser } from "@/services/UsersService";
+import NotFound from "@/app/not-found";
 
 type Props = {
   searchParams: Promise<{ invite?: string }>
@@ -14,5 +16,15 @@ export default async function AccountPage({ searchParams }: Props) {
   const authContext = authResult.parsedJWT.ctx;
   const isMinter = authContext.isMinter;
 
-  return isMinter ? <Minter locale={locale} /> : <User locale={locale} invite={invite} />
+  let userData;
+  try {
+    userData = await getUser(authResult.parsedJWT.sub);
+  } catch (error: any) {
+    console.error("/user fetch error", error.message);
+    return <NotFound />;
+  }
+
+  return isMinter ? 
+    <Minter locale={locale} context={authResult.parsedJWT} minter={userData.data} /> :
+    <User locale={locale} invite={invite} context={authResult.parsedJWT} />
 }

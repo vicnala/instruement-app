@@ -7,22 +7,21 @@ import { QrCode, Info } from 'lucide-react';
 import Modal from "@/components/Modal/Modal";
 import { useModal } from "@/components/Modal/useModal";
 import ButtonSpinner from "./ButtonSpinner";
-import { useStateContext } from '@/app/context';
-import { useActiveAccount } from "thirdweb/react";
 
 interface ButtonQrTransferProps {
   address: string;
   locale: string;
+  context: any;
 }
 
-export default function ButtonQrTransfer({ address, locale }: ButtonQrTransferProps) {
+export default function ButtonQrTransfer({ address, locale, context }: ButtonQrTransferProps) {
   const t = useTranslations('components.UI.ButtonQrTransfer');
   const tAccount = useTranslations('components.Account.User');
   const { isModalOpen, modalContent, openModal, closeModal } = useModal();
-  const { owned, setReloadUser } = useStateContext()
-  const activeAccount = useActiveAccount();
+  const activeAccount = context?.sub;
   const [isExpanded, setIsExpanded] = useState(false);
   const [timer, setTimer] = useState(180); // 3 minutes in seconds
+  const [ owned, setOwned ] = useState([]);
 
   // Reset timer when expanded
   useEffect(() => {
@@ -33,11 +32,15 @@ export default function ButtonQrTransfer({ address, locale }: ButtonQrTransferPr
 
   // Countdown effect
   useEffect(() => {
-
     const getUserTokens = async () => {
+      if (!activeAccount) return;
       try {
-          const result = await fetch(`/api/tokens/${activeAccount?.address}`, { cache: 'no-store' });
+          const result = await fetch(`/api/tokens/${activeAccount}`);
           const data = await result.json();
+          if (!owned.length) {
+            setOwned(data);
+            return;
+          }
 
           if (data.length > owned.length) {
               const newInstrument = data.find((instrument: any) => {
@@ -57,7 +60,6 @@ export default function ButtonQrTransfer({ address, locale }: ButtonQrTransferPr
                   const { metadata: instrument } = newInstrument;
                   clearInterval(interval);
                   alert(tAccount("received_instrument", { name: instrument.name }));
-                  setReloadUser(true);
                   document.location.replace(`/instrument/${instrument.id}`);
                   // router.replace(`/instrument/${instrument.id}`);
               }
@@ -66,10 +68,12 @@ export default function ButtonQrTransfer({ address, locale }: ButtonQrTransferPr
     }
 
     if (!isExpanded) return;
+
     if (timer === 0) {
       setIsExpanded(false);
       return;
     }
+
     const interval = setInterval(() => {
       setTimer((prev) => (prev > 0 ? prev - 1 : 0));
       if (timer % 5 === 0) {
@@ -77,7 +81,7 @@ export default function ButtonQrTransfer({ address, locale }: ButtonQrTransferPr
       }
     }, 1000);
     return () => clearInterval(interval);
-  }, [isExpanded, timer]);
+  }, [isExpanded, timer, owned]);
 
   // Format timer as mm:ss
   const formatTime = useCallback((seconds: number) => {

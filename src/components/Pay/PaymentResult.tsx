@@ -7,7 +7,6 @@ import Page from "@/components/Page";
 import Section from "@/components/Section";
 import DraftService from "@/services/DraftService";
 import { Instrument } from "@/lib/definitions";
-import { useStateContext } from "@/app/context";
 
 
 export default function PaymentResult(
@@ -17,7 +16,6 @@ export default function PaymentResult(
   const router = useRouter();
   const locale = useLocale();
   const [instrument, setInstrument] = useState<Instrument>();
-  const { setReloadUser } = useStateContext();
 
   useEffect(() => {
     const getInstrument = async () => {
@@ -104,7 +102,6 @@ export default function PaymentResult(
                 type="button"
                 className="font-bold inline-flex items-center px-4 py-2 tracking-wide transition-colors duration-200 transform rounded-md focus:outline-none text-it-1000 dark:text-it-500 border-[0.1rem] border-it-500 hover:bg-it-500 hover:text-it-1000 dark:hover:text-it-1000 focus:bg-it-500 focus:text-it-600 dark:focus:text-it-800"
                 onClick={() => {
-                  setReloadUser(true);
                   router.push(`/instrument/${instrument.asset_id}`);
                 }}
               >

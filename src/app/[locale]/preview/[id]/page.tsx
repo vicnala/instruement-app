@@ -10,24 +10,10 @@ export default async function PreviewPage({
   const authResult: any = await authedOnly(`/preview/${id}`, "");
   const authContext = authResult.parsedJWT.ctx;
   const isMinter = authContext.isMinter;
-
-  // const authUser = authContext.user;
-  // const userInstrumentIds = authUser.instruments || [];
-
-  // let requestedInstrumentId;
-  // try {
-  //   requestedInstrumentId = parseInt(id);
-  // } catch (error) {
-  //   return <NotFound />;
-  // }
-
-  // if (!userInstrumentIds.includes(requestedInstrumentId)) {
-  //   return <NotFound />;
-  // }
-
+  
   if (!isMinter) {
     return <NotFound />;
   }
 
-  return <Preview id={id} locale={locale} />;
+  return <Preview id={id} locale={locale} context={authResult.parsedJWT} />;
 }
