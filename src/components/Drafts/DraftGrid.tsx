@@ -12,12 +12,13 @@ export default function DraftGrid({ locale, context }: { locale: string, context
 
   useEffect(() => {
     const getMinter = async () => {
-      const minter = await getUser(context.sub);
-      setMinter(minter);
+      const result = await getUser(context.sub);
+      if (result.code === 'success') {
+        setMinter(result.data);
+      }
     }
     getMinter();
-  }, []);
-  
+  }, []);  
 
   if (minter && minter.instruments && minter.instruments.length > 0) {
     return (

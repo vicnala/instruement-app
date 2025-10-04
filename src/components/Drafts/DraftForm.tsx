@@ -30,7 +30,6 @@ export default function DraftForm(
 ) {
   const t = useTranslations('components.DraftForm');
   const router = useRouter();
-  const setReloadUser = context.ctx.setReloadUser;
 
   const [minter, setMinter] = useState<any>(null);
   const [open, setOpen] = useState(false)
@@ -60,8 +59,10 @@ export default function DraftForm(
 
   useEffect(() => {
     const getMinter = async () => {
-      const minter = await getUser(context.sub);
-      setMinter(minter);
+      const result = await getUser(context.sub);
+      if (result.code === 'success') {
+        setMinter(result.data);
+      }
     }
     getMinter();
   }, []);
@@ -153,18 +154,13 @@ export default function DraftForm(
           const { data } = await DraftService.createInstrument(minter, selected, name);
           if (data.code === 'success') {
             if (data.data) {
-              setReloadUser(true);
               router.replace(`/drafts/${data.data.id}`);
             }
           } else {
             alert(`Error createInstrument: ${data.data.message}`);
-            setReloadUser(true);
-            router.replace(`/`);
           }
         } catch (error: any) {
           alert(`Error createInstrument: ${error.response.data.data.message}`);
-          setReloadUser(true);
-          router.replace(`/`);
         }
       } else if (instrument) {
         try {
@@ -181,13 +177,9 @@ export default function DraftForm(
             }
           } else {
             alert(`Error updateInstrument: ${data.message}`);
-            setReloadUser(true);
-            router.replace(`/`);
           }
         } catch (error: any) {
           alert(`Error updateInstrument: ${error.response.data.message}`);
-          setReloadUser(true);
-          router.replace(`/`);
         }
       }
     }
@@ -200,12 +192,12 @@ export default function DraftForm(
     try {
       if (instrument) {
         await DraftService.deleteInstrument(instrument.id);
+        router.push(`/`)
       }
     } catch (error) {
       console.log("POST /api/instrument DELETE error", error)
     }
-    setReloadUser(true);
-    router.push(`/`)
+    setIsLoadingMetadata(false);
   };
 
   const handleCoverChange = (media: (InstrumentImage | InstrumentFile)[]) => {
@@ -245,6 +237,7 @@ export default function DraftForm(
         }
       }
     }
+
   };
 
   return (

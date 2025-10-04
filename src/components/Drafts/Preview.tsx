@@ -18,10 +18,18 @@ marked.use({
 });
 
 export default function Preview(
-  { locale, id, context }: Readonly<{ locale: string, id?: string, context: any }>
+  { locale,
+    id,
+    context,
+    minter
+  }: Readonly<
+    { locale: string,
+      id?: string,
+      context: any,
+      minter: any
+    }>
 ) {
   const t = useTranslations('components.Preview');
-  const minter = context.ctx.minter;
   const isLoading = context.ctx.isLoading;
   const address = context.sub;
   const [instrument, setInstrument] = useState<Instrument>()
@@ -31,7 +39,6 @@ export default function Preview(
   useEffect(() => {
     const getInstrument = async () => {
       if (!id || isLoadingInstrument) return;
-      
       setIsLoadingInstrument(true);
       const data = await InstrumentService.getInstrument(id, locale, minter?.api_key);
       
@@ -42,12 +49,12 @@ export default function Preview(
       setIsLoadingInstrument(false);
     }
 
-    if (id && !isLoadingInstrument && !instrument && minter) {
+    if (id && !isLoadingInstrument && !instrument) {
       setIsLoadingInstrument(true);
       getInstrument();
     }
 
-  }, [id, locale, isLoadingInstrument, instrument, minter]);
+  }, [id, locale, isLoadingInstrument, instrument]);
 
   if (isLoading || isLoadingInstrument || !address) return <Loading />
 

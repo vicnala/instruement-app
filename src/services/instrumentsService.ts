@@ -36,6 +36,22 @@ export const getInstrument = async (id: string, locale: string) => {
       }
 }
 
+export const getSavedInstrument = async (id: string, locale: string) => {
+  try {
+    const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${id}?locale=${locale}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`,
+      }
+    })
+    const data = await result.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export const getInstrumentFile = async (id: string) => {
   try {
     const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/file/${id}`, {

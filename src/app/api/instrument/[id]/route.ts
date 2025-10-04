@@ -2,6 +2,7 @@
 
 import { NextRequest } from "next/server";
 import { userAuthData } from "@/actions/login";
+import { getLocale } from "next-intl/server";
 
 export async function POST(
   request: Request,
@@ -88,7 +89,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
-  const locale = request.nextUrl.searchParams.get('locale') || 'en'
+  const locale = request.nextUrl.searchParams.get('locale') || await getLocale() || 'en'
 
   // console.log(`(server) GET /api/instrument/${id}?locale=${locale}`)
 
@@ -98,6 +99,13 @@ export async function GET(
   )
 
   const authData: any = await userAuthData();
+  if (!authData.parsedJWT) {
+    return Response.json(
+      { data: { message: `Unauthorized` } },
+      { status: 401 }
+    )
+  }
+
   const authContext = authData.parsedJWT.ctx;
   const isMinter = authContext.isMinter;
   

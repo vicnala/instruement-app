@@ -17,10 +17,9 @@ import { Instrument } from "@/lib/definitions";
 import Page from "../Page";
 import Section from "../Section";
 import Image from "next/image";
-import FileUploadService from "@/services/FileUploadService";
 
 
-function CheckoutForm({ amount, address, id, minterAddress, instrument }: { amount: number, address?: string, id: string, minterAddress: string, instrument: Instrument }): JSX.Element {
+function CheckoutForm({ amount, address, id, instrument, minter }: { amount: number, address?: string, id: string, instrument: Instrument, minter: any }): JSX.Element {
   const locale = useLocale();
   const t = useTranslations('components.ElementsForm');
 
@@ -100,7 +99,7 @@ function CheckoutForm({ amount, address, id, minterAddress, instrument }: { amou
       }
 
       // Create a PaymentIntent with the specified amount.
-      const { client_secret: clientSecret } = await createPaymentIntent(amount, address || '', id, minterAddress);
+      const { client_secret: clientSecret } = await createPaymentIntent(amount, address || '', id, minter.api_key);
 
       // Use your card Element with other Stripe.js APIs
       const { error: confirmError } = await stripe!.confirmPayment({
@@ -242,56 +241,26 @@ function CheckoutForm({ amount, address, id, minterAddress, instrument }: { amou
 }
 
 export default function ElementsForm(
-  { locale, id, address, context }: Readonly<{ locale: string, id: string, address?: string, context: any }>
+  { id,
+    urlAddress,
+    context,
+    instrument,
+    minter,
+    amount
+  }: Readonly<
+    { id: string,
+      urlAddress?: string,
+      context: any,
+      instrument: Instrument,
+      minter: any,
+      amount: number
+    }>
 ): JSX.Element | null {
   const t = useTranslations();
-  const { address: minterAddress, minter, isLoading } = context.ctx;
-  const [instrument, setInstrument] = React.useState<Instrument>()
-  const [amount, setAmount] = React.useState<number>(0)
-
-
-  React.useEffect(() => {
-    const getInstrument = async () => {     
-      try {
-        const result = await fetch(`/api/instrument/${id}?locale=${locale}`, {
-          method: "GET",
-          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-        })
-        const { data } = await result.json()
-        // console.log("GET", `/api/instrument/${id}`, data.data);
-
-        if (data.code !== 'success') {
-          console.log(`GET /api/instrument/${id} ERROR`, data.message);
-          alert(`Error: ${data.message}`);
-        } else {
-          const _instrument = data.data;
-          const type = minter?.instrument_types.find((ins: any) => ins.slug === _instrument.type);
-          if (type) {
-            setAmount(type.user_register_price_eur);
-          }
-          const coverId = data.data.cover_image;
-          if (coverId) {
-            const { data } = await FileUploadService.getFile(coverId, minter?.api_key);
-            // console.log("GET /api/file/", data);
-            if (data.code === 'success') {
-              _instrument.cover_image = data.data;
-            }
-          }
-          
-          setInstrument(_instrument);
-        }
-      } catch (error: any) {
-        console.log(`POST /api/instrument/${id} ERROR`, error.message)
-        alert(`Error: ${error.message}`);
-      } 
-    }
-    
-    if (id && minter && !instrument && !isLoading) {
-      getInstrument();
-    }
-  }, [id, minter, instrument, isLoading]);
-
-  return (instrument && minter && amount > 0) ? (
+  const address = urlAddress || context.sub;
+  const minterAddress = context.sub;
+  
+  return (instrument && minter && amount > 0 && minterAddress) ? (
     <Page>
       <Elements
         stripe={getStripe()}
@@ -308,11 +277,11 @@ export default function ElementsForm(
         }}
       >
         <CheckoutForm 
-          amount={amount} 
-          address={address} 
-          id={id} 
-          minterAddress={minterAddress || ''} 
+          amount={amount}
+          address={address}
+          id={id}
           instrument={instrument}
+          minter={minter}
         />
       </Elements>
     </Page>
