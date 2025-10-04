@@ -10,7 +10,17 @@ import { Instrument } from "@/lib/definitions";
 
 
 export default function PaymentResult(
-  { status, id, name }: { status: string; id: string; name: string }
+  { 
+    status,
+    id,
+    name,
+    context
+  }: { 
+    status: string;
+    id: string;
+    name: string;
+    context: any
+  }
 ) {
   const t = useTranslations('components.PaymentResult');
   const router = useRouter();
@@ -44,32 +54,32 @@ export default function PaymentResult(
   }, [id, locale]);
 
   return (
-    <Page>
+    <Page context={context}>
       <Section>
         { status === 'succeeded' ? (
-          <>
+          <div className="flex flex-col items-center justify-center">
             <h1 className='text-4xl font-bold text-contrast dark:text-it-200 mb-2'>
               {t('title_thank_you')}
             </h1>
             <p className="text-base">
               {t('success_message_received', { title: name })}
             </p>
-          </>
+          </div>
         ) : (
-          <>
+          <div className="flex flex-col items-center justify-center">
             <h1 className='text-4xl font-bold text-contrast dark:text-it-200 mb-2'>
               {t('title_failed')}
             </h1>
             <p className="text-base">
               {t('failed_message')}
             </p>
-          </>
+          </div>
         )}
 
         <div className='text-m text-center'>
           {
             status === 'succeeded' ?
-            <>
+            <div className="flex flex-col items-center justify-center">
               {
                 instrument ?
                 <p className="text-lg">
@@ -77,7 +87,7 @@ export default function PaymentResult(
                 </p> 
                 : 
                 <div className="flex items-center justify-center gap-2 text-lg">
-                  <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
+                  <div className="inline-block h-6 w-6 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
                       <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
                           
                       </span>
@@ -85,11 +95,13 @@ export default function PaymentResult(
                   {t('success_message_loading')}
                 </div>
               }
-            </> 
+            </div>
             :
-            <p>
+            <div className="flex flex-col items-center justify-center">
+              <p>
               {t('failed_message')}
             </p>
+            </div>
           }
         </div>
       </Section>

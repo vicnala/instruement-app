@@ -65,7 +65,7 @@ export default function DraftForm(
       }
     }
     getMinter();
-  }, []);
+  }, [context.sub]);
 
   useEffect(() => {
     // handle preview button    
@@ -110,7 +110,7 @@ export default function DraftForm(
     if (instrumentId && !instrument) {
       getInstrument();
     }
-  }, [minter, instrumentId]);
+  }, [minter, instrument, instrumentId, locale]);
 
   // Update instrument types based on minter skills and instrument type
   useEffect(() => {

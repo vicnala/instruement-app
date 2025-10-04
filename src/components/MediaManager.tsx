@@ -14,7 +14,7 @@ interface ProgressInfo {
 
 type Accept = 'image' | 'file';
 
-interface FilesUploadProps {
+type FilesUploadProps = {
   multiple: boolean;
   instrument: Instrument,
   api_key: string,
@@ -23,14 +23,14 @@ interface FilesUploadProps {
   onMediaChange?: (media: (InstrumentImage | InstrumentFile)[]) => void
 }
 
-const MediaManager: React.FC<FilesUploadProps> = ({
+export default function MediaManager({
   multiple,
   instrument,
   api_key,
   isCover,
   accept,
   onMediaChange
-}) => {
+}: Readonly<FilesUploadProps>) {
   const t = useTranslations('components.MediaManager');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState<(InstrumentImage | InstrumentFile)[]>([]);
@@ -203,46 +203,46 @@ const MediaManager: React.FC<FilesUploadProps> = ({
     setMessage([]);
   };
 
-  const upload = (idx: number, file: File) => {
-    let _progressInfos = [...progressInfosRef.current];
-
-    return UploadService.upload(file, `${instrument.id}`, api_key, isCover, (event: any) => {
-      _progressInfos[idx].percentage = Math.round(
-        (100 * event.loaded) / event.total
-      );
-      setProgressInfos(_progressInfos);
-    })
-    .then(data => {
-      setMessage((prevMessage) => [
-        ...prevMessage,
-        'success'
-      ]);
-
-      // Add description to the uploaded file
-      const uploadedFile = {
-        ...data.data,
-        description: descriptions[idx] || ''
-      };
-
-      return uploadedFile;
-    })
-    .catch((err: any) => {
-      _progressInfos[idx].percentage = 0;
-      setProgressInfos(_progressInfos);
-
-      let msg = 'error';
-      if (err.response && err.response.data && err.response.data.message) {
-        msg += " " + err.response.data.message;
-      }
-
-      setMessage((prevMessage) => [
-        ...prevMessage,
-        msg
-      ]);
-    });
-  };
-
   useEffect(()=> {
+    const upload = (idx: number, file: File) => {
+      let _progressInfos = [...progressInfosRef.current];
+  
+      return UploadService.upload(file, `${instrument.id}`, api_key, isCover, (event: any) => {
+        _progressInfos[idx].percentage = Math.round(
+          (100 * event.loaded) / event.total
+        );
+        setProgressInfos(_progressInfos);
+      })
+      .then(data => {
+        setMessage((prevMessage) => [
+          ...prevMessage,
+          'success'
+        ]);
+  
+        // Add description to the uploaded file
+        const uploadedFile = {
+          ...data.data,
+          description: descriptions[idx] || ''
+        };
+  
+        return uploadedFile;
+      })
+      .catch((err: any) => {
+        _progressInfos[idx].percentage = 0;
+        setProgressInfos(_progressInfos);
+  
+        let msg = 'error';
+        if (err.response && err.response.data && err.response.data.message) {
+          msg += " " + err.response.data.message;
+        }
+  
+        setMessage((prevMessage) => [
+          ...prevMessage,
+          msg
+        ]);
+      });
+    };
+
     if (selectedFiles && selectedFiles.length) {
       let _progressInfos = selectedFiles.map((file) => ({
         percentage: 0,
@@ -268,7 +268,7 @@ const MediaManager: React.FC<FilesUploadProps> = ({
 
       setMessage([]);
     }    
-  }, [selectedFiles]);
+  }, [selectedFiles, api_key, descriptions, instrument.id, isCover]);
 
   const handleToggleDescription = (index: number) => {
     const newVisibleDescriptions = [...visibleDescriptions];
@@ -463,5 +463,3 @@ const MediaManager: React.FC<FilesUploadProps> = ({
     </>
   );
 };
-
-export default MediaManager;

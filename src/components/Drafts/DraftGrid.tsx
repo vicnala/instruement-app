@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import Section from "@/components/Section";
 import { getUser } from "@/services/UsersService";
 
-export default function DraftGrid({ locale, context }: { locale: string, context: any }) {
+export default function DraftGrid({ locale, context }: Readonly<{ locale: string, context: any }>) {
   const t = useTranslations();
   const [minter, setMinter] = useState<any>(null);
 
@@ -18,7 +18,7 @@ export default function DraftGrid({ locale, context }: { locale: string, context
       }
     }
     getMinter();
-  }, []);  
+  }, [context.sub]);
 
   if (minter && minter.instruments && minter.instruments.length > 0) {
     return (

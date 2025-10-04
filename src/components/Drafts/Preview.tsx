@@ -54,7 +54,7 @@ export default function Preview(
       getInstrument();
     }
 
-  }, [id, locale, isLoadingInstrument, instrument]);
+  }, [id, locale, isLoadingInstrument, instrument, minter?.api_key]);
 
   if (isLoading || isLoadingInstrument || !address) return <Loading />
 

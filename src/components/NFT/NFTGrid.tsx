@@ -18,9 +18,9 @@ type Props = {
   emptyText?: string;
   mintedIds: number[];
   address: string;
-};
+}
 
-export default function NFTGrid({ nftData, mintedIds, address }: Props) {
+export default function NFTGrid({ nftData, mintedIds, address }: Readonly<Props>) {
   const t = useTranslations();
   const locale = useLocale();
   const [isLoading, setIsLoading] = useState(true);
@@ -93,7 +93,7 @@ export default function NFTGrid({ nftData, mintedIds, address }: Props) {
         setIsLoading(false);
         alert(`Error: ${error.message}`);
       });
-  }, []);
+  }, [locale, address, nftData, mintedIds]);
 
   return (
     <div className='flex flex-col'>

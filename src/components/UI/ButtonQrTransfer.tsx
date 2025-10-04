@@ -8,13 +8,17 @@ import Modal from "@/components/Modal/Modal";
 import { useModal } from "@/components/Modal/useModal";
 import ButtonSpinner from "./ButtonSpinner";
 
-interface ButtonQrTransferProps {
-  address: string;
-  locale: string;
-  context: any;
-}
 
-export default function ButtonQrTransfer({ address, locale, context }: ButtonQrTransferProps) {
+export default function ButtonQrTransfer({
+    address,
+    locale,
+    context
+  }: Readonly<{
+    address: string,
+    locale: string,
+    context: any
+  }>)
+{
   const t = useTranslations('components.UI.ButtonQrTransfer');
   const tAccount = useTranslations('components.Account.User');
   const { isModalOpen, modalContent, openModal, closeModal } = useModal();
@@ -81,7 +85,7 @@ export default function ButtonQrTransfer({ address, locale, context }: ButtonQrT
       }
     }, 1000);
     return () => clearInterval(interval);
-  }, [isExpanded, timer, owned]);
+  }, [isExpanded, timer, owned, activeAccount, tAccount]);
 
   // Format timer as mm:ss
   const formatTime = useCallback((seconds: number) => {

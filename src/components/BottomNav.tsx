@@ -34,7 +34,7 @@ export const BottomNav = ({ context }: { context: any }) => {
 						<ButtonLink href="/drafts/new" size="md" colorSchema="it">
 							{bottomNavt('new_instrument')}
 						</ButtonLink>
-					) : isMinter && (pathname.includes('/draft') || pathname.includes('/pay')) && (
+					) : isMinter && (pathname.includes('/drafts') || pathname.includes('/pay') || pathname.includes('/preview')) && (
 						<div></div>
 					)
 				}
