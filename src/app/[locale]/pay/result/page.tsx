@@ -14,12 +14,12 @@ export default async function ResultPage({
   }
 
   const paymentIntent: Stripe.PaymentIntent =
-    await stripe.paymentIntents.retrieve(searchParams.payment_intent);
+  await stripe.paymentIntents.retrieve(searchParams.payment_intent);
 
   
   return <PaymentResult
     status={paymentIntent.status}
-    address={paymentIntent.metadata.address}
     id={paymentIntent.metadata.id}
+    name={paymentIntent.metadata.name}
   />;
 }

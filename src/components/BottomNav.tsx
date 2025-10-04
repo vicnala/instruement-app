@@ -30,10 +30,12 @@ export const BottomNav = ({ context }: { context: any }) => {
 					</div>
 				</Link>
 				{
-					isMinter && (pathname === '/' || pathname === '/account' || pathname.includes('/instrument')) && (
+					isMinter && (pathname === '/' || pathname === '/account' || pathname.includes('/instrument')) ? (
 						<ButtonLink href="/drafts/new" size="md" colorSchema="it">
 							{bottomNavt('new_instrument')}
 						</ButtonLink>
+					) : isMinter && (pathname.includes('/draft') || pathname.includes('/pay')) && (
+						<div></div>
 					)
 				}
 				{

@@ -54,6 +54,7 @@ export async function createCheckoutSession(
 export async function createPaymentIntent(
   amount: number,
   address: string,
+  name: string,
   id: string,
   minterAddress: string
 ): Promise<{ client_secret: string }> {
@@ -67,6 +68,7 @@ export async function createPaymentIntent(
       currency: process.env.NEXT_PUBLIC_CURRENCY || 'eur',
       metadata: {
         address,
+        name,
         id,
         minterAddress
       }

@@ -47,9 +47,8 @@ export default async function PayPage({
   return <ElementsForm
     id={id}
     urlAddress={searchParams?.address}
-    context={context}
+    minterAddress={context.sub}
     instrument={instrument.data}
-    minter={minter.data}
     amount={amount}
   />
 }

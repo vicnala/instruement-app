@@ -19,7 +19,21 @@ import Section from "../Section";
 import Image from "next/image";
 
 
-function CheckoutForm({ amount, address, id, instrument, minter }: { amount: number, address?: string, id: string, instrument: Instrument, minter: any }): JSX.Element {
+function CheckoutForm({
+    amount,
+    address,
+    minterAddress,
+    name,
+    id,
+    instrument
+  }: { amount: number,
+    address?: string,
+    minterAddress: string,
+    name: string,
+    id: string,
+    instrument: Instrument
+   }): JSX.Element
+{
   const locale = useLocale();
   const t = useTranslations('components.ElementsForm');
 
@@ -99,7 +113,7 @@ function CheckoutForm({ amount, address, id, instrument, minter }: { amount: num
       }
 
       // Create a PaymentIntent with the specified amount.
-      const { client_secret: clientSecret } = await createPaymentIntent(amount, address || '', id, minter.api_key);
+      const { client_secret: clientSecret } = await createPaymentIntent(amount, address || '', name, id, minterAddress);
 
       // Use your card Element with other Stripe.js APIs
       const { error: confirmError } = await stripe!.confirmPayment({
@@ -243,24 +257,21 @@ function CheckoutForm({ amount, address, id, instrument, minter }: { amount: num
 export default function ElementsForm(
   { id,
     urlAddress,
-    context,
-    instrument,
-    minter,
+    minterAddress,
+    instrument, 
     amount
   }: Readonly<
     { id: string,
       urlAddress?: string,
-      context: any,
+      minterAddress: string,
       instrument: Instrument,
-      minter: any,
       amount: number
     }>
 ): JSX.Element | null {
   const t = useTranslations();
-  const address = urlAddress || context.sub;
-  const minterAddress = context.sub;
+  const address = urlAddress || minterAddress;
   
-  return (instrument && minter && amount > 0 && minterAddress) ? (
+  return (instrument && minterAddress && amount > 0 && minterAddress) ? (
     <Page>
       <Elements
         stripe={getStripe()}
@@ -279,9 +290,10 @@ export default function ElementsForm(
         <CheckoutForm 
           amount={amount}
           address={address}
+          minterAddress={minterAddress}
+          name={instrument.title}
           id={id}
           instrument={instrument}
-          minter={minter}
         />
       </Elements>
     </Page>

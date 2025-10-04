@@ -10,7 +10,7 @@ import { Instrument } from "@/lib/definitions";
 
 
 export default function PaymentResult(
-  { status, address, id }: { status: string; address: string, id: string }
+  { status, id, name }: { status: string; id: string; name: string }
 ) {
   const t = useTranslations('components.PaymentResult');
   const router = useRouter();
@@ -52,7 +52,7 @@ export default function PaymentResult(
               {t('title_thank_you')}
             </h1>
             <p className="text-base">
-              {t('success_message_received', { title: instrument?.title })}
+              {t('success_message_received', { title: name })}
             </p>
           </>
         ) : (
