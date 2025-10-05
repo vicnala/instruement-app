@@ -203,6 +203,7 @@ function CheckoutForm({
             <div className="flex flex-col gap-3 mb-4">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
+                  name="terms-of-use"
                   type="checkbox"
                   checked={consent.terms}
                   onChange={() => handleConsentChange('terms')}
@@ -216,6 +217,7 @@ function CheckoutForm({
               
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
+                  name="privacy-policy"
                   type="checkbox"
                   checked={consent.privacy}
                   onChange={() => handleConsentChange('privacy')}
