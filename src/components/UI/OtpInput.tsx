@@ -12,6 +12,7 @@ type OTPFormProps = {
   className?: string;
   inputMode?: "numeric" | "text" | "decimal" | "tel" | "search" | "email" | "url";
   autoFocus?: boolean;
+  id?: string;
 };
 
 export const OTPForm = (props: OTPFormProps) => {
@@ -23,6 +24,7 @@ export const OTPForm = (props: OTPFormProps) => {
 
   return (
     <OTPInput
+      id={props.id}
       maxLength={props.maxLength || 6}
       value={props.value}
       onChange={props.onChange}

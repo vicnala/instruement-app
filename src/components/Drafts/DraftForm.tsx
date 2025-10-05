@@ -312,7 +312,7 @@ export default function DraftForm(
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-0 md:gap-6 sm:gap-6">
                 <div>
-                  <label htmlFor="type" className="block text-base font-semibold text-gray-1000 pb-1">
+                  <label htmlFor="instrument_type" className="block text-base font-semibold text-gray-1000 pb-1">
                     {t('basic_info.type.label')}
                   </label>
                   <div className="relative">
@@ -329,7 +329,8 @@ export default function DraftForm(
                     <ul className={`absolute z-10 top-0 w-full bg-white rounded-md border border-it-300 overflow-y-auto ${open ? "max-h-60 shadow-sm" : "max-h-0 invisible"} `}>
                       <div className="flex items-center px-2 sticky top-0 bg-white">
                         <input
-                          name="type"
+                          id="instrument_type"
+                          name="instrument_type"
                           type="text"
                           value={inputValue}
                           onChange={(e) => setInputValue(e.target.value.toLowerCase())}
@@ -362,10 +363,11 @@ export default function DraftForm(
                 </div>
 
                 <div className="col-span-2">
-                  <label htmlFor="name" className="block text-base font-semibold text-gray-1000 pb-1">
+                  <label htmlFor="instrument_name" className="block text-base font-semibold text-gray-1000 pb-1">
                     {t('basic_info.name.label')}
                   </label>
                   <input
+                    id="instrument_name"
                     name="instrument_name"
                     className={`text-base block w-full px-2 py-2 text-it-950 border rounded-md focus:border-it-400 focus:ring-it-300 focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-white dark:bg-opacity-90`}
                     onChange={(e) => { setName(e.target.value) }}

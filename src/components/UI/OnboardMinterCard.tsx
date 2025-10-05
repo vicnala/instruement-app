@@ -210,6 +210,7 @@ export default function OnboardMinterCard({ locale, invite, onReloadUser }: Onbo
               </label>
               <div className="relative">
                 <OTPForm
+                  id="business-otp"
                   maxLength={6}
                   value={otp}
                   onChange={(value) => handleOTPChange(value)}
