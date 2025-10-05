@@ -91,7 +91,8 @@
             "title_single": "Your Registered Instrument",
             "description_single": "View the instrument and initiate its property transfer to the new owner.",
             "title_plural": "Registered Instruments",
-            "description_plural": "View all the instruments and initiate their property transfer to the new owner."
+            "description_plural": "View all the instruments and initiate their property transfer to the new owner.",
+            "owned": "owned"
         },
         "Draft": {
             "registering": "Registering"

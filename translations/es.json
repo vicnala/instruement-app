@@ -97,7 +97,8 @@
             "title_single": "Tu Instrumento Registrado",
             "description_single": "Ve el instrumento e inicia la transferencia de propiedad al nuevo propietario.",
             "title_plural": "Instrumentos Registrados",
-            "description_plural": "Ve todos los instrumentos e inicia la transferencia de propiedad al nuevo propietario."
+            "description_plural": "Ve todos los instrumentos e inicia la transferencia de propiedad al nuevo propietario.",
+            "owned": "en propiedad"
         },
         "Draft": {
             "registering": "En proceso de registro"

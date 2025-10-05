@@ -12,7 +12,8 @@ type Props = {
       image: string,
       isMinted: boolean,
       iAmTheOwner: boolean,
-      iAmTheMinter: boolean
+      iAmTheMinter: boolean,
+      properties: any[]
     }
   }[];
   emptyText?: string;
@@ -29,6 +30,7 @@ export default function NFTGrid({ owned, mintedIds, address }: Readonly<Props>) 
   // set iAmTheOwner to true for all owned tokens
   for (const token of owned) {
     token.metadata.iAmTheOwner = true;
+    token.metadata.iAmTheMinter = token.metadata.properties?.some((property: any) => property?.trait_type === "Registrar" && property?.value === address);
   }
 
   useEffect(() => {
@@ -109,6 +111,13 @@ export default function NFTGrid({ owned, mintedIds, address }: Readonly<Props>) 
         <div className="pb-2">
           <h2 className='text-2xl text-left font-bold text-black dark:text-white pb-2'>
             {allNftData.length > 1 || isLoading ? t('components.NFTGrid.title_plural') : t('components.NFTGrid.title_single')}
+            {
+              mintedIds.length > 0 && owned.length > 0 &&
+              <>
+                <span className="font-bold">{" "} {allNftData.map((nft: any) => nft.metadata.iAmTheMinter).length}</span>
+                <span className="font-bold">{", "} {owned.length}</span> {t('components.NFTGrid.owned')}
+              </>
+            }
           </h2>
           <p className="text-md text-gray-500 pb-4">
             {allNftData.length > 1 || isLoading ? t('components.NFTGrid.description_plural') : t('components.NFTGrid.description_single')}
