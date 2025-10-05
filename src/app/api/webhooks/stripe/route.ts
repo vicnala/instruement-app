@@ -112,7 +112,8 @@ export async function POST(request: Request) {
           if (data.metadata.minterAddress && data.metadata.id) {
             let result, blob;
             try {
-              result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/user/${data.metadata.minterAddress}`, { method: 'GET', headers })
+              result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/user/${data.metadata.minterAddress}`,
+                { method: 'GET', headers, cache: 'no-store' })
               const { code, message, data: minter } = await result.json()
 
               if (code === 'success') {
@@ -125,7 +126,8 @@ export async function POST(request: Request) {
                   );
                 }
                 
-                result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${instrumentId}`, { method: 'GET', headers })
+                result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${instrumentId}`,
+                  { method: 'GET', headers, cache: 'no-store' })
                 const { code, message, data: instrument }  = await result.json()
 
                 if (code === 'success') {
@@ -145,7 +147,8 @@ export async function POST(request: Request) {
                   let imageIndex: number = 0;
                   for (const imageId of imagesIds) {
                     try {
-                      result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/file/${imageId}`, { method: 'GET', headers });                     
+                      result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/file/${imageId}`,
+                        { method: 'GET', headers, cache: 'no-store' });                     
 
                       if (result.status !== 200) {
                         return NextResponse.json(
@@ -179,7 +182,8 @@ export async function POST(request: Request) {
                   let documentIndex: number = 0;
                   for (const fileId of filesIds) {
                     try {
-                      result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/file/${fileId}`, { method: 'GET', headers });
+                      result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/file/${fileId}`,
+                        { method: 'GET', headers, cache: 'no-store' });
                       const { data: _file } = await result.json();
                       // console.log("_file", _file);
                       blob = await fetchAndStreamFile(_file.file_url);
@@ -275,7 +279,8 @@ export async function POST(request: Request) {
                       result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${instrumentId}`, {
                         method: 'POST',
                         headers,
-                        body: JSON.stringify({ queue_id: queueId })
+                        body: JSON.stringify({ queue_id: queueId }),
+                        cache: 'no-store'
                       });
 
                       const updateData = await result.json();

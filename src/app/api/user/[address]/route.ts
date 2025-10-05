@@ -23,7 +23,8 @@ export async function GET(
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`,
-      }
+      },
+      cache: 'no-store'
     })
     const data = await result.json()
 
