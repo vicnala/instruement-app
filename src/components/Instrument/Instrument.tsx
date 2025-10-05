@@ -441,6 +441,7 @@ export default function Instrument({
 											}}
 											onTransactionConfirmed={() => {
 												alert(`${tInstrument("transfered_to_success")} ${to || ''}`);
+												setIsTransfering(false);
 												router.replace('/');
 											}}
 											onError={(error) => {
@@ -973,6 +974,7 @@ export default function Instrument({
 															}}
 															onTransactionConfirmed={() => {
 																alert(`${tInstrument("transfered_to_success")} ${to ? to : scannedResult ? scannedResult : ''}`);
+																setIsTransfering(false);
 																router.replace('/');
 															}}
 															onError={(error) => {
