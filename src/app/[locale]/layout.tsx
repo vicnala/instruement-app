@@ -12,6 +12,7 @@ import { jsonLdScriptProps } from "react-schemaorg";
 import { WebSite } from "schema-dts";
 import { ThirdwebProvider } from "thirdweb/react";
 import { locales } from "@/i18n/routing";
+import { IOSSplashScreens } from "@/components/IOSSplashScreens";
 
 const catamaran = Catamaran({ subsets: ["latin"] });
 
@@ -35,6 +36,9 @@ export default async function RootLayout({
           href={process.env.NEXT_PUBLIC_SERVER_URL || `https://app.instruement.com`}
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        <IOSSplashScreens />
+        
         <script
           {...jsonLdScriptProps<WebSite>({
             "@context": "https://schema.org",

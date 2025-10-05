@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'Instruement',
     short_name: 'Instruement',
-    description: 'Secure your musical instrument\'s digital identity',
+    description: 'Stay connected to your musical instrument',
     start_url: '/',
     display: 'standalone',
     background_color: '#fafafb',
@@ -22,8 +22,8 @@ export default function manifest(): MetadataRoute.Manifest {
         type: 'image/png',
       },
       {
-        src: 'images/icons/apple-touch-icon.png',
-        sizes: '180x180',
+        src: 'images/icons/apple-touch-icon-512x512.png',
+        sizes: '512x512',
         type: 'image/png',
       },
     ],
