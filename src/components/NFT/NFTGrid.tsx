@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import NFT, { LoadingNFTComponent } from "./NFT";
+import Skeleton from "../Skeleton";
 
 type Props = {
   owned: {
@@ -112,11 +113,13 @@ export default function NFTGrid({ owned, mintedIds, address }: Readonly<Props>) 
           <h2 className='text-2xl text-left font-bold text-black dark:text-white pb-2'>
             {allNftData.length > 1 || isLoading ? t('components.NFTGrid.title_plural') : t('components.NFTGrid.title_single')}
             {
-              mintedIds.length > 0 && owned.length > 0 &&
+              mintedIds.length > 0 && allNftData.length && owned.length > 0 ?
               <>
                 <span className="font-bold">{" "} {allNftData.map((nft: any) => nft.metadata.iAmTheMinter).length}</span>
                 <span className="font-bold">{", "} {owned.length}</span> {t('components.NFTGrid.owned')}
-              </>
+              </> : 
+                mintedIds.length > 0 && 
+                <span className="inline-block">{" "}<Skeleton width="80px" height="24px"/></span>
             }
           </h2>
           <p className="text-md text-gray-500 pb-4">
