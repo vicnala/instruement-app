@@ -20,18 +20,14 @@ const serwist = new Serwist({
   clientsClaim: true,
   navigationPreload: true,
   runtimeCaching: [
-    {
-      matcher: ({ url }) => url.pathname.includes("/api/instrument/"),
-      handler: new StaleWhileRevalidate()
-    },
+    // {
+    //   matcher: ({ url }) => url.pathname.includes("/api/instrument/"),
+    //   handler: new StaleWhileRevalidate()
+    // },
     {
       matcher: ({ url }) => url.pathname.includes("/api/token/"),
       handler: new StaleWhileRevalidate()
     },
-    // {
-    //   matcher: ({ url }) => url.pathname.includes(`/_next/image`),
-    //   handler: new StaleWhileRevalidate()
-    // },
     {
       matcher: ({ url }) => url.pathname.includes(`/file/`),
       handler: new StaleWhileRevalidate()
