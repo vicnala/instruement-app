@@ -45,3 +45,7 @@ env-*
 
 start-engine.sh
 .cursorrules
+
+# Serwist
+public/sw*
+public/swe-worker*
