@@ -1,5 +1,4 @@
 // icon:chevron-down-24 | Octicons https://primer.style/octicons/ | Github Primer
-import * as React from "react";
 
 interface IconChevronDownTwentyFourProps extends React.SVGProps<SVGSVGElement> {
   height?: string; // Optional height property

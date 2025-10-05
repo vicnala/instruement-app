@@ -13,8 +13,13 @@ export default async function Home() {
   const userId = authContext.userId;
   const userLocale = authContext.lang;
 
-  const mintedIds = await getUserInstruments(userId, userLocale || locale || "en");
+  let mintedIds = [];
+  if (authContext?.isMinter) {
+    mintedIds = await getUserInstruments(userId, userLocale || locale || "en");
+    // console.log("mintedIds", userId, mintedIds);
+  }
   const owned = await getUserTokens(address);
+  // console.log("owned", owned.map((token: any) => token.metadata.id));
   
 
   return authContext?.isMinter

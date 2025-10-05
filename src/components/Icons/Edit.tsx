@@ -1,5 +1,4 @@
 // icon:edit | Octicons https://primer.style/octicons/ | Github Primer
-import * as React from "react";
 
 interface IconEditProps extends React.SVGProps<SVGSVGElement> {
   height?: string;

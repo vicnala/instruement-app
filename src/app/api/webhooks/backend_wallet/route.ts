@@ -68,7 +68,8 @@ export async function POST( request: Request, response: Response ) {
     try {
         const getResult = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/queue/${queueId}`, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` }
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` },
+            cache: 'no-store'
         })
         const getData = await getResult.json()
         const instrumentId = getData.data.id;

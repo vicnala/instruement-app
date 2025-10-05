@@ -1,8 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import type { StripeError } from "@stripe/stripe-js";
 import { useLocale, useTranslations } from "next-intl";
-import * as React from "react";
 import {
   useStripe,
   useElements,
@@ -37,19 +37,19 @@ function CheckoutForm({
   const locale = useLocale();
   const t = useTranslations('components.ElementsForm');
 
-  const [input, setInput] = React.useState<{ cardholderName: string; }>({ cardholderName: "" });
+  const [input, setInput] = useState<{ cardholderName: string; }>({ cardholderName: "" });
 
-  const [paymentType, setPaymentType] = React.useState<string>("");
-  const [payment, setPayment] = React.useState<{status: "initial" | "processing" | "error";}>({ status: "initial" });
-  const [errorMessage, setErrorMessage] = React.useState<string>("");
-  const [ready, setReady] = React.useState<boolean>(false);
+  const [paymentType, setPaymentType] = useState<string>("");
+  const [payment, setPayment] = useState<{status: "initial" | "processing" | "error";}>({ status: "initial" });
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [ready, setReady] = useState<boolean>(false);
 
   const stripe = useStripe();
   const elements = useElements();
 
   const currency = process.env.NEXT_PUBLIC_CURRENCY ? process.env.NEXT_PUBLIC_CURRENCY.toUpperCase() : "EUR";
 
-  const [consent, setConsent] = React.useState({
+  const [consent, setConsent] = useState({
     terms: false,
     privacy: false
   });
