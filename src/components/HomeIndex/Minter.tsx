@@ -64,7 +64,7 @@ export default function Minter(
         </Section> : 
         <Section>
           <NFTGrid
-            nftData={owned}
+            owned={owned}
             mintedIds={mintedIds || []}
             address={context.sub}
           />

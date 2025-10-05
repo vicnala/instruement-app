@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { ConnectButton } from "thirdweb/react";
 import { inAppWallet, createWallet } from "thirdweb/wallets";
 import { useTheme } from "next-themes";

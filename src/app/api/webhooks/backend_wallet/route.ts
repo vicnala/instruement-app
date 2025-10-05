@@ -117,7 +117,6 @@ export async function POST( request: Request, response: Response ) {
                 const postResult = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${instrumentId}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` },
-                    cache: 'no-store',
                     body: JSON.stringify({ asset_id: tokenIdMinted })
                 });
     

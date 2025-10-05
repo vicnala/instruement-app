@@ -23,7 +23,7 @@ export default function User(
         </Section> :
         <Section>
           <div className="flex flex-col pt-4">
-            <NFTGrid nftData={owned} mintedIds={[]} address={context.sub} />
+              <NFTGrid owned={owned} mintedIds={[]} address={context.sub} />
           </div>
         </Section>
       }

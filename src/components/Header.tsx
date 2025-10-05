@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { Link, usePathname } from "@/i18n/routing";
 import Image from 'next/image'
 import { useTranslations } from "next-intl";

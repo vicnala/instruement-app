@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from "next-intl";
 import NFT, { LoadingNFTComponent } from "./NFT";
 
 type Props = {
-  nftData: {
+  owned: {
     owner: string,
     metadata: {
       id: string,
@@ -20,11 +20,16 @@ type Props = {
   address: string;
 }
 
-export default function NFTGrid({ nftData, mintedIds, address }: Readonly<Props>) {
+export default function NFTGrid({ owned, mintedIds, address }: Readonly<Props>) {
   const t = useTranslations();
   const locale = useLocale();
   const [isLoading, setIsLoading] = useState(true);
   const [allNftData, setAllNftData] = useState<any[]>([]);
+
+  // set iAmTheOwner to true for all owned tokens
+  for (const token of owned) {
+    token.metadata.iAmTheOwner = true;
+  }
 
   useEffect(() => {
     const getInstrument = async (id: number) => {     
@@ -61,14 +66,10 @@ export default function NFTGrid({ nftData, mintedIds, address }: Readonly<Props>
     }
 
     Promise.all(mintedIds.map(getInstrument))
-      .then((mintedInstruments) => {
-        for (const token of nftData) {
-          token.metadata.iAmTheOwner = token.owner === address;
-        }
-        
+      .then((mintedInstruments) => {  
         const myMintedTokensIds: any = [];
         for (const instrument of mintedInstruments) {
-          const exists = nftData.find((nft: any) => nft.metadata.id === instrument.asset_id.toString());
+          const exists = owned.find((nft: any) => nft.metadata.id === instrument.asset_id.toString());
           if (exists) {
             exists.metadata.iAmTheOwner = exists.owner === address;
             exists.metadata.iAmTheMinter = true;
@@ -79,7 +80,14 @@ export default function NFTGrid({ nftData, mintedIds, address }: Readonly<Props>
         
         Promise.all(myMintedTokensIds.map((id: string) => getToken(id)))
           .then((mintedTokens) => {
-            setAllNftData([...nftData, ...mintedTokens]);
+            const myMintedTokens = mintedTokens.map((token: any) => ({
+              ...token,
+              metadata: {
+                ...token.metadata,
+                iAmTheMinter: true
+              }
+            }));
+            setAllNftData([...owned, ...myMintedTokens]);
             setIsLoading(false);
           })
           .catch((error: any) => {
@@ -93,7 +101,7 @@ export default function NFTGrid({ nftData, mintedIds, address }: Readonly<Props>
         setIsLoading(false);
         alert(`Error: ${error.message}`);
       });
-  }, [locale, address, nftData, mintedIds]);
+  }, [locale, address, owned, mintedIds]);
 
   return (
     <div className='flex flex-col'>
@@ -108,7 +116,7 @@ export default function NFTGrid({ nftData, mintedIds, address }: Readonly<Props>
         </div>
         {
           isLoading ? (
-            <NFTGridLoading total={nftData.length + mintedIds.length} />
+            <NFTGridLoading total={owned.length + mintedIds.length} />
           ) : (
             <div className="grid justify-start grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {allNftData
