@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import NFT, { LoadingNFTComponent } from "./NFT";
-import Skeleton from "../Skeleton";
+import ButtonSpinner from "../UI/ButtonSpinner";
 
 type Props = {
   owned: {
@@ -119,7 +119,7 @@ export default function NFTGrid({ owned, mintedIds, address }: Readonly<Props>) 
                 <span className="font-bold">{", "} {owned.length}</span> {t('components.NFTGrid.owned')}
               </> : 
                 mintedIds.length > 0 && 
-                <span className="inline-block">{" "}<Skeleton width="80px" height="24px"/></span>
+                <span className="inline-block ml-4"><ButtonSpinner /></span>
             }
           </h2>
           <p className="text-md text-gray-500 pb-4">
