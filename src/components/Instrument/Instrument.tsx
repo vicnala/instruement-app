@@ -13,7 +13,22 @@ import Section from "@/components/Section";
 // import { client } from "@/app/client";
 import QRModal from "./QRModal";
 import Image from "next/image";
-import { Download, Copy, QrCode, ChevronDown, Handshake, Telescope, MoveDown, ArrowDownWideNarrow, Hourglass, CheckCheck, Send, Ban, ChevronUp, CircleX, ExternalLink } from "lucide-react";
+import { Download,
+	Copy,
+	QrCode,
+	ChevronDown,
+	Handshake,
+	Telescope,
+	MoveDown,
+	ArrowDownWideNarrow,
+	Hourglass,
+	CheckCheck,
+	Send,
+	Ban,
+	ChevronUp,
+	CircleX,
+	ExternalLink
+} from "lucide-react";
 import { usePathname, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 import Divider from "@/components/UI/Divider";
@@ -221,6 +236,13 @@ export default function Instrument({
 	const [isDescriptionExpanded, setIsDescriptionExpanded] = useState<boolean>(false);
 	const [isImagesExpanded, setIsImagesExpanded] = useState<boolean>(false);
 
+	// Block explorer URL
+	const blockExplorerBaseUrl = process.env.NEXT_PUBLIC_CHAIN_ID === '421614' ? `https://sepolia.arbiscan.io/nft/${contract?.address}` :
+		process.env.NEXT_PUBLIC_CHAIN_ID === '1' ? `https://etherscan.io/token/${contract?.address}` :
+		``;
+	
+	const blockExplorerUrl = `${blockExplorerBaseUrl}/${id}`;
+
 	useEffect(() => {
 		async function getminter() {
 			try {
@@ -363,9 +385,11 @@ export default function Instrument({
 					{address && instrumentAsset.owner !== address && !hasActiveValidationAttempt(searchParams) ? 
 						<p className='bg-me-50 p-4 rounded-lg border border-me-200 mb-4'>
 							<b>{tInstrument('current_owner')}:</b> {truncateEthAddress(instrumentAsset.owner)} ({tInstrument('you_are_not_owner')})
+							{" "} (<a className="text-we-500" href={blockExplorerUrl} target="_blank" rel="noreferrer">{tInstrument('link_to_block_explorer')}</a>)
 						</p> : address &&
 						<p className='bg-me-50 p-4 rounded-lg border border-me-200 mb-4'>
 							{tInstrument('you_are_owner')}
+							{" "} (<a className="text-we-500" href={blockExplorerUrl} target="_blank" rel="noreferrer">{tInstrument('link_to_block_explorer')}</a>)
 						</p>
 					}
 					{/* Copy URL Button for Non-Owner with Nonce */}

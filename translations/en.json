@@ -243,7 +243,8 @@
             "show_more": "Show more",
             "toggle_additional_images": "Toggle additional images",
             "show_all_images": "Show all images",
-            "close_steps": "Close step"
+            "close_steps": "Close step",
+            "link_to_block_explorer": "View on block explorer"
         },
         "ElementsForm": {
             "title": "Register Your Instrument Now",

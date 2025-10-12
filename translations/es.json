@@ -250,7 +250,8 @@
             "show_more": "Mostrar más",
             "toggle_additional_images": "Alternar imágenes adicionales",
             "show_all_images": "Mostrar todas las imágenes",
-            "close_steps": "Cerrar paso"
+            "close_steps": "Cerrar paso",
+            "link_to_block_explorer": "Ver en el explorador de bloques"
         },
         "ElementsForm": {
             "title": "Registra tu instrumento ahora",
