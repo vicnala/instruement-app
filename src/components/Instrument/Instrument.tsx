@@ -227,7 +227,7 @@ export default function Instrument({
 	const sendSectionRef = useRef<HTMLDivElement>(null);
 	const [isTransferConfirmationValid, setIsTransferConfirmationValid] = useState<boolean>(false);
 
-	const address = context.sub;
+	const address = context?.sub;
 	const isMinter = instrumentAsset.metadata.properties?.some((property: any) => property?.trait_type === "Registrar" && property?.value === address);
 	// Add this state for nonce validation
 	const [isNonceValid, setIsNonceValid] = useState<boolean>(false);
@@ -269,14 +269,14 @@ export default function Instrument({
 			const owner = await ownerOf({ contract, tokenId: BigInt(id) });			
 			if (owner === address) {
 				setIsOwner(true);
-			} else {
-				setIsOwner(false);
 			}
 		}
 
+		if (address && id) {
 		getOwner().catch((e) => {
-			console.error(`getOwner`, e.message);
-		})
+				console.error(`getOwner`, e.message);
+			})
+		}
 	}, [address, id])
 
 	// Update the cookie functions

@@ -76,7 +76,7 @@ export default async function InstrumentPage({ searchParams, params }: Props) {
 
   try {
     authResult = await userAuthData();
-    authContext = authResult.parsedJWT;
+    authContext = authResult?.parsedJWT;
   } catch (error) {
     console.error("authResult error", error);
   }
