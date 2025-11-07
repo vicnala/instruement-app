@@ -256,8 +256,11 @@
         "ElementsForm": {
             "title": "Registra tu instrumento ahora",
             "subtitle": "Rellena tus datos de pago",
+            "airdrop_subtitle": "Tu primer registro es gratuito!",
+            "airdrop_explanation": "Puedes registrar tu instrumento gratis. El primer registro es gratuito para todos los usuarios.",
             "payment_details": "Detalles del pago",
             "pay": "Pagar",
+            "airdrop_pay": "Registrar gratis",
             "name": "Nombre",
             "card_name": "Nombre que aparece en la tarjeta",
             "concept_register": "para el registro del borrador",

@@ -10,6 +10,10 @@ export default async function ResultPage({
   searchParams: { payment_intent: string };
 }): Promise<JSX.Element> {
   const authResult: any = await userAuthData();
+  
+  if (!authResult?.parsedJWT?.sub || !searchParams.payment_intent) {
+    return <NotFound />;
+  }
   if (!searchParams.payment_intent) {
     return <NotFound />;
   }

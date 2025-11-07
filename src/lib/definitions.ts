@@ -64,3 +64,9 @@ export type Instrument = {
     asset_id: string,
     queue_id: string
 };
+
+export type ImageDescription = {
+  name: string;
+  description: string;
+  cover: boolean;
+};

@@ -248,9 +248,12 @@
         },
         "ElementsForm": {
             "title": "Register Your Instrument Now",
+            "airdrop_subtitle": "Your first registration is free!",
+            "airdrop_explanation": "You can register your instrument for free. The first registration is free for all users.",
             "subtitle": "Fill out your payment details",
             "payment_details": "Your payment details",
             "pay": "Pay",
+            "airdrop_pay": "Register for free",
             "name": "Name",
             "card_name": "Cardholder name",
             "concept_register": "for registration of draft",

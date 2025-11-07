@@ -1,4 +1,3 @@
-import { useLocale } from "next-intl";
 import ElementsForm from "@/components/Stripe/ElementsForm";
 import { userAuthData } from "@/actions/login";
 import { getLocale } from "next-intl/server";
@@ -7,6 +6,7 @@ import NotFound from "@/app/not-found";
 import { redirect } from "@/i18n/routing";
 import { getSavedInstrument } from "@/services/instrumentsService";
 import FileUploadService from "@/services/FileUploadService";
+import AirdropForm from "@/components/Stripe/AirdropForm";
 
 export default async function PayPage({
   searchParams,
@@ -34,7 +34,6 @@ export default async function PayPage({
   let amount = 0;
   const type = minter.data.instrument_types.find((ins: any) => ins.slug === instrument.data.type);
   if (type) amount = type.user_register_price_eur;
-  if (amount === 0) return <NotFound />;
 
   const coverId = instrument.data.cover_image;
   if (coverId) {
@@ -44,11 +43,7 @@ export default async function PayPage({
     }
   }
 
-  return <ElementsForm
-    id={id}
-    urlAddress={searchParams?.address}
-    minterAddress={context.sub}
-    instrument={instrument.data}
-    amount={amount}
-  />
+  return amount > 0 ?
+    <ElementsForm id={id} urlAddress={searchParams?.address} minterAddress={context.sub} instrument={instrument.data} amount={amount} /> :
+    <AirdropForm id={id} urlAddress={searchParams?.address} minterAddress={context.sub} instrument={instrument.data} />;
 }

@@ -16,8 +16,8 @@ import { formatAmountForDisplay } from "@/lib/stripe-helpers";
 import { Instrument } from "@/lib/definitions";
 import Page from "../Page";
 import Section from "../Section";
-import Image from "next/image";
-
+import ConsentSection from "./ConsentSection";
+import InstrumentView from "./InstrumentView";
 
 function CheckoutForm({
     amount,
@@ -150,27 +150,7 @@ function CheckoutForm({
             <p className="text-md sm:text-lg text-gray-600">{ t('subtitle') }</p>
           </div>
           <div className=" mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div>
-              <div className="grid grid-cols-3 gap-6 bg-it-50 border border-it-100 shadow-sm rounded-[15px] overflow-hidden">
-                <div className="col-span-1">
-                  <Image
-                    src={instrument.cover_image.file_url}
-                    alt={instrument.cover_image.description || 'Instrument cover image'}
-                    width={300}
-                    height={300}
-                    className="object-cover"
-                  />
-                </div>
-                <div className="col-span-2 py-4">
-                  <h2 className="text-xl text-3xl font-semibold">
-                    {instrument.title}
-                  </h2>
-                  <p className="text-gray-600">
-                    {instrument.type_name}
-                  </p>
-                </div>
-              </div>
-            </div>
+            <InstrumentView instrument={instrument} />
             <div>
               <fieldset className="elements-style mx-auto">
                 {paymentType === "card" ? (
@@ -198,38 +178,9 @@ function CheckoutForm({
             </div>
           </div>
         </Section>
+        <ConsentSection consent={consent} handleConsentChange={handleConsentChange} />
         <Section>
-          <div className="mx-auto">
-            <div className="flex flex-col gap-3 mb-4">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  name="terms-of-use"
-                  type="checkbox"
-                  checked={consent.terms}
-                  onChange={() => handleConsentChange('terms')}
-                  className="w-4 h-4 text-it-500 rounded focus:ring-it-500"
-                  aria-label={t('terms_consent')}
-                />
-                <span className="text-sm text-gray-600">
-                  {t('i_accept')} <a href="https://instruement.com/terms-of-use/" className="text-it-500 hover:text-it-700 underline" target="_blank" rel="noopener noreferrer">{t('terms_of_use')}</a>
-                </span>
-              </label>
-              
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  name="privacy-policy"
-                  type="checkbox"
-                  checked={consent.privacy}
-                  onChange={() => handleConsentChange('privacy')}
-                  className="w-4 h-4 text-it-500 rounded focus:ring-it-500"
-                  aria-label={t('privacy_consent')}
-                />
-                <span className="text-sm text-gray-600">
-                  {t('i_accept')} <a href="https://instruement.com/privacy-policy/" className="text-it-500 hover:text-it-700 underline" target="_blank" rel="noopener noreferrer">{t('privacy_policy')}</a>
-                </span>
-              </label>
-            </div>
-            
+          <div className="mx-auto">            
             <div className="text-right">
               {ready && (
                 <button
@@ -270,7 +221,6 @@ export default function ElementsForm(
       amount: number
     }>
 ): JSX.Element | null {
-  const t = useTranslations();
   const address = urlAddress || minterAddress;
   
   return (instrument && minterAddress && amount > 0 && minterAddress) ? (
