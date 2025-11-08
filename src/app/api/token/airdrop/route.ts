@@ -62,12 +62,9 @@ export async function POST(request: Request) {
     )
   }
 
-  const type = minter.data.instrument_types.find((ins: any) => ins.slug === instrument.type);
-  if (!type) return NextResponse.json({ data: { message: `Airdrop instrument type not found` } }, { status: 400 });
+  const assetCount = minter.data.asset_count.length;
 
-  const amount = type.user_register_price_eur;
-
-  if (amount !== 0) {
+  if (assetCount !== 0) {
     return NextResponse.json({ data: { message: `Not qualified for the airdrop` } }, { status: 400 });
   }
   

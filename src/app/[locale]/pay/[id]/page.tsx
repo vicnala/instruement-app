@@ -35,6 +35,11 @@ export default async function PayPage({
   const type = minter.data.instrument_types.find((ins: any) => ins.slug === instrument.data.type);
   if (type) amount = type.user_register_price_eur;
 
+  let assetCount = 0;
+  if (instrument.data.asset_count) {
+    assetCount = minter.data.asset_count.length;
+  }
+
   const coverId = instrument.data.cover_image;
   if (coverId) {
     const { data } = await FileUploadService.getFile(coverId, minter.data.api_key);
@@ -43,7 +48,9 @@ export default async function PayPage({
     }
   }
 
-  return amount > 0 ?
-    <ElementsForm id={id} urlAddress={searchParams?.address} minterAddress={context.sub} instrument={instrument.data} amount={amount} /> :
-    <AirdropForm id={id} urlAddress={searchParams?.address} minterAddress={context.sub} instrument={instrument.data} />;
+  if (assetCount === 0) {
+    return <AirdropForm id={id} urlAddress={searchParams?.address} minterAddress={context.sub} instrument={instrument.data} />;  
+  }
+
+  return <ElementsForm id={id} urlAddress={searchParams?.address} minterAddress={context.sub} instrument={instrument.data} amount={amount} />
 }
