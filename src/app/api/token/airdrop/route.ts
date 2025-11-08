@@ -259,7 +259,10 @@ export async function POST(request: Request) {
                 const updateData = await result.json();
                 if (updateData?.code === 'success') {
                   console.log("api/token/airdrop queueId POST", updateData.data);
-                  return NextResponse.json({ message: "Received" }, { status: 200 });
+                  return NextResponse.json({
+                    code: "success",
+                    data: { message: `Airdrop successful` },
+                  }, { status: 200 });
                 } else {
                   return NextResponse.json(
                     { message: `/api/token/airdrop ${message}` },

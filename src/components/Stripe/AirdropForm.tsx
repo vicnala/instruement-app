@@ -7,8 +7,7 @@ import Page from "../Page";
 import Section from "../Section";
 import ConsentSection from "./ConsentSection";
 import InstrumentView from "./InstrumentView";
-import { redirect } from "@/i18n/routing";
-
+import { useRouter } from "@/i18n/routing";
 
 function AirdropCheckoutForm({
   address,
@@ -30,6 +29,9 @@ function AirdropCheckoutForm({
     terms: false,
     privacy: false
   });
+  const router = useRouter();
+  const [payment, setPayment] = useState<{status: "initial" | "processing" | "error";}>({ status: "initial" });
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const handleConsentChange = (field: 'terms' | 'privacy') => {
     setConsent(prev => ({
@@ -38,12 +40,40 @@ function AirdropCheckoutForm({
     }));
   };
 
+  const AirdropStatus = ({ status }: { status: string }) => {
+    switch (status) {
+      case "processing":
+      case "requires_payment_method":
+      case "requires_confirmation":
+        return <h2>{t("requires_confirmation")}...</h2>;
+
+      case "requires_action":
+        return <h2>{t('requires_action')}...</h2>;
+
+      case "succeeded":
+        return <h2>{t('payment_succeeded')} 🥳</h2>;
+
+      case "error":
+        return (
+          <>
+            <h2>{t('payment_error')}</h2>
+            <p className="error-message">{errorMessage}</p>
+          </>
+        );
+
+      default:
+        return null;
+    }
+  };
+
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     try {
       e.preventDefault();
 
       if (!address || !minterAddress || !instrument) {
-        throw new Error('Missing required fields');
+        setPayment({ status: "error" });
+        setErrorMessage('Missing required fields');
+        return;
       }
 
       const result = await fetch(`/api/token/airdrop`, {
@@ -57,12 +87,14 @@ function AirdropCheckoutForm({
       const data = await result.json();
 
       if (data.code === 'success') {
-        redirect({ href: `/pay/result/airdrop?id=${id}&name=${name}`, locale: locale });
+        router.push(`/pay/result/airdrop?id=${id}&name=${name}`);
       } else {
-        throw new Error(data.message);
+        setPayment({ status: "error" });
+        setErrorMessage(data.data.message);
       }
     } catch (err) {
-      throw new Error((err as any).message ? (err as any).message : 'An unknown error occurred');
+      setPayment({ status: "error" });
+      setErrorMessage((err as any).message ? (err as any).message : 'An unknown error occurred');
     }
   };
 
@@ -89,7 +121,7 @@ function AirdropCheckoutForm({
                 <button
                   className="inline-flex items-center text-lg px-6 py-3 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
                   type="submit"
-                  disabled={!consent.terms || !consent.privacy}
+                  disabled={!consent.terms || !consent.privacy || payment.status !== "initial"}
                 >
                   {t('airdrop_pay')}
                 </button>
@@ -97,6 +129,9 @@ function AirdropCheckoutForm({
           </div>
         </Section>
       </form>
+      <Section>
+        <AirdropStatus status={payment.status} />
+      </Section>
     </>
   );
 }

@@ -13,7 +13,7 @@ export default async function ResultPage({
   }
   
   return <PaymentResult
-    status="success"
+    status="succeeded"
     id={searchParams.id}
     name={searchParams.name}
     context={authResult.parsedJWT}
