@@ -28,18 +28,19 @@ export const TransitionLink: React.FC<TransitionLinkProps> = ({
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
   ) => {
     e.preventDefault();
-    const body = document.querySelector("body");
+    // const body = document.querySelector("body");
 
-    body?.classList.add("page-transition");
+    // body?.classList.add("page-transition");
     
-    await sleep(50);
     router.push(href);
-    if (href === '/') {
-        await sleep(2500);
-    }
-    await sleep(1000);
 
-    body?.classList.remove("page-transition");
+    // if (href === '/') {
+    //     await sleep(2500);
+    // } else {
+    //   await sleep(1000);
+    // }
+
+    // body?.classList.remove("page-transition");
   };
 
   return (
