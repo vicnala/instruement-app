@@ -137,6 +137,7 @@ export default function NFTGrid({ owned, mintedIds, address }: Readonly<Props>) 
                   <NFT
                     key={`${index}`}
                     nft={nft}
+                    locale={locale}
                   />
               ))}
             </div>
