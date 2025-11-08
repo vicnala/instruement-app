@@ -1,7 +1,8 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
-import { Link, usePathname } from '@/i18n/routing'
+import { useLocale, useTranslations } from 'next-intl'
+import { usePathname } from '@/i18n/routing'
+import { TransitionLink } from '@/components/UI/TransitionLink'
 import { ButtonLink } from '@/components/UI/ButtonLink'
 import { House, User } from 'lucide-react'
 
@@ -9,14 +10,14 @@ import { House, User } from 'lucide-react'
 export const BottomNav = ({ context }: { context: any }) => {
 	const bottomNavt = useTranslations('components.BottomNav')
 	const pathname: string = usePathname();
-
+	const locale = useLocale();
 	const isMinter = context?.ctx?.isMinter;
 	const address = context?.sub;
 
 	return pathname !== '/login' && address &&
 		<nav className='sm:hidden fixed z-50 bottom-0 w-full bg-canvas pb-safe dark:bg-contrast dark:border-t dark:border-gray-900 shadow-[0_0px_4px_0px_rgba(0,0,0,0.2)]'>
 			<div className={`mx-auto grid h-[4rem] max-w-md pt-2 ${isMinter ? 'grid-cols-[1fr_auto_1fr] gap-[3vw]' : !address ? '' : 'grid-cols-[1fr_1fr] gap-[3vw]'}`}>
-				<Link key="home" href="/">
+				<TransitionLink key="home" href="/" locale={locale}>
 					<div className={
 						`flex flex-col items-center pt-1 ${pathname === '/'
 						? 'text-it-500 dark:text-it-400'
@@ -28,7 +29,7 @@ export const BottomNav = ({ context }: { context: any }) => {
 							{bottomNavt('home')}
 						</span>
 					</div>
-				</Link>
+				</TransitionLink>
 				{
 					isMinter && (pathname === '/' || pathname === '/account' || pathname.includes('/instrument')) ? (
 						<ButtonLink href="/drafts/new" size="md" colorSchema="it">
@@ -40,7 +41,7 @@ export const BottomNav = ({ context }: { context: any }) => {
 				}
 				{
 					address && (
-						<Link key="account" href="/account">
+						<TransitionLink key="account" href="/account" locale={locale}>
 							<div className={
 								`flex flex-col items-center pt-1 ${pathname.includes('/account')
 								? 'text-it-500 dark:text-it-400'
@@ -52,7 +53,7 @@ export const BottomNav = ({ context }: { context: any }) => {
 									{bottomNavt('account')}
 								</span>
 							</div>
-						</Link>
+						</TransitionLink>
 					)
 				}
 			</div>

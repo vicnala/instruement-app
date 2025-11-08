@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react"
-import { Link } from "@/i18n/routing";
+import { TransitionLink } from "@/components/UI/TransitionLink";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Instrument, InstrumentImage } from "@/lib/definitions";
@@ -45,8 +45,9 @@ export default function Draft(
 
   return (
     !isQueued ? (
-    <Link
+    <TransitionLink
       href={`/drafts/${instrumentId}`}
+      locale={locale}
       className={`group cursor-pointer transition-all hover:shadow-lg flex flex-col w-full justify-stretch overflow-hidden bg-it-25 border border-it-100 rounded-lg`}
       aria-label={`${instrument?.title || instrumentId}`}
     >
@@ -85,7 +86,7 @@ export default function Draft(
           </p>
         </div>
       </div>
-    </Link>
+    </TransitionLink>
     ) : (
     <div
       className={`cursor-wait flex flex-col w-full justify-stretch overflow-hidden bg-it-25 border border-it-100 rounded-lg`}

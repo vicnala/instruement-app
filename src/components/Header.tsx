@@ -1,6 +1,8 @@
 "use client";
 
-import { Link, usePathname } from "@/i18n/routing";
+import { usePathname } from "@/i18n/routing";
+import { useLocale } from "next-intl";
+import { TransitionLink } from "@/components/UI/TransitionLink";
 import Image from 'next/image'
 import { useTranslations } from "next-intl";
 import { ModeToggle } from "./ModeToggle";
@@ -11,7 +13,7 @@ import { House, User } from "lucide-react";
 export function Header({ context }: { context: any }) {
   const t = useTranslations('components.Header');
   const pathname: string = usePathname();
-  
+  const locale: string = useLocale();
   const isMinter = context?.ctx?.isMinter;
   const address = context?.sub;
 
@@ -20,7 +22,7 @@ export function Header({ context }: { context: any }) {
       <div className='w-full'>
         <header className='bg-canvas px-safe dark:bg-contrast'>
           <div className='mx-auto flex flex-row min-h-[max(10vh,85px)] max-w-screen-lg items-center justify-between px-3.5'>
-            <Link href="/">
+            <TransitionLink href="/" locale={locale}>
               <div className="relative">
                 <Image
                   src="/images/instruement-logo-contrast.png"
@@ -37,7 +39,7 @@ export function Header({ context }: { context: any }) {
                   className="hidden dark:block"
                 />
               </div>
-            </Link>
+            </TransitionLink>
             <nav className='flex items-center space-x-6'>
               {
                 isMinter && 
@@ -49,21 +51,21 @@ export function Header({ context }: { context: any }) {
               {
                 address &&
                   <div className='flex items-center space-x-6'>
-                    <Link key="my-instruments" href="/account">
+                    <TransitionLink key="my-instruments" href="/account" locale={locale}>
                       <User className={`w-5 h-5 ${pathname.includes('/account')
                             ? 'text-it-400 dark:text-white'
                             : 'text-gray-500 hover:text-it-400 dark:text-gray-600 dark:hover:text-it-100'
                         }`}
                         aria-label={t('account')}
                       />
-                    </Link>
+                    </TransitionLink>
                   </div>
               }
               {
                 address && ( pathname === '/account' || pathname.includes('/instrument') || pathname.includes('/drafts')) &&
-                <Link href="/" className={`${pathname === '/' ? 'text-it-400 dark:text-white' : 'text-gray-500 hover:text-it-400 dark:text-gray-600 dark:hover:text-it-100'}`}>
+                <TransitionLink href="/" locale={locale} className={`${pathname === '/' ? 'text-it-400 dark:text-white' : 'text-gray-500 hover:text-it-400 dark:text-gray-600 dark:hover:text-it-100'}`}>
                   <House className="w-5 h-5" />
-                </Link>
+                </TransitionLink>
               }
               { process.env.NODE_ENV === 'development' && <ModeToggle /> }
             </nav>

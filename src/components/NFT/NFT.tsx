@@ -2,7 +2,7 @@
 
 import { MediaRenderer } from "thirdweb/react";
 import Skeleton from "@/components/Skeleton";
-import { Link } from "@/i18n/routing";
+import { TransitionLink } from "@/components/UI/TransitionLink";
 import { client } from "@/app/client";
 import { Send } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -18,10 +18,12 @@ type Props = {
       iAmTheMinter: boolean
     }
   };
+  locale: string;
 };
 
 export default function NFTComponent({
   nft,
+  locale,
 }: Props) {
   const t = useTranslations('components.NFT');
   if (!nft) {
@@ -29,7 +31,8 @@ export default function NFTComponent({
   }
 
   return (
-    <Link
+    <TransitionLink
+      locale={locale}
       href={`/instrument/${nft.metadata.id.toString()}`}
       className={`group cursor-pointer transition-all hover:shadow-lg flex flex-col w-full justify-stretch overflow-hidden rounded-lg ${nft.metadata.iAmTheOwner ? 'bg-we-25 border border-we-100' : 'bg-it-25 border border-it-100'}`}
       aria-label={`${nft.metadata.name || nft.metadata.id.toString()}`}
@@ -58,7 +61,7 @@ export default function NFTComponent({
           </h3>
         </div>
       </div>
-    </Link>
+    </TransitionLink>
   );
 }
 
