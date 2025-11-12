@@ -267,7 +267,15 @@
             "requires_confirmation": "Procesando",
             "requires_action": "Autenticando",
             "payment_succeeded": "Pago realizado con éxito",
-            "payment_error": "Error en el pago",
+            "payment_error": "Error en el pago"
+        },
+        "AirdropForm": {
+            "title": "Registra tu primer instrumento",
+            "subtitle": "Tu primer registro es gratuito.",
+            "register_now": "Registrar ahora",
+            "airdrop_error": "Error en el registro"
+        },
+        "ConsentSection": {
             "terms_consent": "Acepto los términos y condiciones",
             "privacy_consent": "Acepto la política de privacidad",
             "i_accept": "Acepto",

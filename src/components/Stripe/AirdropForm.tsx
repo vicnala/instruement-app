@@ -23,7 +23,7 @@ function AirdropCheckoutForm({
   instrument: Instrument
  }): JSX.Element
 {
-  const t = useTranslations('components.ElementsForm');
+  const t = useTranslations('components.AirdropForm');
   const locale = useLocale();
   const [consent, setConsent] = useState({
     terms: false,
@@ -45,18 +45,12 @@ function AirdropCheckoutForm({
       case "processing":
       case "requires_payment_method":
       case "requires_confirmation":
-        return <h2>{t("requires_confirmation")}...</h2>;
-
       case "requires_action":
-        return <h2>{t('requires_action')}...</h2>;
-
       case "succeeded":
-        return <h2>{t('payment_succeeded')} 🥳</h2>;
-
       case "error":
         return (
           <>
-            <h2>{t('payment_error')}</h2>
+            <h2>{t('airdrop_error')}</h2>
             <p className="error-message">{errorMessage}</p>
           </>
         );
@@ -104,14 +98,10 @@ function AirdropCheckoutForm({
         <Section>
           <div className="mb-6">
             <h2 className="text-2xl sm:text-3xl font-semibold">{ t('title') }</h2>
-            <p className="text-md sm:text-lg text-gray-600">{ t('airdrop_subtitle') }</p>
+            <p className="text-md sm:text-lg text-gray-600">{ t('subtitle') }</p>
           </div>
           <div className=" mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
             <InstrumentView instrument={instrument} />
-            <div>
-              <h3 className="text-lg sm:text-xl font-semibold">{ t('airdrop_subtitle') }</h3>
-              <p className="text-md sm:text-lg text-gray-600">{ t('airdrop_explanation') }</p>
-            </div>
           </div>
         </Section>
         <ConsentSection consent={consent} handleConsentChange={handleConsentChange} />
@@ -123,7 +113,7 @@ function AirdropCheckoutForm({
                   type="submit"
                   disabled={!consent.terms || !consent.privacy || payment.status !== "initial"}
                 >
-                  {t('airdrop_pay')}
+                  {t('register_now')}
                 </button>
             </div>
           </div>

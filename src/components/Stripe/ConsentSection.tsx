@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 import Section from "../Section";
 
 export default function ConsentSection({ consent, handleConsentChange }: { consent: { terms: boolean, privacy: boolean }, handleConsentChange: (field: 'terms' | 'privacy') => void }  ): JSX.Element {
-    const t = useTranslations('components.ElementsForm');
+    const t = useTranslations('components.ConsentSection');
   
     return (
       <Section>
