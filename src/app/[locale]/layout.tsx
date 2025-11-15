@@ -13,6 +13,7 @@ import { WebSite } from "schema-dts";
 import { ThirdwebProvider } from "thirdweb/react";
 import { locales } from "@/i18n/routing";
 import { IOSSplashScreens } from "@/components/IOSSplashScreens";
+import { PostHogProvider } from "@/components/PostHogProvider";
 
 const catamaran = Catamaran({ subsets: ["latin"] });
 
@@ -57,9 +58,11 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <NextIntlClientProvider messages={messages}>
-            <ThirdwebProvider>
+            <PostHogProvider>
+              <ThirdwebProvider>
                 {children}
-            </ThirdwebProvider>
+              </ThirdwebProvider>
+            </PostHogProvider>
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>
