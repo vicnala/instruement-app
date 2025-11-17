@@ -382,16 +382,16 @@ export default function Instrument({
 		<Page context={context}>
 			{instrumentAsset && instrumentAsset.metadata ? (
 				<>
-					{address && instrumentAsset.owner !== address && !hasActiveValidationAttempt(searchParams) ? 
+					{address && !hasActiveValidationAttempt(searchParams) && (
 						<p className='bg-me-50 p-4 rounded-lg mb-4 dark:text-gray-900 flex items-center justify-between'>
-							<span><b>{tInstrument('current_owner')}:</b> {truncateEthAddress(instrumentAsset.owner)} ({tInstrument('you_are_not_owner')})</span>
-							<a className="text-xs text-me-900 px-2 py-1 bg-transparent hover:bg-me-400 border border-me-300 hover:border-me-400 rounded-md flex items-center gap-2" href={blockExplorerUrl} target="_blank" rel="noreferrer">{tInstrument('link_to_block_explorer')} <ExternalLink className="w-3 h-3" /></a>
-						</p> : address &&
-						<p className='bg-me-50 p-4 rounded-lg mb-4 dark:text-gray-900 flex items-center justify-between'>
-							<span><b className='text-me-1000'>{tInstrument('you_are_owner')}</b></span>
+							{instrumentAsset.owner !== address ? (
+								<span><b>{tInstrument('current_owner')}:</b> {truncateEthAddress(instrumentAsset.owner)} ({tInstrument('you_are_not_owner')})</span>
+							) : (
+								<span><b className='text-me-1000'>{tInstrument('you_are_owner')}</b></span>
+							)}
 							<a className="text-xs text-me-900 px-2 py-1 bg-transparent hover:bg-me-400 border border-me-300 hover:border-me-400 rounded-md flex items-center gap-2" href={blockExplorerUrl} target="_blank" rel="noreferrer">{tInstrument('link_to_block_explorer')} <ExternalLink className="w-3 h-3" /></a>
 						</p>
-					}
+					)}
 					{/* Copy URL Button for Non-Owner with Nonce */}
 					{address && !isOwner && hasActiveValidationAttempt(searchParams) && (
 						<Section>
