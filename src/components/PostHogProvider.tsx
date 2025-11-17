@@ -1,29 +1,47 @@
 "use client";
 
 import posthog from "posthog-js";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 
-export const PostHogProvider = ({ children }: { children: React.ReactNode }) => {
+const warningMessage =
+  "PostHog: NEXT_PUBLIC_POSTHOG_KEY is not set. Analytics are disabled.";
+
+export const PostHogProvider = () => {
+  const hasInitialized = useRef(false);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   useEffect(() => {
     if (typeof window === "undefined") return;
-    
+    if (hasInitialized.current) return;
+
     const posthogKey = process.env.NEXT_PUBLIC_POSTHOG_KEY;
     if (!posthogKey) {
-      console.warn("PostHog: NEXT_PUBLIC_POSTHOG_KEY is not set. PostHog will not initialize.");
+      if (process.env.NODE_ENV !== "production") {
+        console.warn(warningMessage);
+      }
       return;
     }
-    
-    // Check if PostHog is already initialized to avoid re-initialization
-    if ((posthog as any).__loaded || (posthog as any).__initialized) {
-      return;
-    }
-    
+
     posthog.init(posthogKey, {
       api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://eu.i.posthog.com",
+      capture_pageview: false,
     });
+
+    hasInitialized.current = true;
   }, []);
 
-  // Simply return children without wrapping in PHProvider to avoid ErrorBoundary issues
-  return <>{children}</>;
+  useEffect(() => {
+    if (!hasInitialized.current) return;
+    if (!pathname) return;
+
+    const query = searchParams?.toString();
+    const url = query ? `${pathname}?${query}` : pathname;
+
+    posthog.capture("$pageview", { $current_url: url });
+  }, [pathname, searchParams]);
+
+  return null;
 };
 
