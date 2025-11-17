@@ -193,7 +193,10 @@ export default function Preview(
               {/* Button to go back to draft */}
               <button
                 type="button"
-                className="inline-flex items-center px-4 py-2 transition-colors duration-200 transform bg-transparent border-[0.1rem] border-it-400 rounded-md hover:bg-it-400 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+                className="inline-flex items-center px-4 py-2 transition-colors duration-200 transform text-gray-600 bg-transparent border-[0.1rem] border-gray-300 rounded-md 
+                 hover:bg-gray-300 hover:text-gray-800 
+                 dark:text-gray-300 dark:hover:text-gray-100 dark:hover:bg-gray-800 dark:border-gray-800
+                 focus:outline-none focus:bg-it-700"
                 onClick={() => router.push(`/drafts/${instrument.id}`)}
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
@@ -201,7 +204,10 @@ export default function Preview(
               </button>
               <button
                 type="button"
-                className="inline-flex items-center px-4 py-2 text-sm font-medium transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+                className="inline-flex items-center px-4 py-2 text-sm text-it-1000 font-medium transition-colors duration-200 transform border-[0.1rem] border-it-300 rounded-md 
+                hover:bg-it-500 hover:border-it-500
+                dark:text-it-100 dark:border-it-800 dark:hover:bg-it-700 dark:hover:border-it-700
+                focus:outline-none focus:bg-it-700"
                 onClick={() => router.push(`/pay/${instrument.id}${address && `?address=${address}`}`)}
               >
                 {t('register_now')}

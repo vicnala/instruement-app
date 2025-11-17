@@ -34,7 +34,9 @@ export default function NFTComponent({
     <TransitionLink
       locale={locale}
       href={`/instrument/${nft.metadata.id.toString()}`}
-      className={`group cursor-pointer transition-all hover:shadow-lg flex flex-col w-full justify-stretch overflow-hidden rounded-lg ${nft.metadata.iAmTheOwner ? 'bg-we-25 border border-we-100' : 'bg-it-25 border border-it-100'}`}
+      className={`group cursor-pointer transition-all hover:shadow-lg flex flex-col w-full justify-stretch overflow-hidden rounded-lg border 
+        ${nft.metadata.iAmTheOwner ? 'bg-we-25 border-we-100 dark:bg-gray-900 dark:border-we-950' 
+        : 'bg-it-25 border-it-100 dark:bg-gray-900 dark:border-gray-800'}`}
       aria-label={`${nft.metadata.name || nft.metadata.id.toString()}`}
     >
       <div className="relative w-full aspect-square bg-it-50">

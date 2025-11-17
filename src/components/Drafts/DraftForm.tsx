@@ -245,28 +245,28 @@ export default function DraftForm(
         {
           minter && <>
         <Section id="progress-bar">
-          <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-it-50 rounded-[15px] border border-it-200 overflow-hidden">
+          <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-it-100 dark:bg-gray-900 rounded-[15px] overflow-hidden">
             <div className="w-full mx-auto mb-4 sm:mb-8">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
+                <div className="text-it-1000 dark:text-gray-100">
                   {
                     instrument ?
                       <>
                         {hasCover && hasImages && hasFiles && description ? (
                           <>
                             <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('title.ready_to_register')}</h2>
-                            <p className="text-sm sm:text-base text-gray-600">{t('title.ready_to_register_sub')}</p>
+                            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">{t('title.ready_to_register_sub')}</p>
                           </>
                         ) : (
                           <>
                             <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('title.edit')} #{instrument.id} </h2>
-                            <p className="text-sm sm:text-base text-gray-600">{t('title.edit_sub_heading')}</p>
+                            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">{t('title.edit_sub_heading')}</p>
                           </>
                         )}
                       </>
                       : <>
                         <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('title.new')}</h2>
-                        <p className="text-sm sm:text-base text-gray-600">{t('title.new_sub_heading')}</p>
+                        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">{t('title.new_sub_heading')}</p>
                       </>
                   }
                 </div>
@@ -298,11 +298,11 @@ export default function DraftForm(
 
         <form className="">
           <Section id="basic-info" className="pb-[0.1rem]">
-            <div className="px-3 sm:px-6 pt-5 pb-6 sm:py-8 || bg-gray-25 rounded-lg">
-              <h2 className="text-xl font-semibold text-gray-1000 pb-3">
+            <div className="px-3 sm:px-6 pt-5 pb-6 sm:py-8 || bg-gray-25 rounded-lg dark:bg-gray-950">
+              <h2 className="text-xl font-semibold text-gray-1000 dark:text-gray-100 pb-3">
                 {t('basic_info.title')}
               </h2>
-              <h3 className="text-lg text-me-600 pb-6">
+              <h3 className="text-lg text-me-600 dark:text-me-400 pb-6">
                     {minter && typeof minter !== 'boolean' && (
                       <span className="flex items-center">
                         <Lock className="w-4 h-4 mr-2 -mt-0.5" />
@@ -312,7 +312,7 @@ export default function DraftForm(
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-0 md:gap-6 sm:gap-6">
                 <div>
-                  <label htmlFor="instrument_type" className="block text-base font-semibold text-gray-1000 pb-1">
+                  <label htmlFor="instrument_type" className="block text-base font-semibold text-gray-1000 dark:text-gray-100 pb-1">
                     {t('basic_info.type.label')}
                   </label>
                   <div className="relative">
@@ -356,25 +356,25 @@ export default function DraftForm(
                         </li>
                       ))}
                     </ul>
-                    <p className="text-sm text-gray-600 pt-2">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 pt-2">
                       {type ? t('basic_info.type.type_set_description') : t('basic_info.type.description')}
                     </p>
                   </div>
                 </div>
 
                 <div className="col-span-2">
-                  <label htmlFor="instrument_name" className="block text-base font-semibold text-gray-1000 pb-1">
+                  <label htmlFor="instrument_name" className="block text-base font-semibold text-gray-1000 dark:text-gray-100 pb-1">
                     {t('basic_info.name.label')}
                   </label>
                   <input
                     id="instrument_name"
                     name="instrument_name"
-                    className={`text-base block w-full px-2 py-2 text-it-950 border rounded-md focus:border-it-400 focus:ring-it-300 focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-white dark:bg-opacity-90`}
+                    className={`text-base block w-full px-2 py-2 text-it-950 border rounded-md focus:border-it-400 focus:ring-it-300 focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-800 dark:bg-opacity-90`}
                     onChange={(e) => { setName(e.target.value) }}
                     value={name}
                     disabled={false}
                   />
-                  <p className="text-sm text-gray-600 pt-2">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 pt-2">
                     {t('basic_info.name.description')}
                   </p>
                 </div>
@@ -395,13 +395,13 @@ export default function DraftForm(
           {
             instrumentId && instrument &&
             <Section id="media" className="pb-1">
-              <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-25 rounded-lg">
+              <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-25 rounded-lg dark:bg-gray-950">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8">
                   <div className="col-span-1 min-h-[300px]">
-                    <h2 className="text-xl font-semibold text-gray-1000 pb-1">
+                    <h2 className="text-xl font-semibold text-gray-1000 dark:text-gray-100 pb-1">
                       {t('media.cover.title')}
                     </h2>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                       {t('media.cover.description')}
                     </p>
                     <div className="mt-4">
@@ -421,10 +421,10 @@ export default function DraftForm(
                     <div className="md:hidden">
                       <Divider spacing="md" />
                     </div>
-                    <h2 className="text-xl font-semibold text-gray-1000 pb-1" >
+                    <h2 className="text-xl font-semibold text-gray-1000 dark:text-gray-100 pb-1" >
                       {t('media.images.title')}
                     </h2>
-                    <p className="text-sm text-gray-600 max-w-lg">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 max-w-lg">
                       {t('media.images.description')}
                     </p>
                     <div className="mt-4">
@@ -439,10 +439,10 @@ export default function DraftForm(
                     </div>
                     <Divider spacing="md" />
 
-                    <h2 className="text-xl font-semibold text-gray-1000 pb-1">
+                    <h2 className="text-xl font-semibold text-gray-1000 dark:text-gray-100 pb-1">
                       {t('media.files.title')}
                     </h2>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                       {t('media.files.description')}
                     </p>
                     <div className="mt-4">
@@ -464,12 +464,12 @@ export default function DraftForm(
           {instrument &&
             hasCover && hasImages && hasFiles &&
             <Section id="description">
-              <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-25 rounded-lg">
+              <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-25 dark:bg-gray-950 rounded-lg">
                 <div className="mb-6">
-                  <h2 className="text-xl font-semibold text-gray-1000 pb-1">
+                  <h2 className="text-xl font-semibold text-gray-1000 dark:text-gray-100 pb-1">
                     {t('description.title')}
                   </h2>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
                     {t('description.description')}
                   </p>
                   <div className="p-0 mt-4 border border-gray-200 bg-white rounded-md">

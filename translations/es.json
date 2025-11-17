@@ -251,7 +251,7 @@
             "toggle_additional_images": "Alternar imágenes adicionales",
             "show_all_images": "Mostrar todas las imágenes",
             "close_steps": "Cerrar paso",
-            "link_to_block_explorer": "Ver en el explorador de bloques"
+            "link_to_block_explorer": "Ver en el explorador de blockchain"
         },
         "ElementsForm": {
             "title": "Registra tu instrumento ahora",

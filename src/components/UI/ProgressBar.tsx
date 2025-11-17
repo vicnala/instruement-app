@@ -75,7 +75,7 @@ const ProgressBar = ({
             <div key={step.number} className="flex flex-col items-center max-w-[110px] sm:max-w-none">
               {/* Step indicators */}
               {step.number < currentStep ? (
-                <CheckCircle className="w-8 h-8 sm:w-10 sm:h-10 text-it-400 bg-it-50 rounded-full" />
+                <CheckCircle className="w-8 h-8 sm:w-10 sm:h-10 text-it-400 bg-it-100 rounded-full dark:bg-gray-900" />
               ) : step.number === currentStep ? (
                 <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-it-400 text-white flex items-center justify-center text-sm sm:text-base font-semibold">
                   {step.number}
@@ -86,8 +86,8 @@ const ProgressBar = ({
               
               {/* Step labels */}
               <div className="mt-2 sm:mt-4 text-center">
-                <div className="text-sm sm:text-base font-medium truncate">{step.title}</div>
-                <div className="hidden sm:block text-xs sm:text-sm text-gray-500 truncate">{step.description}</div>
+                <div className="text-sm sm:text-base font-medium text-it-1000 dark:text-gray-100 truncate">{step.title}</div>
+                <div className="hidden sm:block text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate">{step.description}</div>
               </div>
             </div>
           ))}

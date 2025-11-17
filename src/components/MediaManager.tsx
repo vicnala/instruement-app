@@ -445,7 +445,10 @@ export default function MediaManager({
         <div className="flex justify-center px-3">
           <button
             type="button"
-            className="bg-transparent text-center hover:bg-it-500 text-gray-1000 hover:text-white border-[0.1rem] border-gray-300 hover:border-it-500 py-2 px-4 rounded-md text-base flex items-center justify-center  w-full"
+            className="
+              text-gray-1000 bg-transparent border-[0.1rem] border-it-300 text-center py-2 px-4 rounded-md text-base flex items-center justify-center w-full
+              hover:bg-it-500 hover:text-it-1000 hover:border-it-500
+              dark:text-gray-100 dark:hover:text-it-1000 dark:border-it-800 dark:hover:border-it-500 "
             onClick={handleClick}
           >
             <ArrowUpFromLine className="w-4 h-4 mr-2" />

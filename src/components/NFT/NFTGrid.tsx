@@ -110,7 +110,7 @@ export default function NFTGrid({ owned, mintedIds, address }: Readonly<Props>) 
     <div className='flex flex-col'>
       <div className="pb-2">
         <div className="pb-2">
-          <h2 className='text-2xl text-left font-bold text-black dark:text-white pb-2'>
+          <h2 className='text-2xl text-left font-bold text-it-1000 dark:text-gray-100 pb-2'>
             {allNftData.length > 1 || isLoading ? t('components.NFTGrid.title_plural') : t('components.NFTGrid.title_single')}
             {
               mintedIds.length > 0 && allNftData.length && owned.length > 0 ?
@@ -122,7 +122,7 @@ export default function NFTGrid({ owned, mintedIds, address }: Readonly<Props>) 
                 <span className="inline-block ml-4"><ButtonSpinner /></span>
             }
           </h2>
-          <p className="text-md text-gray-500 pb-4">
+          <p className="text-md text-gray-500 dark:text-gray-400 pb-4">
             {allNftData.length > 1 || isLoading ? t('components.NFTGrid.description_plural') : t('components.NFTGrid.description_single')}
           </p>
         </div>
