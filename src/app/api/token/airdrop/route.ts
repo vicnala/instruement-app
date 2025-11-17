@@ -6,6 +6,7 @@ import { ImageDescription } from "@/lib/definitions";
 import { fetchAndStreamFile } from "@/lib/fetchAndStreamFile";
 import { userAuthData } from "@/actions/login";
 import { getUser } from "@/services/UsersService";
+import { headers } from "@/lib/authorizationHeaders";
 
 const {
   STRIPE_WEBHOOK_SECRET_KEY,
@@ -17,8 +18,6 @@ const {
 } = process.env;
 
 export async function POST(request: Request) {
-  const headers = { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` };
-  
   const { address, name, id, instrument } = await request.json();
 
   if (!address || !name || !id || !instrument) {

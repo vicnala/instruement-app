@@ -3,6 +3,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Engine } from "@thirdweb-dev/engine";
 import { isExpired, isValidSignature } from "../webhookHelper";
+import { headers } from "@/lib/authorizationHeaders";
 
 const {
     ENGINE_URL,
@@ -68,7 +69,7 @@ export async function POST( request: Request, response: Response ) {
     try {
         const getResult = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/queue/${queueId}`, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` },
+            headers,
             cache: 'no-store'
         })
         const getData = await getResult.json()
@@ -116,7 +117,7 @@ export async function POST( request: Request, response: Response ) {
             if (mintedTo && tokenIdMinted) {
                 const postResult = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${instrumentId}`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` },
+                    headers,
                     body: JSON.stringify({ asset_id: tokenIdMinted })
                 });
     

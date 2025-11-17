@@ -1,6 +1,7 @@
 'use server'
 
 import { userAuthData } from "@/actions/login";
+import { headers } from "@/lib/authorizationHeaders";
 
 export async function POST(request: Request) {
   const { user_id, type, name } = await request.json()
@@ -20,10 +21,7 @@ export async function POST(request: Request) {
   try {
     const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`,
-      },
+      headers,
       body: JSON.stringify({ user_id, type, title: name })
     })
     const data = await result.json()

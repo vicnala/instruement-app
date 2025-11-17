@@ -1,6 +1,7 @@
 'use server'
 
 import { userAuthData } from "@/actions/login";
+import { headers } from "@/lib/authorizationHeaders";
 
 export async function POST(request: Request) {
   const formData: any = await request.formData()
@@ -39,12 +40,7 @@ export async function POST(request: Request) {
   try {
     const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/file`, {
       method: 'POST',
-      headers: {
-        // 'accept': 'application/json',
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-        // 'Content-Type': 'multipart/form-data',
-        'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`,
-      },
+      headers,
       body: formData
     })
     const data = await result.json()

@@ -2,6 +2,7 @@
 
 import { userAuthData } from "@/actions/login";
 import { getLocale } from "next-intl/server";
+import { headers } from "@/lib/authorizationHeaders";
 
 export async function GET() {
   const locale = await getLocale();
@@ -19,10 +20,7 @@ export async function GET() {
   try {
     const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instruments?user_id=${authContext.userId}&locale=${locale || "en"}`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`,
-      },
+      headers,
       cache: 'no-store'
     });
 
