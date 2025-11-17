@@ -62,9 +62,9 @@ export default function Preview(
     <Page context={context}>
       { minter && <>
         <Section>
-          <div className="px-3 md:px-6 py-4 md:py-6 border-[0.1rem] border border-gray-100 rounded-lg">
+          <div className="px-3 md:px-6 py-4 md:py-6 bg-gray-25 rounded-lg dark:bg-gray-950 text-it-1000 dark:text-gray-200">
           {instrument?.updated_at && (
-              <p className="text-sm text-it-1000 text-right">
+              <p className="text-sm text-right">
                 {new Date(instrument.updated_at).toLocaleDateString(locale, {
                   year: 'numeric',
                   month: 'long',
@@ -73,9 +73,9 @@ export default function Preview(
               </p>
             )}
             <div>
-              <h1 className="text-3xl font-bold text-it-1000">{instrument?.title}</h1>
-              <h3 className="text-xl text-it-1000 mb-3">{instrument?.type_name}</h3>
-              <h4 className="text-sm text-it-1000">{minter?.business_name ? `${t('made_by')} ${minter.business_name}` : ''}</h4>
+              <h1 className="text-3xl font-bold">{instrument?.title}</h1>
+              <h3 className="text-xl mb-3">{instrument?.type_name}</h3>
+              <h4 className="text-sm">{minter?.business_name ? `${t('made_by')} ${minter.business_name}` : ''}</h4>
             </div>
 
           </div>
@@ -179,9 +179,9 @@ export default function Preview(
 
             {/* Right Column - Instrument Description */}
             <div>
-              <h2 className="text-xl font-semibold mb-4">{t('description')}</h2>
+              <h2 className="text-xl font-semibold mb-4 text-it-1000 dark:text-gray-200">{t('description')}</h2>
               <div 
-                className="text-base text-it-1000 flex flex-col gap-4"
+                className="text-base text-it-1000 dark:text-gray-200 flex flex-col gap-4"
                 dangerouslySetInnerHTML={{ __html: marked.parse(instrument?.description || '') as string }}
               />
             </div>
