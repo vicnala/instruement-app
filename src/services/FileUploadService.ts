@@ -32,6 +32,14 @@ const getFile = (id: number): Promise<any> => {
   return api.get(`/file/${id}`);
 };
 
+const getFileFromInstrumentApi = (id: number, api_key: string): Promise<any> => {
+  return wp.get(`/file/${id}`, {
+    headers: {
+      'X-API-Key': api_key
+    }
+  });
+};
+
 const deleteFile = (id: number, api_key: string): Promise<any> => {
   return wp.delete(`/file/${id}`, {
     headers: {
@@ -40,6 +48,6 @@ const deleteFile = (id: number, api_key: string): Promise<any> => {
   });
 };
 
-const FileUploadService = { upload, deleteFile, getFile };
+const FileUploadService = { upload, deleteFile, getFile, getFileFromInstrumentApi };
 
 export default FileUploadService;

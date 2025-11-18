@@ -42,7 +42,7 @@ export default async function PayPage({
 
   const coverId = instrument.data.cover_image;
   if (coverId) {
-    const { data } = await FileUploadService.getFile(coverId, minter.data.api_key);
+    const { data } = await FileUploadService.getFileFromInstrumentApi(coverId, minter.data.api_key);
     if (data.code === 'success') {
       instrument.data.cover_image = data.data;
     }
