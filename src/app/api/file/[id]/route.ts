@@ -83,7 +83,7 @@ export async function GET(
     const data = await result.json()
 
     if (data?.code === 'success') {
-      return Response.json({ code: 'success', data })
+      return Response.json({ code: 'success', data: data.data })
     }
     return Response.json(
       { data: { message: data?.message ? data.message : '/api/file GET error' } },

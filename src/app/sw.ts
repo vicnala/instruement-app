@@ -29,7 +29,7 @@ const serwist = new Serwist({
       handler: new StaleWhileRevalidate()
     },
     {
-      matcher: ({ url }) => url.pathname.includes(`/file/`),
+      matcher: ({ url }) => url.pathname.includes(`/api/file/`),
       handler: new StaleWhileRevalidate()
     },
     {

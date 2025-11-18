@@ -36,7 +36,7 @@ export default class InstrumentService {
               if (!api_key) {
                 throw new Error('API key is required to fetch images');
               }
-              const result = await FileUploadService.getFile(imgId, api_key);
+              const result = await FileUploadService.getFile(imgId);
               const { data: resultData } = result;
               const { code, message, data: resultDataData } = resultData;              
               if (code !== 'success') {
@@ -71,7 +71,8 @@ export default class InstrumentService {
               if (!api_key) {
                 throw new Error('API key is required to fetch files');
               }
-              const result = await FileUploadService.getFile(fileId, api_key);
+              // const result = await FileUploadService.getFile(fileId, api_key);
+              const result = await FileUploadService.getFile(fileId);
               if (result.data.code !== 'success') {
                 console.log(`GET file ${fileId} ERROR`, result.data.message);
                 return {
@@ -101,7 +102,8 @@ export default class InstrumentService {
           if (!api_key) {
             throw new Error('API key is required to fetch cover image');
           }
-          const result = await FileUploadService.getFile(coverId, api_key);
+          // const result = await FileUploadService.getFile(coverId, api_key);
+          const result = await FileUploadService.getFile(coverId);
           if (result.data.code !== 'success') {
             console.log(`GET cover file ${coverId} ERROR`, result.data.message);
           } else {

@@ -1,4 +1,4 @@
-import { wp } from "../app/http-common";
+import { wp, api } from "../app/http-common";
 
 
 const upload = (
@@ -28,12 +28,8 @@ const upload = (
   });
 };
 
-const getFile = (id: number, api_key: string): Promise<any> => {
-  return wp.get(`/file/${id}`, {
-    headers: {
-      'X-API-Key': api_key
-    }
-  });
+const getFile = (id: number): Promise<any> => {
+  return api.get(`/file/${id}`);
 };
 
 const deleteFile = (id: number, api_key: string): Promise<any> => {
