@@ -3,6 +3,7 @@
 import { NextRequest } from "next/server";
 import { userAuthData } from "@/actions/login";
 import { getLocale } from "next-intl/server";
+import { headers } from "@/lib/authorizationHeaders";
 
 export async function POST(
   request: Request,
@@ -58,10 +59,7 @@ export async function POST(
   try {
     const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${id}`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`,
-      },
+      headers,
       body: JSON.stringify(postData)
     })
     const data = await result.json()
@@ -139,10 +137,7 @@ export async function GET(
   try {
     const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${id}?locale=${locale}`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`,
-      },
+      headers,
       cache: 'no-store'
     })
     const data = await result.json()
@@ -178,9 +173,7 @@ export async function DELETE(
   try {
     const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${id}`, {
       method: 'DELETE',
-      headers: {
-        'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`,
-      },
+      headers,
       body: JSON.stringify({ force: true })
     })
 

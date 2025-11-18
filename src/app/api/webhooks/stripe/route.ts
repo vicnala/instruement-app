@@ -6,6 +6,7 @@ import { upload } from "thirdweb/storage";
 import { client } from "@/app/client";
 import { ImageDescription } from "@/lib/definitions";
 import { fetchAndStreamFile } from "@/lib/fetchAndStreamFile";
+import { headers } from "@/lib/authorizationHeaders";
 
 const {
   STRIPE_WEBHOOK_SECRET_KEY,
@@ -18,8 +19,6 @@ const {
 
 export async function POST(request: Request) {
   let event: Stripe.Event;
-
-  const headers = { 'Content-Type': 'application/json', 'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}` };
 
   try {
     event = stripe.webhooks.constructEvent(

@@ -1,5 +1,7 @@
 'use server'
 
+import { headers } from "@/lib/authorizationHeaders";
+
 export async function POST(request: Request) {
   const { email, otp, address, accepted_terms } = await request.json()
 
@@ -8,11 +10,7 @@ export async function POST(request: Request) {
   try {
     const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/otp/verify`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`,
-
-      },
+      headers,
       body: JSON.stringify({ email, otp, accepted_terms })
     })
     const data = await result.json();
@@ -24,10 +22,7 @@ export async function POST(request: Request) {
       if (session) {
         const userResult = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/user/${encodeURIComponent(email)}`, {
           method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`
-          }
+          headers,
         });
 
         const data = await userResult.json();
@@ -45,11 +40,7 @@ export async function POST(request: Request) {
 
           const addAdressResult = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/address`, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`,
-
-            },
+            headers,
             body: JSON.stringify(addAdress)
           })
 

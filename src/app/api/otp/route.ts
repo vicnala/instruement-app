@@ -1,5 +1,7 @@
 'use server'
 
+import { headers } from "@/lib/authorizationHeaders";
+
 export async function POST(request: Request) {
   const { email, locale } = await request.json()
 
@@ -8,10 +10,7 @@ export async function POST(request: Request) {
   try {
     const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/otp/send`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Basic ${btoa(`${process.env.INSTRUEMENT_API_USER}:${process.env.INSTRUEMENT_API_PASS}`)}`,
-      },
+      headers,
       body: JSON.stringify({ email, locale: locale || 'en', force: true })
     })
     const data = await result.json()
