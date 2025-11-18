@@ -37,15 +37,17 @@ export default class InstrumentService {
                 throw new Error('API key is required to fetch images');
               }
               const result = await FileUploadService.getFile(imgId, api_key);
-              if (result.data.code !== 'success') {
-                console.log(`GET image ${imgId} ERROR`, result.data.message);
+              const { data: resultData } = result;
+              const { code, message, data: resultDataData } = resultData;              
+              if (code !== 'success') {
+                console.log(`GET image ${imgId} ERROR`, message);
                 return {
                   id: imgId,
-                  file_url: data.data.placeholder_image,
+                  file_url: resultDataData.placeholder_image,
                   description: 'Image not found'
                 };
               }
-              return result.data.data;
+              return resultDataData;
             } catch (error) {
               console.log(`GET image ${imgId} ERROR`, error);
               return {
