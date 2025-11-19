@@ -61,10 +61,10 @@ export async function POST(request: Request) {
     )
   }
 
-  const assetsCount = minter.data.assets_count.length;
-
-  if (assetsCount !== 0) {
-    return NextResponse.json({ data: { message: `Not qualified for the airdrop` } }, { status: 400 });
+  if (minter.data.assets_count !== 0) {
+    return NextResponse.json(
+      { data: { message: `Not qualified for the airdrop: ${minter.data.assets_count} assets found` } },
+      { status: 401 });
   }
   
   try {
