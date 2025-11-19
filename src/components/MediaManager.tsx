@@ -143,7 +143,7 @@ export default function MediaManager({
       try {
         const response = await DraftService.updateFileDescription(file.id, newDescription);
         const { data: dataResponse } = response;
-        const { data } = dataResponse;        
+        const { data } = dataResponse;
         if (data.code === 'success') {
           const updatedFiles = [...uploadedFiles];
           if (updatedFiles[index]) {

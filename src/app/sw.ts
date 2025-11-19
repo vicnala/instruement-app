@@ -28,10 +28,10 @@ const serwist = new Serwist({
       matcher: ({ url }) => url.pathname.includes("/api/token/"),
       handler: new StaleWhileRevalidate()
     },
-    {
-      matcher: ({ url }) => url.pathname.includes(`/api/file/`),
-      handler: new StaleWhileRevalidate()
-    },
+    // {
+    //   matcher: ({ url }) => url.pathname.includes(`/api/file/`),
+    //   handler: new StaleWhileRevalidate()
+    // },
     {
       matcher: ({ url }) => url.pathname.includes(`/ipfs/`),
       handler: new StaleWhileRevalidate()
