@@ -8,14 +8,14 @@ export default async function ResultPage({
   searchParams: { id: string, name: string };
 }): Promise<JSX.Element> {
   const authResult: any = await userAuthData();
-  if (!authResult?.parsedJWT?.sub || !searchParams.id || !searchParams.name) {
+  if (!authResult?.parsedJWT?.sub || !searchParams.id) {
     return <NotFound />;
   }
   
   return <PaymentResult
     status="succeeded"
     id={searchParams.id}
-    name={searchParams.name}
+    name={searchParams.name ? searchParams.name : `#${searchParams.id}`}
     context={authResult.parsedJWT}
   />;
 }
