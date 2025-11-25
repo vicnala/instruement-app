@@ -359,9 +359,9 @@
             }
         },
         "NotConnected": {
-            "heading": "Asegura tu instrumento musical con una identidad digital",
+            "heading": "La herramienta digital para gestionar tus instrumentos musicales",
             "sub_heading": "Mantén control absoluto de tus certificados y de tu propiedad",
-            "button_description": "No requiere registro - conéctate de forma anónima",
+            "button_description": "No requiere registro. Conéctate de forma anónima",
             "auth_disclaimer": "Autenticación basada en",
             "visit_instruement": "Visita www.instruement.com"
         },
