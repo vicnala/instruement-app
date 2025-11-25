@@ -349,9 +349,9 @@
             }
         },
         "NotConnected": {
-            "heading": "Secure your musical instrument with a digital identity",
+            "heading": "The digital tool for managing your musical instruments",
             "sub_heading": "Keep absolute control of your certificates and ownership",
-            "button_description": "No registration required - connect anonymously",
+            "button_description": "No registration required. Connect anonymously",
             "auth_disclaimer": "Authentication powered by",
             "visit_instruement": "Visit instruement.com"
         },
