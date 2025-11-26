@@ -202,7 +202,7 @@ export default function Preview(
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 {t('back_to_draft')}
               </button>
-              <button
+              {/* <button
                 type="button"
                 className="inline-flex items-center px-4 py-2 text-sm text-it-1000 font-medium transition-colors duration-200 transform border-[0.1rem] border-it-300 rounded-md 
                 hover:bg-it-500 hover:border-it-500
@@ -212,7 +212,7 @@ export default function Preview(
               >
                 {t('register_now')}
                 <ArrowRight className="w-4 h-4 ml-2" />                
-              </button>
+              </button> */}
             </div>
           }
         </Section>
