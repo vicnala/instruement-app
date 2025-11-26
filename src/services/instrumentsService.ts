@@ -53,10 +53,10 @@ export const getInstrumentFile = async (id: string) => {
       headers,
     })
 
-    const data = await result.json();      
+    const data = await result.json();
 
     if (data?.code === 'success') {
-      return Response.json({ code: 'success', data })
+      return data;
     }
     return Response.json(
       { data: { message: data?.message ? data.message : '/api/file GET error' } },
