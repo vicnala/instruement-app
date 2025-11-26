@@ -15,7 +15,7 @@ export default function User(
   return (
     <Page context={context}>
       {
-        !owned.length ?
+        !owned?.length ?
         <Section>
           <div>
             {context.sub && <ReceiveInstrumentCard address={context.sub} locale={locale} context={context} />}

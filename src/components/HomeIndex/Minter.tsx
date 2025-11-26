@@ -37,7 +37,7 @@ export default function Minter(
     <Page context={context}>
       <DraftGrid locale={locale} context={context} />
       {
-        !owned?.length && !mintedIds.length ?
+        !owned?.length && !mintedIds?.length ?
         <Section>
           {
             !owned?.length &&
