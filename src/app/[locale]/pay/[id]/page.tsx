@@ -7,6 +7,7 @@ import { redirect } from "@/i18n/routing";
 import { getSavedInstrument } from "@/services/instrumentsService";
 import FileUploadService from "@/services/FileUploadService";
 import AirdropForm from "@/components/Stripe/AirdropForm";
+import PaymentInProgress from "@/components/Pay/PaymentInProgress";
 
 export default async function PayPage({
   searchParams,
@@ -46,6 +47,10 @@ export default async function PayPage({
     if (data.code === 'success') {
       instrument.data.cover_image = data.data;
     }
+  }
+
+  if (instrument.data.queue_id) {
+    return <PaymentInProgress context={context} />
   }
 
   if (assetsCount === 0) {

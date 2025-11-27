@@ -28,6 +28,13 @@ const nextConfig = {
           protocol: 'https',
           hostname: '*.instruement.com',
           port: '',
+          pathname: '/wp-content/**',
+          search: '',
+        },
+        {
+          protocol: 'https',
+          hostname: '*.instruement.com',
+          port: '',
           pathname: '/web/**',
           search: '',
         },

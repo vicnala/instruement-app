@@ -43,10 +43,9 @@ function AirdropCheckoutForm({
   const AirdropStatus = ({ status }: { status: string }) => {
     switch (status) {
       case "processing":
-      case "requires_payment_method":
-      case "requires_confirmation":
-      case "requires_action":
+        return <h2>{t('processing_title')}...</h2>;
       case "succeeded":
+        return <h2>{t('airdrop_succeeded')}</h2>;
       case "error":
         return (
           <>
@@ -69,6 +68,8 @@ function AirdropCheckoutForm({
         setErrorMessage('Missing required fields');
         return;
       }
+
+      setPayment({ status: "processing" });
 
       const result = await fetch(`/api/token/airdrop`, {
         headers: {

@@ -273,7 +273,9 @@
             "title": "Registra tu primer instrumento",
             "subtitle": "Tu primer registro es gratuito.",
             "register_now": "Registrar ahora",
-            "airdrop_error": "Error en el registro"
+            "airdrop_error": "Error en el registro",
+            "processing_title": "Registro en progreso",
+            "airdrop_succeeded": "Registro realizado con éxito"
         },
         "ConsentSection": {
             "terms_consent": "Acepto los términos y condiciones",
@@ -289,7 +291,9 @@
             "success_message_ready": "Listo. El instrumento registrado ya está disponible en tu cuenta",
             "go_to_instrument": "Ver el instrumento",
             "title_failed": "Pago fallido",
-            "failed_message": "Algo ha ido mal con el pago. Hemos sido notificados y te contactaremos pronto."
+            "failed_message": "Algo ha ido mal con el pago. Hemos sido notificados y te contactaremos pronto.",
+            "processing_title": "Registro en progreso",
+            "processing_message": "Por favor, espera mientras procesamos tu registro."
         },
         "UI": {
             "ProgressBar": {

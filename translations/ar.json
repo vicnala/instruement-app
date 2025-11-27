@@ -263,7 +263,9 @@
             "title": "Register Your First Instrument",
             "subtitle": "Your first registration is free.",
             "register_now": "Register now",
-            "airdrop_error": "Registration error"
+            "airdrop_error": "Registration error",
+            "processing_title": "Registration in progress",
+            "airdrop_succeeded": "Registration succeeded"
         },
         "ConsentSection": {
             "terms_consent": "I have read and agree to the Terms of Use governing my use of this service.",
@@ -279,7 +281,9 @@
             "success_message_ready": "Ready. The registered instrument is now available in your account",
             "go_to_instrument": "View the instrument",
             "title_failed": "Payment failed",
-            "failed_message": "Something went wrong with the payment. We have been notified and will contact you shortly."
+            "failed_message": "Something went wrong with the payment. We have been notified and will contact you shortly.",
+            "processing_title": "Registration in progress",
+            "processing_message": "Please wait while we process your registration."
         },
         "UI": {
             "ProgressBar": {
