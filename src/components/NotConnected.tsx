@@ -6,11 +6,15 @@ import Link from "next/link";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
 import { CustomConnectButton } from "./CustomConnectButton";
+import { useActiveAccount } from "thirdweb/react";
+import ButtonSpinner from "./UI/ButtonSpinner";
 
 export default function NotConnected(
     { locale, cb, invite }: Readonly<{ locale: string, cb?: string | undefined, invite?: string | undefined }>
 ) {
     const t = useTranslations('components.NotConnected');
+    const account = useActiveAccount();
+
     return (
         <Page>
             <div className='flex flex-col'>
@@ -23,8 +27,15 @@ export default function NotConnected(
                             {/* <p className="text-md md:text-lg text-gray-900 dark:text-gray-200 pb-12 md:pb-16 max-w-[400px] text-balance mx-auto">
                                 {t('sub_heading')}
                             </p> */}
-                            <div className="">
-                                <CustomConnectButton cb={cb} invite={invite} />
+                            <div className="relative">
+                                <div className={account?.address ? 'invisible' : ''}>
+                                    <CustomConnectButton cb={cb} invite={invite} />
+                                </div>
+                                {account?.address && (
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <ButtonSpinner />
+                                    </div>
+                                )}
                             </div>
                             <div className='mt-4'>
                                 <p className='text-sm md:text-md text-gray-900 dark:text-gray-400'>
