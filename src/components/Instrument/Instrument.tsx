@@ -238,7 +238,7 @@ export default function Instrument({
 
 	// Block explorer URL
 	const blockExplorerBaseUrl = process.env.NEXT_PUBLIC_CHAIN_ID === '421614' ? `https://sepolia.arbiscan.io/nft/${contract?.address}` :
-		process.env.NEXT_PUBLIC_CHAIN_ID === '1' ? `https://etherscan.io/token/${contract?.address}` :
+		process.env.NEXT_PUBLIC_CHAIN_ID === '1' ? `https://etherscan.io/nft/${contract?.address}` :
 		``;
 	
 	const blockExplorerUrl = `${blockExplorerBaseUrl}/${id}`;
