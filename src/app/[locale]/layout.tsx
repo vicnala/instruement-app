@@ -39,7 +39,6 @@ export default async function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         
         <IOSSplashScreens />
-        <PostHogProvider />
         
         <script
           {...jsonLdScriptProps<WebSite>({
@@ -59,9 +58,10 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <NextIntlClientProvider messages={messages}>
-              <ThirdwebProvider>
-                {children}
-              </ThirdwebProvider>
+            <PostHogProvider />
+            <ThirdwebProvider>
+              {children}
+            </ThirdwebProvider>
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>

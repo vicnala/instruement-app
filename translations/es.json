@@ -82,11 +82,13 @@
             "and": "y"
         },
         "CustomConnectButton": {
-            "switch_network": "Cambiar de red"
+            "switch_network": "Cambiar de red",
+            "label": "Conectar"
         },
         "Header": {
             "new_instrument": "Registrar instrumento",
-            "account": "Cuenta"
+            "account": "Cuenta",
+            "home": "Inicio"
         },
         "DraftGrid": {
             "title_single": "Registro en borrador",
@@ -94,9 +96,9 @@
             "description": "Instrumentos pendientes de completar su registro. Puedes guardar los cambios y terminar más tarde."
         },
         "NFTGrid": {
-            "title_single": "Tu Instrumento Registrado",
+            "title_single": "Tu instrumento registrado",
             "description_single": "Ve el instrumento e inicia la transferencia de propiedad al nuevo propietario.",
-            "title_plural": "Instrumentos Registrados",
+            "title_plural": "Instrumentos registrados",
             "description_plural": "Ve todos los instrumentos e inicia la transferencia de propiedad al nuevo propietario.",
             "owned": "en propiedad"
         },
@@ -188,12 +190,12 @@
             "documents": "Documentos",
             "description": "Descripción",
             "back_to_draft": "Volver al borrador",
-            "made_by": "Instrumento hecho por"
+            "registered_by": "Instrumento registrado por"
         },
         "Instrument": {
             "instrument": "Instrumento",
             "current_owner": "Propietario actual",
-            "you_are_not_owner": "No eres el propietario",
+            "you_are_not_owner": "No eres el propietario de este instrumento",
             "you_are_owner": "Eres el propietario de este instrumento",
             "additional_images": "Imágenes adicionales",
             "documents": "Documentos",
@@ -271,7 +273,7 @@
         },
         "AirdropForm": {
             "title": "Registra tu primer instrumento",
-            "subtitle": "Tu primer registro es gratuito.",
+            "subtitle": "Sin coste porque la primera vez siempre es la más difícil",
             "register_now": "Registrar ahora",
             "airdrop_error": "Error en el registro",
             "processing_title": "Registro en progreso",
@@ -349,8 +351,8 @@
         },
         "HomeIndex": {
             "User": {
-                "no_instruments": "Recibe tu instrumento registrado",
-                "no_instruments_sub": "Presenta el código QR a tu luthier."
+                "no_instruments": "Recibe tu instrumento",
+                "no_instruments_sub": "Muestra el código QR al luthier o al propietario actual para recibir el registro del instrumento."
             },
             "Minter": {
                 "hello": "Te damos la bienvenida",
@@ -363,9 +365,9 @@
             }
         },
         "NotConnected": {
-            "heading": "La herramienta digital para gestionar tus instrumentos musicales",
+            "heading": "Cuenta la historia real sobre tu instrumento musical",
             "sub_heading": "Mantén control absoluto de tus certificados y de tu propiedad",
-            "button_description": "No requiere registro. Conéctate de forma anónima",
+            "button_description": "No requiere registro",
             "auth_disclaimer": "Autenticación basada en",
             "visit_instruement": "Visita www.instruement.com"
         },
@@ -376,11 +378,12 @@
         },
         "Account": {
             "User": {
-                "title": "Tu cuenta",
+                "account": "Tu cuenta",
+                "type": "Tipo",
+                "anonymous": "Anónima",
                 "received_instrument": "\"{name}\" ha sido recibido.",
-                "anonymous": "Cuenta de tipo anónimo",
-                "connect_button_title": "Acciones avanzadas",
-                "connect_button_description": "Accede a todas las funciones de la cuenta aquí. Si aún no has exportado y guardado tu clave privada, deberías hacerlo ahora!"
+                "connect_button_title": "Acciones avanzadas y cerrar sesión",
+                "connect_button_description": "Presiona el botón de cuenta y accede a todas las funciones avanzadas de tu cuenta. Si aún no has exportado y guardado tu clave privada, deberías hacerlo ahora!"
             },
             "Minter": {
                 "verfied_since": "Verificado desde",

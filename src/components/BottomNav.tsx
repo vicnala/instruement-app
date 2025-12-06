@@ -3,8 +3,8 @@
 import { useLocale, useTranslations } from 'next-intl'
 import { usePathname } from '@/i18n/routing'
 import { TransitionLink } from '@/components/UI/TransitionLink'
-import { ButtonLink } from '@/components/UI/ButtonLink'
 import { House, User } from 'lucide-react'
+import RegisterPlus from '@/components/Icons/RegisterPlus'
 
 
 export const BottomNav = ({ context }: { context: any }) => {
@@ -15,26 +15,33 @@ export const BottomNav = ({ context }: { context: any }) => {
 	const address = context?.sub;
 
 	return pathname !== '/login' && address &&
-		<nav className='sm:hidden fixed z-50 bottom-0 w-full bg-canvas pb-safe dark:bg-contrast dark:border-t dark:border-gray-900 shadow-[0_0px_4px_0px_rgba(0,0,0,0.2)]'>
-			<div className={`mx-auto grid h-[4rem] max-w-md pt-2 ${isMinter ? 'grid-cols-[1fr_auto_1fr] gap-[3vw]' : !address ? '' : 'grid-cols-[1fr_1fr] gap-[3vw]'}`}>
+	<div className='fixed z-50 bottom-4 left-4 right-4 flex justify-center' data-theme="us">
+		<nav className='sm:hidden min-w-[10rem] px-4 bg-scope-100 border border-scope-200 transition-all duration-200 rounded-full shadow-[0_2px_10px_0px_rgba(0,0,0,0.1)] dark:shadow-[0_2px_10px_0px_rgba(0,0,0,0.8)]'>
+			<div className={`mx-auto py-2 grid items-center ${isMinter ? 'grid-cols-[1fr_auto_1fr] gap-6' : !address ? '' : 'grid-cols-[1fr_1fr] gap-3'}`}>
 				<TransitionLink key="home" href="/" locale={locale}>
 					<div className={
-						`flex flex-col items-center pt-1 ${pathname === '/'
-						? 'text-it-500 dark:text-it-400'
-						: 'text-gray-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50'
+						`flex flex-col items-center ${pathname === '/'
+						? 'text-scope-1000'
+						: 'text-scope-400'
 						}`}
 					>
-						<House className={`w-4 h-4 ${pathname === '/' ? 'text-it-400 dark:text-it-500' : 'text-gray-300 dark:text-gray-400'}`} />
-						<span className={`text-sm ${pathname === '/' ? 'text-it-400 dark:text-it-500' : 'text-gray-300 dark:text-gray-400'}`}>
-							{bottomNavt('home')}
-						</span>
+						<House className='w-5 h-5' />
+						<span className='text-xs'>{bottomNavt('home')}</span>
 					</div>
 				</TransitionLink>
 				{
-					isMinter && (pathname === '/' || pathname === '/account' || pathname.includes('/instrument')) ? (
-						<ButtonLink href="/drafts/new" size="md" colorSchema="it">
-							{bottomNavt('new_instrument')}
-						</ButtonLink>
+					isMinter && 
+					(pathname === '/' || pathname === '/account' || pathname.includes('/instrument')) ? (
+						<TransitionLink 
+						href="/drafts/new" 
+						locale={locale}
+						theme="it"
+						className="flex flex-col items-center text-it-600"
+						aria-label={bottomNavt('new_instrument')}
+					  >
+						<RegisterPlus className="w-5 h-5" />
+						<span className="text-xs">{bottomNavt('new_instrument')}</span>
+					  </TransitionLink>
 					) : isMinter && (pathname.includes('/drafts') || pathname.includes('/pay') || pathname.includes('/preview')) && (
 						<div></div>
 					)
@@ -43,19 +50,18 @@ export const BottomNav = ({ context }: { context: any }) => {
 					address && (
 						<TransitionLink key="account" href="/account" locale={locale}>
 							<div className={
-								`flex flex-col items-center pt-1 ${pathname.includes('/account')
-								? 'text-it-500 dark:text-it-400'
-								: 'text-gray-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50'
+								`flex flex-col items-center ${pathname.includes('/account')
+								? 'text-scope-1000'
+								: 'text-scope-400'
 								}`}
 							>
-								<User className={`w-4 h-4 ${pathname.includes('/account') ? 'text-it-400 dark:text-it-500' : 'text-gray-300 dark:text-gray-400'}`} />
-								<span className={`text-sm ${pathname.includes('/account') ? 'text-it-400 dark:text-it-500' : 'text-gray-300 dark:text-gray-400'}`}>
-									{bottomNavt('account')}
-								</span>
+								<User className="w-5 h-5" />
+								<span className="text-xs">{bottomNavt('account')}</span>
 							</div>
 						</TransitionLink>
 					)
 				}
 			</div>
 		</nav>
+	</div>
 }

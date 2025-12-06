@@ -140,13 +140,13 @@ export default function OnboardMinterCard({ locale, invite, onReloadUser }: Onbo
   }
 
   return (
-    <div className="p-6 rounded-[15px] bg-it-50 dark:bg-gray-900 border border-it-100 dark:border-gray-900">
+    <div data-theme="me" className="p-6 rounded-section bg-scope-25 border border-scope-50">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <h3 className="mb-2 text-4xl text-contrast dark:text-it-200 font-bold">
+          <h3 className="mb-2 text-3xl font-bold text-scope-1000">
             {t('title')}
           </h3>
-          <p className="mb-4 text-base text-gray-900 dark:text-gray-200 ">
+          <p className="mb-4 text-base text-us-700 ">
             {t('description')}
           </p>
         </div>
@@ -156,7 +156,7 @@ export default function OnboardMinterCard({ locale, invite, onReloadUser }: Onbo
               <div className="px-1 mt-2 sm:mt-0 flex justify-center">
                 <button
                   onClick={toggleFormVisibility}
-                  className="inline-flex items-center text-gray-800 hover:text-gray-800 dark:text-gray-200 dark:hover:text-gray-800 bg-transparent hover:bg-it-400 border-[0.1rem] border-it-400 font-bold py-2 px-4 rounded-md text-base"
+                  className="inline-flex items-center text-base text-scope-1000 hover:text-scope-1000 bg-transparent hover:bg-scope-500 border-[0.1rem] border-scope-400 hover:border-scope-500 font-bold py-2 px-4"
                 >
                   {t('confirm_invitation_do')}
                 </button>
@@ -164,7 +164,7 @@ export default function OnboardMinterCard({ locale, invite, onReloadUser }: Onbo
             </div>
           ) : !otpOk ? (
             <div className="flex flex-col w-full">
-              <label htmlFor="business-email" className="block text-md font-bold text-gray-800 dark:text-gray-100 mb-1">
+              <label htmlFor="business-email" className="block text-md font-bold text-scope-800 mb-1">
                 {t('confirm_invitation_email_label')}
               </label>
               <div className="relative">
@@ -174,7 +174,7 @@ export default function OnboardMinterCard({ locale, invite, onReloadUser }: Onbo
                   id="business-email"
                   value={email}
                   placeholder={t('confirm_invitation_email_placeholder')}
-                  className="border-[0.1rem] text-lg border-gray-200 dark:border-gray-700 p-2 rounded-md w-full pr-10"
+                  className="border-[0.1rem] text-lg border-scope-100 focus:border-scope-500 focus:outline-none p-2 rounded-button w-full pr-10"
                   onChange={handleEmailChange}
                 />
                 <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -183,7 +183,7 @@ export default function OnboardMinterCard({ locale, invite, onReloadUser }: Onbo
                   />
                 </div>
               </div>
-              <p className="text-md text-gray-700 dark:text-gray-300 pt-2 mb-2 text-pretty">
+              <p className="text-md text-us-600 pt-2 mb-2 text-pretty">
                 {t('confirm_invitation_email_description')}
               </p>
               <div className="">
@@ -195,7 +195,7 @@ export default function OnboardMinterCard({ locale, invite, onReloadUser }: Onbo
                     ref={emailButtonRef}
                     disabled={!isValidEmail}
                     onClick={() => sendUserConfirmationOTP()}
-                    theme="it"
+                    theme="me"
                     isLoading={isSendingOTP}
                   >
                     {t('confirm_invitation_confirm_email')}
@@ -205,7 +205,7 @@ export default function OnboardMinterCard({ locale, invite, onReloadUser }: Onbo
             </div>
           ) : (
             <div className="flex flex-col w-full">
-              <label htmlFor="business-email" className="block text-md font-bold text-gray-700 dark:text-gray-300 mb-1">
+              <label htmlFor="business-email" className="block text-md font-bold text-us-700 mb-1">
                 {t('confirm_invitation_otp_label')}
               </label>
               <div className="relative">
@@ -226,7 +226,7 @@ export default function OnboardMinterCard({ locale, invite, onReloadUser }: Onbo
                     className="mr-2 h-4 w-4 text-me-600 focus:ring-me-500 border-gray-300 rounded"
                     onChange={(e) => setPrivacyPolicyAccepted(e.target.checked)}
                   />
-                  <label htmlFor="privacy-policy" className="text-sm text-gray-700 dark:text-gray-300">
+                  <label htmlFor="privacy-policy" className="text-xs text-scope-700 dark:text-gray-300">
                     {t('privacy_policy')}{' '}
                     <a 
                       href="https://instruement.com/privacy-policy/" 

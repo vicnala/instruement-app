@@ -8,6 +8,7 @@ import Section from "../Section";
 import ConsentSection from "./ConsentSection";
 import InstrumentView from "./InstrumentView";
 import { useRouter } from "@/i18n/routing";
+import ButtonSpinner from "../UI/ButtonSpinner";
 
 function AirdropCheckoutForm({
   address,
@@ -43,7 +44,12 @@ function AirdropCheckoutForm({
   const AirdropStatus = ({ status }: { status: string }) => {
     switch (status) {
       case "processing":
-        return <h2>{t('processing_title')}...</h2>;
+        return (
+          <>
+            <ButtonSpinner />
+            <h2>{t('processing_title')}...</h2>
+          </>
+        );
       case "succeeded":
         return <h2>{t('airdrop_succeeded')}</h2>;
       case "error":
@@ -96,21 +102,32 @@ function AirdropCheckoutForm({
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <Section>
-          <div className="mb-6">
+        <Section className="max-w-xl mx-auto mb-6">
+          <div className="mb-12 text-center">
             <h2 className="text-2xl sm:text-3xl font-semibold">{ t('title') }</h2>
-            <p className="text-md sm:text-lg text-gray-600">{ t('subtitle') }</p>
+            <p className="text-md sm:text-lg text-scope-700">{ t('subtitle') }</p>
           </div>
-          <div className=" mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="mx-auto grid grid-cols-1 gap-6">
             <InstrumentView instrument={instrument} />
           </div>
         </Section>
-        <ConsentSection consent={consent} handleConsentChange={handleConsentChange} />
-        <Section>
+        <Section className="max-w-lg mx-auto">
+          <ConsentSection consent={consent} handleConsentChange={handleConsentChange} />
+        </Section>
+        <Section className="max-w-lg mx-auto">
           <div className="mx-auto">            
-            <div className="text-right">
+            <div className="text-right" data-theme="it">
                 <button
-                  className="inline-flex items-center text-lg px-6 py-3 tracing-wide transition-colors duration-200 transform bg-it-500 rounded-md hover:bg-it-700 focus:outline-none focus:bg-it-700 disabled:opacity-25"
+                  className="
+                  inline-flex items-center px-6 py-3 tracing-wide focus:outline-none
+                  transition-all duration-200 transform hover:-translate-y-0.5 disabled:hover:-translate-y-0
+                  hover:shadow-[0_8px_30px_color-mix(in_srgb,var(--scope-500)_45%,transparent)]
+                  disabled:shadow-none
+                  text-scope-1000 font-bold disabled:text-us-200
+                  bg-scope-500  hover:bg-scope-600 focus:bg-scope-600 disabled:bg-transparent
+                  border-[0.1rem] border-scope-500 hover:border-scope-600 focus:border-scope-800 disabled:border-us-100
+                  disabled:cursor-not-allowed
+                  "
                   type="submit"
                   disabled={!consent.terms || !consent.privacy || payment.status !== "initial"}
                 >

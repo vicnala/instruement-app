@@ -5,7 +5,7 @@ import dynamic from "next/dynamic"
 import { useTranslations } from "next-intl";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
-import { Trash, ChevronDown, Lock } from 'lucide-react';
+import { Trash, ChevronDown, Lock, ArrowRight } from 'lucide-react';
 
 import { Instrument, InstrumentFile, InstrumentImage } from "@/lib/definitions";
 import { useRouter } from "@/i18n/routing";
@@ -13,10 +13,12 @@ import ProgressBar from "../UI/ProgressBar"
 import ButtonSpinner from "../UI/ButtonSpinner"
 import FormSaveButton from "../UI/FormSaveButton"
 import Divider from "../UI/Divider"
+import { TransitionLink } from "../UI/TransitionLink"
 import MediaManager from "@/components/MediaManager";
 import DraftService from "@/services/DraftService";
 import InstrumentService from "@/services/InstrumentService";
 import { getUser } from "@/services/UsersService";
+import Skeleton from "../Skeleton";
 
 const Editor = dynamic(() => import("@/components/Editor"), { ssr: false })
 
@@ -240,12 +242,38 @@ export default function DraftForm(
 
   };
 
+  // Reusable preview button component
+  const previewButton = instrument && (currentStep === 4) ? (
+    <div className="text-right mt-6 mr-6">
+      <TransitionLink
+        href={`/preview/${instrument.id}`}
+        locale={locale}
+        className="
+          inline-flex items-center px-4 py-2 tracking-wide transition-colors duration-200 transform 
+          focus:outline-none
+          font-bold 
+          bg-transparent hover:bg-scope-500 active:bg-scope-200
+          border-[0.1rem] border-scope-400 hover:border-scope-500 focus:border-scope-700 active:border-scope-200
+          text-scope-500 hover:text-scope-1000 focus:text-scope-700 active:text-scope-500
+          active:scale-[0.98]
+          rounded-button
+        "
+        theme="it"
+        aria-label={t('preview')}
+        disabled={!canPreview || isLoadingMetadata}
+      >
+        {t('preview')}
+        {canPreview && !isLoadingMetadata && <ArrowRight className="w-4 h-4 ml-2" />}
+      </TransitionLink>
+    </div>
+  ) : null;
+
   return (
       <Page context={context}>
         {
           minter && <>
-        <Section id="progress-bar">
-          <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-it-100 dark:bg-gray-900 rounded-[15px] overflow-hidden">
+        <Section id="progress-bar"  data-theme="us">
+          <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-scope-25 border border-scope-50 rounded-section overflow-hidden">
             <div className="w-full mx-auto mb-4 sm:mb-8">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="text-it-1000 dark:text-gray-100">
@@ -280,29 +308,17 @@ export default function DraftForm(
             />
           </div>
           <div>
-            {
-              instrument && (currentStep === 4) &&
-              <div className="text-center mt-6">
-                <FormSaveButton
-                  disabled={!canPreview}
-                  onClick={() => router.push(`/preview/${instrument.id}`)}
-                  isLoading={isLoadingMetadata}
-                  theme="me"
-                >
-                  {t('preview')}
-                </FormSaveButton>
-              </div>
-            }
+            {previewButton}
           </div>
         </Section>
 
         <form className="">
-          <Section id="basic-info" className="pb-[0.1rem]">
-            <div className="px-3 sm:px-6 pt-5 pb-6 sm:py-8 || bg-gray-25 rounded-lg dark:bg-gray-950">
-              <h2 className="text-xl font-semibold text-gray-1000 dark:text-gray-100 pb-3">
+          <Section id="basic-info" className="pb-1" data-theme="it">
+            <div className="px-3 sm:px-6 pt-5 pb-6 sm:py-8 || bg-scope-50 border border-scope-100 rounded-section overflow-hidden">
+              <h2 className="text-xl font-semibold text-scope-1000 pb-3">
                 {t('basic_info.title')}
               </h2>
-              <h3 className="text-lg text-me-600 dark:text-me-400 pb-6">
+              <h3 data-theme="me" className="text-lg text-scope-600 pb-6">
                     {minter && typeof minter !== 'boolean' && (
                       <span className="flex items-center">
                         <Lock className="w-4 h-4 mr-2 -mt-0.5" />
@@ -310,101 +326,129 @@ export default function DraftForm(
                       </span>
                     )}
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-0 md:gap-6 sm:gap-6">
-                <div>
-                  <label htmlFor="instrument_type" className="block text-base font-semibold text-gray-1000 dark:text-gray-100 pb-1">
-                    {t('basic_info.type.label')}
-                  </label>
-                  <div className="relative">
-                    <div
-                      onClick={() => instrument?.type ? null : setOpen(!open)}
-                      className={`bg-white text-base p-2 flex border border-gray-200 items-center justify-between rounded-md 
-                        ${!type && "text-gray-700"} 
-                        ${!instrument?.type && "cursor-pointer"}
-                        ${instrument?.type ? "opacity-50 cursor-not-allowed bg-gray-50" : ""}`}
-                    >
-                      {type ? type : t('basic_info.type.placeholder')}
-                      <ChevronDown className="h-5 w-5 text-gray-400" />
+              
+              {instrumentId && !instrument && isLoading ? (
+                // Loading skeleton when instrumentId exists but data hasn't loaded yet
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-0 md:gap-6 sm:gap-6">
+                  <div>
+                    <Skeleton height="20px" width="120px" />
+                    <div className="mt-2">
+                      <Skeleton height="40px" />
                     </div>
-                    <ul className={`absolute z-10 top-0 w-full bg-white rounded-md border border-it-300 overflow-y-auto ${open ? "max-h-60 shadow-sm" : "max-h-0 invisible"} `}>
-                      <div className="flex items-center px-2 sticky top-0 bg-white">
-                        <input
-                          id="instrument_type"
-                          name="instrument_type"
-                          type="text"
-                          value={inputValue}
-                          onChange={(e) => setInputValue(e.target.value.toLowerCase())}
-                          placeholder={t('basic_info.type.input_placeholder')}
-                          className="placeholder:text-gray-300 py-2 outline-none"
-                          disabled={instrument?.type ? true : false}
-                        />
-                      </div>
-                      {instrumentTypes?.length && instrumentTypes.map((ins: any) => (
-                        <li
-                          key={ins?.label}
-                          className={`p-2 text-base hover:bg-it-50 hover:text-it-950 cursor-pointer
-                              ${ins?.value?.toLowerCase() === type?.toLowerCase() && "bg-it-300 text-it-950 hover:bg-it-400"}
-                              ${ins?.value?.toLowerCase().startsWith(inputValue) ? "block" : "hidden"}`}
-                          onClick={() => {
-                            setOpen(false);
-                            if (ins?.value?.toLowerCase() !== type.toLowerCase()) {
-                              setType(ins?.value)
-                            }
-                          }}
-                        >
-                          {ins?.label}
-                        </li>
-                      ))}
-                    </ul>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 pt-2">
-                      {type ? t('basic_info.type.type_set_description') : t('basic_info.type.description')}
-                    </p>
+                    <div className="mt-2">
+                      <Skeleton height="16px" width="200px" />
+                    </div>
+                  </div>
+                  <div className="col-span-2">
+                    <Skeleton height="20px" width="100px" />
+                    <div className="mt-2">
+                      <Skeleton height="40px" />
+                    </div>
+                    <div className="mt-2">
+                      <Skeleton height="16px" width="250px" />
+                    </div>
                   </div>
                 </div>
+              ) : (
+                // Form fields when not loading or when instrument is loaded
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-0 md:gap-6 sm:gap-6">
+                    <div>
+                      <label htmlFor="instrument_type" className="block text-base font-semibold text-scope-1000 pb-1">
+                        {t('basic_info.type.label')}
+                      </label>
+                      <div className="relative" data-theme="it">
+                        <div
+                          onClick={() => instrument?.type ? null : setOpen(!open)}
+                          className={`bg-scope-25 text-base p-2 flex border-[0.1rem] border-scope-200 items-center justify-between rounded-button 
+                            ${!type && "text-gray-700"} 
+                            ${!instrument?.type && "cursor-pointer"}
+                            ${instrument?.type ? "opacity-50 cursor-not-allowed bg-scope-50" : ""}`}
+                        >
+                          {type ? type : t('basic_info.type.placeholder')}
+                          <ChevronDown className="h-5 w-5 text-scope-400" />
+                        </div>
+                        <ul className={`absolute z-10 top-0 w-full bg-scope-25 rounded-md border-[0.1rem] border-scope-300 overflow-y-auto ${open ? "max-h-60 shadow-sm" : "max-h-0 invisible"} `}>
+                          <div className="flex items-center px-2 sticky top-0 bg-scope-25">
+                            <input
+                              id="instrument_type"
+                              name="instrument_type"
+                              type="text"
+                              value={inputValue}
+                              onChange={(e) => setInputValue(e.target.value.toLowerCase())}
+                              placeholder={t('basic_info.type.input_placeholder')}
+                              className="placeholder:text-scope-300 py-2 outline-none text-scope-500 bg-scope-25"
+                              disabled={instrument?.type ? true : false}
+                            />
+                          </div>
+                          {instrumentTypes?.length && instrumentTypes.map((ins: any) => (
+                            <li
+                              key={ins?.label}
+                              className={`p-2 text-base hover:bg-scope-50 hover:text-scope-950 cursor-pointer
+                                  ${ins?.value?.toLowerCase() === type?.toLowerCase() && "bg-scope-300 text-scope-950 hover:bg-scope-400"}
+                                  ${ins?.value?.toLowerCase().startsWith(inputValue) ? "block" : "hidden"}`}
+                              onClick={() => {
+                                setOpen(false);
+                                if (ins?.value?.toLowerCase() !== type.toLowerCase()) {
+                                  setType(ins?.value)
+                                }
+                              }}
+                            >
+                              {ins?.label}
+                            </li>
+                          ))}
+                        </ul>
+                        <p className="text-sm text-us-600 pt-2">
+                          {type ? t('basic_info.type.type_set_description') : t('basic_info.type.description')}
+                        </p>
+                      </div>
+                    </div>
 
-                <div className="col-span-2">
-                  <label htmlFor="instrument_name" className="block text-base font-semibold text-gray-1000 dark:text-gray-100 pb-1">
-                    {t('basic_info.name.label')}
-                  </label>
-                  <input
-                    id="instrument_name"
-                    name="instrument_name"
-                    className={`text-base block w-full px-2 py-2 text-it-950 border rounded-md focus:border-it-400 focus:ring-it-300 focus:outline-none focus:ring focus:ring-opacity-40 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-800 dark:bg-opacity-90`}
-                    onChange={(e) => { setName(e.target.value) }}
-                    value={name}
-                    disabled={false}
-                  />
-                  <p className="text-sm text-gray-600 dark:text-gray-400 pt-2">
-                    {t('basic_info.name.description')}
-                  </p>
-                </div>
-              </div>
-              {(!instrumentId || (instrument?.title ? instrument?.title !== name : true)) &&
-                <div className="mt-4 text-right">
-                  <FormSaveButton
-                    disabled={isLoadingMetadata || !type || !name}
-                    onClick={(e) => createOrUpdateInstrument(e)}
-                    isLoading={isLoadingMetadata}
-                  >
-                    {instrument?.title ? t('basic_info.button_save') : t('basic_info.button_save_and_continue')}
-                  </FormSaveButton>
-                </div>
-              }
+                    <div className="col-span-2" data-theme="it">
+                      <label htmlFor="instrument_name" className="block text-base font-semibold text-scope-1000 pb-1">
+                        {t('basic_info.name.label')}
+                      </label>
+                      <input
+                        id="instrument_name"
+                        name="instrument_name"
+                        className={`text-base block w-full px-2 py-2 text-scope-950 bg-scope-25 border-[0.1rem] border-scope-200 rounded-button focus:border-scope-400 focus:outline-none`}
+                        onChange={(e) => { setName(e.target.value) }}
+                        value={name}
+                        disabled={false}
+                      />
+                      <p className="text-sm text-us-600 pt-2">
+                        {t('basic_info.name.description')}
+                      </p>
+                    </div>
+                  </div>
+                  {(!instrumentId || (instrument?.title ? instrument?.title !== name : true)) &&
+                    <div className="mt-4 text-right">
+                      <FormSaveButton
+                        disabled={isLoadingMetadata || !type || !name}
+                        onClick={(e) => createOrUpdateInstrument(e)}
+                        isLoading={isLoadingMetadata}
+                      >
+                        {instrument?.title ? t('basic_info.button_save') : t('basic_info.button_save_and_continue')}
+                      </FormSaveButton>
+                    </div>
+                  }
+                </>
+              )}
             </div>
           </Section>
           {
             instrumentId && instrument &&
-            <Section id="media" className="pb-1">
-              <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-25 rounded-lg dark:bg-gray-950">
+            <Section id="media" className="pb-1" data-theme="it">
+              <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-scope-50 border border-scope-100 rounded-section">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8">
                   <div className="col-span-1 min-h-[300px]">
-                    <h2 className="text-xl font-semibold text-gray-1000 dark:text-gray-100 pb-1">
+                    <h2 className="text-xl font-semibold text-scope-1000 pb-1">
                       {t('media.cover.title')}
                     </h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-us-600">
                       {t('media.cover.description')}
                     </p>
-                    <div className="mt-4">
+                    <div className="mt-4" data-theme="it">
                         <MediaManager
                           instrument={instrument}
                           multiple={false}
@@ -421,13 +465,13 @@ export default function DraftForm(
                     <div className="md:hidden">
                       <Divider spacing="md" />
                     </div>
-                    <h2 className="text-xl font-semibold text-gray-1000 dark:text-gray-100 pb-1" >
+                    <h2 className="text-xl font-semibold text-scope-1000 pb-1" >
                       {t('media.images.title')}
                     </h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 max-w-lg">
+                    <p className="text-sm text-us-600 max-w-lg">
                       {t('media.images.description')}
                     </p>
-                    <div className="mt-4">
+                    <div className="mt-4" data-theme="it">
                       <MediaManager
                         instrument={instrument}
                         multiple={true}
@@ -439,13 +483,13 @@ export default function DraftForm(
                     </div>
                     <Divider spacing="md" />
 
-                    <h2 className="text-xl font-semibold text-gray-1000 dark:text-gray-100 pb-1">
+                    <h2 className="text-xl font-semibold text-scope-1000 pb-1">
                       {t('media.files.title')}
                     </h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-us-600">
                       {t('media.files.description')}
                     </p>
-                    <div className="mt-4">
+                    <div className="mt-4" data-theme="it">
                       <MediaManager
                         instrument={instrument}
                         multiple={true}
@@ -463,16 +507,16 @@ export default function DraftForm(
 
           {instrument &&
             hasCover && hasImages && hasFiles &&
-            <Section id="description">
-              <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-gray-25 dark:bg-gray-950 rounded-lg">
-                <div className="mb-6">
-                  <h2 className="text-xl font-semibold text-gray-1000 dark:text-gray-100 pb-1">
+            <Section id="description" data-theme="it">
+              <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-scope-50 border border-scope-100 rounded-section">
+                <div className="mb-6" data-theme="it">
+                  <h2 className="text-xl font-semibold text-scope-1000 pb-1">
                     {t('description.title')}
                   </h2>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-us-600">
                     {t('description.description')}
                   </p>
-                  <div className="p-0 mt-4 border border-gray-200 bg-white rounded-md">
+                  <div className="p-0 mt-4 border-[0.1rem] border-scope-200 bg-white rounded-md">
                     <Editor 
                       markdown={description} 
                       updateDescription={handleDescriptionChange}
@@ -496,36 +540,28 @@ export default function DraftForm(
                       disabled={isLoadingMetadata}
                       onClick={(e) => createOrUpdateInstrument(e)}
                       isLoading={isLoadingMetadata}
+                      theme="it"
                     >
                       {t('description.button_save')}
                     </FormSaveButton>
                   )}
                 </div>
               </div>
-              {/* If description is saved and there are media uploads, show preview button */}
-              {
-                instrument && (currentStep === 4) &&
-                <div className="mt-6 text-center">
-                  <FormSaveButton
-                    disabled={!canPreview}
-                    onClick={() => router.push(`/preview/${instrument.id}`)}
-                    isLoading={isLoadingMetadata}
-                    theme="me"
-                  >
-                    {t('preview')}
-                  </FormSaveButton>
-                </div>
-              }
             </Section>
           }
         </form>
 
+        <Section>
+          {/* If description is saved and there are media uploads, show preview button */}
+          {previewButton}
+        </Section>
+
         <Section id="delete">
           {instrument &&
-            <div className="my-6 text-left">
+            <div className="my-6 ml-6 text-left">
               <button
                 type="button"
-                className="inline-flex items-center py-2 px-4 rounded-full text-xs border border-red-200 hover:border-red-500 hover:bg-red-500 hover:text-white font-semibold tracking-wide transition-colors duration-200 transform text-red-500 focus:outline-none focus:bg-red-700"
+                className="inline-flex items-center py-2 px-4 rounded-full text-xs border-[0.1rem] border-red-400 dark:border-red-800 hover:border-red-500 dark:hover:border-red-500 hover:bg-red-500 hover:text-white font-semibold tracking-wide transition-colors duration-200 transform text-red-500 focus:outline-none focus:bg-red-700"
                 disabled={isLoadingMetadata}
                 onClick={() => handleInstrumentDelete()}
                 aria-label={t('delete')}

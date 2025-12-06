@@ -23,12 +23,12 @@ export default function DraftGrid({ locale, context }: Readonly<{ locale: string
   if (minter && minter.instruments && minter.instruments.length > 0) {
     return (
       <Section>
-        <div className='flex flex-col pb-6'>
+        <div className='flex flex-col pt-6 pb-6'>
           <div className="pb-2">
-            <h2 className='text-2xl text-left font-bold text-it-1000 dark:text-gray-100 pb-2'>
+            <h2 className='text-2xl text-left font-bold text-scope-1000 pb-2'>
               {minter.instruments.length > 1 ? t('components.DraftGrid.title_plural') : t('components.DraftGrid.title_single')}
             </h2>
-            <p className="text-md text-gray-500 dark:text-gray-400 pb-4">
+            <p className="text-md text-scope-700 pb-4">
               {t('components.DraftGrid.description')}
             </p>
           </div>

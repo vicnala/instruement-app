@@ -2,7 +2,8 @@
 
 import posthog from "posthog-js";
 import { useEffect, useRef } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "@/i18n/routing";
+import { useSearchParams } from "next/navigation";
 
 const warningMessage =
   "PostHog: NEXT_PUBLIC_POSTHOG_KEY is not set. Analytics are disabled.";

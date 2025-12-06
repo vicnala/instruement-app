@@ -4,7 +4,8 @@ import ButtonSpinner from './ButtonSpinner';
 interface FormSaveButtonProps extends Pick<ButtonHTMLAttributes<HTMLButtonElement>, 'disabled' | 'onClick'> {
   children: ReactNode;
   isLoading?: boolean;
-  theme?: 'it' | 'green' | 'me';
+  theme?: 'it' | 'me' | 'we' | 'us';
+  'aria-label'?: string;
 }
 
 const FormSaveButton = forwardRef(({ 
@@ -12,28 +13,25 @@ const FormSaveButton = forwardRef(({
   onClick, 
   children, 
   isLoading,
-  theme = 'it' 
+  theme = 'it',
+  'aria-label': ariaLabel
 }: FormSaveButtonProps, ref: ForwardedRef<HTMLButtonElement>) => {
-  const baseClasses = "font-bold inline-flex items-center px-4 py-2 tracing-wide transition-colors duration-200 transform rounded-md focus:outline-none disabled:opacity-25";
-  const themeClasses = 
-    theme === 'it' ? "bg-it-300 hover:bg-it-400 focus:bg-it-700" : 
-    theme === 'green' ? "bg-green-300 hover:bg-green-400 focus:bg-green-700" :
-    "bg-me-300 hover:bg-me-400 focus:bg-me-700";
-
   return (
     <button
       ref={ref}
       type="button"
+      data-theme={theme}
+      aria-label={ariaLabel}
       className={`
-        font-bold inline-flex items-center px-4 py-2 tracking-wide transition-colors duration-200 transform rounded-md focus:outline-none
-        ${disabled 
-          ? 'bg-transparent text-gray-300 cursor-not-allowed border-[0.1rem] border-gray-200' 
-          : theme === 'green'
-            ? 'text-green-500 border-[0.1rem] border-green-500 hover:bg-green-500 hover:text-white focus:bg-green-700'
-            : theme === 'me'
-              ? 'text-me-1000 dark:text-me-500 border-[0.1rem] border-me-500 hover:bg-me-500 hover:text-me-1000 dark:hover:text-me-1000 focus:bg-me-500 focus:text-me-600 dark:focus:text-me-800'
-              : 'text-it-1000 dark:text-it-500 border-[0.1rem] border-it-500 hover:bg-it-500 hover:text-it-1000 dark:hover:text-it-1000 focus:bg-it-500 focus:text-it-600 dark:focus:text-it-800'
-        }
+        inline-flex items-center px-4 py-2 tracking-wide transition-colors duration-200 transform 
+        focus:outline-none
+        font-bold 
+        bg-transparent hover:bg-scope-500 active:bg-scope-200
+        border-[0.1rem] border-scope-400 hover:border-scope-500 focus:border-scope-700 active:border-scope-200
+        text-scope-500 hover:text-scope-1000 focus:text-scope-700 active:text-scope-500
+        active:scale-[0.98]
+        disabled:border-us-200 disabled:text-us-200 disabled:hover:bg-transparent disabled:hover:text-us-200
+        disabled:cursor-not-allowed disabled:active:scale-100
       `}
       disabled={disabled}
       onClick={onClick}

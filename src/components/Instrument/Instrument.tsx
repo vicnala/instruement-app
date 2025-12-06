@@ -27,7 +27,10 @@ import { Download,
 	Ban,
 	ChevronUp,
 	CircleX,
-	ExternalLink
+	ExternalLink,
+	Icon,
+	UserRoundCheck,
+	UserRoundX,
 } from "lucide-react";
 import { usePathname, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
@@ -382,16 +385,6 @@ export default function Instrument({
 		<Page context={context}>
 			{instrumentAsset && instrumentAsset.metadata ? (
 				<>
-					{address && !hasActiveValidationAttempt(searchParams) && (
-						<p className='bg-me-50 p-4 rounded-lg mb-4 dark:text-gray-900 flex items-center justify-between'>
-							{instrumentAsset.owner !== address ? (
-								<span><b>{tInstrument('current_owner')}:</b> {truncateEthAddress(instrumentAsset.owner)} ({tInstrument('you_are_not_owner')})</span>
-							) : (
-								<span><b className='text-me-1000'>{tInstrument('you_are_owner')}</b></span>
-							)}
-							<a className="text-xs text-me-900 px-2 py-1 bg-transparent hover:bg-me-400 border border-me-300 hover:border-me-400 rounded-md flex items-center gap-2" href={blockExplorerUrl} target="_blank" rel="noreferrer">{tInstrument('link_to_block_explorer')} <ExternalLink className="w-3 h-3" /></a>
-						</p>
-					)}
 					{/* Copy URL Button for Non-Owner with Nonce */}
 					{address && !isOwner && hasActiveValidationAttempt(searchParams) && (
 						<Section>
@@ -503,8 +496,8 @@ export default function Instrument({
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
 						<div className="flex flex-col space-y-8 md:space-y-10">
 							{/* Cover Image Section */}
-							<div className="rounded-[15px] relative bg-it-100 dark:bg-it-900 shadow-md overflow-hidden">
-								<div className="w-full aspect-square bg-white/[.04]">
+							<div className="rounded-[15px] relative bg-scope-25 border border-scope-50 overflow-hidden">
+								<div className="w-full aspect-square">
 									<a href={instrumentAsset.metadata.image} target="_blank" rel="noreferrer">
 										<Image
 											className="mx-auto"
@@ -520,13 +513,13 @@ export default function Instrument({
 
 						<div className="space-y-8 md:space-y-10">
 							{/* Instrument type and name */}
-							<div className="text-it-1000 dark:text-it-50 space-y-2">
+							<div className="text-scope-1000 space-y-2 pt-6">
 								<h2 className='text-3xl font-semibold'>
 									{instrumentAsset.metadata.name}
 								</h2>
 							</div>
 							{/* Luthier info */}
-							<div className="text-it-1000 dark:text-it-50 border-[0.1rem] border-gray-200 dark:border-gray-700 p-4 rounded-lg relative overflow-hidden">
+							<div className="text-scope-1000 border-[0.1rem] border-scope-50 p-4 rounded-section relative overflow-hidden">
 								{/* Background watermark */}
 								<div 
 									className="absolute inset-0 pointer-events-none dark:opacity-10"
@@ -535,16 +528,16 @@ export default function Instrument({
 										backgroundSize: '130%',
 										backgroundPosition: '200% 20%',
 										backgroundRepeat: 'no-repeat',
-										backgroundColor: 'rgba(116, 102, 90, 0.03)'
+										backgroundColor: 'var(--scope-25)'
 									}}
 								/>
 								{/* Content */}
 								<div className="relative z-10">
-									<p className="text-sm font-semibold text-gray-700 dark:text-gray-400 mb-3">{tInstrument('registered_by')}</p>
+									<p className="text-sm font-semibold text-scope-700 mb-3">{tInstrument('registered_by')}</p>
 									<div className="flex flex-col gap-2">
 										{isLoadingMinter ? (
 											<div className="flex items-center gap-4">
-												<div className="w-30 h-30 rounded-full border border-gray-25 border-[3px] dark:border-gray-700 overflow-hidden flex-shrink-0">
+												<div className="w-30 h-30 rounded-full border border-scope-25 border-[3px] overflow-hidden flex-shrink-0">
 													<Skeleton width="75px" height="75px" />
 												</div>
 												<div className="flex-1">
@@ -556,7 +549,7 @@ export default function Instrument({
 											</div>
 										) : minterUser && minterUser.profile_photo ? (
 											<div className="flex items-center gap-4">
-												<div className="w-[6rem] h-[6rem] rounded-full border border-gray-100 border-[4px] dark:border-gray-700 overflow-hidden">
+												<div className="w-[6rem] h-[6rem] rounded-full border border-scope-25 border-[4px] overflow-hidden">
 													<Image
 														src={minterUser.profile_photo.sizes.thumbnail}
 														alt={minterUser.business_name}
@@ -566,41 +559,48 @@ export default function Instrument({
 													/>
 												</div>
 												<div>
-													<p className="font-bold text-lg mb-2">
+													<p className="font-bold text-lg mb-2 text-scope-1000">
 														{minterUser.business_name}
 													</p>
 													<p>
-														<ButtonLink href={`https://www.instruement.com/?author=${minterUser.user_id}`} size="sm" colorSchema="gray" external={true}>
+														<ButtonLink 
+															href={`https://www.instruement.com/?author=${minterUser.user_id}`} 
+															size="sm" 
+															theme="us" 
+															external={true}
+														>
 															{tInstrument('view_profile')} <ExternalLink className="w-3 h-3" />
 														</ButtonLink>
 													</p>
 												</div>
 											</div>
-										) : null}
+										) : (
+											<div className="w-[6rem] h-[6rem] border-transparent border-[3px]"></div>
+										)} 
 									</div>
 								</div>
 							</div>
 							{/* Description */}
-							<div className="text-contrast dark:text-it-50 p-4 mb-4 sm:mb-0 rounded-lg bg-gray-25 dark:bg-gray-900 sm:bg-transparent sm:p-0 sm:dark:bg-transparent">
+							<div className="text-scope-1000 p-4 mb-4 sm:mb-0  bg-scope-25 sm:bg-transparent sm:p-0 rounded-tab">
 								<div
 									role="button"
 									tabIndex={0}
 									aria-label="Toggle description"
 									aria-expanded={isDescriptionExpanded}
 									onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
-									className="flex items-center justify-between cursor-default outline-none dark:hover:text-it-100 transition-colors"
+									className="flex items-center justify-between cursor-default outline-none text-scope-1000 transition-colors"
 								>
 									<h2 className='text-xl font-semibold'>
 										{tInstrument('description')}
 									</h2>
-									<span className="flex items-center gap-1 text-sm font-medium text-gray-400 dark:text-gray-400 sm:hidden">
+									<span className="flex items-center gap-1 text-sm font-medium text-scope-300 sm:hidden">
 										{isDescriptionExpanded ? <ChevronUp className="w-6 h-6" /> : <ChevronDown className="w-6 h-6" />}
 									</span>
 								</div>
 								<div className="relative">
 									{/* Desktop: Always show full content */}
 									<div
-										className="hidden md:flex text-base text-it-1000 dark:text-gray-300 flex-col gap-4 pt-6"
+										className="hidden md:flex text-base text-it-1000 dark:text-gray-500 flex-col gap-4 pt-6"
 										dangerouslySetInnerHTML={{ __html: marked.parse(instrumentAsset.metadata.description || '') as string }}
 									/>
 									
@@ -621,19 +621,19 @@ export default function Instrument({
 
 					<Divider color="bg-transparent" spacing="0" className="h-1 max-h-0 my-0 sm:my-4 sm:h-[4px] mx-0 md:mx-4"/>
 
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-6">
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-6 mb-6">
 						{/* Images Section */}
 						{images && images.length > 0 && (
-							<div className="p-4 sm:p-0 bg-gray-25 dark:bg-gray-900 sm:bg-transparent sm:dark:bg-transparent rounded-lg">
+							<div className="p-4 sm:p-0 bg-scope-25 sm:bg-transparent rounded-tab">
 								<div
 									role="button"
 									tabIndex={0}
 									aria-label={tInstrument('toggle_additional_images')}
 									aria-expanded={isImagesExpanded}
 									onClick={() => setIsImagesExpanded(!isImagesExpanded)}
-									className="flex items-center justify-between cursor-default outline-none dark:hover:text-it-100 transition-colors"
+									className="flex items-center justify-between cursor-default outline-none text-scope-1000 transition-colors"
 								>
-									<h2 className='text-xl font-semibold text-it-1000 dark:text-it-50'>{tInstrument('additional_images')}</h2>
+									<h2 className='text-xl font-semibold'>{tInstrument('additional_images')}</h2>
 								</div>
 								{(() => {
 									const imagesCount = images.length;
@@ -642,10 +642,10 @@ export default function Instrument({
 									const hiddenImagesCount = shouldShowOverlay ? imagesCount - (IMAGES_THRESHOLD_FOR_MORE_COLUMNS - 1) : 0;
 									
 									return (
-										<div className={`grid ${isImagesExpanded ? 'grid-cols-2' : imagesCount > IMAGES_THRESHOLD_FOR_MORE_COLUMNS ? 'grid-cols-4' : 'grid-cols-2'} gap-2 mt-4`}>
+										<div data-theme="it" className={`grid ${isImagesExpanded ? 'grid-cols-2' : imagesCount > IMAGES_THRESHOLD_FOR_MORE_COLUMNS ? 'grid-cols-4' : 'grid-cols-2'} gap-2 mt-4`}>
 											{/* Show visible images normally */}
 											{images.slice(0, visibleImagesCount).map((img: any, index: number) => (
-												<div key={index} className="relative bg-it-100 border border-it-200 rounded-lg overflow-hidden">
+												<div key={index} className="relative bg-scope-50 border border-scope-100 hover:border-scope-400 transition-colors duration-200 transform rounded-button overflow-hidden">
 													<div className="w-full aspect-square bg-white/[.04]">
 														<a href={img.uri} target="_blank" rel="noreferrer">	
 															<Image
@@ -658,7 +658,7 @@ export default function Instrument({
 														</a>
 													</div>
 													{img.description && 
-														<p className="text-it-1000 p-2 text-sm">
+														<p className="text-scope-700 p-2 text-sm">
 															{img.description || tInstrument('no_description')}
 														</p>
 													}
@@ -686,7 +686,7 @@ export default function Instrument({
 														{/* Overlay */}
 														<div className="absolute inset-0 bg-black/60 flex items-center justify-center">
 															<div className="text-center">
-																<div className="text-it-200 text-3xl mb-1">
+																<div className="text-scope-200 text-3xl mb-1">
 																	+{hiddenImagesCount}
 																</div>
 															</div>
@@ -760,273 +760,359 @@ export default function Instrument({
 					</div>
 
 					{ isOwner && isMinter &&
-					<>
-						{ !hasActiveValidationAttempt(searchParams) && <Divider color="bg-we-500" spacing="lg" className="mt-12" /> }
-					<div className={`mt-6 space-y-4 ${showTransferOptions ? 'min-h-screen' : ''}`}>
-						{/* Transfer Management Section */}
-						{!hasActiveValidationAttempt(searchParams) && (
-							<div className="mb-12" ref={transferSectionRef}>
-								<div>
-									<h2 className="text-2xl font-semibold text-we-600 dark:text-we-500 mb-2">
-										{tInstrument('transfer_management')}
-									</h2>
-									<p className="text-it-1000 dark:text-it-50 mb-6">
-										{tInstrument('transfer_management_description')}
-									</p>
-									{/* Show transfer options button, hide if showTransferOptions is true */}
-									{!showTransferOptions && (
-										<button
-											type="button"
-											className="inline-flex items-center px-4 py-2 text-sm text-we-1000 dark:text-we-50 bg-transparent border-[0.1rem] border-we-500 rounded-md hover:bg-we-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-we-500 disabled:opacity-50"
-											onClick={() => setShowTransferOptions(!showTransferOptions)}
-										>
-											{tInstrument('show_transfer_options')}
-											<ChevronDown className="w-4 h-4 ml-2" />
-										</button>
-									)}
-								</div>
-								{showTransferOptions && (
-								<>
-									<div className="bg-we-50 dark:bg-we-1000 rounded-lg p-6 mb-2 text-center">
-										<h3 className="text-xl font-semibold text-we-600 dark:text-we-500 mt-4 mb-12 sm:mb-8">
-											{tInstrument('transfer_options_title')}
-										</h3>
-										<div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-x-6 gap-y-16">
-											<div className="flex gap-6">
-												<div className="flex flex-col gap-2 text-center">
-													<div className="flex flex-col items-center text-we-500">
-														<Handshake className="w-8 h-8" strokeWidth={1.5} />
-														<h3 className="text-2xl font-semibold text-it-1000 dark:text-it-50">
-															{tInstrument('in_person_transfer')}
-														</h3>
-													</div>
-													<p className="text-it-1000 dark:text-it-50 mb-2">
-														{tInstrument('in_person_transfer_description')}
-													</p>
-													<div className="flex flex-col gap-2">
-														{!to && (
-															<button
-																type="button"
-																className="inline-flex flex-col items-center m-auto px-4 py-2 text-lg font-medium text-we-600 dark:text-we-50  disabled:opacity-50 w-fit border-[0.1rem] border-we-500 rounded-md"
-																onClick={() => {
-																	setShowInPersonSteps(true);
-																	setShowRemoteSteps(false);
-																}}
-																disabled={isTransfering}
-																aria-label={tInstrument('transfer_in_person')}
-															>
-																<span className="text-we-1000 dark:text-we-50">{tInstrument('transfer_in_person')}</span>
-																<ArrowDownWideNarrow className="w-6 h-6" strokeWidth={1.5}/>
-															</button>
-														)}
+					<div data-theme="we">
+						{ !hasActiveValidationAttempt(searchParams) && 
+						<Divider color="bg-scope-500" spacing="lg" className="mt-12" /> }
+						<div className={`mt-6 space-y-4 ${showTransferOptions ? 'min-h-screen' : ''}`}>
+							{/* Transfer Management Section */}
+							{!hasActiveValidationAttempt(searchParams) && (
+								<div className="mb-12" ref={transferSectionRef}>
+									<div>
+										<h2 className="text-2xl font-semibold text-scope-1000 mb-2">
+											{tInstrument('transfer_management')}
+										</h2>
+										<p className="text-us-700 mb-6">
+											{tInstrument('transfer_management_description')}
+										</p>
+										{/* Show transfer options button, hide if showTransferOptions is true */}
+										{!showTransferOptions && (
+											<button
+												type="button"
+												className="inline-flex items-center px-4 py-2 focus:outline-none
+												text-sm text-scope-1000 hover:text-scope-25
+												bg-transparent hover:bg-scope-500
+												border-[0.1rem] border-scope-500 
+												rounded-button 
+												disabled:opacity-50"
+												onClick={() => setShowTransferOptions(!showTransferOptions)}
+											>
+												{tInstrument('show_transfer_options')}
+												<ChevronDown className="w-4 h-4 ml-2" />
+											</button>
+										)}
+									</div>
+									{showTransferOptions && (
+									<>
+										<div className="bg-scope-50 rounded-section border border-scope-100 p-6 mb-2 text-center">
+											<h3 className="text-xl font-semibold text-scope-1000 mt-2 mb-12 sm:mb-8">
+												{tInstrument('transfer_options_title')}
+											</h3>
+											<div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-x-6 gap-y-16">
+												<div className="flex gap-6">
+													<div className="flex flex-col gap-2 text-center">
+														<div className="flex flex-col items-center text-scope-500">
+															<Handshake className="w-8 h-8" strokeWidth={1.5} />
+															<h3 className="text-2xl font-semibold text-scope-1000">
+																{tInstrument('in_person_transfer')}
+															</h3>
+														</div>
+														<p className="text-us-700 mb-2">
+															{tInstrument('in_person_transfer_description')}
+														</p>
+														<div className="flex flex-col gap-2">
+															{!to && (
+																<button
+																	type="button"
+																	className="inline-flex flex-col items-center m-auto px-4 py-2 
+																	text-lg font-medium text-scope-1000 hover:text-scope-25
+																	bg-transparent hover:bg-scope-500
+																	border-[0.1rem] border-scope-500 
+																	rounded-button 
+																	w-fit"
+																	onClick={() => {
+																		setShowInPersonSteps(true);
+																		setShowRemoteSteps(false);
+																	}}
+																	disabled={isTransfering}
+																	aria-label={tInstrument('transfer_in_person')}
+																>
+																	<span>{tInstrument('transfer_in_person')}</span>
+																	<ArrowDownWideNarrow className="w-6 h-6" strokeWidth={1.5}/>
+																</button>
+															)}
+														</div>
 													</div>
 												</div>
-											</div>
-											<div className="flex gap-6">
-												<div className="flex flex-col gap-2 text-center">
-													<div className="flex flex-col items-center text-we-500">
-														<Telescope className="w-8 h-8" strokeWidth={1.5} />
-														<h3 className="text-2xl font-semibold text-it-1000 dark:text-it-50">
-															{tInstrument('remote_transfer')}
-														</h3>
-													</div>
-													<p className="text-it-1000 dark:text-it-50 mb-2">
-														{tInstrument('remote_transfer_description')}
-													</p>
-													<div className="flex flex-col gap-2">
-														{!to && (
-															<button
-																type="button"
-																className="inline-flex flex-col items-center m-auto px-4 py-2 text-lg font-medium text-we-600 dark:text-we-50 disabled:opacity-50 border-[0.1rem] border-we-500 rounded-md w-fit"
-																onClick={() => {
-																	setShowRemoteSteps(true);
-																	setShowInPersonSteps(false);
-																}}
-																disabled={isTransfering}
-																aria-label={tInstrument('transfer_remotely')}
-															>
-																<span className="text-we-1000 dark:text-we-50">{tInstrument('transfer_remotely')}</span>
-																<ArrowDownWideNarrow className="w-6 h-6" strokeWidth={1.5}/>
-															</button>
-														)}
+												<div className="flex gap-6">
+													<div className="flex flex-col gap-2 text-center">
+														<div className="flex flex-col items-center text-scope-500">
+															<Telescope className="w-8 h-8" strokeWidth={1.5} />
+															<h3 className="text-2xl font-semibold text-scope-1000">
+																{tInstrument('remote_transfer')}
+															</h3>
+														</div>
+														<p className="text-us-700 mb-2">
+															{tInstrument('remote_transfer_description')}
+														</p>
+														<div className="flex flex-col gap-2">
+															{!to && (
+																<button
+																	type="button"
+																	className="
+																	inline-flex flex-col items-center m-auto px-4 py-2 
+																	text-lg font-medium text-scope-1000 hover:text-scope-25
+																	bg-transparent hover:bg-scope-500
+																	border-[0.1rem] border-scope-500 
+																	rounded-button 
+																	w-fit"
+																	onClick={() => {
+																		setShowRemoteSteps(true);
+																		setShowInPersonSteps(false);
+																	}}
+																	disabled={isTransfering}
+																	aria-label={tInstrument('transfer_remotely')}
+																>
+																	<span>{tInstrument('transfer_remotely')}</span>
+																	<ArrowDownWideNarrow className="w-6 h-6" strokeWidth={1.5}/>
+																</button>
+															)}
+														</div>
 													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-									{/* Show if in person or remote steps selected */}
-									{(showInPersonSteps || showRemoteSteps) && (
-										<>
-											<div className="bg-we-100 dark:bg-we-950 rounded-lg p-6 mb-2 text-center relative animate-slide-up" ref={stepsSectionRef}>
-												{/* Close/Back button */}
-												<button
-													type="button"
-													className="absolute top-4 right-4 text-xs font-medium text-we-400 dark:text-we-500 bg-transparent"
-													onClick={() => {
-														setShowInPersonSteps(false);
-														setShowRemoteSteps(false);
-														setScannedResult("");
-													}}
-													aria-label={tInstrument('close_steps')}
-												>
-													<CircleX className="w-6 h-6" strokeWidth={1.5}/>
-												</button>
-												{/* Content for in-person steps */}
-												{showInPersonSteps && (
-													<>
-														<div className="flex flex-col items-center justify-center text-we-500 pt-6">
-															<Handshake className="w-8 h-8" strokeWidth={1.5} />
-															<h3 className="text-2xl font-semibold text-we-1000 dark:text-we-50 mb-12 sm:mb-8">
-																{tInstrument('transfer_in_person')}
-															</h3>
-														</div>
-														<div className="mt-4 space-y-6 max-w-sm mx-auto">
-															{/* Step 1 */}
-															<div className="text-center">
-																<p className="text-we-1000 dark:text-we-50 mb-2">
-																	{tInstrument('step_1_description')}
-																</p>
-																<button
-																	type="button"
-																	onClick={() => handleCopyUrl(async () => 'https://app.instruement.com')}
-																	className="inline-flex items-center  px-4 py-2 text-xs font-medium text-we-1000 dark:text-we-50 bg-transparent border-[0.1rem] border-we-400 rounded-md hover:bg-we-400 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-we-400 disabled:opacity-50"
-																	aria-label={tInstrument('share_app')}
-																>
-																	<Copy className="w-4 h-4 mr-2" />
-																	{tInstrument('share_app')}
-																</button>
+										{/* Show if in person or remote steps selected */}
+										{(showInPersonSteps || showRemoteSteps) && (
+											<div data-theme="we">
+												<div className="bg-scope-50 rounded-section border border-scope-100 p-6 mb-2 text-center relative animate-slide-up" ref={stepsSectionRef}>
+													{/* Close/Back button */}
+													<button
+														type="button"
+														className="absolute top-4 right-4 font-medium
+														text-xs text-scope-300 hover:text-scope-700 
+														bg-transparent"
+														onClick={() => {
+															setShowInPersonSteps(false);
+															setShowRemoteSteps(false);
+															setScannedResult("");
+														}}
+														aria-label={tInstrument('close_steps')}
+													>
+														<CircleX className="w-6 h-6" strokeWidth={1.5}/>
+													</button>
+													{/* Content for in-person steps */}
+													{showInPersonSteps && (
+														<>
+															<div className="flex flex-col items-center justify-center text-scope-500 pt-6">
+																<Handshake className="w-8 h-8" strokeWidth={1.5} />
+																<h3 className="text-2xl font-semibold text-scope-1000 mb-12 sm:mb-8">
+																	{tInstrument('transfer_in_person')}
+																</h3>
 															</div>
-															<MoveDown className="w-6 h-6 mx-auto text-we-500" strokeWidth={1.5} />
-															{/* Step 2 */}
-															<div className="text-center">
-																<p className="text-lg text-we-1000 dark:text-we-50 mb-2">
-																	{tInstrument('step_2_description')}
-																</p>
-																<button
-																	type="button"
-																	className="inline-flex items-center px-4 py-2 text-basic font-medium text-we-1000 dark:text-we-50 bg-transparent border-[0.1rem] border-we-400 rounded-md hover:bg-we-400 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-we-400 disabled:opacity-50"
-																	onClick={() => setModalOpen(true)}
-																	aria-label={tInstrument('scan_qr')}
-																>
-																	<QrCode className="w-4 h-4 mr-2" />
-																	{tInstrument('scan_qr')}
-																</button>
-															</div>
-															{!scannedResult && !to ? (
-																<Hourglass className="w-6 h-6 mx-auto text-we-500 animate-pulse" strokeWidth={1.5} />
-															) : (
-																<MoveDown className="w-6 h-6 mx-auto text-we-500" strokeWidth={1.5} />
-															)}
-															{/* Step 3 */}
-															<div className="text-center">
+															<div className="mt-4 space-y-6 max-w-sm mx-auto">
+																{/* Step 1 */}
+																<div className="text-center">
+																	<p className="text-scope-700 mb-2">
+																		{tInstrument('step_1_description')}
+																	</p>
+																	<button
+																		type="button"
+																		onClick={() => handleCopyUrl(async () => 'https://app.instruement.com')}
+																		className="inline-flex items-center px-4 py-2 
+																		text-xs font-medium text-scope-1000 hover:text-scope-25
+																		bg-transparent hover:bg-scope-500
+																		border-[0.1rem] border-scope-500 
+																		rounded-button"
+																		aria-label={tInstrument('share_app')}
+																	>
+																		<Copy className="w-4 h-4 mr-2" />
+																		{tInstrument('share_app')}
+																	</button>
+																</div>
+																<MoveDown className="w-6 h-6 mx-auto text-scope-500" strokeWidth={1.5} />
+																{/* Step 2 */}
+																<div className="text-center">
+																	<p className="text-lg text-scope-700 mb-2">
+																		{tInstrument('step_2_description')}
+																	</p>
+																	<button
+																		type="button"
+																		className="inline-flex items-center px-4 py-2 
+																		text-basic font-medium text-scope-1000 hover:text-scope-25
+																		bg-transparent hover:bg-scope-500
+																		border-[0.1rem] border-scope-500 
+																		rounded-button"
+																		onClick={() => setModalOpen(true)}
+																		aria-label={tInstrument('scan_qr')}
+																	>
+																		<QrCode className="w-4 h-4 mr-2" />
+																		{tInstrument('scan_qr')}
+																	</button>
+																</div>
 																{!scannedResult && !to ? (
-																	<p className="text-we-500 dark:text-we-50 text-sm animate-pulse">
-																		{tInstrument('step_3_waiting_for_scan')}
-																	</p>
+																	<Hourglass className="w-6 h-6 mx-auto text-scope-500 animate-pulse" strokeWidth={1.5} />
 																) : (
-																	<p className="bg-we-200 dark:bg-we-900 text-we-900 font-medium dark:text-we-50 mb-2 p-2 rounded-full">
-																		{tInstrument('recipient_account')} {truncateEthAddress(to || scannedResult || '')}
-																	</p>
+																	<MoveDown className="w-6 h-6 mx-auto text-scope-500" strokeWidth={1.5} />
 																)}
+																{/* Step 3 */}
+																<div className="text-center">
+																	{!scannedResult && !to ? (
+																		<p className="text-scope-500 text-sm animate-pulse">
+																			{tInstrument('step_3_waiting_for_scan')}
+																		</p>
+																	) : (
+																		<p className="bg-scope-50 text-scope-1000 font-medium mb-2 p-2 rounded-full">
+																			{tInstrument('recipient_account')} {truncateEthAddress(to || scannedResult || '')}
+																		</p>
+																	)}
+																</div>
 															</div>
-														</div>
-													</>
-												)}
-												{/* Content for remote steps */}
-												{showRemoteSteps && (
-													<>
-														<div className="flex flex-col items-center justify-center text-we-500 pt-6">
-															<Telescope className="w-8 h-8" strokeWidth={1.5} />
-															<h3 className="text-2xl font-semibold text-we-1000 dark:text-we-50 mb-12 sm:mb-8">
-																{tInstrument('transfer_remotely')}
+														</>
+													)}
+													{/* Content for remote steps */}
+													{showRemoteSteps && (
+														<>
+															<div className="flex flex-col items-center justify-center text-scope-500 pt-6">
+																<Telescope className="w-8 h-8" strokeWidth={1.5} />
+																<h3 className="text-2xl font-semibold text-scope-1000 mb-12 sm:mb-8">
+																	{tInstrument('transfer_remotely')}
+																</h3>
+															</div>
+															<div className="mt-4 space-y-6 max-w-md mx-auto">
+																{/* Step 1 */}
+																<div className="text-center">
+																	<p className="text-scope-700 text-lg mb-2">
+																		{tInstrument('step_1_remote_description')}
+																	</p>
+																	<button
+																		type="button"
+																		onClick={() => handleCopyUrl(generateShareableUrl)}
+																		className="inline-flex items-center px-4 py-2 text-xs font-medium 
+																		text-scope-1000 hover:text-scope-25
+																		bg-transparent hover:bg-scope-500
+																		border-[0.1rem] border-scope-500 
+																		rounded-button"
+																		aria-label={tInstrument('copy_secure_link')}
+																		disabled={isTransfering}
+																	>
+																		<Copy className="w-4 h-4 mr-2" />
+																		{copySuccess ? tInstrument('copied') : `${tInstrument('copy_secure_link')}`}
+																	</button>
+																	<p className="text-scope-700 mt-2 text-xs">
+																		{tInstrument('valid_for')} {COOKIE_EXPIRY_DAYS} {tInstrument('days')}
+																	</p>
+																</div>
+																<MoveDown className="w-6 h-6 mx-auto text-scope-500" strokeWidth={1.5}/>
+																{/* Step 2 */}
+																<div className="text-center">
+																	<p className="text-scope-700 mb-2">
+																		{tInstrument('step_2_remote_description')}
+																	</p>
+																</div>
+																<MoveDown className="w-6 h-6 mx-auto text-scope-500" strokeWidth={1.5}/>
+																{/* Step 3 */}
+																<div className="text-center">
+																	<p className="text-scope-700 mb-2">
+																		{tInstrument('step_3_remote_description')}
+																	</p>
+																</div>
+															</div>
+														</>
+													)}
+												</div>
+												{/* Transaction Button */}
+												{contract && address && (to || scannedResult) && !hasActiveValidationAttempt(searchParams) && (
+													<div className="bg-scope-50 rounded-section border border-scope-100 p-6 mb-12 text-center relative animate-slide-up" ref={sendSectionRef}>
+														<div className="my-6 text-center">
+															<CheckCheck className="w-8 h-8 mx-auto text-scope-500" strokeWidth={1.5}/>
+															<h3 className="text-2xl font-semibold text-scope-1000 mt-2 mb-4">
+																{tInstrument('ready_for_transfer')}
 															</h3>
+															<TransactionButton
+																transaction={() => {
+																	setIsTransfering(true);
+																	return transferFrom({
+																		contract: contract,
+																		from: address,
+																		to: to ? to : scannedResult ? scannedResult : '',
+																		tokenId: BigInt(id)
+																	});
+																}}
+																onTransactionConfirmed={() => {
+																	alert(`${tInstrument("transfered_to_success")} ${to ? to : scannedResult ? scannedResult : ''}`);
+																	setIsTransfering(false);
+																	router.refresh();
+																	router.push('/');
+																}}
+																onError={(error) => {
+																	setIsTransfering(false);
+																	console.error("Transaction error", error);
+																}}
+																unstyled
+																className="px-4 py-2 
+																text-base font-medium transition-colors duration-200 transform 
+																bg-transparent hover:bg-scope-500
+																border-[0.1rem] border-scope-500 
+																rounded-button 
+																text-scope-1000 hover:text-scope-25
+																focus:outline-none"
+															>
+																<div className="flex items-center justify-center gap-2">
+																	<Send className="w-4 h-4" />
+																	{tInstrument('send')}
+																</div>
+															</TransactionButton>
 														</div>
-														<div className="mt-4 space-y-6 max-w-md mx-auto">
-															{/* Step 1 */}
-															<div className="text-center">
-																<p className="text-we-1000 text-lg dark:text-it-50 mb-2">
-																	{tInstrument('step_1_remote_description')}
-																</p>
-																<button
-																	type="button"
-																	onClick={() => handleCopyUrl(generateShareableUrl)}
-																	className="inline-flex items-center px-4 py-2 text-xs font-medium text-we-1000 dark:text-we-50 bg-transparent border-[0.1rem] border-we-400 rounded-md hover:bg-we-400 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-we-400 disabled:opacity-50"
-																	aria-label={tInstrument('copy_secure_link')}
-																	disabled={isTransfering}
-																>
-																	<Copy className="w-4 h-4 mr-2" />
-																	{copySuccess ? tInstrument('copied') : `${tInstrument('copy_secure_link')}`}
-																</button>
-																<p className="text-we-1000 dark:text-we-50 mt-2 text-xs">
-																	{tInstrument('valid_for')} {COOKIE_EXPIRY_DAYS} {tInstrument('days')}
-																</p>
-															</div>
-															<MoveDown className="w-6 h-6 mx-auto text-we-500" strokeWidth={1.5}/>
-															{/* Step 2 */}
-															<div className="text-center">
-																<p className="text-we-1000 dark:text-it-50 mb-2">
-																	{tInstrument('step_2_remote_description')}
-																</p>
-															</div>
-															<MoveDown className="w-6 h-6 mx-auto text-we-500" strokeWidth={1.5}/>
-															{/* Step 3 */}
-															<div className="text-center">
-																<p className="text-we-1000 dark:text-it-50 mb-2">
-																	{tInstrument('step_3_remote_description')}
-																</p>
-															</div>
-														</div>
-													</>
+													</div>
 												)}
 											</div>
-											{/* Transaction Button */}
-											{contract && address && (to || scannedResult) && !hasActiveValidationAttempt(searchParams) && (
-												<div className="bg-we-200 dark:bg-we-900 rounded-lg p-6 mb-12 text-center relative animate-slide-up" ref={sendSectionRef}>
-													<div className="my-6 text-center">
-														<CheckCheck className="w-8 h-8 mx-auto text-we-500" strokeWidth={1.5}/>
-														<h3 className="text-2xl font-semibold text-we-1000 dark:text-we-50 mt-2 mb-4">
-															{tInstrument('ready_for_transfer')}
-														</h3>
-														<TransactionButton
-															transaction={() => {
-																setIsTransfering(true);
-																return transferFrom({
-																	contract: contract,
-																	from: address,
-																	to: to ? to : scannedResult ? scannedResult : '',
-																	tokenId: BigInt(id)
-																});
-															}}
-															onTransactionConfirmed={() => {
-																alert(`${tInstrument("transfered_to_success")} ${to ? to : scannedResult ? scannedResult : ''}`);
-																setIsTransfering(false);
-																router.refresh();
-																router.push('/');
-															}}
-															onError={(error) => {
-																setIsTransfering(false);
-																console.error("Transaction error", error);
-															}}
-															unstyled
-															className="px-4 py-2 text-base font-medium transition-colors duration-200 transform bg-transparent border-[0.1rem] border-we-500 rounded-md hover:bg-we-400 text-we-1000 dark:text-we-50 focus:outline-none"
-														>
-															<div className="flex items-center justify-center gap-2">
-																<Send className="w-4 h-4" />
-																{tInstrument('send')}
-															</div>
-														</TransactionButton>
-													</div>
-												</div>
-											)}
-										</>
-									)}
-								</>
+										)}
+									</>
+								)}
+							</div>
 							)}
 						</div>
-						)}
 					</div>
-					</>
 					}
+
+					{/* Explorer link – not logged in */}
+					{!hasActiveValidationAttempt(searchParams) && !address && (
+						<p className="mt-6 mb-12 flex justify-end">
+							<a
+								className="text-xs text-gray-500 hover:text-gray-900 dark:text-gray-500 dark:hover:text-gray-200 bg-transparent hover:bg-gray-200 dark:hover:bg-gray-800 border border-gray-100 hover:border-gray-200 dark:border-gray-800 dark:hover:border-gray-800 rounded-md flex items-center gap-2 transition-colors duration-200 transform px-2 py-1"
+								href={blockExplorerUrl}
+								target="_blank"
+								rel="noreferrer"
+								aria-label={tInstrument('link_to_block_explorer')}
+							>
+								{tInstrument('link_to_block_explorer')}{' '}
+								<ExternalLink className="w-3 h-3" />
+							</a>
+						</p>
+					)}
+					{/* Ownership message and explorer link – logged in */}
+					{!hasActiveValidationAttempt(searchParams) && address && (
+						<>
+							<Divider color="bg-scope-50" spacing="0" className="h-1 max-h-0 my-0 mb-4 sm:my-4 sm:h-[4px] mx-0 md:mx-0"/>
+							<p className="text-xs md:text-sm mb-12 text-scope-700 flex flex-col md:flex-row gap-2 md:gap-0 items-center justify-between px-4">
+								{instrumentAsset.owner !== address ? (
+									<span className="flex flex-col text-center md:text-left md:flex-row items-center justify-center gap-2 mb-2" data-theme="us">
+										<UserRoundX className="w-8 h-8 text-scope-500" strokeWidth={1.5}/>
+										<span className="flex flex-col">
+											<b>{tInstrument('you_are_not_owner')}</b> 
+											<span className="text-scope-500 text-xs">({tInstrument('current_owner')}:{' '}{truncateEthAddress(instrumentAsset.owner)})</span>
+										</span>
+
+									</span>
+								) : (
+									<span className="flex items-center gap-1 flex-col text-center md:text-left md:flex-row items-center justify-center gap-2 mb-2" data-theme="me">
+										<UserRoundCheck className="w-8 h-8 text-scope-500" strokeWidth={1.5}/>
+										<b className="">{tInstrument('you_are_owner')}</b>
+									</span>
+								)}
+								<ButtonLink
+									href={blockExplorerUrl}
+									external={true}
+									theme="it"
+									size="sm"
+									aria-label={tInstrument('link_to_block_explorer')}
+								>
+									{tInstrument('link_to_block_explorer')}{' '}
+									<ExternalLink className="w-3 h-3" />
+								</ButtonLink>
+							</p>
+						</>
+					)}
 				</>
 			) : null }
 			<QRModal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>

@@ -36,6 +36,10 @@ export const CustomConnectButton = (
       theme={theme === 'system' ? 'light' : theme === 'dark' ? 'dark' : 'light'}
       locale={locale.includes('en') ? 'en_US' : locale.includes('es') ? 'es_ES' : 'en_US'}
       chain={chain}
+      connectButton={{
+        className: "!bg-scope-900",
+        label: t('components.CustomConnectButton.label')
+      }}
       switchButton={{
         label: t('components.CustomConnectButton.switch_network')
       }}

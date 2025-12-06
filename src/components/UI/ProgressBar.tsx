@@ -61,11 +61,11 @@ const ProgressBar = ({
     <div className="w-full mx-auto px-3">
       <div className="relative">
         {/* Progress bar container */}
-        <div className="absolute top-4 sm:top-5 left-11 right-11 h-1 bg-it-200"/>
+        <div className="absolute top-4 sm:top-5 left-11 right-11 h-1 bg-scope-100"/>
         
         {/* Active progress bar */}
         <div 
-          className="absolute top-4 sm:top-5 left-11 h-1 bg-it-300 transition-all duration-300"
+          className="absolute top-4 sm:top-5 left-11 h-1 bg-scope-500 transition-all duration-300"
           style={{ width: getProgressWidth() }}
         />
 
@@ -75,19 +75,19 @@ const ProgressBar = ({
             <div key={step.number} className="flex flex-col items-center max-w-[110px] sm:max-w-none">
               {/* Step indicators */}
               {step.number < currentStep ? (
-                <CheckCircle className="w-8 h-8 sm:w-10 sm:h-10 text-it-400 bg-it-100 rounded-full dark:bg-gray-900" />
+                <CheckCircle className="w-8 h-8 sm:w-10 sm:h-10 text-scope-300 bg-scope-50 rounded-full" />
               ) : step.number === currentStep ? (
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-it-400 text-white flex items-center justify-center text-sm sm:text-base font-semibold">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-scope-500 text-scope-25 flex items-center justify-center text-sm sm:text-base font-semibold">
                   {step.number}
                 </div>
               ) : (
-                <Circle className="w-8 h-8 sm:w-10 sm:h-10 text-it-300 bg-it-50 rounded-full" />
+                <Circle className="w-8 h-8 sm:w-10 sm:h-10 text-scope-200 bg-scope-50 rounded-full" />
               )}
               
               {/* Step labels */}
               <div className="mt-2 sm:mt-4 text-center">
-                <div className="text-sm sm:text-base font-medium text-it-1000 dark:text-gray-100 truncate">{step.title}</div>
-                <div className="hidden sm:block text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate">{step.description}</div>
+                <div className="text-sm sm:text-base font-medium text-scope-1000 truncate">{step.title}</div>
+                <div className="hidden sm:block text-xs sm:text-sm text-scope-500 truncate">{step.description}</div>
               </div>
             </div>
           ))}
@@ -95,11 +95,11 @@ const ProgressBar = ({
           {/* Preview icon at the end */}
           <div className="flex flex-col items-center max-w-[110px] sm:max-w-none">
             {completed ? (
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-green-400 text-white flex items-center justify-center">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-it-500 text-white flex items-center justify-center">
                 <Eye className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
             ) : (
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-it-200 text-it-300 flex items-center justify-center bg-white">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-scope-100 text-scope-300 flex items-center justify-center bg-white">
                 <Eye className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
             )}

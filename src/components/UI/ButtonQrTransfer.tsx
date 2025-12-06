@@ -108,7 +108,7 @@ export default function ButtonQrTransfer({
   return (
     <>
       <div>
-        <div className="p-4 rounded-lg bg-white border-[0.1rem] border-it-200 dark:border-it-400">
+        <div className="p-4 rounded-lg bg-scope-25 border-[0.1rem] border-scope-500 hover:bg-scope-50">
           <div className={`flex justify-between items-center ${isExpanded ? 'flex-col gap-4' : 'gap-2'}`}>
             <button
               onClick={handleToggleExpanded}
@@ -116,18 +116,19 @@ export default function ButtonQrTransfer({
             >
               {!isExpanded && (
                 <div className="flex items-center gap-2">
-                  <QrCode className="text-it-1000 h-6 w-6" />
-                  <p className="text-it-1000 text-base font-bold">{t('show_qr')}</p>
+                  <QrCode className="text-scope-1000 h-6 w-6" />
+                  <p className="text-scope-1000 text-base font-bold">{t('show_qr')}</p>
                 </div>
               )}
               {isExpanded && (
                 <>
-                  <QRCodeCanvas
+                  <div className="p-2 bg-white"><QRCodeCanvas
                     value={address || ''}
                     size={250}
                     bgColor="#ffffff"
                     fgColor="#070605"
                   />
+                  </div>
                   <div className="flex items-center justify-between mt-4 w-full">
                     <ButtonSpinner />
                     <span className="text-gray-600 text-xs font-medium">
@@ -143,10 +144,10 @@ export default function ButtonQrTransfer({
           </div>
         </div>
         <div className="flex justify-left mt-4">
-          <div className="flex flex-col space-y-2">
+          <div className="flex flex-col space-y-2" data-theme="us">
             <button
               onClick={handleOpenInfoModal}
-              className="text-it-400 hover:text-contrast dark:text-gray-300 text-sm flex items-center"
+              className="text-scope-400 hover:text-scope-700 text-sm flex items-center"
             >
               <Info className="h-5 w-5 mr-1" />
               {t('modals.share_account_what.preview')}

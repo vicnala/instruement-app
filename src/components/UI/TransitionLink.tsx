@@ -9,6 +9,9 @@ interface TransitionLinkProps extends LinkProps {
   href: string;
   locale: string;
   className?: string;
+  theme?: string;
+  "aria-label"?: string;
+  disabled?: boolean;
 }
 
 function sleep(ms: number): Promise<void> {
@@ -20,6 +23,9 @@ export const TransitionLink: React.FC<TransitionLinkProps> = ({
   href,
   locale,
   className,
+  theme,
+  "aria-label": ariaLabel,
+  disabled = false,
   ...props
 }) => {
   const router = useRouter();
@@ -28,23 +34,41 @@ export const TransitionLink: React.FC<TransitionLinkProps> = ({
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
   ) => {
     e.preventDefault();
-    // const body = document.querySelector("body");
+    const body = document.querySelector("body");
 
-    // body?.classList.add("page-transition");
+    body?.classList.add("page-transition");
     
     router.push(href);
 
-    // if (href === '/') {
-    //     await sleep(2500);
-    // } else {
-    //   await sleep(1000);
-    // }
+    await sleep(2000);
 
-    // body?.classList.remove("page-transition");
+    body?.classList.remove("page-transition");
   };
 
+  // When disabled, render a div with disabled button classes
+  if (disabled) {
+    return (
+      <div
+        className={`${className || ''} border-us-200 text-us-200 hover:bg-transparent hover:text-us-200 cursor-not-allowed active:scale-100`}
+        data-theme={theme}
+        aria-label={ariaLabel}
+        role="button"
+        aria-disabled="true"
+      >
+        {children}
+      </div>
+    );
+  }
+
   return (
-    <Link {...props} href={href} locale={locale} onClick={handleTransition} className={className}>
+    <Link {...props} 
+    href={href} 
+    locale={locale} 
+    onClick={handleTransition} 
+    className={className} 
+    data-theme={theme}
+    aria-label={ariaLabel}
+    >
       {children}
     </Link>
   );

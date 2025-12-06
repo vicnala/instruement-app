@@ -2,10 +2,296 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-	@apply min-h-screen select-none bg-canvas text-it-1000 antialiased p-safe dark:bg-contrast dark:text-gray-100;
+/* ========================================
+   CSS Custom Properties - Theme Tokens
+   ======================================== */
 
-	transition-property: opacity, transform, filter, background;
+:root {
+	/* Base colors */
+	--color-canvas: #FAFAFB;
+	--color-contrast: #171412;
+	--color-tertiary: #F6F6F6;
+
+	/* Border radius tokens */
+	--radius-button: 0.375rem; /* 6px - equivalent to rounded-md */
+	--radius-tab: 0.5rem; /* 8px - equivalent to rounded-lg */
+	--radius-section: 15px; /* 15px border radius for sections */
+
+	/* IT palette (orange/amber) */
+	--color-it-25: #F6F2EE;
+	--color-it-50: #F3ECE7;
+	--color-it-100: #EDE1D7;
+	--color-it-200: #E6CAB0;
+	--color-it-300: #E9B381;
+	--color-it-400: #F19C4C;
+	--color-it-500: #F6851C;
+	--color-it-600: #D56F0F;
+	--color-it-700: #9F5A1A;
+	--color-it-800: #6C451F;
+	--color-it-900: #432F1D;
+	--color-it-950: #312418;
+	--color-it-1000: #211912;
+
+	/* ME palette (green) */
+	--color-me-25: #EFF5F2;
+	--color-me-50: #E8F1EC;
+	--color-me-100: #D9E9DF;
+	--color-me-200: #B9DCC7;
+	--color-me-300: #96D3AD;
+	--color-me-400: #70CC93;
+	--color-me-500: #4CC379;
+	--color-me-600: #3BA764;
+	--color-me-700: #358052;
+	--color-me-800: #2C5B3E;
+	--color-me-900: #213A2A;
+	--color-me-950: #192B20;
+	--color-me-1000: #111C16;
+
+	/* WE palette (purple) */
+	--color-we-25: #F5F2F7;
+	--color-we-50: #EFEBF3;
+	--color-we-100: #E4DDEC;
+	--color-we-200: #CDBEDF;
+	--color-we-300: #B69BD5;
+	--color-we-400: #9F76CE;
+	--color-we-500: #8953C6;
+	--color-we-600: #733EAF;
+	--color-we-700: #5E3889;
+	--color-we-800: #493164;
+	--color-we-900: #342643;
+	--color-we-950: #291F34;
+	--color-we-1000: #1E1726;
+
+	/* US palette (neutral gray) */
+	--color-us-25: #F3F2F1;
+	--color-us-50: #EEECEB;
+	--color-us-100: #E4E1DF;
+	--color-us-200: #D0CBC7;
+	--color-us-300: #BCB4AE;
+	--color-us-400: #A89E96;
+	--color-us-500: #93877E;
+	--color-us-600: #7D7168;
+	--color-us-700: #645B54;
+	--color-us-800: #4C4540;
+	--color-us-900: #342F2B;
+	--color-us-950: #282421;
+	--color-us-1000: #1C1917;
+
+	/* Gray palette (same as US) */
+	--color-gray-25: #F3F2F1;
+	--color-gray-50: #EEECEB;
+	--color-gray-100: #E4E1DF;
+	--color-gray-200: #D0CBC7;
+	--color-gray-300: #BCB4AE;
+	--color-gray-400: #A89E96;
+	--color-gray-500: #93877E;
+	--color-gray-600: #7D7168;
+	--color-gray-700: #645B54;
+	--color-gray-800: #4C4540;
+	--color-gray-900: #342F2B;
+	--color-gray-950: #282421;
+	--color-gray-1000: #1C1917;
+
+	/* Base semantic tokens */
+	--bg-canvas: var(--color-canvas);
+	--bg-contrast: var(--color-contrast);
+	--bg-tertiary: var(--color-tertiary);
+	--text-primary: var(--color-it-1000);
+	--text-secondary: var(--color-us-600);
+	--text-muted: var(--color-us-500);
+
+	/* Default theme scope - US (neutral gray) */
+	--scope-25: var(--color-us-25);
+	--scope-50: var(--color-us-50);
+	--scope-100: var(--color-us-100);
+	--scope-200: var(--color-us-200);
+	--scope-300: var(--color-us-300);
+	--scope-400: var(--color-us-400);
+	--scope-500: var(--color-us-500);
+	--scope-600: var(--color-us-600);
+	--scope-700: var(--color-us-700);
+	--scope-800: var(--color-us-800);
+	--scope-900: var(--color-us-900);
+	--scope-950: var(--color-us-950);
+	--scope-1000: var(--color-us-1000);
+}
+
+/* Dark mode base overrides */
+.dark {
+	--color-canvas: #171412;
+	--color-contrast: #FAFAFB;
+	--color-tertiary: #2C4540;
+	--bg-canvas: var(--color-canvas);
+	--bg-contrast: var(--color-contrast);
+	--bg-tertiary: var(--color-tertiary);
+	--text-primary: var(--color-it-50);
+	--text-secondary: var(--color-us-300);
+	--text-muted: var(--color-us-500);
+
+	/* Default theme scope - US (neutral gray) - Dark mode */
+	--scope-25: var(--color-us-1000);
+	--scope-50: var(--color-us-950);
+	--scope-100: var(--color-us-900);
+	--scope-200: var(--color-us-800);
+	--scope-300: var(--color-us-700);
+	--scope-400: var(--color-us-600);
+	--scope-500: var(--color-us-500);
+	--scope-600: var(--color-us-400);
+	--scope-700: var(--color-us-300);
+	--scope-800: var(--color-us-200);
+	--scope-900: var(--color-us-100);
+	--scope-950: var(--color-us-50);
+	--scope-1000: var(--color-us-25);
+}
+
+/* ========================================
+   Scope-based tokens for data-theme scoping
+   ======================================== */
+
+/* IT theme scope - Light mode */
+[data-theme="it"] {
+	--scope-25: var(--color-it-25);
+	--scope-50: var(--color-it-50);
+	--scope-100: var(--color-it-100);
+	--scope-200: var(--color-it-200);
+	--scope-300: var(--color-it-300);
+	--scope-400: var(--color-it-400);
+	--scope-500: var(--color-it-500);
+	--scope-600: var(--color-it-600);
+	--scope-700: var(--color-it-700);
+	--scope-800: var(--color-it-800);
+	--scope-900: var(--color-it-900);
+	--scope-950: var(--color-it-950);
+	--scope-1000: var(--color-it-1000);
+}
+
+/* IT theme scope - Dark mode */
+.dark [data-theme="it"] {
+	--scope-25: var(--color-it-1000);
+	--scope-50: var(--color-it-950);
+	--scope-100: var(--color-it-900);
+	--scope-200: var(--color-it-800);
+	--scope-300: var(--color-it-700);
+	--scope-400: var(--color-it-600);
+	--scope-500: var(--color-it-500);
+	--scope-600: var(--color-it-400);
+	--scope-700: var(--color-it-300);
+	--scope-800: var(--color-it-200);
+	--scope-900: var(--color-it-100);
+	--scope-950: var(--color-it-50);
+	--scope-1000: var(--color-it-25);
+}
+
+/* ME theme scope - Light mode */
+[data-theme="me"] {
+	--scope-25: var(--color-me-25);
+	--scope-50: var(--color-me-50);
+	--scope-100: var(--color-me-100);
+	--scope-200: var(--color-me-200);
+	--scope-300: var(--color-me-300);
+	--scope-400: var(--color-me-400);
+	--scope-500: var(--color-me-500);
+	--scope-600: var(--color-me-600);
+	--scope-700: var(--color-me-700);
+	--scope-800: var(--color-me-800);
+	--scope-900: var(--color-me-900);
+	--scope-950: var(--color-me-950);
+	--scope-1000: var(--color-me-1000);
+}
+
+/* ME theme scope - Dark mode */
+.dark [data-theme="me"] {
+	--scope-25: var(--color-me-1000);
+	--scope-50: var(--color-me-950);
+	--scope-100: var(--color-me-900);
+	--scope-200: var(--color-me-800);
+	--scope-300: var(--color-me-700);
+	--scope-400: var(--color-me-600);
+	--scope-500: var(--color-me-500);
+	--scope-600: var(--color-me-400);
+	--scope-700: var(--color-me-300);
+	--scope-800: var(--color-me-200);
+	--scope-900: var(--color-me-100);
+	--scope-950: var(--color-me-50);
+	--scope-1000: var(--color-me-25);
+}
+
+/* WE theme scope - Light mode */
+[data-theme="we"] {
+	--scope-25: var(--color-we-25);
+	--scope-50: var(--color-we-50);
+	--scope-100: var(--color-we-100);
+	--scope-200: var(--color-we-200);
+	--scope-300: var(--color-we-300);
+	--scope-400: var(--color-we-400);
+	--scope-500: var(--color-we-500);
+	--scope-600: var(--color-we-600);
+	--scope-700: var(--color-we-700);
+	--scope-800: var(--color-we-800);
+	--scope-900: var(--color-we-900);
+	--scope-950: var(--color-we-950);
+	--scope-1000: var(--color-we-1000);
+}
+
+/* WE theme scope - Dark mode */
+.dark [data-theme="we"] {
+	--scope-25: var(--color-we-1000);
+	--scope-50: var(--color-we-950);
+	--scope-100: var(--color-we-900);
+	--scope-200: var(--color-we-800);
+	--scope-300: var(--color-we-700);
+	--scope-400: var(--color-we-600);
+	--scope-500: var(--color-we-500);
+	--scope-600: var(--color-we-400);
+	--scope-700: var(--color-we-300);
+	--scope-800: var(--color-we-200);
+	--scope-900: var(--color-we-100);
+	--scope-950: var(--color-we-50);
+	--scope-1000: var(--color-we-25);
+}
+
+/* US theme scope - Light mode */
+[data-theme="us"] {
+	--scope-25: var(--color-us-25);
+	--scope-50: var(--color-us-50);
+	--scope-100: var(--color-us-100);
+	--scope-200: var(--color-us-200);
+	--scope-300: var(--color-us-300);
+	--scope-400: var(--color-us-400);
+	--scope-500: var(--color-us-500);
+	--scope-600: var(--color-us-600);
+	--scope-700: var(--color-us-700);
+	--scope-800: var(--color-us-800);
+	--scope-900: var(--color-us-900);
+	--scope-950: var(--color-us-950);
+	--scope-1000: var(--color-us-1000);
+}
+
+/* US theme scope - Dark mode */
+.dark [data-theme="us"] {
+	--scope-25: var(--color-us-1000);
+	--scope-50: var(--color-us-950);
+	--scope-100: var(--color-us-900);
+	--scope-200: var(--color-us-800);
+	--scope-300: var(--color-us-700);
+	--scope-400: var(--color-us-600);
+	--scope-500: var(--color-us-500);
+	--scope-600: var(--color-us-400);
+	--scope-700: var(--color-us-300);
+	--scope-800: var(--color-us-200);
+	--scope-900: var(--color-us-100);
+	--scope-950: var(--color-us-50);
+	--scope-1000: var(--color-us-25);
+}
+
+body {
+	@apply min-h-screen select-none antialiased p-safe;
+	
+	/* Use CSS variables directly for theme-aware background and text */
+	background-color: var(--bg-canvas);
+	color: var(--text-primary);
+
+	transition-property: opacity, transform, filter, background-color, color;
 	transition-timing-function: ease-in-out;
 	transition-duration: 500ms;
 
@@ -15,13 +301,32 @@ body {
 	-webkit-touch-callout: none;
 }
 
+/* ========================================
+   Default Border Radius for Buttons and Sections
+   ======================================== */
+
+@layer base {
+	/* Apply default border radius to all buttons */
+	button {
+		border-radius: var(--radius-button);
+	}
+
+	/* Apply default border radius to all sections */
+	section {
+		border-radius: var(--radius-section);
+	}
+}
+
 .markdown-editor p {
 	margin-bottom: 1rem;
 }
 
-.page-transition {
-	opacity: 0.5;
-	background: black;
-	transform: translateY(40px);
-	filter: blur(12px);
+/* Main content transition awareness */
+main {
+	transition: opacity 1s ease-in-out;
+}
+
+/* Page transition - fade main content only */
+body.page-transition main {
+	opacity: 0.2;
 }

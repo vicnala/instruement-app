@@ -76,11 +76,13 @@
             "and": "and"
         },
         "CustomConnectButton": {
-            "switch_network": "Switch network"
+            "switch_network": "Switch network",
+            "label": "Connect"
         },
         "Header": {
             "new_instrument": "Register Instrument",
-            "account": "Account"
+            "account": "Account",
+            "home": "Home"
         },
         "DraftGrid": {
             "title_single": "Draft Registration",
@@ -181,12 +183,12 @@
             "documents": "Documents",
             "description": "Description",
             "back_to_draft": "Back to draft",
-            "made_by": "Instrument made by"
+            "registered_by": "Instrument registered by"
         },
         "Instrument": {
             "instrument": "Instrument",
             "current_owner": "Current owner",
-            "you_are_not_owner": "You are not the owner",
+            "you_are_not_owner": "You are not the owner of this instrument",
             "you_are_owner": "You are the owner of this instrument",
             "additional_images": "Additional images",
             "documents": "Documents",
@@ -260,8 +262,8 @@
             "payment_error": "Payment Error"
         },
         "AirdropForm": {
-            "title": "Register Your First Instrument",
-            "subtitle": "Your first registration is free.",
+            "title": "Register your first instrument",
+            "subtitle": "For free because the first time is always the hardest",
             "register_now": "Register now",
             "airdrop_error": "Registration error",
             "processing_title": "Registration in progress",
@@ -339,8 +341,8 @@
         },
         "HomeIndex": {
             "User": {
-                "no_instruments": "Receive your registered instrument",
-                "no_instruments_sub": "Present the QR code to your luthier."
+                "no_instruments": "Receive your instrument",
+                "no_instruments_sub": "Show the QR code to the luthier or current owner to receive the instrument registration."
             },
             "Minter": {
                 "hello": "Welcome",
@@ -353,9 +355,9 @@
             }
         },
         "NotConnected": {
-            "heading": "The digital tool for managing your musical instruments",
+            "heading": "Tell the true story about your musical instrument",
             "sub_heading": "Keep absolute control of your certificates and ownership",
-            "button_description": "No registration required. Connect anonymously",
+            "button_description": "No registration required",
             "auth_disclaimer": "Authentication powered by",
             "visit_instruement": "Visit instruement.com"
         },
@@ -366,12 +368,13 @@
         },
         "Account": {
             "User": {
-                "title": "Your account",
-                "anonymous": "Anonymous account type",
+                "account": "Your account",
+                "type": "Type",
+                "anonymous": "Anonymous",
                 "instrument": "Instrument",
                 "received_instrument": "\"{name}\" has been received.",
-                "connect_button_title": "Advanced actions",
-                "connect_button_description": "Access all core and advanced account functions here. If you haven’t already exported and saved your private key, you should do it now!"
+                "connect_button_title": "Advanced actions & logout",
+                "connect_button_description": "Click the account button to access all core and advanced account functions. If you haven’t already exported and saved your private key, you should do it now!"
             },
             "Minter": {
                 "verfied_since": "Verified since",

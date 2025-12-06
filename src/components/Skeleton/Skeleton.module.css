@@ -1,6 +1,6 @@
 .skeleton {
 	width: 100%;
-	background: linear-gradient(to right, #FCF2E8 0%, #FFF9F3 50%, #FCEAD7 100%);
+	background: linear-gradient(to right, var(--scope-25) 0%, var(--scope-100) 50%, var(--scope-25) 100%);
 	background-size: 400% 400%;
 	animation: gradient 2s ease-in-out infinite;
 	min-height: 12px;

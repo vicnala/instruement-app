@@ -17,8 +17,10 @@ export default function User(
       {
         !owned?.length ?
         <Section>
-          <div>
-            {context.sub && <ReceiveInstrumentCard address={context.sub} locale={locale} context={context} />}
+          <div data-theme="it">
+            {context.sub && 
+            <ReceiveInstrumentCard address={context.sub} locale={locale} context={context} />
+            }
           </div>
         </Section> :
         <Section>

@@ -19,14 +19,6 @@ export default function User(
 
     return (
         <Page context={context}>
-            <Section>
-                <h2 className='text-2xl font-bold text-black dark:text-white'>
-                    {t('title')}
-                </h2>
-                <p className='text-gray-500 dark:text-gray-400'>
-                    {t('anonymous')}
-                </p>
-            </Section>
             {invite && (
                 <Section>
                     <OnboardMinterCard 
@@ -41,14 +33,30 @@ export default function User(
                 </Section>
             )}
             <Section>
-                <div className='mb-16'>
-                    <h3 className='text-lg font-bold text-black dark:text-white mb-2'>
-                        {t('connect_button_title')}
-                    </h3>
-                    <p className='text-gray-500 dark:text-gray-400 mb-4'>
-                        {t('connect_button_description')}
-                    </p>
-                    <CustomConnectButton cb={`/account`} />
+                <div data-theme="us" className="mb-16 bg-scope-25 border border-scope-50 p-6 rounded-section">
+                    <h2 className="text-xl font-bold text-scope-1000 mb-4">
+                        {t('account')}
+                    </h2>
+                    <div className="md:flex gap-6">
+
+                        <div className="mb-6 min-w-[30%]">
+                            <h3 className='text-sm font-bold text-scope-700 mb-2'>
+                                {t('type')}
+                            </h3>
+                            <p className='text-3xl text-scope-400 font-bold'>
+                                {t('anonymous')}
+                            </p>
+                        </div>
+                        <div className="">
+                            <h3 className='text-sm font-bold text-scope-700 mb-2'>
+                                {t('connect_button_title')}
+                            </h3>
+                            <CustomConnectButton cb={`/account`} />
+                            <p className='text-scope-800 mb-4 mt-2'>
+                                {t('connect_button_description')}
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </Section>
         </Page>

@@ -308,7 +308,7 @@ export default function MediaManager({
             uploadedFiles.map((file, index) => (
               <div
                 key={file.id || `file-${index}`}
-                className="bg-it-50 border border-it-200 rounded-lg overflow-hidden"
+                className="bg-scope-50 border border-scope-200 rounded-button overflow-hidden"
               >
                 <div className="relative">
                   {accept === 'image' && file.base_url ? (
@@ -322,8 +322,8 @@ export default function MediaManager({
                       style={{ objectFit: 'contain' }}
                     />
                   ) : (
-                    <div key={`document-${file.id || `document-${index}`}`} className="aspect-square bg-it-200 flex items-center justify-center p-2">
-                      <FileText className="w-4 h-4 mr-2" />
+                    <div key={`document-${file.id || `document-${index}`}`} className="aspect-square text-scope-950 bg-scope-50 border border-scope-100 flex items-center justify-center p-2">
+                      <FileText className="w-4 h-4 mr-2" />hallo
                       <span>{file.title || `document-${index}`}</span>
                     </div>
                   )}
@@ -349,7 +349,7 @@ export default function MediaManager({
                       <div className="p-2">
                         <button
                           type="button"
-                          className="border border-it-200 py-1 px-2 text-xs rounded-md text-gray-600 hover:border-it-500 hover:text-gray-900"
+                          className="border-[0.1rem] border-scope-400 py-1 px-2 text-xs font-bold text-scope-500 hover:text-scope-900 hover:bg-scope-500 hover:border-scope-500"
                           onClick={() => handleToggleDescription(index)}
                         >
                           {t('images.add_description')}
@@ -371,7 +371,7 @@ export default function MediaManager({
                           <div className="p-2">
                             <button
                               type="button"
-                              className="border border-it-400 py-1 px-2 text-xs rounded-md text-gray-600 hover:border-it-500 hover:text-gray-900"
+                              className="border-[0.1rem] border-scope-400 py-1 px-2 text-xs font-bold text-scope-500 hover:text-scope-900 hover:bg-scope-500 hover:border-scope-500"
                               onClick={() => handleUpdateDescription(index)}
                               disabled={updatingFileId === file.id.toString()}
                             >
@@ -395,7 +395,7 @@ export default function MediaManager({
             selectedFiles.map((file, index) => (
               <div
                 key={`image-${index}`}
-                className="bg-it-50 border border-it-200 rounded-lg shadow overflow-hidden"
+                className="bg-scope-50 border border-scope-200 rounded-button shadow overflow-hidden"
               >
                 <div className="relative">
                   {
@@ -415,7 +415,7 @@ export default function MediaManager({
                       </div>
                     </>
                   : 
-                    <div key={`document-${index}`} className="aspect-square bg-it-200 flex items-center justify-center p-2">
+                    <div key={`document-${index}`} className="aspect-square text-scope-950 bg-scope-100 flex items-center justify-center p-2">
                       <FileText className="w-4 h-4 mr-2" />
                       <span>{file.name || `document-${index}`}</span>
                     </div>
@@ -447,9 +447,8 @@ export default function MediaManager({
           <button
             type="button"
             className="
-              text-gray-1000 bg-transparent border-[0.1rem] border-it-300 text-center py-2 px-4 rounded-md text-base flex items-center justify-center w-full
-              hover:bg-it-500 hover:text-it-1000 hover:border-it-500
-              dark:text-gray-100 dark:hover:text-it-1000 dark:border-it-800 dark:hover:border-it-500 "
+              text-scope-500 bg-transparent border-[0.1rem] border-scope-300 text-center py-2 px-4 text-base flex items-center justify-center w-full
+              hover:bg-scope-500 hover:text-scope-1000 hover:border-scope-500"
             onClick={handleClick}
           >
             <ArrowUpFromLine className="w-4 h-4 mr-2" />

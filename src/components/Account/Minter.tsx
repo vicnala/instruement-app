@@ -28,7 +28,7 @@ export default function Minter(
         <Page context={context}>
             {/* Cover Image Section */}
             <div className="relative w-full h-60 mb-16">
-                <div className="w-full h-full overflow-hidden rounded-[15px]">
+                <div className="w-full h-full overflow-hidden rounded-section">
                     <Image
                         src={minter?.cover_image?.url || "https://static.instruement.com/web/img/default-cover.jpg"}
                         alt={minter?.business_name || "Cover"}
@@ -62,14 +62,14 @@ export default function Minter(
                     <div className="flex flex-col">
                         {/* Business Name */}
                         {minter?.business_name && (
-                            <h1 className="text-3xl text-contrast dark:text-gray-25 font-bold mb-1">
+                            <h1 className="text-3xl text-scope-1000 font-bold mb-1">
                                 {minter.business_name}
                             </h1>
                         )}
 
                         {/* Full Name */}
                         {(minter?.alt_luthier_name || minter?.first_name || minter?.last_name) && (
-                            <h2 className="text-2xl text-gray-700 dark:text-gray-300 mb-4">
+                            <h2 className="text-2xl text-scope-700 mb-4">
                                 {minter.alt_luthier_name || `${minter.first_name} ${minter.last_name}`}
                             </h2>
                         )}
@@ -77,10 +77,10 @@ export default function Minter(
                         {/* Verified Since */}
                         {minter?.is_verified && minter?.is_verified_since && (
                             <div className="mb-6">
-                                <span className="text-sm font-medium text-gray-300 dark:text-gray-500">
+                                <span className="text-sm text-scope-700">
                                     {t('verfied_since')}:
                                 </span>
-                                <span className="ml-2 text-sm text-gray-300 dark:text-gray-500">
+                                <span className="text-sm text-scope-700 ml-2">
                                     {minter.is_verified_since}
                                 </span>
                             </div>
@@ -102,7 +102,7 @@ export default function Minter(
 
                         {/* Endorsed Skills */}
                         {minter?.skills && minter.skills.length > 0 && (
-                            <div className="mb-6">
+                            <div className="mb-6" data-theme="me">
                                 {/* <h3 className="text-lg font-semibold mb-2">{t('endorsed_skills')}</h3>
                                 <div className="flex flex-wrap gap-1 gap-y-2">
                                     {minter.skills.map((skill: any, index: number) => (
@@ -113,10 +113,10 @@ export default function Minter(
                                 </div> */}
                                 {isMinter && minterConstructionSkills.length > 0 && (
                                     <div className="">
-                                        <h3 className="text-lg font-semibold mb-2">{t('account.minter_account')}</h3>
+                                        <h3 className="text-lg text-scope-1000 font-semibold mb-2">{t('account.minter_account')}</h3>
                                         <div className="flex flex-wrap gap-1 gap-y-2">
                                             {minterConstructionSkills.map((skill: any, idx: number) => (
-                                                <span key={idx} className="px-3 py-1 bg-it-100 text-it-950 rounded-md text-md">
+                                                <span key={idx} className="px-3 py-1 bg-me-100 text-me-950 rounded-full text-md">
                                                     {skill.name.split(' construction')[0]}
                                                 </span>
                                             ))}
@@ -157,23 +157,29 @@ export default function Minter(
                         </div> */}
                         {/* View complete profile on instruement.com/?author=[minter.user_id] */}
                         <div className="mb-6 pt-6">
-                            <ButtonLink href={`https://www.instruement.com/?author=${minter?.user_id}`} colorSchema="gray" external={true}>
+                            <ButtonLink 
+                                href={`https://www.instruement.com/?author=${minter?.user_id}`} 
+                                theme="me" 
+                                external={true}
+                                size="md"
+                                aria-label={t('view_complete_profile')}
+                            >
                                 {t('view_complete_profile')} <ExternalLink className="w-4 h-4" />
                             </ButtonLink>
                         </div>
                     </div>
-                    <div className="flex flex-col justify-start items-end">
-                        <div className="w-full bg-gray-25 rounded-lg px-4 py-4 mb-3">
+                    <div className="flex flex-col justify-start items-end" data-theme="me">
+                        <div className="w-full bg-scope-25 rounded-section px-4 py-4 mb-3">
                             {/* Address details: */}
                             <div className="mb-6">
-                                <h3 className="text-lg font-semibold mb-2 text-gray-1000 dark:text-gray-800">{t('address')}</h3>
-                                <div className="text-gray-600">
+                                <h3 className="text-lg font-semibold mb-2 text-scope-1000">{t('address')}</h3>
+                                <div className="text-scope-700">
                                     <div className="flex items-center gap-2">
                                         <input
                                             type="text"
                                             value={address || "No wallet address available"}
                                             disabled
-                                            className="bg-gray-100 text-gray-600 p-2 rounded-md w-full"
+                                            className="bg-scope-100 text-scope-700 p-2 rounded-button w-full"
                                             aria-label="Wallet address"
                                         />
                                         <button
@@ -191,7 +197,7 @@ export default function Minter(
                                                     }
                                                 }
                                             }}
-                                            className="p-2 text-gray-600 hover:text-gray-800 disabled:opacity-50"
+                                            className="p-2 text-scope-700 hover:text-scope-1000 disabled:opacity-50"
                                             disabled={!address}
                                             aria-label="Copy wallet address"
                                         >
@@ -210,9 +216,9 @@ export default function Minter(
                                 )
                             }
                         </div>
-                        <div className="w-full bg-gray-25 rounded-lg px-4 py-4 mb-12">
-                            <h3 className="text-lg font-semibold mb-2 text-gray-1000 dark:text-gray-800">{t('wallet_actions_title')}</h3>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{t('wallet_actions_description')}</p>
+                        <div className="w-full bg-scope-25 rounded-section px-4 py-4 mb-12">
+                            <h3 className="text-lg font-semibold mb-2 text-scope-1000">{t('wallet_actions_title')}</h3>
+                            <p className="text-sm text-scope-700 mb-4">{t('wallet_actions_description')}</p>
                             {/* Connect Button */}
                             <CustomConnectButton cb={`/account`} />
                         </div>
