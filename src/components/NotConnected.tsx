@@ -38,7 +38,7 @@ export default function NotConnected(
                                 )} */}
                             </div>
                             <div className='mt-4'>
-                                <p className='text-sm md:text-md text-scope-500'>
+                                <p className='text-sm md:text-md text-us-300'>
                                     {t('button_description')}
                                 </p>
                             </div>

@@ -323,10 +323,65 @@ body {
 
 /* Main content transition awareness */
 main {
-	transition: opacity 1s ease-in-out;
+	transition: opacity 0.5s ease-in-out;
 }
 
 /* Page transition - fade main content only */
 body.page-transition main {
-	opacity: 0.2;
+	opacity: 0;
+}
+
+/* Page transition spinner - centered loading indicator */
+.page-transition-spinner {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 9999;
+	opacity: 0;
+	pointer-events: none;
+	transition: none;
+}
+
+/* Show spinner smoothly after 0.5s delay when page-transition is active */
+body.page-transition .page-transition-spinner {
+	opacity: 1;
+	transition: opacity 0.3s ease-in-out 0.5s;
+	pointer-events: auto;
+}
+
+/* Hide spinner instantly when transition ends (no transition on removal) */
+body:not(.page-transition) .page-transition-spinner {
+	opacity: 0;
+	transition: none;
+	pointer-events: none;
+}
+
+/* Style the spinner SVG - override margin classes for centered display */
+.page-transition-spinner svg {
+	width: 2rem;
+	height: 2rem;
+	color: var(--text-scope-500);
+	margin: 0;
+}
+
+/* BottomNav page transition animation */
+.bottom-nav {
+	opacity: 1;
+	transform: translateY(0);
+	transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+/* Animate BottomNav down and fade out during page transition */
+body.page-transition .bottom-nav {
+	opacity: 0;
+	transform: translateY(20px);
+	transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+/* Animate BottomNav back up and fade in when transition ends */
+body:not(.page-transition) .bottom-nav {
+	opacity: 1;
+	transform: translateY(0);
+	transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }

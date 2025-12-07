@@ -14,10 +14,6 @@ interface TransitionLinkProps extends LinkProps {
   disabled?: boolean;
 }
 
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 export const TransitionLink: React.FC<TransitionLinkProps> = ({
   children,
   href,
@@ -30,19 +26,16 @@ export const TransitionLink: React.FC<TransitionLinkProps> = ({
 }) => {
   const router = useRouter();
 
-  const handleTransition = async (
+  const handleTransition = (
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
   ) => {
     e.preventDefault();
     const body = document.querySelector("body");
 
+    // Add transition class - the new page will remove it when ready
     body?.classList.add("page-transition");
     
     router.push(href);
-
-    await sleep(2000);
-
-    body?.classList.remove("page-transition");
   };
 
   // When disabled, render a div with disabled button classes

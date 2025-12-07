@@ -14,6 +14,8 @@ import { ThirdwebProvider } from "thirdweb/react";
 import { locales } from "@/i18n/routing";
 import { IOSSplashScreens } from "@/components/IOSSplashScreens";
 import { PostHogProvider } from "@/components/PostHogProvider";
+import { PageTransitionHandler } from "@/components/UI/PageTransitionHandler";
+import ButtonSpinner from "@/components/UI/ButtonSpinner";
 
 const catamaran = Catamaran({ subsets: ["latin"] });
 
@@ -59,6 +61,10 @@ export default async function RootLayout({
         >
           <NextIntlClientProvider messages={messages}>
             <PostHogProvider />
+            <PageTransitionHandler />
+            <div className="page-transition-spinner">
+              <ButtonSpinner />
+            </div>
             <ThirdwebProvider>
               {children}
             </ThirdwebProvider>
