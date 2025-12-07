@@ -37,7 +37,7 @@ export const CustomConnectButton = (
       locale={locale.includes('en') ? 'en_US' : locale.includes('es') ? 'es_ES' : 'en_US'}
       chain={chain}
       connectButton={{
-        className: "!bg-scope-900",
+        className: "!bg-scope-900 !text-scope-25",
         label: t('components.CustomConnectButton.label')
       }}
       switchButton={{
