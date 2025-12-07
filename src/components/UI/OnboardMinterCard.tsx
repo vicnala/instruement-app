@@ -146,7 +146,7 @@ export default function OnboardMinterCard({ locale, invite, onReloadUser }: Onbo
           <h3 className="mb-2 text-3xl font-bold text-scope-1000">
             {t('title')}
           </h3>
-          <p className="mb-4 text-base text-us-700 ">
+          <p className="mb-4 text-base text-us-700 dark:text-us-300">
             {t('description')}
           </p>
         </div>
@@ -179,11 +179,11 @@ export default function OnboardMinterCard({ locale, invite, onReloadUser }: Onbo
                 />
                 <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                   <CircleCheck 
-                    className={`h-6 w-6 ${email ? (isValidEmail ? 'text-green-500' : 'text-gray-100') : 'hidden'}`} 
+                    className={`h-6 w-6 ${email ? (isValidEmail ? 'text-green-500' : 'text-us-100') : 'hidden'}`} 
                   />
                 </div>
               </div>
-              <p className="text-md text-us-600 pt-2 mb-2 text-pretty">
+              <p className="text-md text-us-600 dark:text-us-400 pt-2 mb-2 text-pretty">
                 {t('confirm_invitation_email_description')}
               </p>
               <div className="">
@@ -205,7 +205,7 @@ export default function OnboardMinterCard({ locale, invite, onReloadUser }: Onbo
             </div>
           ) : (
             <div className="flex flex-col w-full">
-              <label htmlFor="business-email" className="block text-md font-bold text-us-700 mb-1">
+              <label htmlFor="business-email" className="block text-md font-bold text-us-700 dark:text-us-300 mb-1">
                 {t('confirm_invitation_otp_label')}
               </label>
               <div className="relative">
@@ -226,7 +226,7 @@ export default function OnboardMinterCard({ locale, invite, onReloadUser }: Onbo
                     className="mr-2 h-4 w-4 text-me-600 focus:ring-me-500 border-gray-300 rounded"
                     onChange={(e) => setPrivacyPolicyAccepted(e.target.checked)}
                   />
-                  <label htmlFor="privacy-policy" className="text-xs text-scope-700 dark:text-gray-300">
+                  <label htmlFor="privacy-policy" className="text-xs text-us-700 dark:text-us-300">
                     {t('privacy_policy')}{' '}
                     <a 
                       href="https://instruement.com/privacy-policy/" 

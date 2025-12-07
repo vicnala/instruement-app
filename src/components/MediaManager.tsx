@@ -298,7 +298,7 @@ export default function MediaManager({
       { resizing && 
         <div className="flex items-center pb-4">
           <LoaderCircle className="w-4 h-4 animate-spin mr-1" />
-          <p className="text-xs text-gray-600">{t('processing')}</p>
+          <p className="text-xs text-scope-700">{t('processing')}</p>
         </div>
       }
 
@@ -361,7 +361,7 @@ export default function MediaManager({
                           ref={el => {
                             textareaRefs.current[index] = el;
                           }}
-                          className="text-gray-400 focus:text-gray-900 w-full p-2 border-none focus:outline-none min-h-[30px] bg-transparent focus:bg-white text-sm resize-none overflow-hidden"
+                          className="text-us-400 focus:text-us-900 w-full p-2 border-none focus:outline-none min-h-[30px] bg-transparent focus:bg-white text-sm resize-none overflow-hidden"
                           placeholder={accept === 'image' ? t('images.text_area_placeholder') : t('files.text_area_placeholder')}
                           value={descriptions[index]}
                           onChange={(e) => handleDescriptionChange(index, e.target.value)}

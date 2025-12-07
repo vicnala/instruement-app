@@ -131,10 +131,10 @@ export default function ButtonQrTransfer({
                   </div>
                   <div className="flex items-center justify-between mt-4 w-full">
                     <ButtonSpinner />
-                    <span className="text-gray-600 text-xs font-medium">
+                    <span className="text-scope-600 text-xs font-medium">
                       {t('awaiting_transfer')}
                     </span>
-                    <span className="text-gray-500 text-sm font-mono px-2 py-1 select-none">
+                    <span className="text-scope-400 text-sm font-mono px-2 py-1 select-none">
                       {formatTime(timer)}
                     </span>
                   </div>

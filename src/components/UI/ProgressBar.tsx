@@ -105,7 +105,7 @@ const ProgressBar = ({
             )}
             <div className="mt-2 sm:mt-4 text-center">
               <div className="text-sm sm:text-base font-medium truncate">{t('preview.title')}</div>
-              <div className="hidden sm:block text-xs sm:text-sm text-gray-500 truncate">{t('preview.description')}</div>
+              <div className="hidden sm:block text-xs sm:text-sm text-us-500 truncate">{t('preview.description')}</div>
             </div>
           </div>
         </div>

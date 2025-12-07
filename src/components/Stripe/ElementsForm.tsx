@@ -147,7 +147,7 @@ function CheckoutForm({
         <Section>
           <div className="mb-6">
             <h2 className="text-2xl sm:text-3xl font-semibold">{ t('title') }</h2>
-            <p className="text-md sm:text-lg text-gray-600">{ t('subtitle') }</p>
+            <p className="text-md sm:text-lg text-scope-700">{ t('subtitle') }</p>
           </div>
           <div className=" mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
             <InstrumentView instrument={instrument} />
@@ -155,12 +155,12 @@ function CheckoutForm({
               <fieldset className="elements-style mx-auto">
                 {paymentType === "card" ? (
                   <div className="flex flex-col gap-0 pb-3">
-                    <label htmlFor="cardholderName" className="block text-md text-gray-1000">
+                    <label htmlFor="cardholderName" className="block text-md text-scope-1000">
                       {t('name')}
                     </label>
                     <input
                       placeholder={t('card_name')}
-                      className="elements-style px-4 py-2 text-it-950 border border-gray-50 shadow-sm rounded-md focus:border-gray-400 focus:ring-it-300 focus:outline-none focus:ring focus:ring-opacity-40 placeholder:text-gray-700 placeholder:text-md"
+                      className="elements-style px-4 py-2 text-it-950 border border-scope-50 shadow-sm rounded-md focus:border-gray-400 focus:ring-it-300 focus:outline-none focus:ring focus:ring-opacity-40 placeholder:text-scope-600 placeholder:text-md"
                       type="Text"
                       name="cardholderName"
                       onChange={handleInputChange}

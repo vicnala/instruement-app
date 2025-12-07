@@ -124,12 +124,12 @@ export default function Minter(
                                     </div>
                                 )}
                                 {!isMinter && isLuthier && isVerified && (
-                                    <h4 className="text-sm mt-4 text-gray-500">
+                                    <h4 className="text-sm mt-4 text-us-500">
                                         {t('account.verified_luthier')}
                                     </h4>
                                 )}
                                 {isLuthier && !isVerified && (
-                                    <h4 className="text-sm mt-4 text-gray-500">
+                                    <h4 className="text-sm mt-4 text-us-500">
                                         {t('account.not_verified_luthier')}
                                     </h4>
                                 )}
@@ -188,11 +188,11 @@ export default function Minter(
                                                     navigator.clipboard.writeText(address);
                                                     const icon = document.querySelector('#copy-icon');
                                                     if (icon) {
-                                                        icon.classList.remove('text-gray-600');
-                                                        icon.classList.add('text-green-500');
+                                                        icon.classList.remove('text-us-600');
+                                                        icon.classList.add('text-me-500');
                                                         setTimeout(() => {
-                                                            icon.classList.remove('text-green-500');
-                                                            icon.classList.add('text-gray-600');
+                                                            icon.classList.remove('text-us-500');
+                                                            icon.classList.add('text-me-600');
                                                         }, 1000);
                                                     }
                                                 }

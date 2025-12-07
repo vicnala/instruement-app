@@ -18,7 +18,7 @@ export default function InstrumentView({ instrument }: { instrument: Instrument 
           <h2 className="text-xl font-semibold">
             {instrument.title}
           </h2>
-          <p className="text-gray-600">
+          <p className="text-scope-600">
             {instrument.type_name}
           </p>
         </div>

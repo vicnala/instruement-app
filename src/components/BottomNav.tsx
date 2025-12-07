@@ -15,7 +15,7 @@ export const BottomNav = ({ context }: { context: any }) => {
 	const address = context?.sub;
 
 	return pathname !== '/login' && address &&
-	<div className='bottom-nav fixed z-50 bottom-4 left-4 right-4 flex justify-center' data-theme="us">
+	<div className='bottom-nav fixed z-50 bottom-5 left-4 right-4 flex justify-center' data-theme="us">
 		<nav className='sm:hidden min-w-[10rem] px-4 bg-scope-100 border border-scope-200 transition-all duration-200 rounded-full shadow-[0_2px_10px_0px_rgba(0,0,0,0.1)] dark:shadow-[0_2px_10px_0px_rgba(0,0,0,0.8)]'>
 			<div className={`mx-auto py-2 grid items-center ${isMinter ? 'grid-cols-[1fr_auto_1fr] gap-6' : !address ? '' : 'grid-cols-[1fr_1fr] gap-3'}`}>
 				<TransitionLink key="home" href="/" locale={locale}>

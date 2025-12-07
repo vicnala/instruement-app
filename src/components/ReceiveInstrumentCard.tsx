@@ -18,7 +18,7 @@ const ReceiveInstrumentCard: React.FC<ReceiveInstrumentCardProps> = ({ address, 
           <h2 className='text-3xl font-bold text-scope-1000 mb-2'>
             {t('no_instruments')}
           </h2>
-          <p className="text-md mb-4 text-base text-us-700">
+          <p className="text-md mb-4 text-base text-us-800">
             {t('no_instruments_sub')}
           </p>
         </div>

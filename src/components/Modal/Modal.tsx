@@ -18,8 +18,8 @@ const Modal: React.FC<ModalProps> = ({ isOpen, content, onClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-80 overflow-y-auto h-full w-full flex justify-center items-center">
       <div className="relative z-10 mx-4 px-4 py-6 border w-96 border-none rounded-md bg-white">
         <div className="text-left">
-          <h2 className='text-xl font-bold mb-4 text-gray-900'>{content.title}</h2>
-          <p className='text-sm text-gray-600'>{content.description}</p>
+          <h2 className='text-xl font-bold mb-4 text-scope-950'>{content.title}</h2>
+          <p className='text-sm text-scope-700'>{content.description}</p>
         </div>
         <div className="flex justify-center mt-4">
           <button

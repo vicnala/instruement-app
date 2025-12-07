@@ -388,23 +388,23 @@ export default function Instrument({
 					{/* Copy URL Button for Non-Owner with Nonce */}
 					{address && !isOwner && hasActiveValidationAttempt(searchParams) && (
 						<Section>
-							<div className="bg-we-50 dark:bg-we-950 rounded-lg p-6 mb-3">
+							<div data-theme="we" className="bg-scope-50 rounded-section p-6 mb-3">
 								{isTransferConfirmationValid ? (
 									<>
-										<p className="flex items-center gap-2 text-we-600 font-bold mb-4">
+										<p className="flex items-center gap-2 text-scope-600 font-bold mb-4">
 											<CheckCheck className="w-5 h-5" strokeWidth={1.5} />
 											{tInstrument('remote_transfer_link_valid')}
 										</p>
-										<h1 className="text-2xl font-semibold text-we-1000 dark:text-we-50 mb-2">
+										<h1 className="text-2xl font-semibold text-scope-1000 mb-2">
 											{tInstrument('remote_transfer_confirmation_title')}
 										</h1>
-										<p className="text-we-1000 dark:text-we-50 mb-6">
+										<p className="text-scope-1000 mb-6">
 											{tInstrument('remote_transfer_confirmation_valid_description')}
 										</p>
 										<button
 											type="button"
 											onClick={() => handleCopyUrl(async () => generateResponseUrl())}
-											className="flex items-center gap-2 px-4 py-2 text-white bg-we-500 rounded-md hover:bg-we-600 focus:outline-none focus:ring-2 focus:ring-we-500 focus:ring-offset-2"
+											className="flex items-center gap-2 px-4 py-2 text-scope-25 bg-scope-500 rounded-button focus:outline-none"
 											aria-label={tInstrument('copy_response_url')}
 											disabled={isTransfering}
 										>
@@ -418,10 +418,10 @@ export default function Instrument({
 											<Ban className="w-5 h-5" strokeWidth={1.5} />
 											{tInstrument('remote_transfer_link_invalid')}
 										</p>
-										<h1 className="text-2xl font-semibold text-we-1000 dark:text-we-50 mb-2">
+										<h1 className="text-2xl font-semibold text-scope-1000 mb-2">
 											{tInstrument('remote_transfer_confirmation_title_invalid')}
 										</h1>
-										<p className="text-we-1000 dark:text-we-50 mb-6">
+										<p className="text-scope-1000 mb-6">
 											{tInstrument('remote_transfer_confirmation_invalid_description')}
 										</p>
 									</>
@@ -433,17 +433,17 @@ export default function Instrument({
 					{/* Owner's Remote Transfer Interface */}
 					{address && isOwner && hasActiveValidationAttempt(searchParams) && (
 						<Section>
-							<div className="bg-we-50 dark:bg-we-950 rounded-lg p-6 mb-3">
+							<div data-theme="we" className="bg-scope-50 rounded-section p-6 mb-3">
 								{isNonceValid ? (
 									<>
-										<p className="flex items-center gap-2 text-we-600 font-bold mb-4">
+										<p className="flex items-center gap-2 text-scope-600 font-bold mb-4">
 											<CheckCheck className="w-5 h-5" strokeWidth={1.5} />
 											{tInstrument('remote_transfer_link_valid')}
 										</p>
-										<h1 className="text-2xl font-semibold text-we-1000 dark:text-we-50 mb-2">
+										<h1 className="text-2xl font-semibold text-scope-1000 mb-2">
 											{tInstrument('remote_transfer_step_3_title')}
 										</h1>
-										<p className="text-we-1000 dark:text-we-50 mb-6">
+										<p className="text-scope-1000 mb-6">
 											{tInstrument('remote_transfer_step_3_description')}
 										</p>
 										<TransactionButton
@@ -600,14 +600,14 @@ export default function Instrument({
 								<div className="relative">
 									{/* Desktop: Always show full content */}
 									<div
-										className="hidden md:flex text-base text-it-1000 dark:text-gray-500 flex-col gap-4 pt-6"
+										className="hidden md:flex text-base text-us-700 dark:text-us-300 flex-col gap-4 pt-6"
 										dangerouslySetInnerHTML={{ __html: marked.parse(instrumentAsset.metadata.description || '') as string }}
 									/>
 									
 									{/* Mobile: Collapsible content */}
 									<div className="md:hidden">
 										<div
-											className={`text-base text-gray-800 dark:text-it-100 flex flex-col gap-4 overflow-hidden transition-all duration-300 ${
+											className={`text-base text-us-800 dark:text-us-200 flex flex-col gap-4 overflow-hidden transition-all duration-300 ${
 												isDescriptionExpanded ? 'pt-6 max-h-none' : 'h-0'
 											}`}
 											dangerouslySetInnerHTML={{ __html: marked.parse(instrumentAsset.metadata.description || '') as string }}
@@ -746,7 +746,7 @@ export default function Instrument({
 											<div className="flex flex-col items-start">
 												<h3 className="text-lg font-medium">{doc.description}</h3>
 												{ doc.description && 
-													<p className="text-sm text-gray-500">
+													<p className="text-sm text-scope-700">
 														{doc.description || tInstrument('no_description')}
 													</p>
 												}
@@ -771,7 +771,7 @@ export default function Instrument({
 										<h2 className="text-2xl font-semibold text-scope-1000 mb-2">
 											{tInstrument('transfer_management')}
 										</h2>
-										<p className="text-us-700 mb-6">
+										<p className="text-us-700 dark:text-us-300 mb-6">
 											{tInstrument('transfer_management_description')}
 										</p>
 										{/* Show transfer options button, hide if showTransferOptions is true */}
@@ -806,7 +806,7 @@ export default function Instrument({
 																{tInstrument('in_person_transfer')}
 															</h3>
 														</div>
-														<p className="text-us-700 mb-2">
+														<p className="text-us-700 dark:text-us-300 mb-2">
 															{tInstrument('in_person_transfer_description')}
 														</p>
 														<div className="flex flex-col gap-2">
@@ -841,7 +841,7 @@ export default function Instrument({
 																{tInstrument('remote_transfer')}
 															</h3>
 														</div>
-														<p className="text-us-700 mb-2">
+														<p className="text-us-700 dark:text-us-300 mb-2">
 															{tInstrument('remote_transfer_description')}
 														</p>
 														<div className="flex flex-col gap-2">
@@ -1067,9 +1067,13 @@ export default function Instrument({
 
 					{/* Explorer link – not logged in */}
 					{!hasActiveValidationAttempt(searchParams) && !address && (
-						<p className="mt-6 mb-12 flex justify-end">
+						<p className="mt-6 mb-12 flex justify-end" data-theme="us">
 							<a
-								className="text-xs text-gray-500 hover:text-gray-900 dark:text-gray-500 dark:hover:text-gray-200 bg-transparent hover:bg-gray-200 dark:hover:bg-gray-800 border border-gray-100 hover:border-gray-200 dark:border-gray-800 dark:hover:border-gray-800 rounded-md flex items-center gap-2 transition-colors duration-200 transform px-2 py-1"
+								className="flex items-center gap-2 transition-colors duration-200 transform px-2 py-1
+								text-xs text-scope-500 hover:text-scope-900 
+								bg-transparent hover:bg-scope-200 
+								border border-scope-100 hover:border-scope-200 
+								rounded-button "
 								href={blockExplorerUrl}
 								target="_blank"
 								rel="noreferrer"

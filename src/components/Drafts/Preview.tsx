@@ -122,7 +122,7 @@ export default function Preview(
                             className="object-cover w-full h-full"
                           />
                         </div>
-                        <p className={`p-2 text-sm ${image.description ? 'text-it-1000' : 'text-gray-500'}`}>
+                        <p className={`p-2 text-sm ${image.description ? 'text-it-1000' : 'text-us-500'}`}>
                           {image.description || t('no_description')}
                         </p>
                       </div>
@@ -152,7 +152,7 @@ export default function Preview(
                             {file.description || t('no_description')}
                           </p>
                         </div>
-                        <Download className="w-6 h-6 text-gray-500" />
+                        <Download className="w-6 h-6 text-us-500" />
                       </a>
                     ))}
                   </div>

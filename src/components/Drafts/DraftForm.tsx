@@ -276,25 +276,25 @@ export default function DraftForm(
           <div className="px-3 sm:px-6 py-4 sm:py-8 || bg-scope-25 border border-scope-50 rounded-section overflow-hidden">
             <div className="w-full mx-auto mb-4 sm:mb-8">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="text-it-1000 dark:text-gray-100">
+                <div className="text-it-1000 dark:text-us-100">
                   {
                     instrument ?
                       <>
                         {hasCover && hasImages && hasFiles && description ? (
                           <>
                             <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('title.ready_to_register')}</h2>
-                            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">{t('title.ready_to_register_sub')}</p>
+                            <p className="text-sm sm:text-base text-us-600 dark:text-us-400">{t('title.ready_to_register_sub')}</p>
                           </>
                         ) : (
                           <>
                             <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('title.edit')} #{instrument.id} </h2>
-                            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">{t('title.edit_sub_heading')}</p>
+                            <p className="text-sm sm:text-base text-us-600 dark:text-us-400">{t('title.edit_sub_heading')}</p>
                           </>
                         )}
                       </>
                       : <>
                         <h2 className='text-xl sm:text-2xl font-semibold mb-1'>{t('title.new')}</h2>
-                        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">{t('title.new_sub_heading')}</p>
+                        <p className="text-sm sm:text-base text-us-600 dark:text-us-400">{t('title.new_sub_heading')}</p>
                       </>
                   }
                 </div>
@@ -361,7 +361,7 @@ export default function DraftForm(
                         <div
                           onClick={() => instrument?.type ? null : setOpen(!open)}
                           className={`bg-scope-25 text-base p-2 flex border-[0.1rem] border-scope-200 items-center justify-between rounded-button 
-                            ${!type && "text-gray-700"} 
+                            ${!type && "text-us-700 dark:text-us-300"} 
                             ${!instrument?.type && "cursor-pointer"}
                             ${instrument?.type ? "opacity-50 cursor-not-allowed bg-scope-50" : ""}`}
                         >
@@ -398,7 +398,7 @@ export default function DraftForm(
                             </li>
                           ))}
                         </ul>
-                        <p className="text-sm text-us-600 pt-2">
+                        <p className="text-sm text-us-600 dark:text-us-400 pt-2">
                           {type ? t('basic_info.type.type_set_description') : t('basic_info.type.description')}
                         </p>
                       </div>
@@ -416,7 +416,7 @@ export default function DraftForm(
                         value={name}
                         disabled={false}
                       />
-                      <p className="text-sm text-us-600 pt-2">
+                      <p className="text-sm text-us-600 dark:text-us-400 pt-2">
                         {t('basic_info.name.description')}
                       </p>
                     </div>
@@ -445,7 +445,7 @@ export default function DraftForm(
                     <h2 className="text-xl font-semibold text-scope-1000 pb-1">
                       {t('media.cover.title')}
                     </h2>
-                    <p className="text-sm text-us-600">
+                    <p className="text-sm text-us-600 dark:text-us-400">
                       {t('media.cover.description')}
                     </p>
                     <div className="mt-4" data-theme="it">
@@ -468,7 +468,7 @@ export default function DraftForm(
                     <h2 className="text-xl font-semibold text-scope-1000 pb-1" >
                       {t('media.images.title')}
                     </h2>
-                    <p className="text-sm text-us-600 max-w-lg">
+                    <p className="text-sm text-us-600 dark:text-us-400 max-w-lg">
                       {t('media.images.description')}
                     </p>
                     <div className="mt-4" data-theme="it">
@@ -486,7 +486,7 @@ export default function DraftForm(
                     <h2 className="text-xl font-semibold text-scope-1000 pb-1">
                       {t('media.files.title')}
                     </h2>
-                    <p className="text-sm text-us-600">
+                    <p className="text-sm text-us-600 dark:text-us-400">
                       {t('media.files.description')}
                     </p>
                     <div className="mt-4" data-theme="it">
@@ -513,7 +513,7 @@ export default function DraftForm(
                   <h2 className="text-xl font-semibold text-scope-1000 pb-1">
                     {t('description.title')}
                   </h2>
-                  <p className="text-sm text-us-600">
+                  <p className="text-sm text-us-600 dark:text-us-400">
                     {t('description.description')}
                   </p>
                   <div className="p-0 mt-4 border-[0.1rem] border-scope-200 bg-white rounded-md">
@@ -523,7 +523,7 @@ export default function DraftForm(
                       contentEditableClassName="markdown-editor"
                     />
                   </div>
-                  <div className="mt-2 text-xs text-gray-600 flex justify-end">
+                  <div className="mt-2 text-xs text-us-600 dark:text-us-400 flex justify-end">
                     <span className={`${description.length < MIN_DESCRIPTION_LENGTH ? 'text-red-500' : 'text-green-600'}`}>
                       {description.length} {description.length < MIN_DESCRIPTION_LENGTH ? t('description.characters_min') : t('description.characters')}
                     </span>
