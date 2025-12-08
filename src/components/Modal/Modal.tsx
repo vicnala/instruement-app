@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { useTranslations } from "next-intl";
 interface ModalItem {
   title: string;
   description: string;
@@ -12,30 +12,26 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, content, onClose }) => {
+  const t = useTranslations('components.Modal');
   if (!isOpen || !content) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-80 overflow-y-auto h-full w-full flex justify-center items-center">
-      <div className="relative z-10 mx-4 px-4 py-6 border w-96 border-none rounded-md bg-white">
-        <div className="text-left">
-          <h2 className='text-xl font-bold mb-4 text-scope-950'>{content.title}</h2>
-          <p className='text-sm text-scope-700'>{content.description}</p>
+      <div className="relative z-10 mx-4 px-4 py-6 border w-96 border-none rounded-section bg-us-25">
+        <div className="text-left mb-6">
+          <h2 className='text-xl font-bold mb-4 text-us-1000'>{content.title}</h2>
+          <p className='text-sm text-us-700'>{content.description}</p>
         </div>
-        <div className="flex justify-center mt-4">
+        <div className="flex justify-center">
           <button
-            onClick={onClose}
-            className="text-black background-transparent font-bold uppercase px-0 py-0 text-sm outline-none focus:outline-none ease-linear transition-all duration-150" type="button"
+          onClick={onClose}
+          className="uppercase px-4 py-2 rounded-button outline-none focus:outline-none transition-all duration-150 cursor-pointer
+          text-xs text-us-700 
+          border-[0.1rem] border-us-100 active:border-us-300
+          bg-transparent hover:bg-us-100 active:bg-us-200"
+          type="button"
           >
-            <svg
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              height="3em"
-              width="3em"
-              className="text-me-500"
-            >
-              <path d="M17.28 9.28a.75.75 0 00-1.06-1.06l-5.97 5.97-2.47-2.47a.75.75 0 00-1.06 1.06l3 3a.75.75 0 001.06 0l6.5-6.5z" />
-              <path fillRule="evenodd" d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1zM2.5 12a9.5 9.5 0 1119 0 9.5 9.5 0 01-19 0z" />
-            </svg>
+            {t('close')}
           </button>
         </div>
 
