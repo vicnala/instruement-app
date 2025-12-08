@@ -38,7 +38,7 @@ export default async function RootLayout({
           rel="canonical"
           href={process.env.NEXT_PUBLIC_SERVER_URL || `https://app.instruement.com`}
         />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
         
         <IOSSplashScreens />
         
