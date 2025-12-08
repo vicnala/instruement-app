@@ -229,11 +229,13 @@ export default function Instrument({
 	const stepsSectionRef = useRef<HTMLDivElement>(null);
 	const sendSectionRef = useRef<HTMLDivElement>(null);
 	const [isTransferConfirmationValid, setIsTransferConfirmationValid] = useState<boolean>(false);
+	const [isValidatingTransferConfirmation, setIsValidatingTransferConfirmation] = useState<boolean>(true);
 
 	const address = context?.sub;
 	const isMinter = instrumentAsset.metadata.properties?.some((property: any) => property?.trait_type === "Registrar" && property?.value === address);
 	// Add this state for nonce validation
 	const [isNonceValid, setIsNonceValid] = useState<boolean>(false);
+	const [isValidatingNonce, setIsValidatingNonce] = useState<boolean>(true);
 
 	// Add state for description collapse/expand
 	const [isDescriptionExpanded, setIsDescriptionExpanded] = useState<boolean>(false);
@@ -363,6 +365,7 @@ export default function Instrument({
 		} else {
 			setIsTransferConfirmationValid(false);
 		}
+		setIsValidatingTransferConfirmation(false);
 	}, [searchParams, id]);
 
 	// Add this effect to validate the nonce when the component mounts or searchParams changes
@@ -376,6 +379,7 @@ export default function Instrument({
 			} else {
 				setIsNonceValid(false);
 			}
+			setIsValidatingNonce(false);
 		};
 
 		validateNonce();
@@ -386,7 +390,7 @@ export default function Instrument({
 			{instrumentAsset && instrumentAsset.metadata ? (
 				<>
 					{/* Copy URL Button for Non-Owner with Nonce */}
-					{address && !isOwner && hasActiveValidationAttempt(searchParams) && (
+					{address && !isOwner && hasActiveValidationAttempt(searchParams) && !isValidatingTransferConfirmation && (
 						<Section>
 							<div data-theme="we" className="bg-scope-50 rounded-section p-6 mb-3">
 								{isTransferConfirmationValid ? (
@@ -431,7 +435,7 @@ export default function Instrument({
 					)}
 
 					{/* Owner's Remote Transfer Interface */}
-					{address && isOwner && hasActiveValidationAttempt(searchParams) && (
+					{address && isOwner && hasActiveValidationAttempt(searchParams) && !isValidatingNonce && (
 						<Section>
 							<div data-theme="we" className="bg-scope-50 rounded-section p-6 mb-3">
 								{isNonceValid ? (
