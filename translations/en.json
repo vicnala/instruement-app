@@ -378,6 +378,7 @@
             },
             "Minter": {
                 "verfied_since": "Verified since",
+                "luthier_label": "Luthier",
                 "instrument_type_specialization": "Specialization",
                 "endorsed_skills": "Endorsed skills",
                 "about": "About",

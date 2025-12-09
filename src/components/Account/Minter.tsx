@@ -94,18 +94,18 @@ export default function Minter(
 
                         {/* Full Name */}
                         {(minter?.alt_luthier_name || minter?.first_name || minter?.last_name) && (
-                            <h2 className="text-lg text-scope-700 text-center md:text-left mb-0">
-                                {minter.alt_luthier_name || `${minter.first_name} ${minter.last_name}`}
+                            <h2 className="text-lg text-scope-1000 text-center md:text-left mb-0">
+                                {minter.alt_luthier_name || `${t('luthier_label')}: ${minter.first_name} ${minter.last_name}`}
                             </h2>
                         )}
 
                         {/* Verified Since */}
                         {minter?.is_verified && minter?.is_verified_since && (
-                            <div className="mb-6 text-center md:text-left">
-                                <span className="text-xs text-scope-700">
-                                    {t('verfied_since')}:
+                            <div className="mb-6 text-center md:text-left text-sm text-scope-700">
+                                <span className="">
+                                    {t('verfied_since')}
                                 </span>
-                                <span className="text-xs text-scope-700 ml-2">
+                                <span className="ml-1">
                                     {minter.is_verified_since}
                                 </span>
                             </div>
