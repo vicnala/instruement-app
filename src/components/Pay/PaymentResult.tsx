@@ -2,28 +2,30 @@
 
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { useRouter } from "@/i18n/routing";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
 import DraftService from "@/services/DraftService";
 import { Instrument } from "@/lib/definitions";
-
+import { TransitionLink } from "@/components/UI/TransitionLink";
+import { House } from "lucide-react";
+import ButtonSpinner from "@/components/UI/ButtonSpinner";
 
 export default function PaymentResult(
   { 
     status,
     id,
     name,
-    context
+    context,
+    paymentType = "payment"
   }: { 
     status: string;
     id: string;
     name: string;
-    context: any
+    context: any;
+    paymentType?: "payment" | "airdrop";
   }
 ) {
   const t = useTranslations('components.PaymentResult');
-  const router = useRouter();
   const locale = useLocale();
   const [instrument, setInstrument] = useState<Instrument>();
 
@@ -56,51 +58,60 @@ export default function PaymentResult(
   return (
     <Page context={context}>
       <Section>
-        { status === 'succeeded' ? (
-          <div className="flex flex-col items-center justify-center">
-            <h1 className='text-4xl font-bold text-contrast dark:text-it-200 mb-2'>
-              {t('title_thank_you')}
-            </h1>
-            <p className="text-base">
-              {t('success_message_received', { title: name })}
-            </p>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center">
-            <h1 className='text-4xl font-bold text-contrast dark:text-it-200 mb-2'>
-              {t('title_failed')}
-            </h1>
-            <p className="text-base">
-              {t('failed_message')}
-            </p>
-          </div>
+        {!instrument && (
+          status === 'succeeded' ? (
+            <div className="flex flex-col items-center justify-center max-w-md mx-auto">
+              <h1 className='text-4xl font-bold text-contrast dark:text-it-200 mb-2'>
+                {t('title_thank_you')}
+              </h1>
+              <p className="text-base">
+                {paymentType === "airdrop" 
+                  ? t('success_message_received_airdrop', { title: name })
+                  : t('success_message_received', { title: name })
+                }
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center max-w-md mx-auto">
+              <h1 className='text-4xl font-bold text-contrast dark:text-it-200 mb-2'>
+                {t('title_failed')}
+              </h1>
+              <p className="text-base">
+                {t('failed_message')}
+              </p>
+              <TransitionLink 
+              href="/" 
+              locale={locale} 
+              className="mt-6 inline-flex items-center px-4 py-2 mb-6 tracking-wide transition-colors duration-200 transform focus:outline-none 
+              rounded-button 
+              text-base text-scope-500 hover:text-scope-1000  
+              border-[0.1rem] border-scope-500 
+              bg-transparent hover:bg-scope-500 
+              focus:bg-scope-500 focus:text-scope-1000" 
+              aria-label={t('go_back_to_home')}>
+                <House className="w-4 h-4 mr-2" />
+                {t('go_back_to_home')}
+              </TransitionLink>
+            </div>
+          )
         )}
 
-        <div className='text-m text-center'>
+        <div className='text-md text-center pt-6'>
           {
             status === 'succeeded' ?
             <div className="flex flex-col items-center justify-center">
-              {
-                instrument ?
-                <p className="text-lg">
-                  {t('success_message_ready')}
-                </p> 
-                : 
+              {!instrument && (
                 <div className="flex items-center justify-center gap-2 text-lg">
-                  <div className="inline-block h-6 w-6 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
-                      <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-                          
-                      </span>
-                  </div>
+                  <ButtonSpinner />
                   {t('success_message_loading')}
                 </div>
-              }
+              )}
             </div>
             :
             <div className="flex flex-col items-center justify-center">
               <p>
-              {t('failed_message')}
-            </p>
+                {t('failed_message')}
+              </p>
             </div>
           }
         </div>
@@ -108,18 +119,28 @@ export default function PaymentResult(
       {
         instrument && 
         <Section>
-          <div className="mt-6 text-center">
-            {
-              <button
-                type="button"
-                className="font-bold inline-flex items-center px-4 py-2 tracking-wide transition-colors duration-200 transform rounded-md focus:outline-none text-it-1000 dark:text-it-500 border-[0.1rem] border-it-500 hover:bg-it-500 hover:text-it-1000 dark:hover:text-it-1000 focus:bg-it-500 focus:text-it-600 dark:focus:text-it-800"
-                onClick={() => {
-                  router.push(`/instrument/${instrument.asset_id}`);
-                }}
-              >
-                {t('go_to_instrument')}
-              </button>
-            }
+          <div data-theme="it" className="mt-6 text-center rounded-section bg-scope-50 border border-scope-100 p-4 mb-12 max-w-xl mx-auto">
+            <div className="flex flex-col items-center justify-center mb-6">
+              <h3 className="text-2xl font-bold text-scope-1000 mb-2">
+                {t('success_message_ready_title')}
+              </h3>
+              <p className="text-lg">
+                {t('success_message_ready')}
+              </p>
+            </div>
+            <TransitionLink
+              href={`/instrument/${instrument.asset_id}`}
+              locale={locale}
+              className="font-bold inline-flex items-center px-4 py-2 mb-6 tracking-wide transition-colors duration-200 transform focus:outline-none 
+              rounded-button 
+              text-scope-500 hover:text-scope-1000  
+              border-[0.1rem] border-scope-500 
+              bg-transparent hover:bg-scope-500 
+              focus:bg-scope-500 focus:text-scope-1000"
+              aria-label={t('go_to_instrument')}
+            >
+              {t('go_to_instrument')}
+            </TransitionLink>
           </div>
         </Section>
       }

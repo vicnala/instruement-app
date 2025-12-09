@@ -289,11 +289,14 @@
         "PaymentResult": {
             "title_thank_you": "Gracias",
             "success_message_received": "Tu pago por \"{title}\" ha sido recibido. Puedes esperar unos minutos o comprobar tu email para la confirmación.",
+            "success_message_received_airdrop": "Tu registro gratuito por \"{title}\" ha sido recibido. Puedes esperar unos minutos o comprobar tu email para la confirmación.",
             "success_message_loading": "Procesando el registro...",
-            "success_message_ready": "Listo. El instrumento registrado ya está disponible en tu cuenta",
+            "success_message_ready_title": "Listo",
+            "success_message_ready": "El instrumento registrado ya está disponible en tu cuenta",
             "go_to_instrument": "Ver el instrumento",
             "title_failed": "Pago fallido",
             "failed_message": "Algo ha ido mal con el pago. Hemos sido notificados y te contactaremos pronto.",
+            "go_back_to_home": "Volver al inicio",
             "processing_title": "Registro en progreso",
             "processing_message": "Por favor, espera mientras procesamos tu registro."
         },

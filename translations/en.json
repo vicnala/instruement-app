@@ -279,11 +279,14 @@
         "PaymentResult": {
             "title_thank_you": "Thank you",
             "success_message_received": "Your payment for \"{title}\" has been received. You can wait a few moments or check your email for the confirmation.",
+            "success_message_received_airdrop": "Your free registration for \"{title}\" has been received. You can wait a few moments or check your email for the confirmation.",
             "success_message_loading": "Registration in progress...",
-            "success_message_ready": "Ready. The registered instrument is now available in your account",
+            "success_message_ready_title": "Ready",
+            "success_message_ready": "The registered instrument is now available in your account",
             "go_to_instrument": "View the instrument",
             "title_failed": "Payment failed",
             "failed_message": "Something went wrong with the payment. We have been notified and will contact you shortly.",
+            "go_back_to_home": "Go to home",
             "processing_title": "Registration in progress",
             "processing_message": "Please wait while we process your registration."
         },
