@@ -373,16 +373,20 @@ body:not(.page-transition) .page-transition-spinner {
 	transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
-/* Animate BottomNav down and fade out during page transition */
-body.page-transition .bottom-nav {
-	opacity: 0;
-	transform: translateY(20px);
+
+
+/* Animate BottomNav back up and fade in when transition ends */
+body:not(.page-transition) .bottom-nav,
+body:not(.focus-mode) .bottom-nav {
+	opacity: 1;
+	transform: translateY(0);
 	transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
-/* Animate BottomNav back up and fade in when transition ends */
-body:not(.page-transition) .bottom-nav {
-	opacity: 1;
-	transform: translateY(0);
+/* Animate BottomNav down and fade out during page transition */
+body.page-transition .bottom-nav,
+body.focus-mode .bottom-nav {
+	opacity: 0;
+	transform: translateY(20px);
 	transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
