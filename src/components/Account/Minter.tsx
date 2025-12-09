@@ -24,6 +24,25 @@ export default function Minter(
         minterConstructionSkills = minter.skills.filter((skill: any) => skill.slug.includes('construction'));
     }
 
+    // Group skills by instrument type based on slug matching
+    const getInstrumentTypeWithSkills = () => {
+        if (!minter?.instrument_types || !minter?.skills) return [];
+        
+        return minter.instrument_types.map((instrumentType: any) => {
+            const matchingSkills = minter.skills.filter((skill: any) => {
+                // Check if skill slug starts with instrument type slug followed by a hyphen
+                return skill.slug.startsWith(`${instrumentType.slug}-`);
+            });
+            
+            return {
+                instrumentType,
+                skills: matchingSkills
+            };
+        }).filter((item: any) => item.skills.length > 0); // Only return instrument types that have matching skills
+    };
+
+    const instrumentTypesWithSkills = getInstrumentTypeWithSkills();
+
     return (
         <Page context={context}>
             {/* Cover Image Section */}
@@ -62,14 +81,14 @@ export default function Minter(
                     <div className="flex flex-col">
                         {/* Business Name */}
                         {minter?.business_name && (
-                            <h1 className="text-3xl text-scope-1000 font-bold mb-1">
+                            <h1 className="text-3xl text-scope-1000 font-bold mb-4">
                                 {minter.business_name}
                             </h1>
                         )}
 
                         {/* Full Name */}
                         {(minter?.alt_luthier_name || minter?.first_name || minter?.last_name) && (
-                            <h2 className="text-2xl text-scope-700 mb-4">
+                            <h2 className="text-xl text-scope-700 mb-0">
                                 {minter.alt_luthier_name || `${minter.first_name} ${minter.last_name}`}
                             </h2>
                         )}
@@ -77,48 +96,36 @@ export default function Minter(
                         {/* Verified Since */}
                         {minter?.is_verified && minter?.is_verified_since && (
                             <div className="mb-6">
-                                <span className="text-sm text-scope-700">
+                                <span className="text-xs text-scope-700">
                                     {t('verfied_since')}:
                                 </span>
-                                <span className="text-sm text-scope-700 ml-2">
+                                <span className="text-xs text-scope-700 ml-2">
                                     {minter.is_verified_since}
                                 </span>
                             </div>
                         )}
 
-                        {/* Instrument Types */}
-                        {/* {minter?.instrument_types && minter.instrument_types.length > 0 && (
-                            <div className="mb-6">
-                                <h3 className="text-lg font-semibold mb-2">{t('instrument_type_specialization')}</h3>
-                                <div className="flex flex-wrap gap-1 gap-y-2">
-                                    {minter.instrument_types.map((type: any, index: number) => (
-                                        <span key={index} className="px-3 py-1 bg-it-100 text-it-950 rounded-md text-md">
-                                            {type.name}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        )} */}
-
                         {/* Endorsed Skills */}
                         {minter?.skills && minter.skills.length > 0 && (
-                            <div className="mb-6" data-theme="me">
-                                {/* <h3 className="text-lg font-semibold mb-2">{t('endorsed_skills')}</h3>
-                                <div className="flex flex-wrap gap-1 gap-y-2">
-                                    {minter.skills.map((skill: any, index: number) => (
-                                        <span key={index} className="px-3 py-1 bg-gray-50 text-gray-800 rounded-md text-md">
-                                            {skill.name}
-                                        </span>
-                                    ))}
-                                </div> */}
-                                {isMinter && minterConstructionSkills.length > 0 && (
+                            <div className="mb-6" data-theme="us">
+                                {isMinter && instrumentTypesWithSkills.length > 0 && (
                                     <div className="">
                                         <h3 className="text-lg text-scope-1000 font-semibold mb-2">{t('account.minter_account')}</h3>
-                                        <div className="flex flex-wrap gap-1 gap-y-2">
-                                            {minterConstructionSkills.map((skill: any, idx: number) => (
-                                                <span key={idx} className="px-3 py-1 bg-me-100 text-me-950 rounded-full text-md">
-                                                    {skill.name.split(' construction')[0]}
-                                                </span>
+                                        <div className="flex flex-col gap-3">
+                                            {instrumentTypesWithSkills.map((item: any, idx: number) => (
+                                                <div key={idx} className="flex items-center gap-2 flex-wrap">
+                                                    <span className="text-scope-700 font-medium text-md">
+                                                        {item.instrumentType.name}
+                                                    </span>
+                                                    <span className="text-scope-500 ">›</span>
+                                                    <div className="flex flex-wrap gap-1 gap-y-2">
+                                                        {item.skills.map((skill: any, skillIdx: number) => (
+                                                            <span key={skillIdx} className="px-3 py-1 bg-scope-100 text-scope-900 rounded-full text-md">
+                                                                {skill.name.split(' construction')[0]}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
                                             ))}
                                         </div>
                                     </div>
@@ -136,25 +143,6 @@ export default function Minter(
                             </div>
                         )}
 
-                        {/* Products & Services Section */}
-                        {/* <div className="mb-6 max-w-md">
-                            {minter?.products_services && minter.products_services.length > 0 ? (
-                                minter.products_services
-                                .filter((item: any) => item.lang === locale)
-                                .map((item: any, index: number) => (
-                                    <>
-                                        <h3 className="text-md font-semibold mb-2">{item.title}</h3>
-                                        <div 
-                                            key={index} 
-                                            className="text-gray-600 prose prose-sm max-w-none"
-                                            dangerouslySetInnerHTML={{ __html: item.content }}
-                                        />
-                                    </>
-                                    ))
-                            ) : (
-                                <p className="text-gray-600">{t('no_content_available')}</p>
-                            )}
-                        </div> */}
                         {/* View complete profile on instruement.com/?author=[minter.user_id] */}
                         <div className="mb-6 pt-6">
                             <ButtonLink 
