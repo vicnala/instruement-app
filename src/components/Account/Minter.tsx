@@ -46,7 +46,7 @@ export default function Minter(
     return (
         <Page context={context}>
             {/* Cover Image Section */}
-            <div className="relative w-full h-60 mb-16">
+            <div className="relative w-full h-[100px] md:h-60 mb-10 md:mb-16">
                 <div className="w-full h-full overflow-hidden rounded-section">
                     <Image
                         src={minter?.cover_image?.url || "https://static.instruement.com/web/img/default-cover.jpg"}
@@ -60,8 +60,14 @@ export default function Minter(
 
                 {/* Profile Photo floating on cover image */}
                 {minter?.profile_photo && (
-                    <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
-                        <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                    <div className="absolute bottom-0 left-1/2 transform translate-y-1/2 -translate-x-1/2">
+                        <div className="overflow-hidden
+                        w-24 h-24 md:w-32 md:h-32 
+                        rounded-full 
+                        border-[0.2rem] border-us-100 dark:border-us-700 
+                        shadow-lg 
+                        bg-us-300 dark:bg-me-700"
+                        >
                             <Image
                                 src={minter.profile_photo.url}
                                 alt={`${minter.first_name} ${minter.last_name}`}
@@ -81,21 +87,21 @@ export default function Minter(
                     <div className="flex flex-col">
                         {/* Business Name */}
                         {minter?.business_name && (
-                            <h1 className="text-3xl text-scope-1000 font-bold mb-4">
+                            <h1 className="text-2xl text-scope-1000 font-bold text-center md:text-left mb-4">
                                 {minter.business_name}
                             </h1>
                         )}
 
                         {/* Full Name */}
                         {(minter?.alt_luthier_name || minter?.first_name || minter?.last_name) && (
-                            <h2 className="text-xl text-scope-700 mb-0">
+                            <h2 className="text-lg text-scope-700 text-center md:text-left mb-0">
                                 {minter.alt_luthier_name || `${minter.first_name} ${minter.last_name}`}
                             </h2>
                         )}
 
                         {/* Verified Since */}
                         {minter?.is_verified && minter?.is_verified_since && (
-                            <div className="mb-6">
+                            <div className="mb-6 text-center md:text-left">
                                 <span className="text-xs text-scope-700">
                                     {t('verfied_since')}:
                                 </span>
