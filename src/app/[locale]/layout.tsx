@@ -16,6 +16,7 @@ import { IOSSplashScreens } from "@/components/IOSSplashScreens";
 import { PostHogProvider } from "@/components/PostHogProvider";
 import { PageTransitionHandler } from "@/components/UI/PageTransitionHandler";
 import ButtonSpinner from "@/components/UI/ButtonSpinner";
+import { PullToRefresh } from "@/components/UI/PullToRefresh";
 
 const catamaran = Catamaran({ subsets: ["latin"] });
 
@@ -38,7 +39,7 @@ export default async function RootLayout({
           rel="canonical"
           href={process.env.NEXT_PUBLIC_SERVER_URL || `https://app.instruement.com`}
         />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3.0" />
         
         <IOSSplashScreens />
         
@@ -62,6 +63,7 @@ export default async function RootLayout({
           <NextIntlClientProvider messages={messages}>
             <PostHogProvider />
             <PageTransitionHandler />
+            <PullToRefresh />
             <div className="page-transition-spinner">
               <ButtonSpinner />
             </div>
