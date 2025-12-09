@@ -119,7 +119,7 @@ export default function NFTGrid({ owned, mintedIds, address }: Readonly<Props>) 
                 <span className="font-bold">{", "} {owned.length}</span> {t('components.NFTGrid.owned')}
               </> : 
                 mintedIds.length > 0 && 
-                <span className="inline-block ml-4"><ButtonSpinner /></span>
+                <span className="inline-block ml-4 w-4 h-4"><ButtonSpinner /></span>
             }
           </h2>
           <p className="text-md text-scope-700 pb-4">
