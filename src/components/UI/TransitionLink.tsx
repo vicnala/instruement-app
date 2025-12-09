@@ -2,7 +2,7 @@
 import { LinkProps } from "next/link";
 import { Link } from "@/i18n/routing";
 import React from "react";
-import { useRouter } from "@/i18n/routing";
+import { useRouter, usePathname } from "@/i18n/routing";
 
 interface TransitionLinkProps extends LinkProps {
   children: React.ReactNode;
@@ -25,10 +25,17 @@ export const TransitionLink: React.FC<TransitionLinkProps> = ({
   ...props
 }) => {
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleTransition = (
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
   ) => {
+    // Prevent navigation if already on the target page
+    if (pathname === href) {
+      e.preventDefault();
+      return;
+    }
+
     e.preventDefault();
     const body = document.querySelector("body");
 
