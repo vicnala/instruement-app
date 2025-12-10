@@ -12,7 +12,7 @@ const Page = ({ children, context }: Props) => {
 		<>
 			<Header context={context} />
 			<main className='px-3.5 relative z-10 rounded-section'>
-				<div className='pt-6 pb-[4rem] sm:px-0 mx-auto max-w-screen-lg'>{children}</div>
+				<div className='pt-6 pb-[6rem] md:pb-[2rem] sm:px-0 mx-auto max-w-screen-lg'>{children}</div>
 			</main>
 			<BottomNav context={context} />
 		</>

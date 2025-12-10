@@ -350,6 +350,12 @@
                     "no_valid_email": "El email no es válido",
                     "otp_failed": "Algo ha ido mal con este paso. Por favor, inténtalo de nuevo."
                 }
+            },
+            "PWAInstall": {
+                "app_icon_alt": "Icono de la aplicación Instruement",
+                "title": "Añade Instruement a tu pantalla de inicio",
+                "description": "Habilita el acceso directo a tus instrumentos registrados para un uso más cómodo",
+                "install_button_label": "Instalar ahora"
             }
         },
         "HomeIndex": {

@@ -340,6 +340,12 @@
                     "no_valid_email": "The email is not valid",
                     "otp_failed": "Something went wrong with this step. Please try again."
                 }
+            },
+            "PWAInstall": {
+                "app_icon_alt": "Instruement app icon",
+                "title": "Add Instruement to your home screen",
+                "description": "Enable direct access to your registered musical instruments for a more convenient use",
+                "install_button_label": "Install now"
             }
         },
         "HomeIndex": {

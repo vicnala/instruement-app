@@ -8,6 +8,7 @@ import ReceiveInstrumentCard from "@/components/ReceiveInstrumentCard";
 import OnboardMinterCard from "@/components/UI/OnboardMinterCard";
 import { CustomConnectButton } from "@/components/CustomConnectButton";
 import { useActiveAccount } from "thirdweb/react";
+import PWAInstall from "@/components/UI/PWAInstall";
 
 export default function User(
     { locale, invite, context }: Readonly<{ locale: string, invite?: string, context: any }>
@@ -33,7 +34,7 @@ export default function User(
                 </Section>
             )}
             <Section>
-                <div data-theme="us" className="mb-16 bg-scope-25 border border-scope-50 p-6 rounded-section">
+                <div data-theme="us" className="bg-scope-25 border border-scope-50 p-6 rounded-section">
                     <h2 className="text-xl font-bold text-scope-1000 mb-4">
                         {t('account')}
                     </h2>
@@ -58,6 +59,9 @@ export default function User(
                         </div>
                     </div>
                 </div>
+            </Section>
+            <Section>
+                <PWAInstall />
             </Section>
         </Page>
     )

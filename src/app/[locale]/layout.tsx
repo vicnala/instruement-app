@@ -40,6 +40,8 @@ export default async function RootLayout({
           href={process.env.NEXT_PUBLIC_SERVER_URL || `https://app.instruement.com`}
         />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3.0" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fafafb" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#171412" />
         
         <IOSSplashScreens />
         
