@@ -93,10 +93,10 @@ const PWAInstall = () => {
                     />
                 </div>
             </div>
-            <h2 className="text-2xl font-bold text-scope-1000 dark:text-scope-50 text-center">
+            <h2 className="text-2xl font-bold text-scope-1000 text-center">
                 {t('title')}
             </h2>
-            <p className="text-base text-scope-700 dark:text-scope-300 text-center max-w-md">
+            <p className="text-base text-scope-700 text-center max-w-md">
                 {t('description')}
             </p>
             <Button
