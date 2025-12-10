@@ -24,6 +24,7 @@ type ExtendedManifest = MetadataRoute.Manifest & {
 
 export default function manifest(): ExtendedManifest {
   return {
+    id: 'instruement',
     name: 'Instruement',
     short_name: 'Instruement',
     description: 'Tell the true story about your musical instrument',
@@ -32,6 +33,7 @@ export default function manifest(): ExtendedManifest {
     background_color: '#fafafb',
     theme_color: '#171412',
     orientation: "portrait",
+    prefer_related_applications: false,
     icons: [
       {
         src: "images/icons/android-chrome-192x192.png",

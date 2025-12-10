@@ -19,12 +19,19 @@ const PWAInstall = () => {
 
   useEffect(() => {
     // Check if the app is already installed
+    // Standard check for most platforms
     if (window.matchMedia("(display-mode: standalone)").matches) {
       setIsInstalled(true);
       return;
     }
 
-    // Check if beforeinstallprompt is supported
+    // iOS-specific check for standalone mode
+    if ((window.navigator as any).standalone === true) {
+      setIsInstalled(true);
+      return;
+    }
+
+    // Handle beforeinstallprompt event - works on all supporting browsers/platforms
     const handleBeforeInstallPrompt = (e: Event) => {
       // Prevent the browser from displaying the default install dialog
       e.preventDefault();
@@ -36,14 +43,6 @@ const PWAInstall = () => {
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
-    // Check if app is already installed (for iOS)
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const isStandalone = (window.navigator as any).standalone === true;
-    
-    if (isIOS && !isStandalone) {
-      setIsSupported(true);
-    }
-
     return () => {
       window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     };
@@ -52,16 +51,22 @@ const PWAInstall = () => {
   const handleInstallClick = async () => {
     // If the deferredEvent exists, call its prompt method to display the install dialog
     if (deferredPromptRef.current) {
-      deferredPromptRef.current.prompt();
-      
-      // Wait for the user to respond to the prompt
-      const { outcome } = await deferredPromptRef.current.userChoice;
-      
-      if (outcome === "accepted") {
-        deferredPromptRef.current = null;
-        setIsInstalled(true);
-      } else {
-        // User dismissed the prompt
+      try {
+        await deferredPromptRef.current.prompt();
+        
+        // Wait for the user to respond to the prompt
+        const { outcome } = await deferredPromptRef.current.userChoice;
+        
+        if (outcome === "accepted") {
+          deferredPromptRef.current = null;
+          setIsInstalled(true);
+        } else {
+          // User dismissed the prompt
+          deferredPromptRef.current = null;
+        }
+      } catch (error) {
+        // Handle any errors (e.g., if prompt was already called)
+        console.error('Error showing install prompt:', error);
         deferredPromptRef.current = null;
       }
     }
@@ -72,8 +77,8 @@ const PWAInstall = () => {
     return null;
   }
 
-  // Show component if supported (either has deferredPrompt or is iOS)
-  if (!isSupported) {
+  // Only show if we have a deferred prompt (beforeinstallprompt fired)
+  if (!isSupported || !deferredPromptRef.current) {
     return null;
   }
 
@@ -100,7 +105,7 @@ const PWAInstall = () => {
             </p>
             <Button
                 onClick={handleInstallClick}
-                className="mt-2"
+                className="mt-2 px-4 py-2 bg-transparent focus:outline-none active:bg-scope-200"
                 size="lg"
                 aria-label={t('install_button_label')}
                 tabIndex={0}
