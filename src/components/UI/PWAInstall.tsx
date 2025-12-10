@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { SquarePlus } from "lucide-react";
 import Image from "next/image";
@@ -13,7 +13,7 @@ interface BeforeInstallPromptEvent extends Event {
 
 const PWAInstall = () => {
   const t = useTranslations('components.UI.PWAInstall');
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const deferredPromptRef = useRef<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [isSupported, setIsSupported] = useState(false);
 
@@ -26,8 +26,11 @@ const PWAInstall = () => {
 
     // Check if beforeinstallprompt is supported
     const handleBeforeInstallPrompt = (e: Event) => {
+      // Prevent the browser from displaying the default install dialog
       e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
+      
+      // Stash the event so it can be triggered later when the user clicks the button
+      deferredPromptRef.current = e as BeforeInstallPromptEvent;
       setIsSupported(true);
     };
 
@@ -47,24 +50,20 @@ const PWAInstall = () => {
   }, []);
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) {
-      // For iOS or browsers that don't support beforeinstallprompt
-      // The browser will show its own install UI or instructions
-      return;
-    }
-
-    // Show the install prompt
-    deferredPrompt.prompt();
-
-    // Wait for the user to respond to the prompt
-    const { outcome } = await deferredPrompt.userChoice;
-
-    if (outcome === "accepted") {
-      setDeferredPrompt(null);
-      setIsInstalled(true);
-    } else {
-      // User dismissed the prompt
-      setDeferredPrompt(null);
+    // If the deferredEvent exists, call its prompt method to display the install dialog
+    if (deferredPromptRef.current) {
+      deferredPromptRef.current.prompt();
+      
+      // Wait for the user to respond to the prompt
+      const { outcome } = await deferredPromptRef.current.userChoice;
+      
+      if (outcome === "accepted") {
+        deferredPromptRef.current = null;
+        setIsInstalled(true);
+      } else {
+        // User dismissed the prompt
+        deferredPromptRef.current = null;
+      }
     }
   };
 
