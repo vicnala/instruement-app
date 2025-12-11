@@ -5,13 +5,13 @@ import Page from "@/components/Page";
 import Loading from "@/components/Loading";
 import Section from "@/components/Section";
 import ReceiveInstrumentCard from "@/components/ReceiveInstrumentCard";
-import OnboardMinterCard from "@/components/UI/OnboardMinterCard";
+import OnboardMinterCardInvite from "@/components/UI/OnboardMinterCardInvite";
+import OnboardMinterCardToken from "../UI/OnboardMinterCardToken";
 import { CustomConnectButton } from "@/components/CustomConnectButton";
-import { useActiveAccount } from "thirdweb/react";
-import PWAInstall from "@/components/UI/PWAInstall";
+
 
 export default function User(
-    { locale, invite, context }: Readonly<{ locale: string, invite?: string, context: any }>
+    { locale, invite, token, context }: Readonly<{ locale: string, invite?: string, token?: string, context: any }>
 ) {
     const t = useTranslations('components.Account.User');
     const address = context.sub;
@@ -20,21 +20,26 @@ export default function User(
 
     return (
         <Page context={context}>
-            {invite && (
-                <Section>
-                    <OnboardMinterCard 
+            {(invite || token) && (
+                invite ? (
+                    <OnboardMinterCardInvite 
                         locale={locale} 
                         invite={invite}
                     />
-                </Section>
+                ) : (
+                    <OnboardMinterCardToken 
+                        locale={locale} 
+                        token={token}
+                    />
+                )
             )}
-            { !invite && (
+            { (!invite && !token) && (
                 <Section>
                     <ReceiveInstrumentCard address={address} locale={locale} context={context} />
                 </Section>
             )}
             <Section>
-                <div data-theme="us" className="bg-scope-25 border border-scope-50 p-6 rounded-section">
+                <div data-theme="us" className="mb-16 bg-scope-25 border border-scope-50 p-6 rounded-section">
                     <h2 className="text-xl font-bold text-scope-1000 mb-4">
                         {t('account')}
                     </h2>
@@ -59,9 +64,6 @@ export default function User(
                         </div>
                     </div>
                 </div>
-            </Section>
-            <Section>
-                <PWAInstall />
             </Section>
         </Page>
     )

@@ -3,16 +3,61 @@
 import { headers } from "@/lib/authorizationHeaders";
 
 export async function POST(request: Request) {
-  const { email, otp, address, accepted_terms } = await request.json()
+  const { email, otp, token, address, accepted_terms } = await request.json()
 
-  if (!email || !otp || !address) return Response.error()
+  console.log('email', email);
+  console.log('otp', otp);
+  console.log('token', token);
+  console.log('address', address);
+  console.log('accepted_terms', accepted_terms);
 
+  if (!address) return Response.json(
+    { message: 'Address is required' },
+    { status: 400 }
+  )
+
+  if (!accepted_terms) return Response.json(
+    { message: 'Accepted terms are required' },
+    { status: 400 }
+  )
+
+  if (email && !otp) return Response.json(
+    { message: 'OTP is required' },
+    { status: 400 }
+  )
+
+  if (otp && !email) return Response.json(
+    { message: 'Email is required' },
+    { status: 400 }
+  )
+
+  if (!token) return Response.json(
+    { message: 'Token is required' },
+    { status: 400 }
+  )
+    
   try {
-    const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/otp/verify`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({ email, otp, accepted_terms })
-    })
+    let result;
+    if (email && otp) {
+      result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/otp/verify`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ email, otp, accepted_terms })
+      })
+    } else if (token) {
+      result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/otp/verify`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ token, accepted_terms })
+      })
+    }
+
+    if (!result) return Response.json(
+      { message: 'Verify error' },
+      { status: 400 }
+    )
+
+
     const data = await result.json();
 
     // console.log(`/api/otp/verfy`, data);

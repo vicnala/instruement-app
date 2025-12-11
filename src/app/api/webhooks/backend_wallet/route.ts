@@ -127,13 +127,19 @@ export async function POST( request: Request, response: Response ) {
                     // console.log('webhooks: backend_wallet postData', postData.data);
                     console.log(`webhooks: backend_wallet update asset_id SUCCEED for draft #${instrumentId} queue_id ${queueId} and asset_id #${tokenIdMinted}`);
                     return Response.json({ message: "Received" })
+                } else {
+                    console.error(`POST /instrument/${instrumentId} FAILED with ${postData?.message}`);
+                    return NextResponse.json(
+                        { message: postData?.message },
+                        { status: 400 },
+                    );
                 }
             }
         } else {
             console.error(`GET /instrument/queue/${queueId} FAILED with ${getData?.data?.message}`);
             return NextResponse.json(
                 { message: getData?.message },
-                { status: 200 },
+                { status: 400 },
             );   
         }
         console.error(`Update asset_id FAILED for draft #${instrumentId} queue_id ${queueId}`);

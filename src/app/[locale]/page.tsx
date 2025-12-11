@@ -7,7 +7,7 @@ import { getUserTokens } from "@/services/TokensService";
 
 export default async function Home() {
   const locale = await getLocale();
-  const authResult: any = await authedOnly("/", "");
+  const authResult: any = await authedOnly("/", "", "");
   const authContext = authResult.parsedJWT.ctx;
   const address = authResult.parsedJWT.sub;
   const userId = authContext.userId;
