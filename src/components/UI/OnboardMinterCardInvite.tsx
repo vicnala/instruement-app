@@ -8,13 +8,13 @@ import { CircleCheck } from 'lucide-react';
 import { logout } from '@/actions/login';
 import { useActiveAccount } from "thirdweb/react";
 
-interface OnboardMinterCardProps {
+interface OnboardMinterCardInviteProps {
   locale: string;
   invite?: string;
   onReloadUser?: () => void;
 }
 
-export default function OnboardMinterCard({ locale, invite, onReloadUser }: OnboardMinterCardProps) {
+export default function OnboardMinterCardInvite({ locale, invite }: OnboardMinterCardInviteProps) {
   const t = useTranslations('components.UI.OnboardMinterCard');
   const [showForm, setShowForm] = useState(false)
   const [email, setEmail] = useState<string>('')
