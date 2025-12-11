@@ -19,14 +19,14 @@ export default function NotConnected(
         <Page>
             <div className='flex flex-col'>
                 <Section>
-                    <div data-theme="it" className="min-h-[550px] h-[60vh] max-h-[700px] flex items-center justify-center bg-scope-25 px-3.5 md:px-24 rounded-section border border-scope-50">
+                    <div data-theme="it" className="min-h-[450px] h-[60vh] max-h-[700px] flex items-center justify-center bg-scope-25 px-3.5 md:px-24 rounded-section border border-scope-50">
                         <div className="text-center">
-                            <h2 className='text-3xl md:text-4xl font-semibold text-scope-900 mb-6 text-balance'>
+                            <h2 className='text-3xl md:text-4xl font-semibold text-scope-900 mb-4 text-balance'>
                                 {t('heading')}
                             </h2>
-                            {/* <p className="text-md md:text-lg text-scope-900 pb-12 md:pb-16 max-w-[400px] text-balance mx-auto">
+                            <p className="text-md md:text-lg text-scope-500 mb-12 text-balance mx-auto">
                                 {t('sub_heading')}
-                            </p> */}
+                            </p>
                             <div className="relative">
                                 {/* <div className={account?.address ? 'invisible' : ''}> */}
                                     <CustomConnectButton cb={cb} invite={invite} />
@@ -38,14 +38,14 @@ export default function NotConnected(
                                 )} */}
                             </div>
                             <div className='mt-4'>
-                                <p className='text-sm md:text-md text-us-700 dark:text-us-300'>
+                                <p className='text-sm md:text-md text-us-400 dark:text-us-600'>
                                     {t('button_description')}
                                 </p>
                             </div>
                         </div>
                     </div>
                     <div className="flex justify-center items-center mt-6" data-theme="it">
-                        <Link href="https://www.instruement.com" target="_blank" className="text-xs text-scope-500">
+                        <Link href="https://www.instruement.com" target="_blank" className="text-xs text-us-500">
                             {t('visit_instruement')}
                         </Link>
                     </div>
