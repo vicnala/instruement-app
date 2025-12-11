@@ -390,3 +390,9 @@ body.focus-mode .bottom-nav {
 	transform: translateY(20px);
 	transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
+
+/* Dialog backdrop styling */
+dialog::backdrop {
+	background-color: rgba(0, 0, 0, 0.5);
+	backdrop-filter: blur(4px);
+}

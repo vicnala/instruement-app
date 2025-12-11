@@ -25,9 +25,9 @@ type ExtendedManifest = MetadataRoute.Manifest & {
 export default function manifest(): ExtendedManifest {
   return {
     id: 'instruement',
-    name: 'Instruement',
+    name: 'Instruement App',
     short_name: 'Instruement',
-    description: 'Tell the true story about your musical instrument',
+    description: 'Join professional and verified luthiers all around the world registering and showcasing their work on the first public distributed network for musical instruments.',
     start_url: '/',
     display: 'standalone',
     background_color: '#fafafb',

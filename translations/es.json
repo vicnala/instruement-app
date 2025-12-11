@@ -355,7 +355,16 @@
                 "app_icon_alt": "Icono de la aplicación Instruement",
                 "title": "Añade Instruement a tu pantalla de inicio",
                 "description": "Habilita el acceso directo a tus instrumentos registrados para un uso más cómodo",
-                "install_button_label": "Instalar ahora"
+                "install_button_label": "Instalar ahora",
+                "ios_dialog": {
+                    "title": "Añade Instruement a tu pantalla de inicio",
+                    "close_label": "Cerrar",
+                    "introduction": "Para instalar la aplicación:",
+                    "step1": "1. Toca compartir",
+                    "step1_icon_alt": "Icono de compartir",
+                    "step2": "2. Desliza hacia arriba y toca Añadir a la pantalla de inicio",
+                    "step2_icon_alt": "Icono de añadir a la pantalla de inicio"
+                }
             }
         },
         "HomeIndex": {

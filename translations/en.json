@@ -345,7 +345,16 @@
                 "app_icon_alt": "Instruement app icon",
                 "title": "Add Instruement to your home screen",
                 "description": "Enable direct access to your registered musical instruments for a more convenient use",
-                "install_button_label": "Install now"
+                "install_button_label": "Install now",
+                "ios_dialog": {
+                    "title": "Add Instruement to your home screen",
+                    "close_label": "Close",
+                    "introduction": "To install the app:",
+                    "step1": "1.Tap Share",
+                    "step1_icon_alt": "Share icon",
+                    "step2": "Swipe up and tap Add to Home Screen",
+                    "step2_icon_alt": "2. Add to Home Screen icon"
+                }
             }
         },
         "HomeIndex": {
