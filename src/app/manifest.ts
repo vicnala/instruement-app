@@ -29,6 +29,7 @@ export default function manifest(): ExtendedManifest {
     short_name: 'Instruement',
     description: 'Join professional and verified luthiers all around the world registering and showcasing their work on the first public distributed network for musical instruments.',
     start_url: '/',
+    scope: '/',
     display: 'standalone',
     background_color: '#fafafb',
     theme_color: '#171412',
