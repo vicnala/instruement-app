@@ -7,7 +7,7 @@ export default async function NewDraftPage({
 }: {
   params: { locale: string };
 }) {
-  const authResult: any = await authedOnly(`/drafts/new`, "");
+  const authResult: any = await authedOnly(`/drafts/new`, "", "");
   const authContext = authResult.parsedJWT.ctx;
   const isMinter = authContext.isMinter;
   

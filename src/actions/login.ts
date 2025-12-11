@@ -85,17 +85,17 @@ export async function isLoggedIn() {
   return authResult.valid;
 }
 
-export async function authedOnly(cb: string, invite: string | undefined) {
+export async function authedOnly(cb: string, invite: string | undefined, token: string | undefined) {
   const locale = await getLocale();
 
   const jwt = cookies().get("jwt");
   if (!jwt?.value) {
-    redirect({ href: `/login?cb=${cb}${invite ? `&invite=${invite}` : ''}`, locale });
+    redirect({ href: `/login?cb=${cb}${invite ? `&invite=${invite}` : ''}${token ? `&token=${token}` : ''}`, locale });
   }
 
   const authResult = await thirdwebAuth.verifyJWT({ jwt: jwt?.value || '' });
   if (!authResult.valid) {
-    redirect({ href: `/login?cb=${cb}${invite ? `&invite=${invite}` : ''}`, locale });
+    redirect({ href: `/login?cb=${cb}${invite ? `&invite=${invite}` : ''}${token ? `&token=${token}` : ''}`, locale });
   }
   return authResult;
 }
