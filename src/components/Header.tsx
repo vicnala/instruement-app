@@ -60,6 +60,7 @@ export function Header({ context }: { context: any }) {
                 address && 
                   <div className='flex flex-col items-center space-x-6'>
                     <TransitionLink 
+                    disabled={pathname === '/account'}
                     href="/account" 
                     key="my-instruments" 
                     locale={locale} 
@@ -73,6 +74,7 @@ export function Header({ context }: { context: any }) {
               {
                 address && ( pathname === '/account' || pathname.includes('/instrument') || pathname.includes('/drafts')) &&
                 <TransitionLink 
+                disabled={pathname === '/'}
                 href="/" 
                 locale={locale} 
                 theme="us" 
