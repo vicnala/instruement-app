@@ -15,7 +15,7 @@ interface OnboardMinterCardInviteProps {
 }
 
 export default function OnboardMinterCardInvite({ locale, invite }: OnboardMinterCardInviteProps) {
-  const t = useTranslations('components.UI.OnboardMinterCard');
+  const t = useTranslations('components.Account.OnboardMinterCardInvite');
   const [showForm, setShowForm] = useState(false)
   const [email, setEmail] = useState<string>('')
   const [isValidEmail, setIsValidEmail] = useState(false)

@@ -320,27 +320,6 @@
                     }
                 }
             },
-            "OnboardMinterCard": {
-                "title": "Activate your luthier account now",
-                "description": "Proceed to confirm the email where you received your invitation.",
-                "confirm_invitation_do": "Confirm your invitation",
-                "confirm_invitation_email_label": "Business email",
-                "confirm_invitation_email_placeholder": "Enter your email",
-                "confirm_invitation_email_description": "We will send you a verification code to this email",
-                "confirm_invitation_confirm_email": "Send code",
-                "confirm_invitation_cancel_email": "Cancel",
-                "confirm_invitation_otp_label": "Verification code",
-                "confirm_invitation_otp": "Enter the code",
-                "confirm_invitation_confirm_otp": "Send code",
-                "confirm_invitation_cancel_otp": "Cancel",
-                "privacy_policy": "I have read and agree to the",
-                "privacy_policy_link": "Privacy Policy",
-                "reload_notice": "Note: on successful validation, the page will reload and you will need to sign-in again.",
-                "errors": {
-                    "no_valid_email": "The email is not valid",
-                    "otp_failed": "Something went wrong with this step. Please try again."
-                }
-            },
             "PWAInstall": {
                 "app_icon_alt": "Instruement app icon",
                 "title": "Add Instruement to your home screen",
@@ -416,14 +395,14 @@
                 "title_activating": "Activating your luthier account now",
                 "title_activated": "Your luthier account is now activated!",
                 "status": {
-                    "waiting_wallet": "Connecting to your wallet…",
+                    "waiting_wallet": "Connecting to your blockchain address…",
                     "verifying_account": "Verifying account",
-                    "adding_address": "Adding your wallet address to your account…",
+                    "adding_address": "Adding your blockchain address to your account…",
                     "fetching_user": "Applying the varnish…",
                     "retry": "Try again",
-                    "success_title": "{firstName}, your luthier business account is now activated!",
-                    "success_description": "Your wallet has been successfully linked to your luthier account. Check your email for more information. You can now register instruments and transfer their digital passport to the new owner.",
-                    "wallet_address_label": "Your wallet address",
+                    "success_title": "{firstName}, your luthier account is now activated!",
+                    "success_description": "Your blockchain address has been successfully linked to your luthier account. Check your email for more information. You can now register instruments and transfer their digital passport to the new owner.",
+                    "wallet_address_label": "Your blockchain address",
                     "continue": "Go to home"
                 },
                 "errors": {
@@ -435,8 +414,24 @@
             },
             "OnboardMinterCardInvite": {
                 "title": "Activate your luthier account now",
-                "description": "Proceed to confirm the email where you received your invitation."
-
+                "description": "Proceed to confirm the email where you received your invitation.",
+                "confirm_invitation_do": "Confirm your invitation",
+                "confirm_invitation_email_label": "Business email",
+                "confirm_invitation_email_placeholder": "Enter your email",
+                "confirm_invitation_email_description": "We will send you a verification code to this email",
+                "confirm_invitation_confirm_email": "Send code",
+                "confirm_invitation_cancel_email": "Cancel",
+                "confirm_invitation_otp_label": "Verification code",
+                "confirm_invitation_otp": "Enter the code",
+                "confirm_invitation_confirm_otp": "Send code",
+                "confirm_invitation_cancel_otp": "Cancel",
+                "privacy_policy": "I have read and agree to the",
+                "privacy_policy_link": "Privacy Policy",
+                "reload_notice": "Note: on successful validation, the page will reload and you will need to sign-in again.",
+                "errors": {
+                    "no_valid_email": "The email is not valid",
+                    "otp_failed": "Something went wrong with this step. Please try again."
+                }
             }
         },
         "Modal": {

@@ -330,27 +330,6 @@
                     }
                 }
             },
-            "OnboardMinterCard": {
-                "title": "Activa tu cuenta de luthier ahora",
-                "description": "Procede a confirmar el email donde recibiste tu invitación.",
-                "confirm_invitation_do": "Confirma tu invitación",
-                "confirm_invitation_email_label": "Email de negocio",
-                "confirm_invitation_email_placeholder": "Introduce tu email",
-                "confirm_invitation_email_description": "Te enviaremos un código de verificación a este email",
-                "confirm_invitation_confirm_email": "Enviar código",
-                "confirm_invitation_cancel_email": "Cancelar",
-                "confirm_invitation_otp_label": "Código de verificación",
-                "confirm_invitation_otp": "Introduce el código",
-                "confirm_invitation_confirm_otp": "Enviar",
-                "confirm_invitation_cancel_otp": "Cancelar",
-                "privacy_policy": "He leído y acepto la",
-                "privacy_policy_link": "Política de privacidad",
-                "reload_notice": "Nota: en caso de una validación exitosa, la página se recargará y necesitarás iniciar sesión de nuevo.",
-                "errors": {
-                    "no_valid_email": "El email no es válido",
-                    "otp_failed": "Algo ha ido mal con este paso. Por favor, inténtalo de nuevo."
-                }
-            },
             "PWAInstall": {
                 "app_icon_alt": "Icono de la aplicación Instruement",
                 "title": "Añade Instruement a tu pantalla de inicio",
@@ -422,24 +401,45 @@
                 "view_complete_profile": "Ver perfil público completo"
             },
             "OnboardMinterCardTicket": {
-                "title": "Activa tu cuenta de luthier",
-                "description": "",
+                "title_activating": "Activando tu cuenta de luthier",
+                "title_activated": "Tu cuenta de luthier está activada!",
                 "status": {
-                    "waiting_wallet": "Conectando a tu wallet…",
+                    "waiting_wallet": "Conectando a tu dirección blockchain…",
                     "verifying_account": "Verificando cuenta",
-                    "adding_address": "Añadiendo tu dirección de wallet a tu cuenta…",
+                    "adding_address": "Añadiendo tu dirección blockchain a tu cuenta…",
                     "fetching_user": "Aplicando el barniz…",
                     "retry": "Intentar de nuevo",
                     "success_title": "{firstName}, tu cuenta de luthier está activada!",
-                    "success_description": "Tu wallet ha sido correctamente vinculada a tu cuenta de luthier. Comprueba tu email para más información. Ahora puedes registrar instrumentos y transferir su pasaporte digital al nuevo propietario.",
-                    "wallet_address_label": "Tu dirección de wallet",
+                    "success_description": "Tu dirección blockchain ha sido correctamente vinculada a tu cuenta de luthier. Comprueba tu email para más información. Ahora puedes registrar instrumentos y transferir su pasaporte digital al nuevo propietario.",
+                    "wallet_address_label": "Tu dirección blockchain",
                     "continue": "Ir a inicio"
                 },
                 "errors": {
-                    "title": "Activation failed",
-                    "verification_failed": "Your account activation verification failed. Please try again or contact support.",
-                    "ticket_failed": "This URL link is not valid for wallet activation.",
-                    "address_failed": "Failed to link wallet address. Please try again."
+                    "title": "Activación fallida",
+                    "verification_failed": "La verificación de la activación de tu cuenta ha fallado. Por favor, inténtalo de nuevo o contacta con soporte.",
+                    "ticket_failed": "Este enlace no es válido para la activación de la wallet.",
+                    "address_failed": "Falló la vinculación de la dirección de la wallet. Por favor, inténtalo de nuevo."
+                }
+            },
+            "OnboardMinterCardInvite": {
+                "title": "Activa tu cuenta de luthier ahora",
+                "description": "Procede a confirmar el email donde recibiste tu invitación.",
+                "confirm_invitation_do": "Confirma tu invitación",
+                "confirm_invitation_email_label": "Email de negocio",
+                "confirm_invitation_email_placeholder": "Introduce tu email",
+                "confirm_invitation_email_description": "Te enviaremos un código de verificación a este email",
+                "confirm_invitation_confirm_email": "Enviar código",
+                "confirm_invitation_cancel_email": "Cancelar",
+                "confirm_invitation_otp_label": "Código de verificación",
+                "confirm_invitation_otp": "Introduce el código",
+                "confirm_invitation_confirm_otp": "Enviar",
+                "confirm_invitation_cancel_otp": "Cancelar",
+                "privacy_policy": "He leído y acepto la",
+                "privacy_policy_link": "Política de privacidad",
+                "reload_notice": "Nota: en caso de una validación exitosa, la página se recargará y necesitarás iniciar sesión de nuevo.",
+                "errors": {
+                    "no_valid_email": "El email no es válido",
+                    "otp_failed": "Algo ha ido mal con este paso. Por favor, inténtalo de nuevo."
                 }
             }
         },
