@@ -5,7 +5,7 @@ import Page from "@/components/Page";
 import Section from "@/components/Section";
 import NFTGrid from "@/components/NFT/NFTGrid";
 import DraftGrid from "@/components/Drafts/DraftGrid";
-import NotConnected from "../NotConnected";
+import NotConnected from "@/components/HomeIndex/NotConnected";
 
 const VIDEO_URLS: Record<string, string> = {
   en: "https://www.youtube.com/embed/PbbHg0uxc60", 

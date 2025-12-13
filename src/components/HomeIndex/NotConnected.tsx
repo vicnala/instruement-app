@@ -5,9 +5,9 @@ import Image from 'next/image'
 import Link from "next/link";
 import Page from "@/components/Page";
 import Section from "@/components/Section";
-import { CustomConnectButton } from "./CustomConnectButton";
+import { CustomConnectButton } from "@/components/CustomConnectButton";
 import { useActiveAccount } from "thirdweb/react";
-import ButtonSpinner from "./UI/ButtonSpinner";
+import ButtonSpinner from "@/components/UI/ButtonSpinner";
 
 export default function NotConnected(
     { locale, cb, invite }: Readonly<{ locale: string, cb?: string | undefined, invite?: string | undefined }>

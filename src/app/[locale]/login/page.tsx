@@ -1,4 +1,4 @@
-import NotConnected from "@/components/NotConnected";
+import NotConnected from "@/components/HomeIndex/NotConnected";
 import { getLocale } from "next-intl/server";
 
 export default async function Login(
