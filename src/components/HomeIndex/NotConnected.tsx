@@ -9,9 +9,14 @@ import { CustomConnectButton } from "@/components/CustomConnectButton";
 import { useActiveAccount } from "thirdweb/react";
 import ButtonSpinner from "@/components/UI/ButtonSpinner";
 
-export default function NotConnected(
-    { locale, cb, invite }: Readonly<{ locale: string, cb?: string | undefined, invite?: string | undefined }>
-) {
+type NotConnectedProps = Readonly<{
+    locale: string;
+    cb?: string;
+    invite?: string;
+    ticket?: string;
+}>;
+
+export default function NotConnected({ locale, cb, invite, ticket }: NotConnectedProps) {
     const t = useTranslations('components.NotConnected');
     const account = useActiveAccount();
 
@@ -29,7 +34,7 @@ export default function NotConnected(
                             </p>
                             <div className="relative">
                                 {/* <div className={account?.address ? 'invisible' : ''}> */}
-                                    <CustomConnectButton cb={cb} invite={invite} />
+                                    <CustomConnectButton cb={cb} invite={invite} ticket={ticket} />
                                 {/* </div> */}
                                 {/* {account?.address && (
                                     <div className="absolute inset-0 flex items-center justify-center">
