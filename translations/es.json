@@ -421,7 +421,7 @@
                 "wallet_actions_description": "Accede a todas las funciones de la cuenta aquí. Si aún no has exportado y guardado tu clave privada, deberías hacerlo ahora!",
                 "view_complete_profile": "Ver perfil público completo"
             },
-            "OnboardMinterCardToken": {
+            "OnboardMinterCardTicket": {
                 "title": "Activa tu cuenta de luthier",
                 "description": "",
                 "status": {
