@@ -411,6 +411,32 @@
                 "wallet_actions_title": "Advanced account actions",
                 "wallet_actions_description": "Access all account functions here. If you haven’t already exported and saved your private key, you should do it now!",
                 "view_complete_profile": "View complete public profile"
+            },
+            "OnboardMinterCardTicket": {
+                "title_activating": "Activating your luthier account now",
+                "title_activated": "Your luthier account is now activated!",
+                "status": {
+                    "waiting_wallet": "Connecting to your wallet…",
+                    "verifying_account": "Verifying account",
+                    "adding_address": "Adding your wallet address to your account…",
+                    "fetching_user": "Applying the varnish…",
+                    "retry": "Try again",
+                    "success_title": "{firstName}, your luthier business account is now activated!",
+                    "success_description": "Your wallet has been successfully linked to your luthier account. Check your email for more information. You can now register instruments and transfer their digital passport to the new owner.",
+                    "wallet_address_label": "Your wallet address",
+                    "continue": "Go to home"
+                },
+                "errors": {
+                    "title": "Activation failed",
+                    "verification_failed": "Your account activation verification failed. Please try again or contact support.",
+                    "ticket_failed": "This URL link is not valid for wallet activation.",
+                    "address_failed": "Failed to link wallet address. Please try again."
+                }
+            },
+            "OnboardMinterCardInvite": {
+                "title": "Activate your luthier account now",
+                "description": "Proceed to confirm the email where you received your invitation."
+
             }
         },
         "Modal": {

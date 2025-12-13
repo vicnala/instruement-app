@@ -261,3 +261,4 @@ export default function OnboardMinterCardInvite({ locale, invite }: OnboardMinte
     </div>
   );
 } 
+

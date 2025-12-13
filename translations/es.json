@@ -420,6 +420,27 @@
                 "wallet_actions_title": "Acciones de cuenta avanzadas",
                 "wallet_actions_description": "Accede a todas las funciones de la cuenta aquí. Si aún no has exportado y guardado tu clave privada, deberías hacerlo ahora!",
                 "view_complete_profile": "Ver perfil público completo"
+            },
+            "OnboardMinterCardToken": {
+                "title": "Activa tu cuenta de luthier",
+                "description": "",
+                "status": {
+                    "waiting_wallet": "Conectando a tu wallet…",
+                    "verifying_account": "Verificando cuenta",
+                    "adding_address": "Añadiendo tu dirección de wallet a tu cuenta…",
+                    "fetching_user": "Aplicando el barniz…",
+                    "retry": "Intentar de nuevo",
+                    "success_title": "{firstName}, tu cuenta de luthier está activada!",
+                    "success_description": "Tu wallet ha sido correctamente vinculada a tu cuenta de luthier. Comprueba tu email para más información. Ahora puedes registrar instrumentos y transferir su pasaporte digital al nuevo propietario.",
+                    "wallet_address_label": "Tu dirección de wallet",
+                    "continue": "Ir a inicio"
+                },
+                "errors": {
+                    "title": "Activation failed",
+                    "verification_failed": "Your account activation verification failed. Please try again or contact support.",
+                    "ticket_failed": "This URL link is not valid for wallet activation.",
+                    "address_failed": "Failed to link wallet address. Please try again."
+                }
             }
         },
         "Modal": {

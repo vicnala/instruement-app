@@ -5,13 +5,13 @@ import Page from "@/components/Page";
 import Loading from "@/components/Loading";
 import Section from "@/components/Section";
 import ReceiveInstrumentCard from "@/components/ReceiveInstrumentCard";
-import OnboardMinterCardInvite from "@/components/UI/OnboardMinterCardInvite";
-import OnboardMinterCardToken from "../UI/OnboardMinterCardToken";
+import OnboardMinterCardInvite from "./OnboardMinterCardInvite";
+import OnboardMinterCardTicket from "./OnboardMinterCardTicket";
 import { CustomConnectButton } from "@/components/CustomConnectButton";
 
 
 export default function User(
-    { locale, invite, token, context }: Readonly<{ locale: string, invite?: string, token?: string, context: any }>
+    { locale, invite, ticket, context }: Readonly<{ locale: string, invite?: string, ticket?: string, context: any }>
 ) {
     const t = useTranslations('components.Account.User');
     const address = context.sub;
@@ -20,20 +20,22 @@ export default function User(
 
     return (
         <Page context={context}>
-            {(invite || token) && (
-                invite ? (
-                    <OnboardMinterCardInvite 
-                        locale={locale} 
-                        invite={invite}
-                    />
-                ) : (
-                    <OnboardMinterCardToken 
-                        locale={locale} 
-                        token={token}
-                    />
-                )
+            {(invite || ticket) && (
+                <Section>
+                    {invite ? (
+                        <OnboardMinterCardInvite 
+                            locale={locale} 
+                            invite={invite}
+                        />
+                    ) : (
+                        <OnboardMinterCardTicket 
+                            locale={locale} 
+                            ticket={ticket}
+                        />
+                    )}
+                </Section>
             )}
-            { (!invite && !token) && (
+            { (!invite && !ticket) && (
                 <Section>
                     <ReceiveInstrumentCard address={address} locale={locale} context={context} />
                 </Section>

@@ -6,14 +6,14 @@ import { getUser } from "@/services/UsersService";
 import NotFound from "@/app/not-found";
 
 type Props = {
-  searchParams: Promise<{ invite?: string, token?: string }>
+  searchParams: Promise<{ invite?: string, ticket?: string }>
 }
 
 export default async function AccountPage({ searchParams }: Props) {
   const locale = await getLocale();
-  const { invite, token } = await searchParams;
+  const { invite, ticket } = await searchParams;
   
-  const authResult: any = await authedOnly("/account", invite || undefined, token || undefined);
+  const authResult: any = await authedOnly("/account", invite || undefined, ticket || undefined);
 
   const authContext = authResult.parsedJWT.ctx;
   const isMinter = authContext.isMinter;
@@ -28,5 +28,5 @@ export default async function AccountPage({ searchParams }: Props) {
 
   return isMinter ? 
     <Minter locale={locale} context={authResult.parsedJWT} minter={userData.data} /> :
-    <User locale={locale} invite={invite} token={token} context={authResult.parsedJWT} />
+    <User locale={locale} invite={invite} ticket={ticket} context={authResult.parsedJWT} />
 }

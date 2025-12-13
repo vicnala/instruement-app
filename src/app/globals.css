@@ -396,3 +396,17 @@ dialog::backdrop {
 	background-color: rgba(0, 0, 0, 0.5);
 	backdrop-filter: blur(4px);
 }
+
+/* Pulsing border animation */
+@keyframes pulse-border {
+	0%, 100% {
+		border-color: var(--scope-50);
+	}
+	50% {
+		border-color: var(--scope-400);
+	}
+}
+
+.animate-pulse-border {
+	animation: pulse-border 2s ease-in-out infinite;
+}
