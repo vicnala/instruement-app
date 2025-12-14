@@ -249,7 +249,7 @@ export default function DraftForm(
         href={`/preview/${instrument.id}`}
         locale={locale}
         className="
-          inline-flex items-center px-4 py-2 tracking-wide transition-colors duration-200 transform 
+          inline-flex items-center px-4 py-2 transition-colors duration-200 transform 
           focus:outline-none
           font-bold 
           bg-transparent hover:bg-scope-500 active:bg-scope-200
@@ -561,7 +561,7 @@ export default function DraftForm(
             <div className="my-6 ml-6 text-left">
               <button
                 type="button"
-                className="inline-flex items-center py-2 px-4 rounded-full text-xs border-[0.1rem] border-red-400 dark:border-red-800 hover:border-red-500 dark:hover:border-red-500 hover:bg-red-500 hover:text-white font-semibold tracking-wide transition-colors duration-200 transform text-red-500 focus:outline-none focus:bg-red-700"
+                className="inline-flex items-center py-2 px-4 rounded-full text-xs border-[0.1rem] border-red-400 dark:border-red-800 hover:border-red-500 dark:hover:border-red-500 hover:bg-red-500 hover:text-white font-semibold transition-colors duration-200 transform text-red-500 focus:outline-none focus:bg-red-700"
                 disabled={isLoadingMetadata}
                 onClick={() => handleInstrumentDelete()}
                 aria-label={t('delete')}

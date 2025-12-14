@@ -82,7 +82,7 @@ export default function PaymentResult(
               <TransitionLink 
               href="/" 
               locale={locale} 
-              className="mt-6 inline-flex items-center px-4 py-2 mb-6 tracking-wide transition-colors duration-200 transform focus:outline-none 
+              className="mt-6 inline-flex items-center px-4 py-2 mb-6 transition-colors duration-200 transform focus:outline-none 
               rounded-button 
               text-base text-scope-500 hover:text-scope-1000  
               border-[0.1rem] border-scope-500 
@@ -131,7 +131,7 @@ export default function PaymentResult(
             <TransitionLink
               href={`/instrument/${instrument.asset_id}`}
               locale={locale}
-              className="font-bold inline-flex items-center px-4 py-2 mb-6 tracking-wide transition-colors duration-200 transform focus:outline-none 
+              className="font-bold inline-flex items-center px-4 py-2 mb-6 transition-colors duration-200 transform focus:outline-none 
               rounded-button 
               text-scope-500 hover:text-scope-1000  
               border-[0.1rem] border-scope-500 

@@ -23,7 +23,7 @@ const FormSaveButton = forwardRef(({
       data-theme={theme}
       aria-label={ariaLabel}
       className={`
-        inline-flex items-center px-4 py-2 tracking-wide transition-colors duration-200 transform 
+        inline-flex items-center px-4 py-2 transition-colors duration-200 transform 
         focus:outline-none
         font-bold 
         bg-transparent hover:bg-scope-500 active:bg-scope-200

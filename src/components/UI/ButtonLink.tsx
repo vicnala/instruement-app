@@ -25,7 +25,7 @@ export const ButtonLink = ({ href, children, className = "", size = "md", theme 
         data-theme={theme}
         aria-label={ariaLabel}
         className={
-          `focus:outline-none disabled:opacity-25 inline-flex items-center tracking-wide transition-colors duration-200 transform 
+          `focus:outline-none disabled:opacity-25 inline-flex items-center transition-colors duration-200 transform 
            bg-transparent hover:bg-scope-500
            border-[0.1rem] border-scope-400 hover:border-scope-500 focus:border-scope-800 
            text-scope-500 hover:text-scope-1000 focus:text-scope-1000
