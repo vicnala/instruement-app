@@ -15,7 +15,7 @@ type InAppBrowserBannerProps = Readonly<{
 
 const InAppBrowserBanner = ({ className = "" }: InAppBrowserBannerProps) => {
     const t = useTranslations("components.HomeIndex.InAppBrowserBanner");
-    const [isInApp, setIsInApp] = useState(false);
+    const [shouldShow, setShouldShow] = useState(false);
     const [os, setOs] = useState<OSType>("other");
     const [escapeLink, setEscapeLink] = useState<string>("");
 
@@ -25,11 +25,20 @@ const InAppBrowserBanner = ({ className = "" }: InAppBrowserBannerProps) => {
         const { isInApp: inAppDetected } = InAppSpy();
         const osName = Bowser.getParser(window.navigator.userAgent).getOSName(true) as OSType;
         const currentUrl = window.location.href;
+        const urlParams = new URLSearchParams(window.location.search);
+        const hasTicketParam = urlParams.has("ticket");
 
-        setIsInApp(inAppDetected);
         setOs(osName);
 
-        if (inAppDetected) {
+        // Show banner if inapp-spy detects in-app browser on iOS/Android
+        // OR as fallback: if URL has "ticket" param and OS is Android
+        const shouldDisplay = 
+            (inAppDetected && (osName === "ios" || osName === "android")) ||
+            (hasTicketParam && osName === "android");
+
+        if (shouldDisplay) {
+            setShouldShow(true);
+
             if (osName === "ios") {
                 const encodedUrl = encodeURIComponent(currentUrl);
                 const randomId = crypto.randomUUID();
@@ -40,7 +49,7 @@ const InAppBrowserBanner = ({ className = "" }: InAppBrowserBannerProps) => {
         }
     }, []);
 
-    if (!isInApp || os === "other") {
+    if (!shouldShow) {
         return null;
     }
 

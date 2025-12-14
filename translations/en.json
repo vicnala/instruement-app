@@ -351,8 +351,8 @@
                 "register_more": "More info"
             },
             "InAppBrowserBanner": {
-                "title": "Proceed in your default browser",
-                "warning": "Activation is not possible in the in-app browser you are using (usually Gmail).",
+                "title": "Please open this page in your default browser",
+                "warning": "If you use Gmail, chances are you are seeing this in the in-app browser. Activation is only possible in your default browser. Ignore this message if you are using your default browser.",
                 "button_ios": "Open in Browser",
                 "button_android": "Open in Browser",
                 "button_aria_label": "Open this page in your default browser"
