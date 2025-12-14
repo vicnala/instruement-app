@@ -23,12 +23,18 @@ const InAppBrowserBanner = ({ className = "" }: InAppBrowserBannerProps) => {
         if (typeof window === "undefined") return;
 
         const { isInApp: inAppDetected } = InAppSpy();
-        const osName = Bowser.getParser(window.navigator.userAgent).getOSName(true) as OSType;
+        const browser = Bowser.getParser(window.navigator.userAgent);
+        const osName = browser.getOSName(true) as OSType;
+        const browserName = browser.getBrowserName(true);
         const currentUrl = window.location.href;
         const urlParams = new URLSearchParams(window.location.search);
         const hasTicketParam = urlParams.has("ticket");
 
         setOs(osName);
+
+        // Don't show banner if user is already in Chrome or Safari
+        const isStandaloneBrowser = browserName === "chrome" || browserName === "safari";
+        if (isStandaloneBrowser) return;
 
         // Show banner if inapp-spy detects in-app browser on iOS/Android
         // OR as fallback: if URL has "ticket" param and OS is Android
