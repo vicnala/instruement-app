@@ -8,6 +8,7 @@ import Section from "@/components/Section";
 import { CustomConnectButton } from "@/components/CustomConnectButton";
 import { useActiveAccount } from "thirdweb/react";
 import ButtonSpinner from "@/components/UI/ButtonSpinner";
+import InAppBrowserBanner from "@/components/HomeIndex/InAppBrowserBanner";
 
 type NotConnectedProps = Readonly<{
     locale: string;
@@ -17,11 +18,12 @@ type NotConnectedProps = Readonly<{
 }>;
 
 export default function NotConnected({ locale, cb, invite, ticket }: NotConnectedProps) {
-    const t = useTranslations('components.NotConnected');
+    const t = useTranslations('components.HomeIndex.NotConnected');
     const account = useActiveAccount();
 
     return (
         <Page>
+            <InAppBrowserBanner className="rounded-section" />
             <div className='flex flex-col'>
                 <Section>
                     <div data-theme="it" className="min-h-[450px] h-[60vh] max-h-[700px] flex items-center justify-center bg-scope-25 px-3.5 md:px-24 rounded-section border border-scope-50">

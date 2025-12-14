@@ -349,14 +349,21 @@
                 "register_text": "As verified luthier you can register instruments of your endorsed skills",
                 "register_now": "Register now",
                 "register_more": "More info"
+            },
+            "InAppBrowserBanner": {
+                "title": "Proceed in your default browser",
+                "warning": "Activation is not possible in the in-app browser you are using (usually Gmail).",
+                "button_ios": "Open in Browser",
+                "button_android": "Open in Browser",
+                "button_aria_label": "Open this page in your default browser"
+            },
+            "NotConnected": {
+                "heading": "Know the true story about your musical instrument",
+                "sub_heading": "That’s the mission.",
+                "button_description": "No registration required",
+                "auth_disclaimer": "Authentication powered by",
+                "visit_instruement": "Visit instruement.com"
             }
-        },
-        "NotConnected": {
-            "heading": "Know the true story about your musical instrument",
-            "sub_heading": "That’s the mission.",
-            "button_description": "No registration required",
-            "auth_disclaimer": "Authentication powered by",
-            "visit_instruement": "Visit instruement.com"
         },
         "BottomNav": {
             "home": "Home",
