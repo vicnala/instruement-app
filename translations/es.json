@@ -366,13 +366,6 @@
                 "button_description": "No requiere registro",
                 "auth_disclaimer": "Autenticación basada en",
                 "visit_instruement": "Visita www.instruement.com"
-            },
-            "InAppBrowserBanner": {
-                "title": "Por favor, abre esta página en tu navegador por defecto",
-                "warning": "Si usas Gmail, es probable que estés viendo esto en el navegador de la propia aplicación. La activación solo es posible en tu navegador por defecto. Ignora éste mensaje si estas usando tu navegador por defecto.",
-                "button_ios": "Abrir en navegador",
-                "button_android": "Abrir en navegador",
-                "button_aria_label": "Abrir esta página en tu navegador predeterminado"
             }
         },
         "BottomNav": {
