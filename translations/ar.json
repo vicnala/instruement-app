@@ -436,6 +436,33 @@
         },
         "Modal": {
             "close": "Close"
+        },
+        "Join": {
+            "JoinConnect": {
+                "loading": "Loading...",
+                "heading": "Join as luthier through the app",
+                "description": "Install the Instruement webapp to start your luthier onboarding process. The webapp provides the best experience for registering and managing your instruments on mobile devices.",
+                "app_icon_alt": "Instruement app icon",
+                "install_button_label": "Install now",
+                "android_ready": "Tap the button above to install the webapp",
+                "ios_hint": "Tap the button to see installation instructions on iPhone",
+                "connect_heading": "Hello Luthier",
+                "connect_sub_heading": "Sign in and create your luthier account",
+                "connect_description": "Secure authentication powered by blockchain",
+                "visit_instruement": "Visit instruement.com",
+                "ios_dialog": {
+                    "title": "Add Instruement to your home screen",
+                    "close_label": "Close",
+                    "introduction": "To install the app:",
+                    "step1": "1. Tap Share",
+                    "step2": "2. Swipe up and tap Add to Home Screen"
+                }
+            },
+            "JoinOnboarding": {
+                "app_icon_alt": "Instruement app icon",
+                "heading": "Let's get started",
+                "sub_heading": "We need to know…"
+            }
         }
     }
   }
