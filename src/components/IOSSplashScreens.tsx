@@ -10,6 +10,14 @@ import React from 'react';
 export const IOSSplashScreens: React.FC = () => {
   return (
     <>
+      {/* iOS Web App Capable - Required for PWA installation on iOS */}
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+      
+      {/* iOS App Icon - Required for home screen icon */}
+      <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon-512x512.png" />
+      <link rel="apple-touch-icon" sizes="180x180" href="/images/icons/apple-touch-icon-180x180.png" />
+      
       {/* iOS Splash Screens - Portrait only (PWA is locked to portrait mode) */}
       <link rel="apple-touch-startup-image" media="screen and (device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="/images/icons/ios/iPhone_17_Pro__iPhone_17__iPhone_16_Pro_portrait.png" />
       <link rel="apple-touch-startup-image" media="screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="/images/icons/ios/12.9__iPad_Pro_portrait.png" />

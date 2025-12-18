@@ -24,9 +24,13 @@ const wallets = [
   createWallet("walletConnect"),
 ];
 
-export const CustomConnectButton = (
-  { cb, invite }: Readonly<{ cb?: string | undefined, invite?: string | undefined }>
-) => {
+type CustomConnectButtonProps = Readonly<{
+  cb?: string;
+  invite?: string;
+  ticket?: string;
+}>;
+
+export const CustomConnectButton = ({ cb, invite, ticket }: CustomConnectButtonProps) => {
   const { theme } = useTheme();
   const locale = useLocale();
   const t = useTranslations();
@@ -36,6 +40,10 @@ export const CustomConnectButton = (
       theme={theme === 'system' ? 'light' : theme === 'dark' ? 'dark' : 'light'}
       locale={locale.includes('en') ? 'en_US' : locale.includes('es') ? 'es_ES' : 'en_US'}
       chain={chain}
+      connectButton={{
+        className: "!bg-scope-900 !text-scope-25",
+        label: t('components.CustomConnectButton.label')
+      }}
       switchButton={{
         label: t('components.CustomConnectButton.switch_network')
       }}
@@ -55,7 +63,7 @@ export const CustomConnectButton = (
         },
         doLogin: async (params) => {
           // console.log("logging in!");
-          await login(params, cb, invite);
+          await login(params, cb, invite, ticket);
         },
         getLoginPayload: async ({ address }) =>
           await generatePayload({ address, chainId: chain.id }),

@@ -5,7 +5,7 @@ import Page from "@/components/Page";
 import Section from "@/components/Section";
 import NFTGrid from "@/components/NFT/NFTGrid";
 import DraftGrid from "@/components/Drafts/DraftGrid";
-import NotConnected from "../NotConnected";
+import NotConnected from "@/components/HomeIndex/NotConnected";
 
 const VIDEO_URLS: Record<string, string> = {
   en: "https://www.youtube.com/embed/PbbHg0uxc60", 
@@ -42,7 +42,7 @@ export default function Minter(
           {
             !owned?.length &&
             <div className="flex flex-row flex-wrap gap-6">
-              <div className="flex object-cover aspect-3/2 flex-[2] min-w-[300px] rounded-[15px] overflow-hidden">
+              <div className="flex object-cover aspect-3/2 flex-[2] min-w-[300px] rounded-section border border-scope-50 overflow-hidden">
                 <iframe 
                   className="w-full h-full aspect-video object-contain" 
                   src={videoUrl}
@@ -52,10 +52,10 @@ export default function Minter(
                 />
               </div>
               <div className="flex flex-col gap-2 justify-center flex-[1] min-w-[30ch]">
-                <h2 className="text-3xl font-semibold text-gray-900 dark:text-gray-100">
+                <h2 className="text-3xl font-semibold text-scope-1000">
                   {context.ctx.firstName},
                 </h2>
-                <p className="mb-4 text-lg">
+                <p className="mb-4 text-lg text-scope-700">
                   {t('hello_sub')}
                 </p>
               </div>

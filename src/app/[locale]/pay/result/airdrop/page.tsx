@@ -17,5 +17,6 @@ export default async function ResultPage({
     id={searchParams.id}
     name={searchParams.name ? searchParams.name : `#${searchParams.id}`}
     context={authResult.parsedJWT}
+    paymentType="airdrop"
   />;
 }

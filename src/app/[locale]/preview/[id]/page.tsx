@@ -8,7 +8,7 @@ export default async function PreviewPage({
 }: {
   params: { locale: string, id: string };
 }) {
-  const authResult: any = await authedOnly(`/preview/${id}`, "");
+  const authResult: any = await authedOnly(`/preview/${id}`, "", "");
   const context = authResult.parsedJWT;
   
   let userData;

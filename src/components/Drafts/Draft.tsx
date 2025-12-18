@@ -48,8 +48,9 @@ export default function Draft(
     <TransitionLink
       href={`/drafts/${instrumentId}`}
       locale={locale}
-      className={`group cursor-pointer transition-all hover:shadow-lg flex flex-col w-full justify-stretch overflow-hidden bg-it-25 border border-it-100 dark:bg-gray-900 dark:border-gray-800 rounded-lg`}
+      className={`group cursor-pointer transition-all hover:shadow-sm flex flex-col w-full justify-stretch overflow-hidden bg-scope-25 border border-scope-100 hover:border-scope-200 rounded-button`}
       aria-label={`${instrument?.title || instrumentId}`}
+      theme="it"
     >
       <div className="relative w-full aspect-square bg-white/[.04]">
         {
@@ -70,7 +71,7 @@ export default function Draft(
                 alt={image.description}
                 className="object-cover aspect-square w-full"
               /> :
-              <div className="w-full h-full rounded-lg">
+              <div className="w-full h-full rounded-button">
               </div>
             }
           </>
@@ -89,7 +90,7 @@ export default function Draft(
     </TransitionLink>
     ) : (
     <div
-      className={`cursor-wait flex flex-col w-full justify-stretch overflow-hidden bg-it-25 border border-it-100 rounded-lg`}
+      className={`cursor-wait flex flex-col w-full justify-stretch overflow-hidden bg-us-25 border border-us-100 rounded-button`}
       aria-disabled="true"
     >
       <div className="relative w-full aspect-square bg-white/[.04]">
@@ -109,7 +110,7 @@ export default function Draft(
                 alt={image.description}
                 className="object-cover aspect-square w-full"
               /> :
-              <div className="w-full h-full rounded-lg">
+              <div className="w-full h-full rounded-button">
               </div>
             }
           </>

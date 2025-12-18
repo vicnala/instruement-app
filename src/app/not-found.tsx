@@ -20,11 +20,11 @@ export default function NotFound() {
                 d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
               />
             </svg>
-            <h1 className="text-3xl font-bold text-gray-800">
+            <h1 className="text-3xl font-bold text-scope-800">
               Oops! Something went wrong.
             </h1>
           </div>
-          <p className="text-gray-600 text-lg mb-8 text-center">
+          <p className="text-scope-600 dark:text-scope-400 text-lg mb-8 text-center">
             We&apos;re sorry, but we couldn&apos;t find the page you were
             looking for. Please check the URL or go back to the homepage.
           </p>

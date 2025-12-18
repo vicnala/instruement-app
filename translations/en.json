@@ -76,11 +76,13 @@
             "and": "and"
         },
         "CustomConnectButton": {
-            "switch_network": "Switch network"
+            "switch_network": "Switch network",
+            "label": "Connect"
         },
         "Header": {
             "new_instrument": "Register Instrument",
-            "account": "Account"
+            "account": "Account",
+            "home": "Home"
         },
         "DraftGrid": {
             "title_single": "Draft Registration",
@@ -181,12 +183,12 @@
             "documents": "Documents",
             "description": "Description",
             "back_to_draft": "Back to draft",
-            "made_by": "Instrument made by"
+            "registered_by": "Instrument registered by"
         },
         "Instrument": {
             "instrument": "Instrument",
             "current_owner": "Current owner",
-            "you_are_not_owner": "You are not the owner",
+            "you_are_not_owner": "You are not the owner of this instrument",
             "you_are_owner": "You are the owner of this instrument",
             "additional_images": "Additional images",
             "documents": "Documents",
@@ -260,10 +262,12 @@
             "payment_error": "Payment Error"
         },
         "AirdropForm": {
-            "title": "Register Your First Instrument",
-            "subtitle": "Your first registration is free.",
+            "title": "Register your first instrument",
+            "subtitle": "For free because the first time is always the hardest",
             "register_now": "Register now",
-            "airdrop_error": "Registration error"
+            "airdrop_error": "Registration error",
+            "processing_title": "Registration in progress",
+            "airdrop_succeeded": "Registration succeeded"
         },
         "ConsentSection": {
             "terms_consent": "I have read and agree to the Terms of Use governing my use of this service.",
@@ -275,11 +279,16 @@
         "PaymentResult": {
             "title_thank_you": "Thank you",
             "success_message_received": "Your payment for \"{title}\" has been received. You can wait a few moments or check your email for the confirmation.",
+            "success_message_received_airdrop": "Your free registration for \"{title}\" has been received. You can wait a few moments or check your email for the confirmation.",
             "success_message_loading": "Registration in progress...",
-            "success_message_ready": "Ready. The registered instrument is now available in your account",
+            "success_message_ready_title": "Ready",
+            "success_message_ready": "The registered instrument is now available in your account",
             "go_to_instrument": "View the instrument",
             "title_failed": "Payment failed",
-            "failed_message": "Something went wrong with the payment. We have been notified and will contact you shortly."
+            "failed_message": "Something went wrong with the payment. We have been notified and will contact you shortly.",
+            "go_back_to_home": "Go to home",
+            "processing_title": "Registration in progress",
+            "processing_message": "Please wait while we process your registration."
         },
         "UI": {
             "ProgressBar": {
@@ -311,7 +320,99 @@
                     }
                 }
             },
-            "OnboardMinterCard": {
+            "PWAInstall": {
+                "app_icon_alt": "Instruement app icon",
+                "title": "Add Instruement to your home screen",
+                "description": "Enable direct access to your registered musical instruments for a more convenient use",
+                "install_button_label": "Install now",
+                "ios_dialog": {
+                    "title": "Add Instruement to your home screen",
+                    "close_label": "Close",
+                    "introduction": "To install the app:",
+                    "step1": "1.Tap Share",
+                    "step1_icon_alt": "Share icon",
+                    "step2": "Swipe up and tap Add to Home Screen",
+                    "step2_icon_alt": "2. Add to Home Screen icon"
+                }
+            }
+        },
+        "HomeIndex": {
+            "User": {
+                "no_instruments": "Receive your instrument",
+                "no_instruments_sub": "Show the QR code to the luthier or current owner to receive the instrument registration."
+            },
+            "Minter": {
+                "hello": "Welcome",
+                "hello_sub": "we welcome you to our simple but powerful digital tool for Luthiers. In our quick introduction video you will learn how to register your first instrument.",
+                "verified_since": "Verified since",
+                "register_title": "Register your instrument",
+                "register_text": "As verified luthier you can register instruments of your endorsed skills",
+                "register_now": "Register now",
+                "register_more": "More info"
+            },
+            "NotConnected": {
+                "heading": "Know the true story about your musical instrument",
+                "sub_heading": "That’s the mission.",
+                "button_description": "No registration required",
+                "auth_disclaimer": "Authentication powered by",
+                "visit_instruement": "Visit instruement.com"
+            }
+        },
+        "BottomNav": {
+            "home": "Home",
+            "new_instrument": "Register Instrument",
+            "account": "Account"
+        },
+        "Account": {
+            "User": {
+                "account": "Your account",
+                "type": "Type",
+                "anonymous": "Anonymous",
+                "instrument": "Instrument",
+                "received_instrument": "\"{name}\" has been received.",
+                "connect_button_title": "Advanced actions & logout",
+                "connect_button_description": "Click the account button to access all core and advanced account functions. If you haven’t already exported and saved your private key, you should do it now!"
+            },
+            "Minter": {
+                "verfied_since": "Verified since",
+                "luthier_label": "Luthier",
+                "instrument_type_specialization": "Specialization",
+                "endorsed_skills": "Endorsed skills",
+                "about": "About",
+                "products_services": "Products & Services",
+                "no_content_available": "No content available",
+                "account": {
+                    "minter_account": "Can register",
+                    "verified_luthier": "Verified luthier",
+                    "not_verified_luthier": "Not verified luthier"
+                },
+                "address": "Account address",
+                "wallet_actions_title": "Advanced account actions",
+                "wallet_actions_description": "Access all account functions here. If you haven’t already exported and saved your private key, you should do it now!",
+                "view_complete_profile": "View complete public profile"
+            },
+            "OnboardMinterCardTicket": {
+                "title_activating": "Activating your luthier account now",
+                "title_activated": "Your luthier account is now activated!",
+                "status": {
+                    "waiting_wallet": "Connecting to your blockchain address…",
+                    "verifying_account": "Verifying account",
+                    "adding_address": "Adding your blockchain address to your account…",
+                    "fetching_user": "Applying the varnish…",
+                    "retry": "Try again",
+                    "success_title": "{firstName}, your luthier account is now activated!",
+                    "success_description": "Your blockchain address has been successfully linked to your luthier account. Check your email for more information. You can now register instruments and transfer their digital passport to the new owner.",
+                    "wallet_address_label": "Your blockchain address",
+                    "continue": "Go to home"
+                },
+                "errors": {
+                    "title": "Activation failed",
+                    "verification_failed": "Your account activation verification failed. Please try again or contact support.",
+                    "ticket_failed": "This URL link is not valid for wallet activation.",
+                    "address_failed": "Failed to link wallet address. Please try again."
+                }
+            },
+            "OnboardMinterCardInvite": {
                 "title": "Activate your luthier account now",
                 "description": "Proceed to confirm the email where you received your invitation.",
                 "confirm_invitation_do": "Confirm your invitation",
@@ -333,59 +434,8 @@
                 }
             }
         },
-        "HomeIndex": {
-            "User": {
-                "no_instruments": "Receive your registered instrument",
-                "no_instruments_sub": "Present the QR code to your luthier."
-            },
-            "Minter": {
-                "hello": "Welcome",
-                "hello_sub": "we welcome you to our simple but powerful digital tool for Luthiers. In our quick introduction video you will learn how to register your first instrument.",
-                "verified_since": "Verified since",
-                "register_title": "Register your instrument",
-                "register_text": "As verified luthier you can register instruments of your endorsed skills",
-                "register_now": "Register now",
-                "register_more": "More info"
-            }
-        },
-        "NotConnected": {
-            "heading": "The digital tool for managing your musical instruments",
-            "sub_heading": "Keep absolute control of your certificates and ownership",
-            "button_description": "No registration required. Connect anonymously",
-            "auth_disclaimer": "Authentication powered by",
-            "visit_instruement": "Visit instruement.com"
-        },
-        "BottomNav": {
-            "home": "Home",
-            "new_instrument": "Register Instrument",
-            "account": "Account"
-        },
-        "Account": {
-            "User": {
-                "title": "Your account",
-                "anonymous": "Anonymous account type",
-                "instrument": "Instrument",
-                "received_instrument": "\"{name}\" has been received.",
-                "connect_button_title": "Advanced actions",
-                "connect_button_description": "Access all core and advanced account functions here. If you haven’t already exported and saved your private key, you should do it now!"
-            },
-            "Minter": {
-                "verfied_since": "Verified since",
-                "instrument_type_specialization": "Specialization",
-                "endorsed_skills": "Endorsed skills",
-                "about": "About",
-                "products_services": "Products & Services",
-                "no_content_available": "No content available",
-                "account": {
-                    "minter_account": "Can register",
-                    "verified_luthier": "Verified luthier",
-                    "not_verified_luthier": "Not verified luthier"
-                },
-                "address": "Account address",
-                "wallet_actions_title": "Advanced account actions",
-                "wallet_actions_description": "Access all account functions here. If you haven’t already exported and saved your private key, you should do it now!",
-                "view_complete_profile": "View complete public profile"
-            }
+        "Modal": {
+            "close": "Close"
         }
     }
   }

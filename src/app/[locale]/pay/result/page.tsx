@@ -27,5 +27,6 @@ export default async function ResultPage({
     id={paymentIntent.metadata.id}
     name={paymentIntent.metadata.name}
     context={authResult.parsedJWT}
+    paymentType="payment"
   />;
 }

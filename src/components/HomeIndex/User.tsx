@@ -4,7 +4,7 @@ import Page from "@/components/Page";
 import Section from "@/components/Section";
 import NFTGrid from '@/components/NFT/NFTGrid';
 import ReceiveInstrumentCard from "@/components/ReceiveInstrumentCard";
-import NotConnected from "../NotConnected";
+import NotConnected from "@/components/HomeIndex/NotConnected";
 
   
 export default function User(
@@ -17,8 +17,10 @@ export default function User(
       {
         !owned?.length ?
         <Section>
-          <div>
-            {context.sub && <ReceiveInstrumentCard address={context.sub} locale={locale} context={context} />}
+          <div data-theme="it">
+            {context.sub && 
+            <ReceiveInstrumentCard address={context.sub} locale={locale} context={context} />
+            }
           </div>
         </Section> :
         <Section>

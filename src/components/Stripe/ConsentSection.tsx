@@ -15,7 +15,7 @@ export default function ConsentSection({ consent, handleConsentChange }: { conse
                 className="w-4 h-4 text-it-500 rounded focus:ring-it-500"
                 aria-label={t('terms_consent')}
               />
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-scope-700">
                 {t('i_accept')} <a href="https://instruement.com/terms-of-use/" className="text-it-500 hover:text-it-700 underline" target="_blank" rel="noopener noreferrer">{t('terms_of_use')}</a>
               </span>
             </label>
@@ -28,7 +28,7 @@ export default function ConsentSection({ consent, handleConsentChange }: { conse
                 className="w-4 h-4 text-it-500 rounded focus:ring-it-500"
                 aria-label={t('privacy_consent')}
               />
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-scope-700">
                 {t('i_accept')} <a href="https://instruement.com/privacy-policy/" className="text-it-500 hover:text-it-700 underline" target="_blank" rel="noopener noreferrer">{t('privacy_policy')}</a>
               </span>
           </label>

@@ -17,6 +17,17 @@ const {
   NEXT_PUBLIC_CHAIN_ID
 } = process.env;
 
+
+const setInstrumentQueueId = async (instrumentId: number, queueId: string) => {
+  const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${instrumentId}`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ queue_id: queueId })
+  })
+  const data = await result.json()
+  return data
+}
+
 export async function POST(request: Request) {
   let event: Stripe.Event;
 
@@ -102,6 +113,17 @@ export async function POST(request: Request) {
                   if (instrument.queue_id) {
                     return NextResponse.json({ message: `Already processing queueId ${instrument.queue_id} for instrument ${instrumentId}` }, { status: 200 });
                   }
+
+                  const updateQueueId = await setInstrumentQueueId(instrumentId, 'queued_for_stripe_payment');
+                  if (updateQueueId?.code === 'success') {
+                    console.log("api/webhooks/stripe set temporary queueId as 'queued_for_stripe_payment' on instrument", instrumentId);
+                  } else {
+                    return NextResponse.json(
+                      { message: `/api/webhooks/stripe ${updateQueueId?.message}` },
+                      { status: 400 },
+                    );
+                  }
+
                   // console.log('instrument mint', instrument);
 
                   const files: File[] = [];
@@ -241,23 +263,15 @@ export async function POST(request: Request) {
                       // console.log(">>> engine.erc721.mintTo <<< end");
                       
                       const { queueId } = mintResult.result;
-
                       // console.log('webhooks: stripe queueId', queueId, 'for draft', instrumentId);
 
-                      result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${instrumentId}`, {
-                        method: 'POST',
-                        headers,
-                        body: JSON.stringify({ queue_id: queueId }),
-                        cache: 'no-store'
-                      });
-
-                      const updateData = await result.json();
-                      if (updateData?.code === 'success') {
-                        // console.log("webhooks: stripe queueId POST", updateData.data);
+                      const updateQueueId = await setInstrumentQueueId(instrumentId, queueId);
+                      if (updateQueueId?.code === 'success') {
+                        console.log(`api/webhooks/stripe set queueId for ${instrumentId} as ${queueId}`);
                         return NextResponse.json({ message: "Received" }, { status: 200 });
                       } else {
                         return NextResponse.json(
-                          { message: `/api/webhooks/stripe ${message}` },
+                          { message: `/api/webhooks/stripe ${updateQueueId?.message}` },
                           { status: 400 },
                         );
                       }

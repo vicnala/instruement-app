@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function InstrumentView({ instrument }: { instrument: Instrument }): JSX.Element {
     return (
-      <div className="grid grid-cols-3 gap-6 bg-it-50 border border-it-100 shadow-sm rounded-[15px] overflow-hidden">
+      <div className="grid grid-cols-2 gap-6 bg-scope-50 border border-scope-100 shadow-sm rounded-section overflow-hidden">
         <div className="col-span-1">
           <Image
             src={instrument.cover_image.file_url}
@@ -14,11 +14,11 @@ export default function InstrumentView({ instrument }: { instrument: Instrument 
             className="object-cover"
           />
         </div>
-        <div className="col-span-2 py-4">
-          <h2 className="text-xl text-3xl font-semibold">
+        <div className="col-span-1 py-4">
+          <h2 className="text-xl font-semibold">
             {instrument.title}
           </h2>
-          <p className="text-gray-600">
+          <p className="text-scope-600">
             {instrument.type_name}
           </p>
         </div>

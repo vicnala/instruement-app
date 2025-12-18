@@ -6,8 +6,8 @@ import { TransitionLink } from "@/components/UI/TransitionLink";
 import Image from 'next/image'
 import { useTranslations } from "next-intl";
 import { ModeToggle } from "./ModeToggle";
-import { ButtonLink } from "@/components/UI/ButtonLink";
 import { House, User } from "lucide-react";
+import RegisterPlus from '@/components/Icons/RegisterPlus'
 
 
 export function Header({ context }: { context: any }) {
@@ -20,7 +20,7 @@ export function Header({ context }: { context: any }) {
   return (
     <div className={`${address ? 'hidden sm:block' : ''}`}>
       <div className='w-full'>
-        <header className='bg-canvas px-safe dark:bg-contrast'>
+        <header className='bg-canvas px-safe'>
           <div className='mx-auto flex flex-row min-h-[max(10vh,85px)] max-w-screen-lg items-center justify-between px-3.5'>
             <TransitionLink href="/" locale={locale}>
               <div className="relative">
@@ -44,27 +44,43 @@ export function Header({ context }: { context: any }) {
               {
                 isMinter && 
                 (pathname === '/' || pathname === '/account' || pathname.includes('/instrument')) &&
-                <ButtonLink href="/drafts/new" size="md" colorSchema="it">
-                  {t('new_instrument')}
-                </ButtonLink>
+                <TransitionLink 
+                  href="/drafts/new" 
+                  locale={locale}
+                  theme="us"
+                  className="flex flex-col items-center font-medium text-sm
+                  text-scope-400 hover:text-it-500"
+                  aria-label={t('new_instrument')}
+                >
+                  <RegisterPlus className="w-5 h-5" />
+                  <span className="text-xs">{t('new_instrument')}</span>
+                </TransitionLink>
               }
               {
-                address &&
-                  <div className='flex items-center space-x-6'>
-                    <TransitionLink key="my-instruments" href="/account" locale={locale}>
-                      <User className={`w-5 h-5 ${pathname.includes('/account')
-                            ? 'text-it-400 dark:text-white'
-                            : 'text-gray-500 hover:text-it-400 dark:text-gray-600 dark:hover:text-it-100'
-                        }`}
-                        aria-label={t('account')}
-                      />
+                address && 
+                  <div className='flex flex-col items-center space-x-6'>
+                    <TransitionLink 
+                    disabled={pathname === '/account'}
+                    href="/account" 
+                    key="my-instruments" 
+                    locale={locale} 
+                    theme="us"
+                    className={`flex flex-col items-center hover:text-scope-1000 ${pathname.includes('/account') ? 'text-scope-1000' : 'text-scope-400'}`}>
+                      <User className="w-5 h-5" aria-label={t('account')} />
+                      <span className="text-xs">{t('account')}</span>
                     </TransitionLink>
                   </div>
               }
               {
                 address && ( pathname === '/account' || pathname.includes('/instrument') || pathname.includes('/drafts')) &&
-                <TransitionLink href="/" locale={locale} className={`${pathname === '/' ? 'text-it-400 dark:text-white' : 'text-gray-500 hover:text-it-400 dark:text-gray-600 dark:hover:text-it-100'}`}>
+                <TransitionLink 
+                disabled={pathname === '/'}
+                href="/" 
+                locale={locale} 
+                theme="us" 
+                className={`flex flex-col items-center ${pathname === '/' ? 'text-scope-1000' : 'text-scope-300 hover:text-scope-700'}`}>
                   <House className="w-5 h-5" />
+                  <span className="text-xs">{t('home')}</span>
                 </TransitionLink>
               }
               { process.env.NODE_ENV === 'development' && <ModeToggle /> }

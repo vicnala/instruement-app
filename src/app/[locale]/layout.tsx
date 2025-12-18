@@ -14,6 +14,9 @@ import { ThirdwebProvider } from "thirdweb/react";
 import { locales } from "@/i18n/routing";
 import { IOSSplashScreens } from "@/components/IOSSplashScreens";
 import { PostHogProvider } from "@/components/PostHogProvider";
+import { PageTransitionHandler } from "@/components/UI/PageTransitionHandler";
+import ButtonSpinner from "@/components/UI/ButtonSpinner";
+import { PullToRefresh } from "@/components/UI/PullToRefresh";
 
 const catamaran = Catamaran({ subsets: ["latin"] });
 
@@ -36,10 +39,11 @@ export default async function RootLayout({
           rel="canonical"
           href={process.env.NEXT_PUBLIC_SERVER_URL || `https://app.instruement.com`}
         />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3.0" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fafafb" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#171412" />
         
         <IOSSplashScreens />
-        <PostHogProvider />
         
         <script
           {...jsonLdScriptProps<WebSite>({
@@ -59,9 +63,15 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <NextIntlClientProvider messages={messages}>
-              <ThirdwebProvider>
-                {children}
-              </ThirdwebProvider>
+            <PostHogProvider />
+            <PageTransitionHandler />
+            <PullToRefresh />
+            <div className="page-transition-spinner">
+              <ButtonSpinner />
+            </div>
+            <ThirdwebProvider>
+              {children}
+            </ThirdwebProvider>
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>
