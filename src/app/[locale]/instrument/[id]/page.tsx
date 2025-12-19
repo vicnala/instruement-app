@@ -125,9 +125,9 @@ export default async function InstrumentPage({ searchParams, params }: Props) {
     console.log("fileDescriptionsUrl", fileDescriptionsUrl);
 
     const result = await fetch(fileDescriptionsUrl);
-    console.log("result fetch fileDescriptionsUrl", result);
+    // console.log("result fetch fileDescriptionsUrl", result);
     const fileDescriptionsData = await result.json();
-    // console.log("fileDescriptionsData", fileDescriptionsData);					
+    console.log("fileDescriptionsData", JSON.stringify(fileDescriptionsData, null, 2));
 
     for (const fileDescription of fileDescriptionsData || []) {
       if (fileDescription.cover) continue;
