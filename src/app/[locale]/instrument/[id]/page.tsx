@@ -148,7 +148,9 @@ export default async function InstrumentPage({ searchParams, params }: Props) {
     }
   }
 
-  if (!minter || !images.length || !documents.length) return <NotFound />;
+  
+  console.log("images", JSON.stringify(images, null, 2));
+  console.log("documents", JSON.stringify(documents, null, 2));
 
   return (
     <Instrument
