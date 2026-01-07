@@ -92,13 +92,15 @@ export default function MediaManager({
     UploadService.deleteFile(file.id, api_key)
       .then(() => {
         if (type === 'image') {
-          setImagePreviews(imagePreviews.filter((_, i) => i !== index));
+          setImagePreviews(prev => prev.filter((_, i) => i !== index));
         }
-        setSelectedFiles(selectedFiles.filter((_, i) => i !== index));
-        setProgressInfos(progressInfos.filter((_, i) => i !== index));
-        setUploadedFiles(uploadedFiles.filter((_, i) => i !== index));
-        setMessage(message.filter((_, i) => i !== index));
-        setDescriptions(descriptions.filter((_, i) => i !== index));
+        setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+        setProgressInfos(prev => prev.filter((_, i) => i !== index));
+        setUploadedFiles(prev => prev.filter((_, i) => i !== index));
+        setMessage(prev => prev.filter((_, i) => i !== index));
+        setDescriptions(prev => prev.filter((_, i) => i !== index));
+        setOriginalDescriptions(prev => prev.filter((_, i) => i !== index));
+        setVisibleDescriptions(prev => prev.filter((_, i) => i !== index));
       })
       .catch((err: any) => {
         alert(`Error deleting file ${file.id}`);
@@ -191,18 +193,22 @@ export default function MediaManager({
         }
         setSelectedFiles(resizedFiles);
         setImagePreviews(images);
-        setDescriptions([...descriptions, ...Array(files.length).fill('')]);
+        setDescriptions(prev => [...prev, ...Array(files.length).fill('')]);
       }
     } else if (accept === 'file') {
       if (files) {
         setSelectedFiles(Array.from(files));
-        setDescriptions([...descriptions, ...Array(files.length).fill('')]);
+        setDescriptions(prev => [...prev, ...Array(files.length).fill('')]);
       }
     }
 
     setProgressInfos([]);
     setMessage([]);
   };
+
+  // Use ref to access current descriptions without adding to dependencies
+  const descriptionsRef = useRef(descriptions);
+  descriptionsRef.current = descriptions;
 
   useEffect(()=> {
     const upload = (idx: number, file: File) => {
@@ -220,10 +226,10 @@ export default function MediaManager({
           'success'
         ]);
   
-        // Add description to the uploaded file
+        // Add description to the uploaded file (use ref to get current value)
         const uploadedFile = {
           ...data.data,
-          description: descriptions[idx] || ''
+          description: descriptionsRef.current[idx] || ''
         };
   
         return uploadedFile;
@@ -256,7 +262,7 @@ export default function MediaManager({
       setResizing(false);
 
       Promise.all(uploadPromises)
-        .then((data: any) => {          
+        .then((data: any) => {
           // Only keep successfully uploaded files
           const successfulUploads = data
             .filter((d: any) => d.code === 'success')
@@ -269,7 +275,7 @@ export default function MediaManager({
 
       setMessage([]);
     }    
-  }, [selectedFiles, api_key, descriptions, instrument.id, isCover]);
+  }, [selectedFiles, api_key, instrument.id, isCover]);
 
   const handleToggleDescription = (index: number) => {
     const newVisibleDescriptions = [...visibleDescriptions];
