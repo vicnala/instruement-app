@@ -53,6 +53,13 @@ const nextConfig = {
           search: '',
         },
         {
+          protocol: 'https',
+          hostname: 'instruement.loc',
+          port: '',
+          pathname: '/wp-content/**',
+          search: '',
+        },
+        {
           protocol: 'http',
           hostname: 'localhost',
           port: '3000',
