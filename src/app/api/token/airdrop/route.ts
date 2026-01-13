@@ -17,6 +17,17 @@ const {
   NEXT_PUBLIC_CHAIN_ID
 } = process.env;
 
+
+const setInstrumentQueueId = async (instrumentId: number, queueId: string) => {
+  const result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${instrumentId}`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ queue_id: queueId })
+  })
+  const data = await result.json()
+  return data
+}
+
 export async function POST(request: Request) {
   const { address, name, id, instrument } = await request.json();
 
@@ -103,6 +114,17 @@ export async function POST(request: Request) {
             if (instrument.queue_id) {
               return NextResponse.json({ message: `Already processing queueId ${instrument.queue_id} for instrument ${instrumentId}` }, { status: 200 });
             }
+
+            const updateQueueId = await setInstrumentQueueId(instrumentId, 'queued_for_airdrop');
+            if (updateQueueId?.code === 'success') {
+              console.log("api/token/airdrop set temporary queueId as 'airdrop' on instrument", instrumentId);
+            } else {
+              return NextResponse.json(
+                { message: `/api/token/airdrop ${updateQueueId?.message}` },
+                { status: 400 },
+              );
+            }
+
             // console.log('instrument mint', instrument);
 
             const files: File[] = [];
@@ -242,26 +264,18 @@ export async function POST(request: Request) {
                 // console.log(">>> engine.erc721.mintTo <<< end");
                 
                 const { queueId } = mintResult.result;
-
                 // console.log('api/token/airdrop queueId', queueId, 'for instrument', instrumentId);
 
-                result = await fetch(`${process.env.NEXT_PUBLIC_INSTRUEMENT_API_URL}/instrument/${instrumentId}`, {
-                  method: 'POST',
-                  headers,
-                  body: JSON.stringify({ queue_id: queueId }),
-                  cache: 'no-store'
-                });
-
-                const updateData = await result.json();
-                if (updateData?.code === 'success') {
-                  console.log("api/token/airdrop queueId POST", updateData.data);
+                const updateQueueId = await setInstrumentQueueId(instrumentId, queueId);
+                if (updateQueueId?.code === 'success') {
+                  console.log(`api/token/airdrop set queueId for ${instrumentId} as ${queueId}`);
                   return NextResponse.json({
                     code: "success",
                     data: { message: `Airdrop successful` },
                   }, { status: 200 });
                 } else {
                   return NextResponse.json(
-                    { message: `/api/token/airdrop ${message}` },
+                    { message: `/api/token/airdrop ${updateQueueId?.message}` },
                     { status: 400 },
                   );
                 }

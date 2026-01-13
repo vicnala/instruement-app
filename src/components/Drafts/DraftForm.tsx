@@ -145,11 +145,11 @@ export default function DraftForm(
   const createOrUpdateInstrument = async (e: any) => {
     e.preventDefault()
     if (type && name && (!instrumentId || instrument)) {
+      setIsLoadingMetadata(true);
       if (!instrumentId) {
-        // setIsLoading(true);
         const selected: any = instrumentTypes.find((i: any) => i.label === type);
         if (!selected) {
-          // setIsLoading(false)
+          setIsLoadingMetadata(false);
           return;
         }
         try {
@@ -163,6 +163,8 @@ export default function DraftForm(
           }
         } catch (error: any) {
           alert(`Error createInstrument: ${error.response.data.data.message}`);
+        } finally {
+          setIsLoadingMetadata(false);
         }
       } else if (instrument) {
         try {
@@ -182,10 +184,11 @@ export default function DraftForm(
           }
         } catch (error: any) {
           alert(`Error updateInstrument: ${error.response.data.message}`);
+        } finally {
+          setIsLoadingMetadata(false);
         }
       }
     }
-    // setIsLoading(false);
   }
 
   // Handle instrument delete

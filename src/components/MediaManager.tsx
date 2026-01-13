@@ -46,10 +46,15 @@ export default function MediaManager({
   const [resizing, setResizing] = useState<Boolean>(false);
   const ref = useRef<HTMLInputElement>(null);
   const textareaRefs = useRef<(HTMLTextAreaElement | null)[]>([]);
+  const uploadedFilesRef = useRef(uploadedFiles);
+  uploadedFilesRef.current = uploadedFiles;
+  const lastInstrumentIdRef = useRef<number | null>(null);
 
-  // Initialize with existing media
+  // Initialize with existing media (only when instrument ID changes)
   useEffect(() => {
-    if (instrument) {
+    if (instrument && instrument.id !== lastInstrumentIdRef.current) {
+      lastInstrumentIdRef.current = instrument.id;
+      
       const existingMedia: (InstrumentImage | InstrumentFile)[] = [];
       const existingDescriptions: string[] = [];
       
@@ -85,23 +90,32 @@ export default function MediaManager({
     ref.current?.click();
   }
 
-  const handleDelete = (index: number, type: string) => {
-    const file = uploadedFiles[index];
-    setDeletingFileId(file.id.toString());
+  const handleDelete = (fileId: number, type: string) => {
+    setDeletingFileId(fileId.toString());
 
-    UploadService.deleteFile(file.id, api_key)
+    UploadService.deleteFile(fileId, api_key)
       .then(() => {
+        // Get current index from ref (always up-to-date)
+        const currentFiles = uploadedFilesRef.current;
+        const fileIndex = currentFiles.findIndex(f => f.id === fileId);
+        
+        if (fileIndex === -1) return;
+        
+        // All state updates at the same level (not nested) for proper React rendering
+        setUploadedFiles(prev => prev.filter(f => f.id !== fileId));
+        
         if (type === 'image') {
-          setImagePreviews(imagePreviews.filter((_, i) => i !== index));
+          setImagePreviews(prev => prev.filter((_, i) => i !== fileIndex));
         }
-        setSelectedFiles(selectedFiles.filter((_, i) => i !== index));
-        setProgressInfos(progressInfos.filter((_, i) => i !== index));
-        setUploadedFiles(uploadedFiles.filter((_, i) => i !== index));
-        setMessage(message.filter((_, i) => i !== index));
-        setDescriptions(descriptions.filter((_, i) => i !== index));
+        setSelectedFiles(prev => prev.filter((_, i) => i !== fileIndex));
+        setProgressInfos(prev => prev.filter((_, i) => i !== fileIndex));
+        setMessage(prev => prev.filter((_, i) => i !== fileIndex));
+        setDescriptions(prev => prev.filter((_, i) => i !== fileIndex));
+        setOriginalDescriptions(prev => prev.filter((_, i) => i !== fileIndex));
+        setVisibleDescriptions(prev => prev.filter((_, i) => i !== fileIndex));
       })
       .catch((err: any) => {
-        alert(`Error deleting file ${file.id}`);
+        alert(`Error deleting file ${fileId}`);
       })
       .finally(() => {
         setDeletingFileId(null);
@@ -191,18 +205,22 @@ export default function MediaManager({
         }
         setSelectedFiles(resizedFiles);
         setImagePreviews(images);
-        setDescriptions([...descriptions, ...Array(files.length).fill('')]);
+        setDescriptions(prev => [...prev, ...Array(files.length).fill('')]);
       }
     } else if (accept === 'file') {
       if (files) {
         setSelectedFiles(Array.from(files));
-        setDescriptions([...descriptions, ...Array(files.length).fill('')]);
+        setDescriptions(prev => [...prev, ...Array(files.length).fill('')]);
       }
     }
 
     setProgressInfos([]);
     setMessage([]);
   };
+
+  // Use ref to access current descriptions without adding to dependencies
+  const descriptionsRef = useRef(descriptions);
+  descriptionsRef.current = descriptions;
 
   useEffect(()=> {
     const upload = (idx: number, file: File) => {
@@ -220,10 +238,10 @@ export default function MediaManager({
           'success'
         ]);
   
-        // Add description to the uploaded file
+        // Add description to the uploaded file (use ref to get current value)
         const uploadedFile = {
           ...data.data,
-          description: descriptions[idx] || ''
+          description: descriptionsRef.current[idx] || ''
         };
   
         return uploadedFile;
@@ -256,7 +274,7 @@ export default function MediaManager({
       setResizing(false);
 
       Promise.all(uploadPromises)
-        .then((data: any) => {          
+        .then((data: any) => {
           // Only keep successfully uploaded files
           const successfulUploads = data
             .filter((d: any) => d.code === 'success')
@@ -269,7 +287,7 @@ export default function MediaManager({
 
       setMessage([]);
     }    
-  }, [selectedFiles, api_key, descriptions, instrument.id, isCover]);
+  }, [selectedFiles, api_key, instrument.id, isCover]);
 
   const handleToggleDescription = (index: number) => {
     const newVisibleDescriptions = [...visibleDescriptions];
@@ -330,7 +348,7 @@ export default function MediaManager({
                   <button
                     type="button"
                     className="absolute top-2 right-2 p-2 hover:bg-red-600 text-white font-bold p-1 rounded-full aspect-square bg-black bg-opacity-30"
-                    onClick={() => handleDelete(index, accept)}
+                    onClick={() => handleDelete(file.id, accept)}
                     disabled={deletingFileId === file.id.toString()}
                     title={t('images.delete_image')}
                     aria-label={t('images.delete_image')}

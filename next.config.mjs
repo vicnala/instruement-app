@@ -35,6 +35,13 @@ const nextConfig = {
           protocol: 'https',
           hostname: '*.instruement.com',
           port: '',
+          pathname: '/wp-json/**',
+          search: '',
+        },
+        {
+          protocol: 'https',
+          hostname: '*.instruement.com',
+          port: '',
           pathname: '/web/**',
           search: '',
         },
@@ -43,6 +50,13 @@ const nextConfig = {
           hostname: '*.ipfscdn.io',
           port: '',
           pathname: '/ipfs/**',
+          search: '',
+        },
+        {
+          protocol: 'https',
+          hostname: 'instruement.loc',
+          port: '',
+          pathname: '/wp-content/**',
           search: '',
         },
         {

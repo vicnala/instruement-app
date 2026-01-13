@@ -112,21 +112,24 @@ export default async function InstrumentPage({ searchParams, params }: Props) {
     minter = registrarTrait.value;
   }
 
+  console.log("minter", minter);  
+
   if (fileDirHashTrait) {
     const fileDirHash = fileDirHashTrait.value;
-    // console.log("fileDirHash", fileDirHash);
+    console.log("fileDirHash", fileDirHash);
 
     const fileDescriptionsUrl = await resolveScheme({
       client,
       uri: `ipfs://${fileDirHash}/descriptions`
     });
-    // console.log("fileDescriptionsUrl", fileDescriptionsUrl);
+    console.log("fileDescriptionsUrl", fileDescriptionsUrl);
 
-    const result = await fetch(fileDescriptionsUrl)
+    const result = await fetch(fileDescriptionsUrl);
+    // console.log("result fetch fileDescriptionsUrl", result);
     const fileDescriptionsData = await result.json();
-    // console.log("fileDescriptionsData", fileDescriptionsData);					
+    console.log("fileDescriptionsData", JSON.stringify(fileDescriptionsData, null, 2));
 
-    for (const fileDescription of fileDescriptionsData) {
+    for (const fileDescription of fileDescriptionsData || []) {
       if (fileDescription.cover) continue;
 
       if (fileDescription.name.includes('image')) {
@@ -145,7 +148,9 @@ export default async function InstrumentPage({ searchParams, params }: Props) {
     }
   }
 
-  if (!minter || !images || !documents) return <NotFound />;
+  
+  console.log("images", JSON.stringify(images, null, 2));
+  console.log("documents", JSON.stringify(documents, null, 2));
 
   return (
     <Instrument
