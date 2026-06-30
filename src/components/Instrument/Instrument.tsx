@@ -221,7 +221,7 @@ export default function Instrument({
 
 	const [scannedResult, setScannedResult] = useState<string | undefined>("")
 	const [isModalOpen, setModalOpen] = useState(false);
-	const [isCoverImageOpen, setCoverImageOpen] = useState(false);
+	const [zoomedImage, setZoomedImage] = useState<string | null>(null);
 
 	const [isTransfering, setIsTransfering] = useState(false);
 	const [showTransferOptions, setShowTransferOptions] = useState(false);
@@ -506,7 +506,7 @@ export default function Instrument({
 								<button
 									type="button"
 									className="w-full aspect-square cursor-zoom-in"
-									onClick={() => setCoverImageOpen(true)}
+									onClick={() => setZoomedImage(instrumentAsset.metadata.image)}
 									aria-label={tInstrument('view_full_size_image')}
 								>
 									<Image
@@ -656,7 +656,12 @@ export default function Instrument({
 											{images.slice(0, visibleImagesCount).map((img: any, index: number) => (
 												<div key={index} className="relative bg-scope-50 border border-scope-100 hover:border-scope-400 transition-colors duration-200 transform rounded-button overflow-hidden">
 													<div className="w-full aspect-square bg-white/[.04]">
-														<a href={img.uri} target="_blank" rel="noreferrer">	
+														<button
+															type="button"
+															className="w-full h-full cursor-zoom-in"
+															onClick={() => setZoomedImage(img.uri)}
+															aria-label={tInstrument('view_full_size_image')}
+														>
 															<Image
 																src={img.uri}
 																alt={`Instrument #${id}`}
@@ -664,7 +669,7 @@ export default function Instrument({
 																height={400}
 																className="object-cover w-full h-full"
 															/>
-														</a>
+														</button>
 													</div>
 													{img.description && 
 														<p className="text-scope-700 p-2 text-sm">
@@ -713,7 +718,12 @@ export default function Instrument({
 											{isImagesExpanded && images.slice(visibleImagesCount).map((img: any, index: number) => (
 												<div key={visibleImagesCount + index} className="relative bg-it-100 border border-it-200 rounded-lg overflow-hidden">
 													<div className="w-full aspect-square bg-white/[.04]">
-														<a href={img.uri} target="_blank" rel="noreferrer">	
+														<button
+															type="button"
+															className="w-full h-full cursor-zoom-in"
+															onClick={() => setZoomedImage(img.uri)}
+															aria-label={tInstrument('view_full_size_image')}
+														>
 															<Image
 																src={img.uri}
 																alt={`Instrument #${id}`}
@@ -721,7 +731,7 @@ export default function Instrument({
 																height={400}
 																className="object-cover w-full h-full"
 															/>
-														</a>
+														</button>
 													</div>
 													{img.description && 
 														<p className="text-it-1000 p-2 text-sm">
@@ -1129,9 +1139,9 @@ export default function Instrument({
 				</>
 			) : null }
 			<ImageZoomModal
-				isOpen={isCoverImageOpen}
-				onClose={() => setCoverImageOpen(false)}
-				src={instrumentAsset.metadata.image}
+				isOpen={!!zoomedImage}
+				onClose={() => setZoomedImage(null)}
+				src={zoomedImage ?? ''}
 				alt={`Instrument #${id}`}
 			/>
 			<QRModal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
