@@ -12,6 +12,7 @@ import Page from "@/components/Page";
 import Section from "@/components/Section";
 // import { client } from "@/app/client";
 import QRModal from "./QRModal";
+import ImageZoomModal from "./ImageZoomModal";
 import Image from "next/image";
 import { Download,
 	Copy,
@@ -220,6 +221,7 @@ export default function Instrument({
 
 	const [scannedResult, setScannedResult] = useState<string | undefined>("")
 	const [isModalOpen, setModalOpen] = useState(false);
+	const [isCoverImageOpen, setCoverImageOpen] = useState(false);
 
 	const [isTransfering, setIsTransfering] = useState(false);
 	const [showTransferOptions, setShowTransferOptions] = useState(false);
@@ -501,17 +503,20 @@ export default function Instrument({
 						<div className="flex flex-col space-y-8 md:space-y-10">
 							{/* Cover Image Section */}
 							<div className="rounded-[15px] relative bg-scope-25 border border-scope-50 overflow-hidden">
-								<div className="w-full aspect-square">
-									<a href={instrumentAsset.metadata.image} target="_blank" rel="noreferrer">
-										<Image
-											className="mx-auto"
-											src={instrumentAsset.metadata.image}
-											width={800}
-											height={800}
-											alt={`Instrument #${id}`}
-										/>
-									</a>
-								</div>
+								<button
+									type="button"
+									className="w-full aspect-square cursor-zoom-in"
+									onClick={() => setCoverImageOpen(true)}
+									aria-label={tInstrument('view_full_size_image')}
+								>
+									<Image
+										className="mx-auto"
+										src={instrumentAsset.metadata.image}
+										width={800}
+										height={800}
+										alt={`Instrument #${id}`}
+									/>
+								</button>
 							</div>
 						</div>
 
@@ -1123,6 +1128,12 @@ export default function Instrument({
 					)}
 				</>
 			) : null }
+			<ImageZoomModal
+				isOpen={isCoverImageOpen}
+				onClose={() => setCoverImageOpen(false)}
+				src={instrumentAsset.metadata.image}
+				alt={`Instrument #${id}`}
+			/>
 			<QRModal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
 				<Scanner
 					onScan={(result) => {
